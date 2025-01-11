@@ -1,0 +1,135 @@
+-- Completion engine providing inline code completion (UI suggestion popups provided by other package in this setup, completions are externally sourced e.g. from ChatGPT).
+-- https://github.com/hrsh7th/nvim-cmp
+
+-- local cmp = require("cmp")
+-- local cmp_active = true
+-- -- Possible better performance/UX with this, from docs:
+-- -- Doesn't seem to have effect here, so cmp.nvim may be handling this or it needs to go in `.setup()`
+-- -- Copilot suggestion is automatically hidden when popupmenu-completion is open. In case you use a custom menu for completion, you can set the copilot_suggestion_hidden buffer variable to true to have the same behavior. For example, with nvim-cmp:
+-- -- cmp.event:on("menu_opened", function()
+-- -- 	vim.b.copilot_suggestion_hidden = true
+-- -- end)
+-- -- cmp.event:on("menu_closed", function()
+-- -- 	vim.b.copilot_suggestion_hidden = false
+-- -- end)
+--
+-- local function toggle_cmp(enable)
+-- 	if enable then
+-- 		cmp_active = true
+-- 		cmp.setup.buffer({ enabled = true })
+-- 	else
+-- 		cmp_active = false
+-- 		cmp.setup.buffer({ enabled = false })
+-- 	end
+-- end
+--
+-- -- Re-enable cmp when entering insert mode
+-- vim.api.nvim_create_autocmd("InsertEnter", {
+-- 	callback = function()
+-- 		-- "try" to swallow error when not normal buffer (e.g. TelescopePrompt etc.)
+-- 		pcall(function()
+-- 			toggle_cmp(true)
+-- 		end)
+-- 		-- end
+-- 	end,
+-- })
+return {
+	-- dependencies = {
+	-- 	{
+	-- 		"hrsh7th/cmp-cmdline",
+	-- 		config = function()
+	-- 			-- Completion on buffer search
+	-- 			-- `/` cmdline setup.
+	-- 			cmp.setup.cmdline("/", {
+	-- 				mapping = cmp.mapping.preset.cmdline(),
+	-- 				sources = {
+	-- 					{ name = "buffer" },
+	-- 				},
+	-- 			})
+	-- 			-- Completion on nvim command line
+	-- 			-- `:` cmdline setup.
+	-- 			cmp.setup.cmdline(":", {
+	-- 				mapping = cmp.mapping.preset.cmdline(),
+	-- 				sources = cmp.config.sources({
+	-- 					{ name = "neorg" },
+	-- 					{ name = "path" },
+	-- 				}, {
+	-- 					{
+	-- 						name = "cmdline",
+	-- 						option = {
+	-- 							ignore_cmds = { "Man", "!" },
+	-- 						},
+	-- 					},
+	-- 				}),
+	-- 			})
+	-- 		end,
+	-- 	},
+	-- },
+	-- "hrsh7th/nvim-cmp",
+	-- opts = {
+	-- 	view = {
+	-- 		docs = {
+	-- 			auto_open = true,
+	-- 		},
+	-- 		entries = {
+	-- 			follow_cursor = true,
+	-- 		},
+	-- 	},
+	-- 	experimental = {
+	-- 		ghost_text = true,
+	-- 		ghost_text = {
+	-- 			hl_group = "CmpGhostText",
+	-- 		},
+	-- 	},
+	-- 	mapping = {
+	-- 		...,
+	-- 		-- Open docs view, not sure what this means though as docstrings are already showing
+	-- 		["<C-k>"] = function(fallback)
+	-- 			if cmp.visible then
+	-- 				if cmp.visible_docs() then
+	-- 					cmp.close_docs()
+	-- 				else
+	-- 					cmp.open_docs()
+	-- 				end
+	-- 			else
+	-- 				fallback()
+	-- 			end
+	-- 		end,
+	-- 		-- Make it so suggestions must be selected to confirm w/ Enter. Allows Enter to be used for newlines.
+	-- 		-- Ctrl+n/p can be used to navigate suggestions.
+	-- 		["<CR>"] = cmp.mapping(function(fallback)
+	-- 			if cmp.visible() and cmp.get_active_entry() then
+	-- 				cmp.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = false })
+	-- 			else
+	-- 				fallback()
+	-- 			end
+	-- 		end, { "i", "c" }),
+	--
+	-- 		-- Map Ctrl+Space to confirm active entry.
+	-- 		["<C-Space>"] = cmp.mapping(function(fallback)
+	-- 			if cmp.visible() then
+	-- 				-- If completion menu is open, Ctrl+Enter will insert the suggestion, selecting the first one if no selection.
+	-- 				cmp.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = true })
+	-- 			else
+	-- 				fallback()
+	-- 			end
+	-- 		end, { "i", "c" }),
+	--
+	-- 		-- Map Ctrl+i to close cmp menu
+	-- 		-- Closes cmp menu until InsertEnter if active
+	-- 		["<C-i>"] = cmp.mapping(function(fallback)
+	-- 			if cmp_active then
+	-- 				if cmp.visible() then
+	-- 					cmp.close()
+	-- 					toggle_cmp(false)
+	-- 				else
+	-- 					fallback()
+	-- 				end
+	-- 			else
+	-- 				toggle_cmp(true)
+	-- 			end
+	-- 		end, { "i", "c" }),
+	-- 		...,
+	-- 	},
+	-- },
+}

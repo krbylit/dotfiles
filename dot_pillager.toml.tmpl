@@ -1,0 +1,19 @@
+# pillager.toml
+# Basic configuration
+verbose = false
+path = "."
+workers = 4
+redact = false
+reporter = "json-pretty"
+
+{{ range .pillager.rules }}
+[[rules]]
+{{- range $key, $value := . }}
+{{ $key }} = {{ $value | quote }}
+{{- end }}
+{{ end }}
+
+# Allowlist configuration
+[allowlist]
+paths = [".*/_test\\.go$", ".*/testdata/.*", ".*\\.md$", ".*/vendor/.*"]
+regexes = ["EXAMPLE_KEY", "DUMMY_SECRET"]

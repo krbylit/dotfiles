@@ -1,0 +1,15 @@
+# https://www.chezmoi.io/reference/special-files-and-directories/chezmoiignore/
+# Patterns added here will match against the target path and be ignored
+# I.e., these will not be copied into the local environment
+lazy-lock.json
+# `/dir/**/*` will ignore all files in all subdirs
+# `dir/` is required to ignore and not add the dir and subdirs
+README.md
+ctrld-configs/
+ctrld-configs/**/*.*
+my-chezmoi-scripts/
+my-chezmoi-scripts/**/*.*
+neorg/
+neorg/**/*.*
+terminfo
+.pkg-backups/**

@@ -1,0 +1,21 @@
+// Global neoconf settings
+{
+  "neoconf": {
+    "plugins": {
+      "lua_ls": {
+        "enabled": true
+      },
+      "eslint": {
+        "enabled": true
+      }
+    }
+  },
+  "lspconfig": {
+    "eslint": {
+      // "nodePath": "frontend", // Only add this if your front-end code is in a different folder
+      "format": {
+        "enable": true
+      }
+    }
+  }
+}

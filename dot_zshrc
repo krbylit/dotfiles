@@ -1,0 +1,269 @@
+# Source .zshrc-lite in SSH sessions so we don't auto-download our plugins.
+# if [[ -n "$SSH_CONNECTION" || -n "$SSH_TTY" ]]; then
+#     # Source the alternative zshrc file for SSH sessions
+#     source /path/to/your/alternative/.zshrc
+# fi
+
+# Download Znap, if it's not there yet.
+# Lazy loading and plugin management with Znap
+# https://github.com/marlonrichert/zsh-snap
+[[ -r ~/.zsh/plugins/znap/znap.zsh ]] ||
+    git clone --depth 1 -- \
+        https://github.com/marlonrichert/zsh-snap.git ~/.zsh/plugins/znap
+source ~/.zsh/plugins/znap/znap.zsh  # Start Znap
+
+# export PATH="/usr/local/opt/libpq/bin:$PATH" # PSQL tools library
+export PATH="/usr/local/bin:$PATH" # Homebrew on Intel silicon
+export PATH="/opt/homebrew/bin:$PATH" # Homebrew on Apple silicon
+export PATH="/opt/homebrew:$PATH" # Homebrew on Apple silicon
+export PATH="$HOME/.cargo/bin:$PATH" # Homebrew on Apple silicon
+export EDITOR="nvim"
+
+# ----------------------------------------------------------------
+# Path / setting vars
+# ----------------------------------------------------------------
+export NVM_DIR="$HOME/.nvm"
+export VIRTUALENVWRAPPER_PYTHON=$(which python3)
+export PROJECT_HOME=$HOME/Devel
+export CM_PATH="$HOME/.local/share/chezmoi"
+# lazygit config dir (lazygit looks here for config)
+CONFIG_DIR="$HOME/.config/lazygit"
+# change app config dir to .config
+export XDG_CONFIG_HOME="$HOME/.config"
+# fzf install dir for omz fzf plugin
+export FZF_BASE="$(which fzf)"
+export GIT_EXTERNAL_DIFF=delta
+# Dirs to exclude from zoxide
+# Use `bat` for man pages
+# It might also be necessary to set MANROFFOPT="-c" if you experience formatting problems.
+# export MANPAGER="sh -c 'col -bx | bat -l man -p'" # disabling, zsh colorized man pages plugin seems to work better
+
+# ----------------------------------------------------------------
+# Python settings
+# ----------------------------------------------------------------
+export PYENV_ROOT="$HOME/.pyenv"
+export WORKON_HOME=$HOME/".virtualenvs"
+# enable auto-sourcing Python virtual env's with omz python plugin
+export PYTHON_AUTO_VRUN=true
+export PYTHON_VENV_NAME="virtual_env"
+
+# ----------------------------------------------------------------
+# vi-mode settings
+# ----------------------------------------------------------------
+# Enable changing mode indicator for omz vi-mode. Redraws prompt
+export VI_MODE_RESET_PROMPT_ON_MODE_CHANGE="true"
+# Enable changing the cursor in insert mode for omz vi-mode.
+export VI_MODE_SET_CURSOR="true"
+# omz vi-mode indicator strings
+# $PROMPT and $RPROMPT can be altered to include indicators by adding `$(vi_mode_prompt_info)`
+# e.g. `PROMPT="$PROMPT\$(vi_mode_prompt_info)"`
+# Note the \$ here, which importantly prevents interpolation at the time of defining, but allows it to be executed for each prompt update event.
+export MODE_INDICATOR="%F{white}+%f"
+export INSERT_MODE_INDICATOR="%F{yellow}+%f"
+# Mode cursor settings
+# 0, 1 - Blinking block
+# 2 - Solid block
+# 3 - Blinking underline
+# 4 - Solid underline
+# 5 - Blinking line
+# 6 - Solid line
+export VI_MODE_CURSOR_NORMAL=2
+export VI_MODE_CURSOR_VISUAL=6
+export VI_MODE_CURSOR_INSERT=6
+export VI_MODE_CURSOR_OPPEND=0
+
+# ----------------------------------------------------------------
+# OMZ/ZSH settings
+# ----------------------------------------------------------------
+DISABLE_AUTO_UPDATE="true"
+COMPLETION_WAITING_DOTS="true"
+# Set to share command history accross terminal sessions
+setopt SHARE_HISTORY
+# disable automatic widget re-binding on each precmd. This can be a big boost to performance, but you'll need to handle re-binding yourself
+ZSH_AUTOSUGGEST_MANUAL_REBIND="true"
+ZSH_AUTOSUGGEST_STRATEGY=(match_prev_cmd history completion)
+# Install omz and source it
+znap source ohmyzsh/ohmyzsh
+# Lazy load each OMZ plugin. These must be sourced before keybinds for keybinds that work on plugins.
+znap source ohmyzsh/ohmyzsh plugins/aliases
+znap source ohmyzsh/ohmyzsh plugins/colored-man-pages # For some reason this doesn't seem to work if called before sourcing omz above
+znap source ohmyzsh/ohmyzsh plugins/colorize
+znap source ohmyzsh/ohmyzsh plugins/common-aliases
+znap source ohmyzsh/ohmyzsh plugins/copypath
+znap source ohmyzsh/ohmyzsh plugins/dirhistory
+znap source ohmyzsh/ohmyzsh plugins/fzf
+znap source ohmyzsh/ohmyzsh plugins/git
+znap source ohmyzsh/ohmyzsh plugins/kitty
+znap source ohmyzsh/ohmyzsh plugins/last-working-dir
+znap source ohmyzsh/ohmyzsh plugins/magic-enter
+znap source ohmyzsh/ohmyzsh plugins/python
+znap source ohmyzsh/ohmyzsh plugins/sudo
+znap source ohmyzsh/ohmyzsh plugins/vi-mode
+# znap source ohmyzsh/ohmyzsh plugins/z
+znap source ohmyzsh/ohmyzsh plugins/zsh-interactive-cd
+znap source ohmyzsh/ohmyzsh plugins/zsh-navigation-tools
+# Lazy load general zsh plugins
+znap source zsh-users/zsh-syntax-highlighting
+znap source zsh-users/zsh-autosuggestions
+# Keybinds AFTER sourcing
+bindkey "^H" beginning-of-line
+bindkey "^D" list-choices
+bindkey "^L" end-of-line
+bindkey "^F" self-insert
+bindkey "^G" list-expand
+bindkey "^I" zic-completion
+bindkey "^X" clear-screen
+bindkey "^M" accept-line
+bindkey "^J" down-history
+bindkey "^O" self-insert
+bindkey "^K" up-history
+# NOTE: very helpful for setting keybinds: press vi-quoted-insert (Ctrl+V) then any key and it will show what the zsh keybind char sequence translates to that key bindkey "^V" vi-quoted-insert
+bindkey "^R" znt-history-widget
+bindkey "^S" history-incremental-search-forward
+bindkey "^T" fzf-file-widget
+bindkey "^U" vi-kill-line
+bindkey "^V" vi-quoted-insert
+bindkey "^W" backward-kill-word
+bindkey -R "^Y"-"^Z" self-insert
+bindkey "^[" vi-cmd-mode
+bindkey "^ " autosuggest-accept
+# NOTE: doesn't seem we can bind ctrl+enter
+# bindkey "^[M" autosuggest-accept
+
+# ----------------------------------------------------------------
+# Run commands
+# ----------------------------------------------------------------
+# Set up lazy load of nvm (which causes much slower initial prompt). nvm won't be sourced until `nvm` command invoked or completion (2nd line) is run for `nvm`
+znap function _nvm nvm '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" && [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"'  # This loads nvm
+# compctl -K _nvm nvm
+# Use more modern `compdef` instead of `compctl` to define autocompletions for `nvm`
+compdef _nvm nvm
+# Lazy-load nvm when npm is invoked and then run npm
+znap function _npm npm '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" && npm "$@"'
+
+# ----------------------------------------------------------------
+# Aliases
+# ----------------------------------------------------------------
+# config aliases
+# NOTE: `cm edit` on target files/dirs runs git auto-push, editing source files/dirs directly still applies changes automatically through `chezmoi.nvim` but does not auto-push
+alias zconf="chezmoi edit ~/.zshrc --watch"
+alias kconf="chezmoi edit ~/.config/kitty/kitty.conf --watch"
+alias sconf="chezmoi edit ~/.config/starship.toml --watch"
+# alias nconf="nvim -c 'Dashboard' $CM_PATH/private_dot_config/nvim"
+alias nconf="nvim --cmd 'cd $CM_PATH/private_dot_config/exact_nvim' -c 'lua Snacks.dashboard({win=0})'"
+alias conf="nvim --cmd 'cd $CM_PATH' -c 'lua Snacks.dashboard({win=0})'"
+# alias conf="nvim $CM_PATH"
+# cli aliases
+alias n="nvim"
+# lazygit for chezmoi dir
+alias cmg="lazygit -p $(chezmoi source-path)"
+alias cmf="chezmoi apply --force"
+# chezmoi commands
+alias cm="chezmoi"
+# lazygit
+alias lg="lazygit"
+# lazydocker
+alias ld="lazydocker"
+# Vi-mongo
+alias vm="vi-mongo"
+alias no="nvim ~/.nb"
+# Kitty term diff viewer
+alias diff="kitten diff"
+# Utility aliases
+# Yank current dir to clipboard (`pbcopy` is macOS)
+alias ywd="pwd | pbcopy"
+alias ll='ls -CF --color=auto'
+# Replace `cat` with syntax-highlighting `bat`
+alias cat='bat --paging=never'
+# Use `bat` to colorize --help output
+# alias -g -- -h='-h 2>&1 | bat --language=help --style=plain' # Disabling this as some `-h` is not help e.g. `ls -h`
+# alias -g -- --help='--help 2>&1 | bat --language=help --style=plain'
+# This allows for passing args after `--help` flag e.g. `brew --help install`
+preexec() {
+  # Check if the command includes `--help`
+  if [[ "$1" == *"--help"* ]]; then
+    # Wrap the command in a subshell and pipe all output to `bat`
+    eval "($1) 2>&1 | bat --language=help --style=plain"
+    return 0
+  fi
+}
+# Use `batgrep` for `rg` with `bat` syntax highlighting, also defaults to smartcase
+alias rg='batgrep -S'
+# SSH kitten
+ksh() {
+    # This works
+    # kitten ssh -t "$@" bash --rcfile /tmp/ssh-kitten-config/.bashrc
+    # This seems to work as well
+    kitten ssh -t "$@" 'if which zsh >/dev/null 2>&1; then exec zsh; else exec bash --rcfile /tmp/ssh-kitten-config/ssh-dotfiles/.bashrc; fi'
+}
+# `yazi` file manager alias to change cwd on exit of yazi
+# also disables cursor trail while in yazi
+function y() {
+	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")"
+    # Disable cursor trail while in yazi, requires remote_control to be allowed in kitty
+    kitten @ load-config --override cursor_trail=0
+	yazi "$@" --cwd-file="$tmp"
+	if cwd="$(command cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
+		builtin cd -- "$cwd"
+	fi
+	rm -f -- "$tmp"
+    # Enable again on exit
+    kitten @ load-config --override cursor_trail=3
+}
+# Git add and commit
+# Usage: `commit "<commit message>"`
+commit() {
+  git add . && git commit -m "$*"
+}
+
+# ----------------------------------------------------------------
+# ZSH / Starship transient prompt implementation
+# ----------------------------------------------------------------
+# Transient prompt implementation from https://www.zsh.org/mla/users/2019/msg00633.html
+zle-line-init() {
+    STARSHIP=$(which starship)
+    TPROMPT=$($STARSHIP module custom.time)" "$($STARSHIP module directory)" "$($STARSHIP module character)
+    TRPROMPT=""
+    # TRPROMPT=$($STARSHIP module directory)
+    # TPROMPT=' '$($STARSHIP module directory)'  '$($STARSHIP module character)$($STARSHIP module character)
+    # TPROMPT=$($STARSHIP module custom.tprompt)
+    # TPROMPT=$($STARSHIP module directory)
+    # TPROMPT=$($STARSHIP module time)" "$($STARSHIP module directory)" "$($STARSHIP module character)$($STARSHIP module character)$($STARSHIP module character)
+
+    emulate -L zsh
+
+    [[ $CONTEXT == start ]] || return 0
+
+    while true; do
+    zle .recursive-edit
+    local -i ret=$?
+    [[ $ret == 0 && $KEYS == $'\4' ]] || break
+    [[ -o ignore_eof ]] || exit 0
+    done
+
+    local saved_prompt=$PROMPT
+    local saved_rprompt=$RPROMPT
+    # Transient prompts to print
+    PROMPT=$TPROMPT
+    RPROMPT=$TRPROMPT
+    # PROMPT='%# '
+    # RPROMPT=''
+    zle .reset-prompt
+    PROMPT=$saved_prompt
+    RPROMPT=$saved_rprompt
+
+    if (( ret )); then
+    zle .send-break
+    else
+    zle .accept-line
+    fi
+    return ret
+}
+zle -N zle-line-init
+# eval "$(starship init zsh)"
+# Load zoxide
+znap eval zoxide 'zoxide init zsh'
+# znap eval seems that it may be slightly faster to first prompt
+znap eval starship 'starship init zsh --print-full-init'
+# gh copilot here seems to slow startup prompt a bit
+# eval "$(gh copilot alias -- zsh)"

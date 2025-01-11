@@ -1,0 +1,29 @@
+-- NOTE: disabled because config is absolutely asinine and against all known plugin conventions
+-- local map = vim.keymap.set
+return {
+	-- "kungfusheep/snipe-lsp.nvim",
+	-- event = "VeryLazy",
+	-- dependencies = "leath-dub/snipe.nvim",
+	-- keys = {
+	-- 	{
+	-- 		"<leader>cy",
+	-- 		"<cmd>SnipeLspSymbols<cr>",
+	-- 		desc = "Open Snipe LSP symbols menu",
+	-- 	},
+	-- 	-- {
+	-- 	-- 	"<leader>cys",
+	-- 	-- 	"<cmd>SnipeLspSymbols split<cr>",
+	-- 	-- 	desc = "Open Snipe LSP symbols menu in split",
+	-- 	-- },
+	-- 	-- {
+	-- 	-- 	"<leader>cyv",
+	-- 	-- 	"<cmd>SnipeLspSymbols vsplit<cr>",
+	-- 	-- 	desc = "Open Snipe LSP symbols menu in vsplit",
+	-- 	-- },
+	-- },
+	-- opts = {
+	-- 	open_symbols_menu = "<leader>cy",
+	-- 	open_symbols_menu_for_split = "<leader>cys",
+	-- 	open_symbols_menu_for_vsplit = "<leader>cyv",
+	-- },
+}
