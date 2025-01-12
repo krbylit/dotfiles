@@ -45,7 +45,7 @@ jobs:
 
           # Capture commit messages and write to a temporary file
           echo "$(date)" > commit_message.txt
-          git log origin/main..private/main --since="24 hours ago" --pretty=format:'%h - %s%n%bAuthor: %an <%ae>%n' --reverse >> commit_message.txt
+          git log origin/dev..private/dev --since="24 hours ago" --pretty=format:'%h - %s%n%bAuthor: %an <%ae>%n' --reverse >> commit_message.txt
 
           # Check if the commit message file is too large
           if [ $(wc -c <commit_message.txt) -ge 10240 ]; then
@@ -56,4 +56,4 @@ jobs:
           # Create a squashed commit using the commit message file
           git commit -F commit_message.txt
           rm -f commit_message.txt
-          git push origin main --force
+          git push origin dev --force
