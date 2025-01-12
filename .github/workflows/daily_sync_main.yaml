@@ -1,0 +1,40 @@
+name: Daily Sync from Private Repo
+
+on:
+  schedule:
+    - cron: "0 1 * * *" # Runs daily at 1 AM UTC
+  workflow_dispatch: # Allows manual triggering if needed
+
+jobs:
+  sync_main_and_dev:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Public Repo
+        uses: actions/checkout@v4
+
+      - name: Set Up Git User (GitHub Actions Bot)
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      # Add Private Repo with SSH Authentication
+      - name: Add Private Repo as Remote
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.DOTFILES_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          eval "$(ssh-agent -s)"
+          ssh-add ~/.ssh/id_ed25519
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+          git remote add private git@github.com:krbylit/dotfiles-private.git
+          git fetch private main
+          git fetch private dev
+
+      # Squash Merge Private Main into Public Main
+      - name: Squash Merge Private Main into Public Main
+        run: |
+          git checkout main
+          git merge --squash private/main --allow-unrelated-histories
+          git commit -F $(git log private/main --pretty=format:"%h - %s%n%bAuthor: %an <%ae>%n")
+          git push origin main --force
