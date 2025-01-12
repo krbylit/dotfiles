@@ -27,12 +27,12 @@ jobs:
           eval "$(ssh-agent -s)"
           ssh-add ~/.ssh/id_ed25519
           ssh-keyscan github.com >> ~/.ssh/known_hosts
-          git remote add origin git@github.com:krbylit/dotfiles.git
+          # git remote add origin git@github.com:krbylit/dotfiles.git
           git remote add private git@github.com:krbylit/dotfiles-private.git
           git fetch private main
           git fetch private dev
-          git fetch origin main
-          git fetch origin dev
+          # git fetch origin main
+          # git fetch origin dev
 
       # Squash Merge Private Dev into Public Dev
       - name: Squash Merge Private Dev into Public Dev
