@@ -39,13 +39,21 @@ jobs:
           git checkout main
           git pull origin main || true
 
-          # Capture all commit messages from the last merge range
-          COMMIT_MESSAGE="$(git log main..private/main --pretty=format:'%h - %s%n%bAuthor: %an <%ae>' --reverse)"
-
           # Full overwrite: Replace working directory with private repo state
           git checkout private/main -- .
           git add .
 
-          # Create a single squashed commit with all commit messages included
-          git commit -m "$(date)" -m "$COMMIT_MESSAGE"
+          # Capture commit messages and write to a temporary file
+          echo "$(date)" > commit_message.txt
+          git log origin/main..private/main --since="24 hours ago" --pretty=format:'%h - %s%n%bAuthor: %an <%ae>%n' --reverse >> commit_message.txt
+
+          # Check if the commit message file is too large
+          if [ $(wc -c <commit_message.txt) -ge 10240 ]; then
+            echo "$(date)" > commit_message.txt
+            echo "Too many commits to log." >> commit_message.txt
+          fi
+
+          # Create a squashed commit using the commit message file
+          git commit -F commit_message.txt
+          rm -f commit_message.txt
           git push origin main --force
