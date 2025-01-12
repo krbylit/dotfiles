@@ -6,12 +6,14 @@ on:
   workflow_dispatch: # Allows manual triggering if needed
 
 jobs:
-  sync_main_and_dev:
+  sync_dev:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Public Repo
+      - name: Checkout Public Dev Branch
         uses: actions/checkout@v4
+        with:
+          ref: dev # Fetch only the dev branch
 
       - name: Set Up Git User (GitHub Actions Bot)
         run: |
@@ -27,30 +29,18 @@ jobs:
           eval "$(ssh-agent -s)"
           ssh-add ~/.ssh/id_ed25519
           ssh-keyscan github.com >> ~/.ssh/known_hosts
-          # git remote add origin git@github.com:krbylit/dotfiles.git
           git remote add private git@github.com:krbylit/dotfiles-private.git
-          git fetch private main
           git fetch private dev
-          git fetch origin main
-          git fetch origin dev
 
       # Squash Merge Private Dev into Public Dev
       - name: Squash Merge Private Dev into Public Dev
         run: |
-          # Fetch the latest changes
           git fetch private dev
-          # Create or update a local tracking branch from private/dev
-          git checkout -B temp-private-dev private/dev
-          git pull
+          git checkout dev
+          git pull origin dev
 
-          # Switch back to the public dev branch and ensure it's up to date
-          git checkout origin/dev
-          # git branch --unset-upstream || true # Clear any existing remote tracking
-          git branch --set-upstream-to=origin/dev dev
-          git pull
-
-          # Perform the squash merge from the local private branch copy
-          git merge --squash temp-private-dev --allow-unrelated-histories
+          # Perform the squash merge and commit
+          git merge --squash private/dev --allow-unrelated-histories
           git add .
-          git commit -F $(git log temp-private-dev --pretty=format:"%h - %s%n%bAuthor: %an <%ae>%n")
+          git commit -m "$(git log private/dev --pretty=format:'%h - %s%n%bAuthor: %an <%ae>' -1)"
           git push origin dev --force

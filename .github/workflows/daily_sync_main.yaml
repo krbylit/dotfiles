@@ -6,12 +6,14 @@ on:
   workflow_dispatch: # Allows manual triggering if needed
 
 jobs:
-  sync_main_and_dev:
+  sync_main:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Public Repo
+      - name: Checkout Public Main Branch
         uses: actions/checkout@v4
+        with:
+          ref: main # Fetch only the main branch
 
       - name: Set Up Git User (GitHub Actions Bot)
         run: |
@@ -29,22 +31,16 @@ jobs:
           ssh-keyscan github.com >> ~/.ssh/known_hosts
           git remote add private git@github.com:krbylit/dotfiles-private.git
           git fetch private main
-          git fetch private dev
 
       # Squash Merge Private Main into Public Main
-      - name: Squash Merge Private main into Public main
+      - name: Squash Merge Private Main into Public Main
         run: |
-          # Fetch the latest changes
           git fetch private main
-          # Create or update a local tracking branch from private/main
-          git checkout -B temp-private-main private/main
+          git checkout main
+          git pull origin main
 
-          # Switch back to the public main branch and ensure it's up to date
-          git checkout main || git checkout -b main
-          git pull origin main || true
-
-          # Perform the squash merge from the local private branch copy
-          git merge --squash temp-private-main --allow-unrelated-histories
+          # Perform the squash merge and commit
+          git merge --squash private/main --allow-unrelated-histories
           git add .
-          git commit -F $(git log temp-private-main --pretty=format:"%h - %s%n%bAuthor: %an <%ae>%n")
+          git commit -m "$(git log private/main --pretty=format:'%h - %s%n%bAuthor: %an <%ae>' -1)"
           git push origin main --force
