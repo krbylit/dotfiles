@@ -31,20 +31,10 @@ jobs:
           git fetch private main
           git fetch private dev
 
-      # Sync Main Branch (Allows Unrelated Histories)
-      - name: Squash Merge Private Main into Public Main
-        run: |
-          git checkout main
-          git merge --squash private/main --allow-unrelated-histories
-          git log private/main --pretty=format:"%h - %s%n%bAuthor: %an <%ae>%n" > commit_message_main.txt
-          git commit -F commit_message_main.txt
-          git push origin main
-
-      # Sync Dev Branch (Allows Unrelated Histories)
+      # Squash Merge Private Dev into Public Dev
       - name: Squash Merge Private Dev into Public Dev
         run: |
           git checkout dev || git checkout -b dev
           git merge --squash private/dev --allow-unrelated-histories
-          git log private/dev --pretty=format:"%h - %s%n%bAuthor: %an <%ae>%n" > commit_message_dev.txt
-          git commit -F commit_message_dev.txt
-          git push origin dev
+          git commit -F $(git log private/dev --pretty=format:"%h - %s%n%bAuthor: %an <%ae>%n")
+          git push origin dev --force
