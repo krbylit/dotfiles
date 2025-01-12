@@ -1,0 +1,37 @@
+name: Sync Private Main Merges to Public Repo
+
+on:
+  repository_dispatch:
+    types: [push] # Triggered by the webhook event from the private repo
+
+jobs:
+  sync_private_main:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Public Repo (dotfiles)
+        uses: actions/checkout@v4
+
+      - name: Set Up Git User (GitHub Actions Bot)
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Add Private Repo as Remote and Authenticate
+        run: |
+          git remote add private https://krbylit:${{ secrets.GH_PAT }}@github.com/krbylit/dotfiles-private.git
+          git fetch private main
+
+      - name: Verify Push to Main Branch
+        run: |
+          if [ "${{ github.event.ref }}" != "refs/heads/main" ]; then
+            echo "Not the main branch, exiting."
+            exit 0
+          fi
+
+      - name: Squash Merge with Commit Messages
+        run: |
+          git checkout main
+          git merge --squash private/main
+          git log private/main --pretty=format:"%h - %s%n%b%nAuthor: %an <%ae>%n" > commit_message.txt
+          git commit -F commit_message.txt
+          git push origin main
