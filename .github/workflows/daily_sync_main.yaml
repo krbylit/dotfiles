@@ -35,17 +35,22 @@ jobs:
       # Force Sync Private Main into Public Main
       - name: Force Sync Private Main into Public Main
         run: |
-          git fetch private main
-          git checkout main
-          git pull origin main || true
-
           # Full overwrite: Replace working directory with private repo state
+          git fetch private main
           git checkout private/main -- .
           git add .
 
-          # Capture commit messages
-          COMMIT_MESSAGE="$(git log origin/main..private/main --since="24 hours ago" --pretty=format:'%h - %s%n%bAuthor: %an <%ae>%n' --reverse)"
+          # Capture commit messages and write to a temporary file
+          echo "$(date)" > commit_message.txt
+          git log origin/main..private/main --since="24 hours ago" --pretty=format:'%h - %s%n%bAuthor: %an <%ae>%n' --reverse >> commit_message.txt
 
-          # Create a squashed commit
-          git commit -m "$(date)" -m "$COMMIT_MESSAGE" || git commit -m "$(date)"
+          # Check if the commit message file is too large
+          if [ $(wc -c <commit_message.txt) -ge 10240 ]; then
+            echo "$(date)" > commit_message.txt
+            echo "Too many commits to log." >> commit_message.txt
+          fi
+
+          # Create a squashed commit using the commit message file
+          git commit -F commit_message.txt
+          rm -f commit_message.txt
           git push origin main --force
