@@ -41,7 +41,8 @@ jobs:
 
           # Switch back to the public dev branch and ensure it's up to date
           git checkout dev || git checkout -b dev
-          git pull origin dev || true
+          git branch --unset-upstream || true # Clear any existing remote tracking
+          git branch --set-upstream-to=origin/dev dev
 
           # Perform the squash merge from the local private branch copy
           git merge --squash temp-private-dev --allow-unrelated-histories
