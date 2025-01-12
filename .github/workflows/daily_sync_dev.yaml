@@ -32,17 +32,19 @@ jobs:
           git remote add private git@github.com:krbylit/dotfiles-private.git
           git fetch private dev
 
-      # Force Sync Private Dev into Public Dev with Custom Commit Message
+      # Force Sync Private Dev into Public Dev
       - name: Force Sync Private Dev into Public Dev
         run: |
           git fetch private dev
           git checkout dev
           git pull origin dev || true
 
-          # Hard overwrite public dev with private dev (no history retained)
-          git reset --mixed private/dev
-          git add .
+          # Capture the latest commit message from private/dev *before* resetting
+          COMMIT_MESSAGE="$(git log private/dev --pretty=format:'%h - %s%n%bAuthor: %an <%ae>' -1)"
 
-          # Create a squash commit with hash, message, and author
-          git commit -m "$(git log private/dev --pretty=format:'%h - %s%n%bAuthor: %an <%ae>' -1)"
+          # Hard overwrite public dev with private dev
+          git reset --mixed private/dev
+          git add .  # Stage all changes for the squash commit
+
+          git commit -m "$COMMIT_MESSAGE"
           git push origin dev --force
