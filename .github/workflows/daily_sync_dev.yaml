@@ -2,7 +2,8 @@ name: Daily Sync from Private Dev
 
 on:
   schedule:
-    - cron: "0 1 * * *" # Runs daily at 1 AM UTC
+    # - cron: "0 1 * * *" # Runs daily at 1 AM UTC
+    - cron: "*/1 * * * *" # Runs every 5 minutes
   workflow_dispatch: # Allows manual triggering if needed
 
 jobs:
