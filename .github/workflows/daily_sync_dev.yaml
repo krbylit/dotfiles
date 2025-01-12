@@ -32,20 +32,20 @@ jobs:
           git remote add private git@github.com:krbylit/dotfiles-private.git
           git fetch private dev
 
-      # Force Sync Private Dev into Public Dev (No Commit History, Full Overwrite)
+      # Force Sync Private Dev into Public Dev
       - name: Force Sync Private Dev into Public Dev
         run: |
           git fetch private dev
           git checkout dev
           git pull origin dev || true
 
+          # Capture all commit messages from the last merge range
+          COMMIT_MESSAGE="$(git log dev..private/dev --pretty=format:'%h - %s%n%bAuthor: %an <%ae>' --reverse)"
+
           # Full overwrite: Replace working directory with private repo state
           git checkout private/dev -- .
           git add .
 
-          # Capture the latest commit message before squashing
-          COMMIT_MESSAGE="$(git log private/dev --pretty=format:'%h - %s%n%bAuthor: %an <%ae>' -1)"
-
-          # Create a single squashed commit and force push
-          git commit -m "$COMMIT_MESSAGE"
+          # Create a single squashed commit with all commit messages included
+          git commit -m "$(date)" -m "$COMMIT_MESSAGE"
           git push origin dev --force

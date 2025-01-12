@@ -32,15 +32,20 @@ jobs:
           git remote add private git@github.com:krbylit/dotfiles-private.git
           git fetch private main
 
-      # Squash Merge Private Main into Public Main
-      - name: Squash Merge Private Main into Public Main
+      # Force Sync Private Main into Public Main
+      - name: Force Sync Private Main into Public Main
         run: |
           git fetch private main
           git checkout main
-          git pull origin main
+          git pull origin main || true
 
-          # Perform the squash merge and commit
-          git merge --squash private/main --allow-unrelated-histories
+          # Capture all commit messages from the last merge range
+          COMMIT_MESSAGE="$(git log main..private/main --pretty=format:'%h - %s%n%bAuthor: %an <%ae>' --reverse)"
+
+          # Full overwrite: Replace working directory with private repo state
+          git checkout private/main -- .
           git add .
-          git commit -m "$(git log private/main --pretty=format:'%h - %s%n%bAuthor: %an <%ae>' -1)"
+
+          # Create a single squashed commit with all commit messages included
+          git commit -m "$(date)" -m "$COMMIT_MESSAGE"
           git push origin main --force
