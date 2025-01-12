@@ -1,4 +1,4 @@
-name: Daily Sync from Private Repo
+name: Daily Sync from Private Dev
 
 on:
   schedule:
