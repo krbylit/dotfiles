@@ -1,23 +1,25 @@
-name: Daily Squash Merge from Private Dev
+name: Daily Sync from Private Repo
 
 on:
   schedule:
     - cron: "0 1 * * *" # Runs daily at 1 AM UTC
-  workflow_dispatch: # Allow manual triggering if needed
+  workflow_dispatch: # Allows manual triggering if needed
 
 jobs:
-  squash_merge_dev:
+  sync_main_and_dev:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout Public Repo (dotfiles)
+      - name: Checkout Public Repo
         uses: actions/checkout@v4
 
-      - name: Set Up Git User
+      - name: Set Up Git User (GitHub Actions Bot)
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-      - name: Add Private Repo as Remote (SSH)
+      # Add Private Repo with SSH Authentication
+      - name: Add Private Repo as Remote
         run: |
           mkdir -p ~/.ssh
           echo "${{ secrets.DOTFILES_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
@@ -26,14 +28,23 @@ jobs:
           ssh-add ~/.ssh/id_ed25519
           ssh-keyscan github.com >> ~/.ssh/known_hosts
           git remote add private git@github.com:krbylit/dotfiles-private.git
+          git fetch private main
           git fetch private dev
 
-      - name: Squash Merge with Commit Messages
+      # Sync Main Branch (Allows Unrelated Histories)
+      - name: Squash Merge Private Main into Public Main
         run: |
           git checkout main
-          git merge --squash --allow-unrelated-histories private/dev
-
-          # Prepare a detailed commit message with authors
-          git log private/dev --pretty=format:"%h - %s%n%bAuthor: %an <%ae>%n" > commit_message.txt
-          git commit -F commit_message.txt
+          git merge --squash private/main --allow-unrelated-histories
+          git log private/main --pretty=format:"%h - %s%n%bAuthor: %an <%ae>%n" > commit_message_main.txt
+          git commit -F commit_message_main.txt
           git push origin main
+
+      # Sync Dev Branch (Allows Unrelated Histories)
+      - name: Squash Merge Private Dev into Public Dev
+        run: |
+          git checkout dev || git checkout -b dev
+          git merge --squash private/dev --allow-unrelated-histories
+          git log private/dev --pretty=format:"%h - %s%n%bAuthor: %an <%ae>%n" > commit_message_dev.txt
+          git commit -F commit_message_dev.txt
+          git push origin dev
