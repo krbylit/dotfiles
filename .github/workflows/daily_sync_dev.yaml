@@ -44,12 +44,7 @@ jobs:
 
           # Cherry-pick each commit and resolve conflicts by always preferring private state
           for commit in $COMMITS; do
-            git cherry-pick $commit || (
-              echo "Conflict detected - Resolving by preferring private state."
-              git checkout --theirs .  # Always keep the private version of the files
-              git add .
-              git commit --no-edit  # Commit the resolved merge without modifying the message
-            )
+            git cherry-pick $commit --strategy-option=theirs
           done
 
           # Push changes after all cherry-picking
