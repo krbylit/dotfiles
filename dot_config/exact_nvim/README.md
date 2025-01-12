@@ -47,12 +47,17 @@ Based on LazyVim, with separate config options for nvim in VS Code and in the te
 
 - [Basic Config Tutorial](https://martinlwx.github.io/en/config-neovim-from-scratch/)
 
-## LazyVim
+### Lua
 
+- [Quick primer](https://learnxinyminutes.com/docs/lua/)
+
+### LazyVim
+
+- [Book on using LazyVim](https://lazyvim-ambitious-devs.phillips.codes/course/chapter-1/)
 - [LazyVim Install](https://www.lazyvim.org/installation)
 - [LazyVim Starter Template](https://github.com/LazyVim/starter)
 
-### Extending vs Overriding Plugin Configurations in LazyVim
+## Extending vs Overriding Plugin Configurations in LazyVim
 
 LazyVim makes it easy to extend or override default plugin configurations. Here's how it works:
 
@@ -77,8 +82,6 @@ You can extend LazyVim’s default configurations in two ways:
     },
   }
   ```
-
-````
 
 - **Using `opts` as a Function**
   If you need more control, you can use a function to modify or replace the existing `opts`. This gives you access to the defaults for dynamic changes.
@@ -124,39 +127,3 @@ return {
 - `opts` will merge configurations by default.
 - Properties like `cmd`, `event`, `ft`, `keys`, and `dependencies` are extended automatically.
 - Any property not explicitly mentioned above (e.g., `config`) will override the default configuration entirely.
-
-## Preconfigured Alternatives
-
-- [jdhao/nvim-config](https://github.com/jdhao/nvim-config)
-- [LunarVim](https://github.com/LunarVim/LunarVim)
-- [LunarVim/Launch.nvim](https://github.com/LunarVim/Launch.nvim)
-
-## Themes
-
-- [VS Code Theme](https://github.com/Mofiqul/vscode.nvim)
-
-## Plugin Notes
-
-### `copilot.lua`
-
-- If we're not getting completions or Copilot plugin otherwise not working,
-  first try reauthorizing:
-  - Delete `~/.config/github-copilot/`
-  - Rerun the `copilot.lua` setup in nvim with `:Copilot auth`
-- Requires Node v18. Wasn't loading and getting error, so it's possible that having switched to v16 to work on a project messed this up.
-  - This was probably happening because `nvm` is being lazy loaded from `.zshrc`, so system's default v16 was being used.
-
-### `neorg.lua`
-
-- How to properly import module functions
-
-  ```lua
-  -- Both of below methods work for retrieving Neorg module public functions
-  local todo_module = require("neorg.modules.core.qol.todo_items.module")
-  -- Bracket notation required for fns w/ hyphens (invalid var char in Lua)
-  local task_cycle = todo_module.public["task-cycle"]
-
-  local todo_module = require("neorg").modules.get_module("core.qol.todo_items")
-  local task_cycle = todo_module["task-cycle"]
-  ```
-````

@@ -13,39 +13,50 @@
 
 ### Manual Installs
 
+These are not installed by chezmoi, so must be installed manually.
+
 - Docker
 - [YabaiIndicator](https://github.com/xiamaz/YabaiIndicator)
 
-### Python
+## Checking the Repository for Secrets
 
-- cfnlint
-- ruff_lsp
-- ruff
-- textual
-- rich
-- flask
-- yapf
--
+### Pre-commit hook
 
-### Node
+We have a pre-commit hook that scans for secrets with `gitleaks` on every commit. This is installed with our Homebrew packages and set up with `.pre-commit-config.yaml`, `.gitleaksignore`, and `run_after_2-install-various.sh`.
 
-- prettier
-- eslint_d
-- eslint-cli
+### Manually scan the repository, including commit history
 
-## Lua
+- Save `jsonextra.tmpl` in root dir:
 
-- [Quick primer](https://learnxinyminutes.com/docs/lua/)
+  ```
+  [{{ $lastFinding := (sub (len . ) 1) }}
+  {{- range $i, $finding := . }}{{with $finding}}
+      {
+          "Description": {{ quote .Description }},
+          "StartLine": {{ .StartLine }},
+          "EndLine": {{ .EndLine }},
+          "StartColumn": {{ .StartColumn }},
+          "EndColumn": {{ .EndColumn }},
+          "Line": {{ quote .Line }},
+          "Match": {{ quote .Match }},
+          "Secret": {{ quote .Secret }},
+          "File": "{{ .File }}",
+          "SymlinkFile": {{ quote .SymlinkFile }},
+          "Commit": {{ quote .Commit }},
+          "Entropy": {{ .Entropy }},
+          "Author": {{ quote .Author }},
+          "Email": {{ quote .Email }},
+          "Date": {{ quote .Date }},
+          "Message": {{ quote .Message }},
+          "Tags": [{{ $lastTag := (sub (len .Tags ) 1) }}{{ range $j, $tag := .Tags }}{{ quote . }}{{ if ne $j $lastTag }},{{ end }}{{ end }}],
+          "RuleID": {{ quote .RuleID }},
+          "Fingerprint": {{ quote .Fingerprint }}
+      }{{ if ne $i $lastFinding }},{{ end }}
+  {{- end}}{{ end }}
+  ]
+  ```
 
-## Delta notes
-
-- [Themes](https://github.com/dandavison/delta/blob/main/themes.gitconfig)
-
-## Watchman notes
-
-- `watchman watch "${CHEZMOI_SOURCE_PATH}"` will watch the directory for changes.
-- `echo '["trigger", "'${CHEZMOI_SOURCE_PATH}'", {"name": "chezmoi-apply", "command": ["chezmoi", "apply", "--force"]}]' | watchman -j` tells watchman to run `chezmoi apply --force` when changes are detected.
-- `watchman shutdown-server` to stop the watchman server.
+- Run `gitleaks git --report-path "gitleaks-report.json" --report-format template --report-template jsonextra.tmpl`
 
 ## Chezmoi notes
 
@@ -53,14 +64,13 @@
 - "Destination state" refers to the current dirs/files in local environment.
 - "Target state" refers to the desired dir/file state that chezmoi will apply to the
   local environment.
-- [Setting up externally modified files (e.g. program settings)](https://www.chezmoi.io/user-guide/manage-different-types-of-file/#handle-configuration-files-which-are-externally-modified)
+- [Setting up externally modified files (e.g. settings which programs can alter at runtime, see `btop.conf` or `karabiner.json`)](https://www.chezmoi.io/user-guide/manage-different-types-of-file/#handle-configuration-files-which-are-externally-modified)
 - `chezmoi edit <file>` will open the file in the editor specified in the `EDITOR` environment variable.
 - `chezmoi apply` will apply the changes to the "source" files.
 - `chezmoi diff` will show the differences between the "source" files and the "destination" files.
 - `chezmoi cd` will change the working directory to the chezmoi directory.
 - `chezmoi update` will pull from the chezmoi repository and apply the changes.
-- `sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply git@github.com:krbylit/configs.git` will install chezmoi and apply my configs on a new machine.
-- `private_` prefix sets target file permissions to 0600
+- `sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply git@github.com:krbylit/dotfiles.git` will install chezmoi and apply our configs on a new machine.
 
 ## 1Password notes
 
@@ -68,58 +78,13 @@
 - Using 1Pass Service Accounts, Chezmoi must be configured for `onepassword.mode="service"` in the `.chezmoi.toml`
 - `OP_SERVICE_ACCOUNT_TOKEN` must be set in environment or chezmoi will stop with an error
 
-## Vimium notes
-
-- "Restore settings" can only take <=8KB of data
-  - <https://github.com/philc/vimium/issues/4371>
-
-### Themes
-
-- <https://github.com/mxxjng/vimium-glass-theme>
-- <https://github.com/catppuccin/vimium>
-
 ## File encryption notes
-
-### Encrypting with `gpg`
 
 - Files encrypted with a passphrase
 - With the setup in `.chezmoi.toml`, chezmoi will prompt for the passphrase once first time `chezmoi init` is run, then will store the passphrase in the config file on the local machine
-
-### Encrypting with `rage`
-
-- Generate key with `rage-keygen -o $HOME/key.txt`
-- Set encryption method to `rage` in `.chezmoi.toml` and specify `identity` and `recipient`
+- To edit encrypted files, we must use the typical Chezmoi workflow of `chezmoi edit <file>` since `chezmoi.nvim` will not work with encrypted files.
 
 ## nvim config workflow
 
-- Since I like to edit by opening the nvim/ dir and going from there, `chezmoi edit` does not edit the "source" files in `~/.config/nvim/`, but instead the files in `~/.local/share/chezmoi/`.
-
-  - This means that to see changes, `chezmoi apply` must be run to copy the changes to the "source" files.
-
-## Application dependencies
-
-- `Neovim` >0.10.0
-  - <https://neovim.io/>
-  - `brew install neovim`
-- `Kitty`
-  - <https://sw.kovidgoyal.net/kitty/binary/>
-  - `curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin`
-- `Starship`
-  - <https://starship.rs/>
-  - `brew install starship`
-- `watchman` for detecting source changes and running `chezmoi apply` automatically
-  - <https://github.com/facebook/watchman>
-  - `brew install watchman`
-- `delta` diff tool for git
-  - <https://dandavison.github.io/delta/installation.html>
-  - brew install git-delta
-- `luajit` for neovim config using luarocks
-  - `brew install luajit`
-  - NOTE: currently only used for `lfs` to dynamically import from `plugin-keymaps`
-  - TODO: consider alternate method to eliminate this dependency
-- `1password-cli` for 1Password Service Account management of SSH keys
-  - `brew install 1password-cli`
-  - <https://developer.1password.com/docs/cli/get-started>
-    `rage` for file encryption
-  - `brew install rage`
-  - <https://github.com/str4d/rage#installation>
+- We have various config aliases in `fish/functions/`. For nvim, run `vc`.
+- Since we have `chezmoi.nvim`, any saved changes to files made with nvim in `~/.local/share/chezmoi` will be automatically applied to the target state, so we don't need to run `chezmoi apply` afterwards.

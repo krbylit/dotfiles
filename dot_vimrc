@@ -4,18 +4,11 @@ if exists('$SSHVIMRUNTIME')
     let s:sshruntime = $SSHVIMRUNTIME
 else
 	" This dir holds the minimal plugins. This is fallback for `vim` on local machine.
-    let s:sshruntime = expand('~/.vim-ssh')
+    let s:sshruntime = expand('~/.ssh-dotfiles/.vim')
 endif
 if isdirectory(s:sshruntime)
     execute 'set runtimepath+=' . s:sshruntime
 endif
-
-" vim-which-key settings
-let g:mapleader = ','
-let g:maplocalleader = "\<Space>"
-nnoremap <silent> <leader>      :<c-u>WhichKey ','<CR>
-nnoremap <silent> <localleader> :<c-u>WhichKey  '<Space>'<CR>
-set timeoutlen=500
 
 " autocmd to add commentstring for filetypes not already supported by `vim-commentary`
 " autocmd FileType python setlocal commentstring=#\ %s
@@ -52,12 +45,6 @@ autocmd VimEnter * silent !echo -ne "\e[2 q"
 augroup END
 
 syntax on
-
-" " Map meta+/ in normal mode to toggle comment
-" nnoremap <C-/> :call ToggleComment()<CR>
-"
-" " Map meta+/ in visual mode to toggle comment on selected lines
-" vnoremap <C-/> :call ToggleComment()<CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "
@@ -341,7 +328,7 @@ set expandtab       " expand tab to spaces so that tabs are spaces
 
 
 " Set the space  as the leader key.
-	" let mapleader = ","
+	let mapleader = ","
 
 
 " Select all the text
@@ -384,6 +371,7 @@ nnoremap L :bnext<CR>
 
 " Delete buffer
   map <leader>bd :bd<CR>
+  nnoremap <C-q> :bd<CR>
 
 
 " Resize split windows using arrow keys by pressing:
@@ -403,7 +391,9 @@ nnoremap L :bnext<CR>
 
 
 " Saving a file using CTRL+S
-	map <C-S> :w<CR>
+	nnoremap <C-s> :w<CR>
+	inoremap <C-s> <Esc>:w<CR>
+	vnoremap <C-s> <Esc>:w<CR>
 
 
 " Quitting and saving a file using CTRL+S
