@@ -43,10 +43,17 @@ jobs:
           git checkout private/dev -- .
           git add .
 
-          # Capture all commit messages from the last merge range
-          COMMIT_MESSAGE="$(git log origin/dev..private/dev --since="24 hours ago" --pretty=format:'%h - %s%n%bAuthor: %an <%ae>' --reverse)"
-          echo "$COMMIT_MESSAGE"
+          # Capture commit messages and write to a temporary file
+          echo "$(date)" > commit_message.txt
+          git log origin/main..private/main --since="24 hours ago" --pretty=format:'%h - %s%n%bAuthor: %an <%ae>%n' --reverse >> commit_message.txt
 
-          # Create a single squashed commit with all commit messages included
-          git commit -m "$(date)" -m "$COMMIT_MESSAGE"
-          git push origin dev --force
+          # Check if the commit message file is too large
+          if [ $(wc -c <commit_message.txt) -ge 10240 ]; then
+            echo "$(date)" > commit_message.txt
+            echo "Too many commits to log." >> commit_message.txt
+          fi
+
+          # Create a squashed commit using the commit message file
+          git commit -F commit_message.txt
+          rm -f commit_message.txt
+          git push origin main --force
