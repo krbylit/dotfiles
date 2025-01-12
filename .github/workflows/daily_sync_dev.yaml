@@ -31,8 +31,8 @@ jobs:
           git remote add private git@github.com:krbylit/dotfiles-private.git
           git fetch private main
           git fetch private dev
-          # git fetch origin main
-          # git fetch origin dev
+          git fetch origin main
+          git fetch origin dev
 
       # Squash Merge Private Dev into Public Dev
       - name: Squash Merge Private Dev into Public Dev
@@ -41,9 +41,10 @@ jobs:
           git fetch private dev
           # Create or update a local tracking branch from private/dev
           git checkout -B temp-private-dev private/dev
+          git pull
 
           # Switch back to the public dev branch and ensure it's up to date
-          git checkout dev || git checkout -b dev
+          git checkout origin/dev
           git branch --unset-upstream || true # Clear any existing remote tracking
           git branch --set-upstream-to=origin/dev dev
           git pull
