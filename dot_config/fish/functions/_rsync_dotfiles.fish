@@ -10,6 +10,7 @@ function _rsync_dotfiles
     # Copy configs
     rsync --recursive \
         --compress \
+        --copy-links \
         --checksum \
         --progress \
         --partial \
