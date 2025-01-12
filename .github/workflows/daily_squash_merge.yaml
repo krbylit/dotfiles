@@ -26,7 +26,7 @@ jobs:
           ssh-add ~/.ssh/id_ed25519
           ssh-keyscan github.com >> ~/.ssh/known_hosts
           git remote add private git@github.com:krbylit/dotfiles-private.git
-          git fetch private main
+          git fetch private dev
 
       - name: Squash Merge with Commit Messages
         run: |
