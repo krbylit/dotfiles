@@ -44,6 +44,7 @@ jobs:
           git pull origin dev || true
 
           # Full overwrite: Replace working directory with private repo state
+          git rm -r --cached .
           git checkout private/dev -- .
           git add .
 
