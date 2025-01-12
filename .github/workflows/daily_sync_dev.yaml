@@ -1,4 +1,4 @@
-name: Daily Sync from Private Repo
+name: Daily Sync from Private Dev
 
 on:
   schedule:
@@ -34,7 +34,17 @@ jobs:
       # Squash Merge Private Dev into Public Dev
       - name: Squash Merge Private Dev into Public Dev
         run: |
+          # Fetch the latest changes
+          git fetch private dev
+          # Create or update a local tracking branch from private/dev
+          git checkout -B temp-private-dev private/dev
+
+          # Switch back to the public dev branch and ensure it's up to date
           git checkout dev || git checkout -b dev
-          git merge --squash private/dev --allow-unrelated-histories
-          git commit -F $(git log private/dev --pretty=format:"%h - %s%n%bAuthor: %an <%ae>%n")
+          git pull origin dev || true
+
+          # Perform the squash merge from the local private branch copy
+          git merge --squash temp-private-dev --allow-unrelated-histories
+          git add .
+          git commit -F $(git log temp-private-dev --pretty=format:"%h - %s%n%bAuthor: %an <%ae>%n")
           git push origin dev --force
