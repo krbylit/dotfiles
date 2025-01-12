@@ -44,7 +44,7 @@ jobs:
           git add .
 
           # Capture all commit messages from the last merge range
-          COMMIT_MESSAGE="$(git log private/dev --since="24 hours ago" --pretty=format:'%h - %s%n%bAuthor: %an <%ae>' --reverse)"
+          COMMIT_MESSAGE="$(git log origin/dev..private/dev --since="24 hours ago" --pretty=format:'%h - %s%n%bAuthor: %an <%ae>' --reverse)"
           echo "$COMMIT_MESSAGE"
 
           # Create a single squashed commit with all commit messages included
