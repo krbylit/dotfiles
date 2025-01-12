@@ -45,7 +45,7 @@ jobs:
 
           # Switch back to the public dev branch and ensure it's up to date
           git checkout origin/dev
-          git branch --unset-upstream || true # Clear any existing remote tracking
+          # git branch --unset-upstream || true # Clear any existing remote tracking
           git branch --set-upstream-to=origin/dev dev
           git pull
 
