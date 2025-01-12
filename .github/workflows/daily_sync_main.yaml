@@ -5,6 +5,10 @@ on:
     - cron: "0 1 * * *" # Runs daily at 1 AM UTC
   workflow_dispatch: # Allows manual triggering if needed
 
+permissions:
+  contents: write
+  actions: write
+
 jobs:
   sync_main:
     runs-on: ubuntu-latest
@@ -32,15 +36,28 @@ jobs:
           git remote add private git@github.com:krbylit/dotfiles-private.git
           git fetch private main
 
-      # Squash Merge Private Main into Public Main
-      - name: Squash Merge Private Main into Public Main
+      # Force Sync Private Main into Public Main
+      - name: Force Sync Private Main into Public Main
         run: |
           git fetch private main
           git checkout main
-          git pull origin main
+          git pull origin main || true
 
-          # Perform the squash merge and commit
-          git merge --squash private/main --allow-unrelated-histories
+          # Full overwrite: Replace working directory with private repo state
+          git checkout private/main -- .
           git add .
-          git commit -m "$(git log private/main --pretty=format:'%h - %s%n%bAuthor: %an <%ae>' -1)"
+
+          # Capture commit messages and write to a temporary file
+          echo "$(date)" > commit_message.txt
+          git log origin/main..private/main --since="24 hours ago" --pretty=format:'%h - %s%n%bAuthor: %an <%ae>%n' --reverse >> commit_message.txt
+
+          # Check if the commit message file is too large
+          if [ $(wc -c <commit_message.txt) -ge 10240 ]; then
+            echo "$(date)" > commit_message.txt
+            echo "Too many commits to log." >> commit_message.txt
+          fi
+
+          # Create a squashed commit using the commit message file
+          git commit -F commit_message.txt
+          rm -f commit_message.txt
           git push origin main --force
