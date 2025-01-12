@@ -32,15 +32,17 @@ jobs:
           git remote add private git@github.com:krbylit/dotfiles-private.git
           git fetch private dev
 
-      # Squash Merge Private Dev into Public Dev
-      - name: Squash Merge Private Dev into Public Dev
+      # Force Sync Private Dev into Public Dev with Custom Commit Message
+      - name: Force Sync Private Dev into Public Dev
         run: |
           git fetch private dev
           git checkout dev
-          git pull origin dev
+          git pull origin dev || true
 
-          # Perform the squash merge and commit
-          git merge --squash private/dev --allow-unrelated-histories
+          # Hard overwrite public dev with private dev (no history retained)
+          git reset --mixed private/dev
           git add .
+
+          # Create a squash commit with hash, message, and author
           git commit -m "$(git log private/dev --pretty=format:'%h - %s%n%bAuthor: %an <%ae>' -1)"
           git push origin dev --force
