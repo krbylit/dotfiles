@@ -1,4 +1,4 @@
-name: Daily Sync from Private Dev (Force Cherry-Pick)
+name: Daily Sync from Private Dev (Cherry-Pick)
 
 on:
   schedule:
@@ -32,7 +32,7 @@ jobs:
           git remote add private git@github.com:krbylit/dotfiles-private.git
           git fetch private dev
 
-      # Force Cherry-Pick New Commits and Resolve Conflicts by Preferring Private Changes
+      # Cherry-Pick All New Commits from Private Dev
       - name: Cherry-Pick New Commits from Private Dev into Public Dev
         run: |
           git fetch private dev
@@ -42,15 +42,10 @@ jobs:
           # Identify new commits to cherry-pick (not in origin/dev)
           COMMITS=$(git log origin/dev..private/dev --reverse --pretty=format:"%H")
 
-          # Cherry-pick each commit and resolve conflicts by always preferring private state
+          # Cherry-pick each commit individually
           for commit in $COMMITS; do
-            git cherry-pick $commit || (
-              echo "Conflict detected - Resolving by preferring private state."
-              git checkout --theirs .  # Always keep the private version of the files
-              git add .
-              git commit --no-edit  # Commit the resolved merge without modifying the message
-            )
+            git cherry-pick $commit || { echo "Conflict detected, aborting!"; git cherry-pick --abort; exit 1; }
           done
 
-          # Push changes after all cherry-picking
-          git push origin dev --force
+          # Push the changes if no conflicts occurred
+          git push origin dev
