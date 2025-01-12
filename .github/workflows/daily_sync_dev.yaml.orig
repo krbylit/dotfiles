@@ -32,13 +32,47 @@ jobs:
           git remote add private git@github.com:krbylit/dotfiles-private.git
           git fetch private dev
 
+<<<<<<< HEAD
+      # Squash Merge Private Dev into Public Dev
+      - name: Squash Merge Private Dev into Public Dev
+||||||| parent of 184e22a (cherry pick)
+      # Force Sync Private Dev into Public Dev
+      - name: Force Sync Private Dev into Public Dev
+=======
       # Cherry-Pick All New Commits from Private Dev
       - name: Cherry-Pick New Commits from Private Dev into Public Dev
+>>>>>>> 184e22a (cherry pick)
         run: |
           git fetch private dev
           git checkout dev
-          git pull origin dev || true
+          git pull origin dev
 
+<<<<<<< HEAD
+          # Perform the squash merge and commit
+          git merge --squash private/dev --allow-unrelated-histories
+          git add .
+          git commit -m "$(git log private/dev --pretty=format:'%h - %s%n%bAuthor: %an <%ae>' -1)"
+          git push origin dev --force
+||||||| parent of 184e22a (cherry pick)
+          # Full overwrite: Replace working directory with private repo state
+          git checkout private/dev -- .
+          git add .
+
+          # Capture commit messages and write to a temporary file
+          echo "$(date)" > commit_message.txt
+          git log origin/dev..private/dev --since="24 hours ago" --pretty=format:'%h - %s%n%bAuthor: %an <%ae>%n' --reverse >> commit_message.txt
+
+          # Check if the commit message file is too large
+          if [ $(wc -c <commit_message.txt) -ge 10240 ]; then
+            echo "$(date)" > commit_message.txt
+            echo "Too many commits to log." >> commit_message.txt
+          fi
+
+          # Create a squashed commit using the commit message file
+          git commit -F commit_message.txt
+          rm -f commit_message.txt
+          git push origin dev --force
+=======
           # Identify new commits to cherry-pick (not in origin/dev)
           COMMITS=$(git log origin/dev..private/dev --reverse --pretty=format:"%H")
 
@@ -49,3 +83,4 @@ jobs:
 
           # Push the changes if no conflicts occurred
           git push origin dev
+>>>>>>> 184e22a (cherry pick)
