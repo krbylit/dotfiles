@@ -34,6 +34,6 @@ jobs:
           git merge --squash private/dev
 
           # Prepare a detailed commit message with authors
-          git log private/dev --pretty=format:"%h - %s%n%b%nAuthor: %an <%ae>%n" > commit_message.txt
+          git log private/dev --pretty=format:"%h - %s%n%bAuthor: %an <%ae>%n" > commit_message.txt
           git commit -F commit_message.txt
           git push origin main
