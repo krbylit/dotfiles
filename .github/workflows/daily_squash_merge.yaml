@@ -17,10 +17,16 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-      - name: Pull Changes from Private Dev Branch
+      - name: Add Private Repo as Remote (SSH)
         run: |
-          git remote add private https://krbylit:${{ secrets.GH_PAT }}@github.com/krbylit/dotfiles-private.git
-          git fetch private dev
+          mkdir -p ~/.ssh
+          echo "${{ secrets.DOTFILES_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          eval "$(ssh-agent -s)"
+          ssh-add ~/.ssh/id_ed25519
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+          git remote add private git@github.com:krbylit/dotfiles-private.git
+          git fetch private main
 
       - name: Squash Merge with Commit Messages
         run: |
