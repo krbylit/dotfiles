@@ -43,17 +43,9 @@ jobs:
           git checkout private/main -- .
           git add .
 
-          # Capture commit messages and write to a temporary file
-          echo "$(date)" > commit_message.txt
-          git log origin/main..private/main --since="24 hours ago" --pretty=format:'%h - %s%n%bAuthor: %an <%ae>%n' --reverse >> commit_message.txt
+          # Capture commit messages
+          COMMIT_MESSAGE="$(git log origin/main..private/main --since="24 hours ago" --pretty=format:'%h - %s%n%bAuthor: %an <%ae>%n' --reverse)"
 
-          # Check if the commit message file is too large
-          if [ $(wc -c <commit_message.txt) -ge 10240 ]; then
-            echo "$(date)" > commit_message.txt
-            echo "Too many commits to log." >> commit_message.txt
-          fi
-
-          # Create a squashed commit using the commit message file
-          git commit -F commit_message.txt
-          rm -f commit_message.txt
+          # Create a squashed commit
+          git commit -m "$(date)" -m "$COMMIT_MESSAGE" || git commit -m "$(date)"
           git push origin main --force
