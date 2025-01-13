@@ -1,0 +1,135 @@
+#!/usr/bin/env bash
+# Load scripting addition (requires root and SIP disabled)
+yabai -m signal --add event=dock_did_restart action="sudo yabai --load-sa"
+sudo yabai --load-sa
+
+BAR_HEIGHT=$(sketchybar -m --query bar | jq -r '.height')
+# General Configurations
+yabai -m config external_bar all:"${BAR_HEIGHT}":0
+yabai -m config split_type auto
+yabai -m config split_ratio 0.5
+yabai -m config auto_balance off
+yabai -m config insert_feedback_color 0xff7793d1
+
+# Window Configurations
+yabai -m config window_placement second_child
+yabai -m config window_shadow float
+yabai -m config window_opacity off
+yabai -m config window_animation_duration 0.0
+yabai -m config window_origin_display default
+
+# Layout Configurations
+yabai -m config layout bsp
+yabai -m config top_padding 6
+yabai -m config bottom_padding 6
+yabai -m config left_padding 6
+yabai -m config right_padding 6
+yabai -m config window_gap 6
+
+# Mouse Configurations
+yabai -m config mouse_modifier alt
+yabai -m config mouse_action1 move
+yabai -m config mouse_action2 resize
+yabai -m config mouse_drop_action swap
+yabai -m config focus_follows_mouse off
+yabai -m config mouse_follows_focus off
+
+# Space Labels
+yabai -m space 1 --label term
+yabai -m space 2 --label comms
+yabai -m space 3 --label code
+yabai -m space 4 --label dev
+yabai -m space 5 --label misc
+yabai -m space 6 --label ref
+yabai -m space 7 --label debug
+yabai -m space 8 --label util
+yabai -m space 9 --label personal
+
+# Assign Spaces to Displays
+yabai -m space term --display 1
+yabai -m space comms --display 1
+yabai -m space code --display 1
+yabai -m space dev --display 1
+yabai -m space misc --display 1
+# Conditionally assign spaces to display 2 if more than one display exists, otherwise assign to display 1
+yabai -m space ref --display $(($(yabai -m query --displays | jq '. | length') > 1 ? 2 : 1))
+yabai -m space debug --display $(($(yabai -m query --displays | jq '. | length') > 1 ? 2 : 1))
+yabai -m space util --display $(($(yabai -m query --displays | jq '. | length') > 1 ? 2 : 1))
+yabai -m space personal --display $(($(yabai -m query --displays | jq '. | length') > 1 ? 2 : 1))
+
+# Rules for Excluded Applications
+yabai -m rule --add label=Finder app="^Finder$" title="(Co(py|nnect)|Move|Info|Pref)" manage=off
+yabai -m rule --add label=Safari app="^Safari$" title="^(General|(Tab|Password|Website|Extension)s|AutoFill|Se(arch|curity)|Privacy|Advance)$" manage=off
+yabai -m rule --add label="About This Mac" app="System Information" title="About This Mac" manage=off
+
+# Unmanaged Applications
+yabai -m rule --add label=unmanage_Alfred app="^Alfred$" manage=off
+yabai -m rule --add label=unmanage_AppStore app="^App Store$" manage=off
+yabai -m rule --add label=unmanage_ArchiveUtility app="^Archive Utility$" manage=off
+yabai -m rule --add label=unmanage_Calculator app="^Calculator$" manage=off
+yabai -m rule --add label=unmanage_Dictionary app="^Dictionary$" manage=off
+yabai -m rule --add label=unmanage_FaceTime app="^FaceTime$" manage=off
+yabai -m rule --add label=unmanage_PhotoBooth app="^Photo Booth$" manage=off
+yabai -m rule --add label=unmanage_Python app="^Python$" manage=off
+yabai -m rule --add label=unmanage_ScreenSharing app="^Screen Sharing$" manage=off
+yabai -m rule --add label=unmanage_Screens app="^Screens$" manage=off
+yabai -m rule --add label=unmanage_SoftwareUpdate app="^Software Update$" manage=off
+yabai -m rule --add label=unmanage_Stats app="^Stats$" manage=off
+yabai -m rule --add label=unmanage_SystemInformation app="^System Information$" manage=off
+yabai -m rule --add label=unmanage_SystemPreferences app="^System Preferences$" manage=off
+yabai -m rule --add label=unmanage_SystemSettings app="^System Settings$" manage=off
+
+# Rules for Sticky Applications
+# yabai -m rule --add label=sticky_SystemPreferences app="^System Preferences$" sticky=on
+# yabai -m rule --add label=sticky_SystemSettings app="^System Settings$" sticky=on
+
+# Application Assignments by Space
+# Term Space
+yabai -m rule --add label=term_kitty app="^kitty$" space=term
+
+# Comms Space
+yabai -m rule --add label=comms_Slack app="^Slack$" space=comms
+yabai -m rule --add label=comms_Edge app="^Microsoft Edge$" space=comms
+yabai -m rule --add label=comms_Outlook app="^Microsoft Outlook$" space=comms
+
+# Code Space
+yabai -m rule --add label=code_Code app="^Code$" space=code
+yabai -m rule --add label=code_VS app="^Visual Studio$" space=code
+yabai -m rule --add label=code_Sublime app="^Sublime Text$" space=code
+
+# Dev Space
+yabai -m rule --add label=dev_GitHub app="^GitHub$" space=dev
+yabai -m rule --add label=dev_MongoDBCompass app="^MongoDB Compass$" space=dev
+yabai -m rule --add label=dev_Docker app="^Docker$" space=dev
+yabai -m rule --add label=dev_Cyberduck app="^Cyberduck$" space=dev
+
+# Ref Space
+yabai -m rule --add label=ref_Notion app="^Notion$" space=ref
+
+# Debug Space
+yabai -m rule --add label=debug_Chrome app="^Google Chrome$" space=debug
+
+# Util Space
+yabai -m rule --add label=util_Figma app="^Figma$" space=util
+yabai -m rule --add label=util_1Password app="^1Password$" space=util
+yabai -m rule --add label=util_ActivityMonitor app="^Activity Monitor$" space=util
+yabai -m rule --add label=util_Karabiner app="^Karabiner-Elements$" space=util
+
+# Misc Space
+yabai -m rule --add label=misc_Finder app="^Finder$" space=misc
+
+# Personal Space
+yabai -m rule --add label=personal_Firefox app="^Firefox$" space=personal
+
+# Space-Specific Configurations
+yabai -m config --space term layout float
+yabai -m config --space comms layout stack
+yabai -m config --space personal layout bsp
+# yabai -m config --space term window_opacity off
+# yabai -m config --space comms window_opacity off
+
+# Signals
+yabai -m signal --add event=display_added action="yabai -m rule --apply"
+yabai -m signal --add event=display_removed action="yabai -m rule --apply"
+
+echo "Yabai configuration loaded."

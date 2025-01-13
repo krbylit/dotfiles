@@ -1,0 +1,2 @@
+# Read from `ghostty.conf` so we get features like `commentstring` in our editor
+config-file = "ghostty.conf"

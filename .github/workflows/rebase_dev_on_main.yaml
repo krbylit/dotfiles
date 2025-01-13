@@ -1,0 +1,38 @@
+name: Rebase Dev on Main
+
+on:
+  pull_request:
+    types:
+      - closed
+    branches:
+      - main
+
+jobs:
+  rebase_dev:
+    if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main' && github.event.pull_request.head.ref == 'dev'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout the Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Ensures full commit history for rebase
+
+      - name: Set Up Git User (GitHub Actions Bot)
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Fetch All Branches
+        run: |
+          git fetch origin main
+          git fetch origin dev
+
+      - name: Rebase `dev` onto `main`
+        run: |
+          git checkout dev
+          git rebase main
+
+      - name: Push the Rebasing Changes (Force Push for Clean History)
+        run: |
+          git push origin dev --force-with-lease

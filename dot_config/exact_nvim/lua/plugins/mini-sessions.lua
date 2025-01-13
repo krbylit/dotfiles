@@ -1,0 +1,35 @@
+return {
+	-- "echasnovski/mini.sessions",
+	-- config = function()
+	-- 	require("mini.sessions").setup({
+	-- 		-- No need to copy this inside `setup()`. Will be used automatically.
+	-- 		-- Whether to read default session if Neovim opened without file arguments
+	-- 		autoread = false,
+	--
+	-- 		-- Whether to write currently read session before quitting Neovim
+	-- 		autowrite = true,
+	--
+	-- 		-- Directory where global sessions are stored (use `''` to disable)
+	-- 		-- <"session" subdir of user data directory from |stdpath()|>,
+	-- 		directory = vim.fn.expand("$HOME/.local/share/nvim/sessions"),
+	--
+	-- 		-- File for local session (use `''` to disable)
+	-- 		file = "Session.vim",
+	--
+	-- 		-- Whether to force possibly harmful actions (meaning depends on function)
+	-- 		force = { read = true, write = true, delete = true },
+	--
+	-- 		-- Hook functions for actions. Default `nil` means 'do nothing'.
+	-- 		hooks = {
+	-- 			-- Before successful action
+	-- 			pre = { read = nil, write = nil, delete = nil },
+	-- 			-- After successful action
+	-- 			post = { read = nil, write = nil, delete = nil },
+	-- 		},
+	--
+	-- 		-- Whether to print session path after action
+	-- 		verbose = { read = true, write = true, delete = true },
+	-- 	})
+	-- end,
+	-- opts = {},
+}

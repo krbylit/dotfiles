@@ -1,0 +1,178 @@
+# Get editor completions based on the config schema
+"$schema" = 'https://starship.rs/config-schema.json'
+
+# Set for git timeout error received in chezmoi dir (though may be due to using tethered connection)
+command_timeout = 5000
+
+# ================ Prompts ================
+format = """
+[█▓▒](flamingo) $directory $fill( $status)( $username $hostname)( $cmd_duration )${custom.block_rprompt_repo_top} 
+[▓▒░](flamingo) $character($sudo )
+"""
+right_format = '''
+(($git_branch )($nodejs )($python )[┛](bold surface1) )
+'''
+continuation_prompt = ' '
+
+add_newline = true
+
+palette = "catp"
+[palettes.catp]
+rosewater = "#f4dbd6"
+flamingo = "#f0c6c6"
+pink = "#f5bde6"
+mauve = "#c6a0f6"
+red = "#ed8796"
+dark_red = "#e64553"
+maroon = "#ee99a0"
+peach = "#f5a97f"
+yellow = "#eed49f"
+green = "#a6da95"
+green2 = "#a6d189"
+dark_green = "#40a02b"
+teal = "#8bd5ca"
+sky = "#91d7e3"
+sapphire = "#7dc4e4"
+blue = "#8aadf4"
+lavender = "#b7bdf8"
+text = "#cad3f5"
+subtext1 = "#b8c0e0"
+subtext0 = "#a5adcb"
+overlay2 = "#939ab7"
+overlay1 = "#8087a2"
+overlay0 = "#6e738d"
+surface2 = "#5b6078"
+surface1 = "#494d64"
+surface0 = "#363a4f"
+base = "#24273a"
+mantle = "#1e2030"
+crust = "#181926"
+
+[custom.block_rprompt_repo_top]
+when = true
+require_repo = true
+format = "[┓](bold surface1)"
+
+[custom.block_rprompt_repo_bottom]
+when = true
+require_repo = true
+format = "[┛](bold surface1)"
+
+# ================ Transient prompts ================
+# Angular LEFT
+[custom.angular_transient_prompt]
+command = 'starship module directory; echo -n " "; starship module git_branch; echo ""; echo -n "┗ "; starship module character; starship module custom.time'
+style = 'bold surface1'
+when = true
+format = "[$output]($style) $symbol "
+symbol = "[](green)"
+
+# RIGHT
+[custom.transient_rprompt]
+command = "echo -n '░▒▓█'"
+style = 'yellow'
+when = true
+format = "[$output]($style)"
+
+[fill]
+symbol = '━'            # For Block Prompt
+style = 'bold surface1'
+
+[character]
+success_symbol = "[](bold dark_green)"
+vimcmd_symbol = "[](bold green2)"
+vimcmd_visual_symbol = "[](bold lavendar)"
+vimcmd_replace_symbol = "[](bold red)"
+vimcmd_replace_one_symbol = "[](bold red)"
+error_symbol = "[](bold dark_red)"
+
+[username]
+disabled = false
+style_user = "bold blue dimmed"
+style_root = "bold red"
+show_always = true
+format = '[ $user]($style)'
+
+[hostname]
+ssh_only = false
+ssh_symbol = ''
+style = 'bold peach dimmed'
+format = '[($ssh_symbol ) $hostname]($style)'
+
+[directory]
+read_only = ''
+read_only_style = 'red'
+home_symbol = '~'
+truncation_length = 0
+before_repo_root_style = "flamingo dimmed"
+truncate_to_repo = false
+style = "peach"
+repo_root_style = "bold mauve"
+repo_root_format = "[]($style) [$before_root_path]($before_repo_root_style)[$repo_root]($repo_root_style)[$path]($style)( [$read_only]($read_only_style))"
+format = "[ $path]($style)( [$read_only]($read_only_style))"
+
+[git_branch]
+symbol = ""
+style = "bold maroon"
+format = '([$symbol $branch]($style))'
+
+[git_state]
+disabled = true
+format = '\([$state( $progress_current/$progress_total)]($style)\)'
+style = 'bold yellow'
+
+[git_status]
+disabled = true
+format = '([\[$conflicted$deleted$renamed$modified$typechanged$staged$untracked$ahead_behind\]]($style))'
+
+[sudo]
+disabled = false
+format = '[$symbol]($style)'
+symbol = ''
+style = 'bold blue'
+
+[status]
+disabled = false
+style = 'yellow'
+format = '[\[$status - $common_meaning\]]($style)'
+
+[nodejs]
+style = 'bold green2'
+symbol = ''
+format = 'via [$symbol ($version)]($style)($engines_version)(not_capable_style)'
+
+[python]
+style = "bold pink"
+symbol = ''
+format = 'via [$symbol $pyenv_prefix($version)(  $virtualenv)]($style)'
+
+[container]
+disabled = true
+symbol = ''
+style = 'bold red dimmed'
+format = '[$symbol \[$name\]]($style)'
+
+[cmd_duration]
+disabled = false
+min_time = 0
+show_milliseconds = true
+style = "green dimmed"
+format = "[ $duration]($style)"
+
+[time]
+disabled = false
+style = "bold yellow dimmed"
+format = "[ $time]($style)"
+time_format = "%Y-%m-%d | %H:%M"
+utc_time_offset = "local"
+use_12hr = false
+
+# Used in our transient prompt
+[custom.time]
+command = "date +'%H:%M:%S'"
+style = "green2"
+format = "[ $output]($style)"
+when = true
+# style = "inverted"
+# Old icons 
+# format = "[{  $output }]($style)"

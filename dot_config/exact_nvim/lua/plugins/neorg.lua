@@ -1,0 +1,161 @@
+-- Note / task / project management organization tool
+-- https://github.com/nvim-neorg/neorg
+
+-- NOTE: not sure if module deps must be explicitly loaded
+-- local function get_chezmoi_source_path()
+-- 	if os.getenv("CHEZMOI_SOURCE_PATH") then
+-- 		return os.getenv("CHEZMOI_SOURCE_PATH")
+-- 	else
+-- 		return "~/.local/share/chezmoi"
+-- 	end
+-- end
+-- local chezmoi_source_path = get_chezmoi_source_path()
+-- local map = vim.keymap.set
+return {
+	-- "nvim-neorg/neorg",
+	-- lazy = false,
+	-- version = "*",
+	-- -- dependencies = { "nvim-lua/plenary.nvim", "nvim-neorg/lua-utils.nvim" }, -- NOTE: not sure if these are required
+	-- dependencies = { { "luarocks.nvim" }, { "nvim-neorg/lua-utils.nvim" } },
+	-- -- cmd = "Neorg",
+	-- config = function()
+	-- 	require("nvim-treesitter.configs").setup({
+	-- 		ensure_installed = { "norg" }, -- Add 'norg' to the list of parsers to install
+	-- 		highlight = {
+	-- 			enable = true, -- Enable Treesitter highlighting
+	-- 			additional_vim_regex_highlighting = false,
+	-- 		},
+	-- 	})
+	-- 	require("neorg").setup({
+	-- 		load = {
+	-- 			["core.defaults"] = {},
+	-- 			["core.keybinds"] = {
+	-- 				config = {
+	-- 					default_keybinds = true,
+	-- 					-- neorg_leader = "<LocalLeader><LocalLeader>",
+	-- 				},
+	-- 			},
+	-- 			-- Use icons for markup
+	-- 			["core.concealer"] = { config = { icon_preset = "varied" } },
+	-- 			-- ["core.completion"] = {
+	-- 			-- 	config = {
+	-- 			-- 		engine = "nvim-cmp",
+	-- 			-- 		name = "[Norg]",
+	-- 			-- 	},
+	-- 			-- },
+	-- 			-- Generates summary, with links, of entire workspace (hover over a heading and call the cmd)
+	-- 			["core.summary"] = {
+	-- 				config = {
+	-- 					-- How to gen the summary. Opts are <"default"|"by_path">.
+	-- 					-- "default" uses file metadata and falls back to top level heading, then filename as title
+	-- 					-- "by_path" uses folder name. @type string|fun(files: PathlibPath[], ws_root: PathlibPath, heading_level: number?, include_categories: string[]?): string[]?
+	-- 					strategy = "default",
+	-- 				},
+	-- 			},
+	-- 			-- Module for managing and displaying UIs to the user. No config opts.
+	-- 			["core.ui"] = {
+	-- 				config = {},
+	-- 			},
+	-- 			["core.journal"] = {
+	-- 				config = {
+	-- 					journal_folder = "journal",
+	-- 					strategy = "nested", -- how to create dirs for individual entries
+	-- 					use_template = true, -- apply the template to new entries
+	-- 					workspace = "journal",
+	-- 				},
+	-- 			},
+	-- 			["core.autocommands"] = {
+	-- 				config = {},
+	-- 			},
+	-- 			-- Configure workspaces here
+	-- 			["core.dirman"] = {
+	-- 				config = {
+	-- 					workspaces = {
+	-- 						default = chezmoi_source_path .. "/neorg",
+	-- 						notes = chezmoi_source_path .. "/neorg/notes",
+	-- 						tasks = chezmoi_source_path .. "/neorg/tasks",
+	-- 						journal = chezmoi_source_path .. "/neorg", -- neorg seems to add 'journal' automatically, so adding that on path results in a redundant dir
+	-- 					},
+	-- 					default_workspace = "default",
+	-- 				},
+	-- 			},
+	-- 			["core.dirman.utils"] = {
+	-- 				config = {},
+	-- 			},
+	-- 			["core.text-objects"] = {
+	-- 				-- https://github.com/nvim-neorg/neorg/wiki/Norg-Text-Objects
+	-- 				config = {},
+	-- 			},
+	-- 			-- When a language not supported by Treesitter is found a fallback is made to use vim regex highlighting.
+	-- 			-- ["core.syntax"] = {
+	-- 			-- 	config = {},
+	-- 			-- },
+	-- 			["core.highlights"] = {
+	-- 				config = {},
+	-- 			},
+	-- 			-- This module handles the whole concept of toggling TODO items, as well as updating parent and/or children items alongside the current item.
+	-- 			["core.qol.todo_items"] = {
+	-- 				config = {
+	-- 					-- When true, will automatically create a TODO extension for an item if it does not exist and an operation is performed on that item.
+	-- 					create_todo_items = true,
+	-- 					-- When set to true, will automatically convert parent items to TODOs whenever a child item's TODO state is updated.
+	-- 					create_todo_parents = true,
+	-- 				},
+	-- 			},
+	-- 			-- The TOC module generates a table of contents for a given Norg buffer.
+	-- 			["core.qol.toc"] = {
+	-- 				config = {
+	-- 					-- Enter a ToC window opened manually (any ToC window not opened by auto_toc)
+	-- 					enter = true,
+	-- 				},
+	-- 			},
+	-- 			["core.esupports.metagen"] = {
+	-- 				-- The metagen module automatically places relevant metadata at the top of your .norg files.
+	-- 				-- The inject-metadata command will remove any existing metadata and overwrite it with fresh information.
+	-- 				-- The update-metadata preserves existing info, updating things like the updated fields (when the file was last edited) as well as a few other non-destructive fields.
+	-- 				-- Override current system's username for author name
+	-- 				config = {
+	-- 					author = "Kirby Little",
+	-- 					-- "none" generates no metadata, "auto" generates metadata if it is not present, "empty" generates metadata only for new files/buffers.
+	-- 					type = "auto",
+	-- 					-- Whether updated date field should be automatically updated on save if required
+	-- 					update_date = true,
+	-- 				},
+	-- 			},
+	-- 			["core.esupports.indent"] = {
+	-- 				config = {
+	-- 					-- Whether or not to "trim" excess indentation
+	-- 					dedent_excess = true,
+	-- 					-- Format on every <CR>
+	-- 					format_on_enter = true,
+	-- 					-- Format on every insert leave
+	-- 					format_on_escape = true,
+	-- 					-- This table describes a set of node types and how they should be indented when encountered in the syntax tree.
+	-- 					-- indents = {},
+	-- 				},
+	-- 			},
+	-- 			-- Follow links in .norg files
+	-- 			["core.esupports.hop"] = {
+	-- 				-- Dependencies: `core.dirman.utils`, `core.integrations.treesitter`, `core.ui`
+	-- 				config = {
+	-- 					-- List of strings specifying which filetypes to open in an external application, should the user want to open a link to such a file.
+	-- 					-- external_filetypes = {},
+	-- 					-- This value determines the strictness of fuzzy matching when trying to fix a link. Zero means only exact matches will be found, and higher values mean more lenience.
+	-- 					fuzzing_threshold = 0.5,
+	-- 					-- If true, will attempt to find a link further than your cursor on the current line, even if your cursor is not over the link itself.
+	-- 					lookahead = true,
+	-- 				},
+	-- 			},
+	-- 			-- ["core.integrations.treesitter"] = {
+	-- 			-- 	config = {
+	-- 			-- 		configure_parsers = true, -- auto-config parsers
+	-- 			-- 		install_parsers = true, -- auto-install parsers
+	-- 			-- 	},
+	-- 			-- },
+	-- 			-- ["core.integrations.nvim-cmp"] = {
+	-- 			-- 	config = {},
+	-- 			-- },
+	-- 		},
+	-- 	})
+	-- end,
+}
