@@ -1,0 +1,32 @@
+# https://www.chezmoi.io/reference/special-files-and-directories/chezmoi-format-tmpl/
+# Template for creating our chezmoi config file upon `chezmoi init`
+
+progress = true
+
+# Set `gpg` for encrypting files symmetrically with a passphrase
+# Prompt for passphrase
+{{ $passphrase := promptStringOnce . "passphrase" "passphrase" -}}
+encryption = "gpg"
+
+[edit]
+    apply = true # apply changes on exit
+    watch = true # apply changes on save
+
+# Set chezmoi to auto-push config changes
+[git]
+    autoCommit = true # auto commit on source state changes
+    autoPush = false # auto push to GitHub on source state changes
+    autoAdd = true # auto `git add .`
+
+# Set chezmoi to use 1Password Service Accounts
+[onepassword]
+    mode = "service"
+
+# Store passphrase in config file on local machine
+[data]
+    passphrase = {{ $passphrase | quote }}
+
+[gpg]
+    symmetric = true
+    args = ["--batch", "--passphrase", {{ $passphrase | quote }}, "--no-symkey-cache"]
+
