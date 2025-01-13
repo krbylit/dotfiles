@@ -1,0 +1,9 @@
+# https://www.chezmoi.io/reference/special-files-and-directories/chezmoiignore/
+# Patterns added here will match against the target path and be ignored
+# I.e., these will not be copied into the local environment
+# `dir/**/*` will ignore all files in all subdirs, but still copy the empty dir.
+# `dir` will ignore the dir and all its contents.
+README.md
+.pre-commit-config.yaml
+.gitleaksignore
+cm-util
