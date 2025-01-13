@@ -1,0 +1,377 @@
+#!/usr/bin/env bash
+# TODO: model on this config: https://github.com/khaneliman/dotfiles/blob/main/dots/macos/yabai/home/.config/yabai/yabairc
+# --- Load scripting addition for yabai, enabling features that hook into Dock.app
+# (requires root and SIP disabled)
+yabai -m signal --add event=dock_did_restart action="sudo yabai --load-sa"
+sudo yabai --load-sa
+# --- End scripting addition
+
+# Util fn to check if second display connected
+get_ext_display() {
+	# Check if there is a second display
+	local display_count
+	display_count=$(yabai -m query --displays | jq '. | length')
+
+	# If there's a second display, return display 2; otherwise, return display 1
+	if [ "$display_count" -ge 2 ]; then
+		echo 2
+	else
+		echo 1
+	fi
+}
+# Use this var to assign apps we want on external display conditionally
+EXT_DISPLAY=$(get_ext_display)
+
+delete_extra_spaces() {
+	# Get all display indices (use 'index' instead of 'id')
+	local displays
+	displays=($(yabai -m query --displays | jq -r '.[].index'))
+
+	# Iterate over each display by index
+	for display_index in "${displays[@]}"; do
+		# Get all spaces for the current display
+		local spaces
+		spaces=($(yabai -m query --spaces --display "$display_index" | jq -r '.[].index'))
+
+		# Keep only the first space, destroy the rest
+		for ((j = ${#spaces[@]} - 1; j > 0; j--)); do
+			yabai -m space --destroy "${spaces[$j]}" && echo "Destroyed space ${spaces[$j]} on display $display_index"
+		done
+	done
+
+	echo "All displays now have only one space remaining."
+}
+delete_extra_spaces
+
+# ================================================================
+# SIGNALS
+# ================================================================
+yabai -m signal --add event=display_added action="sleep 1 && sudo yabai --load-sa && yabai -m rule --apply"
+yabai -m signal --add event=display_removed action="sleep 1 && sudo yabai --load-sa && yabai -m rule --apply"
+# yabai -m signal --add event=display_added action="sleep 1 && source $HOME/.config/yabai/yabairc && yabai -m rule --apply"
+# yabai -m signal --add event=display_removed action="sleep 1 && source $HOME/.config/yabai/yabairc && yabai -m rule --apply"
+
+# ================================================================
+# GENERAL CONFIG
+# ================================================================
+BAR_HEIGHT=$(sketchybar -m --query bar | jq -r '.height')
+
+GENERAL=(
+	external_bar all:"${BAR_HEIGHT}":0
+	split_type auto
+	split_ratio 0.5
+	auto_balance off
+	insert_feedback_color 0xff7793d1
+)
+
+WINDOWS=(
+	window_placement second_child
+	window_shadow float
+	window_opacity on
+	active_window_opacity 1.0
+	normal_window_opacity 0.9
+	window_animation_duration 0.0
+	window_origin_display focused
+	window_opacity_duration 0.15
+)
+
+LAYOUT=(
+	layout bsp
+	top_padding 6
+	bottom_padding 6
+	left_padding 6
+	right_padding 6
+	window_gap 6
+)
+
+MOUSE=(
+	mouse_modifier alt
+	mouse_action1 move
+	mouse_action2 resize
+	mouse_drop_action swap
+	focus_follows_mouse off
+	mouse_follows_focus off
+)
+
+yabai -m config "${GENERAL[@]}"
+yabai -m config "${WINDOWS[@]}"
+yabai -m config "${LAYOUT[@]}"
+yabai -m config "${MOUSE[@]}"
+
+# ================================================================
+# SPACE LABELS
+# ================================================================
+LABELS=(
+	term
+	comms
+	code
+	dev
+	misc
+	ref
+	debug
+	util
+	personal
+)
+# Create spaces if they don't exist
+EXISTING_SPACES=$(yabai -m query --spaces | jq length)
+TARGET_SPACES=${#LABELS[@]}
+if ((EXISTING_SPACES < TARGET_SPACES)); then
+	SPACES_TO_CREATE=$((TARGET_SPACES - EXISTING_SPACES))
+	for ((i = 1; i <= SPACES_TO_CREATE; i++)); do
+		yabai -m space --create
+	done
+fi
+# Label spaces
+for ((i = 1; i <= "${#LABELS[@]}"; i++)); do
+	yabai -m space "${i}" --label "${LABELS[(($i - 1))]}"
+done
+MAIN_DISPLAY_SPACES=(
+	term
+	comms
+	code
+	dev
+	misc
+)
+EXT_DISPLAY_SPACES=(
+	ref
+	debug
+	util
+	personal
+)
+# Assign spaces to displays
+for space in "${EXT_DISPLAY_SPACES[@]}"; do
+	# Load bearing sleep
+	sleep 0.5
+	yabai -m space "${space}" --display "${EXT_DISPLAY}"
+done
+for space in "${MAIN_DISPLAY_SPACES[@]}"; do
+	# Load bearing sleep
+	sleep 0.5
+	yabai -m space "${space}" --display 1
+done
+
+# ================================================================
+# SPACES CONFIG
+# ================================================================
+# Exclude problematic apps from being managed:
+yabai -m rule --add label="Finder" app="^Finder$" title="(Co(py|nnect)|Move|Info|Pref)" manage=off
+yabai -m rule --add label="Safari" app="^Safari$" title="^(General|(Tab|Password|Website|Extension)s|AutoFill|Se(arch|curity)|Privacy|Advance)$" manage=off
+yabai -m rule --add label="About This Mac" app="System Information" title="About This Mac" manage=off
+
+# ================================================================
+# UNMANAGED
+# ================================================================
+UNMANAGED=(
+	# Activity Monitor
+	"Alfred"
+	"App Store"
+	"Archive Utility"
+	"Calculator"
+	"Dictionary"
+	"FaceTime"
+	"Photo Booth"
+	"Python"
+	"Screen Sharing"
+	"Screens"
+	"Software Update"
+	"Stats"
+	"System Information"
+	"System Preferences"
+	"System Settings"
+)
+# Add apps to the unmanaged list
+for ((i = 1; i <= "${#UNMANAGED[@]}"; i++)); do
+	yabai -m rule --add label="unmanage_${UNMANAGED[(($i - 1))]}" app="^${UNMANAGED[(($i - 1))]}.*$" manage=off
+done
+
+# ================================================================
+# STICKY
+# ================================================================
+STICKY=(
+	"System Preferences"
+	"System Settings"
+)
+# Add apps to the sticky list
+for ((i = 1; i <= "${#STICKY[@]}"; i++)); do
+	yabai -m rule --add label="sticky_${STICKY[(($i - 1))]}" app="^${STICKY[(($i - 1))]}.*$" sticky=on
+done
+
+# ================================================================
+# TERM
+# ================================================================
+TERM=(
+	"kitty"
+)
+# TODO: for now float seems best as it avoids some issues with padding
+TERM_OPTS=(
+	"layout float"
+	"window_opacity off"
+)
+# Add apps to the term space
+for ((i = 1; i <= "${#TERM[@]}"; i++)); do
+	yabai -m rule --add label="term_${TERM[(($i - 1))]}" app="^${TERM[(($i - 1))]}.*$" space=^term
+done
+# Set config options for term space
+for ((i = 1; i <= "${#TERM_OPTS[@]}"; i++)); do
+	yabai -m config --space "term" ${TERM_OPTS[(($i - 1))]}
+done
+# BAR_HEIGHT padding overrides here as it applies to all displays
+# yabai -m space "term" --padding abs:0:0:0:0
+
+# ================================================================
+# COMMS
+# ================================================================
+COMMS=(
+	"Slack"
+	"Microsoft Edge"
+	"Microsoft Outlook"
+)
+COMMS_OPTS=(
+	"layout stack"
+	"window_opacity off"
+)
+# Add apps to the comms space
+for ((i = 1; i <= "${#COMMS[@]}"; i++)); do
+	yabai -m rule --add label="comms_${COMMS[(($i - 1))]}" app="^${COMMS[(($i - 1))]}.*$" space=^comms
+done
+# Set config options for comms space
+for ((i = 1; i <= "${#COMMS_OPTS[@]}"; i++)); do
+	yabai -m config --space "comms" ${COMMS_OPTS[(($i - 1))]}
+done
+
+# ================================================================
+# CODE
+# ================================================================
+CODE=(
+	"Code"
+	"Visual Studio"
+	"Sublime Text"
+)
+CODE_OPTS=(
+)
+# Add apps to the code space
+for ((i = 1; i <= "${#CODE[@]}"; i++)); do
+	yabai -m rule --add label="code_${CODE[(($i - 1))]}" app="^${CODE[(($i - 1))]}.*$" space=^code
+done
+# Set config options for code space
+for ((i = 1; i <= "${#CODE_OPTS[@]}"; i++)); do
+	yabai -m config --space "code" ${CODE_OPTS[(($i - 1))]}
+done
+
+# ================================================================
+# DEV
+# ================================================================
+DEV=(
+	"GitHub"
+	"MongoDB Compass"
+	"Docker"
+	"Cyberduck"
+)
+DEV_OPTS=(
+)
+# Add apps to the dev space
+for ((i = 1; i <= "${#DEV[@]}"; i++)); do
+	yabai -m rule --add label="dev_${DEV[(($i - 1))]}" app="^${DEV[(($i - 1))]}.*$" space=^dev
+done
+# Set config options for dev space
+for ((i = 1; i <= "${#DEV_OPTS[@]}"; i++)); do
+	yabai -m config --space "dev" ${DEV_OPTS[(($i - 1))]}
+done
+
+# ================================================================
+# REF
+# ================================================================
+REF=(
+	# Grabs Notion Calendar as well
+	"Notion"
+)
+REF_OPTS=(
+)
+# Add apps to the ref space
+for ((i = 1; i <= "${#REF[@]}"; i++)); do
+	yabai -m rule --add label="ref_${REF[(($i - 1))]}" app="^${REF[(($i - 1))]}.*$" space=^ref
+done
+# Set config options for ref space
+for ((i = 1; i <= "${#REF_OPTS[@]}"; i++)); do
+	yabai -m config --space "ref" ${REF_OPTS[(($i - 1))]}
+done
+
+# ================================================================
+# DEBUG
+# ================================================================
+DEBUG=(
+	"Google Chrome"
+)
+DEBUG_OPTS=(
+)
+# Add apps to the debug space
+for ((i = 1; i <= "${#DEBUG[@]}"; i++)); do
+	yabai -m rule --add label="debug_${DEBUG[(($i - 1))]}" app="^${DEBUG[(($i - 1))]}.*$" space=^debug
+done
+# Set config options for debug space
+for ((i = 1; i <= "${#DEBUG_OPTS[@]}"; i++)); do
+	yabai -m config --space "debug" ${DEBUG_OPTS[(($i - 1))]}
+done
+
+# ================================================================
+# UTIL
+# ================================================================
+UTIL=(
+	"Figma"
+	"1Password"
+	"Activity Monitor"
+	"Karabiner-Elements"
+)
+UTIL_OPTS=(
+)
+# Add apps to the util space
+for ((i = 1; i <= "${#UTIL[@]}"; i++)); do
+	yabai -m rule --add label="util_${UTIL[(($i - 1))]}" app="^${UTIL[(($i - 1))]}.*$" space=^util
+done
+# Set config options for util space
+for ((i = 1; i <= "${#UTIL_OPTS[@]}"; i++)); do
+	yabai -m config --space "util" ${UTIL_OPTS[(($i - 1))]}
+done
+
+# ================================================================
+# MISC
+# ================================================================
+MISC=(
+	"Finder"
+)
+MISC_OPTS=(
+)
+# Add apps to the misc space
+for ((i = 1; i <= "${#MISC[@]}"; i++)); do
+	yabai -m rule --add label="misc_${MISC[(($i - 1))]}" app="^${MISC[(($i - 1))]}.*$" space=^misc
+done
+# Set config options for misc space
+for ((i = 1; i <= "${#MISC_OPTS[@]}"; i++)); do
+	yabai -m config --space "misc" ${MISC_OPTS[(($i - 1))]}
+done
+
+# ================================================================
+# PERSONAL
+# ================================================================
+PERSONAL=(
+	"Firefox"
+)
+PERSONAL_OPTS=(
+	"layout bsp"
+)
+# Add apps to the personal space
+for ((i = 1; i <= "${#PERSONAL[@]}"; i++)); do
+	yabai -m rule --add label="personal_${PERSONAL[(($i - 1))]}" app="^${PERSONAL[(($i - 1))]}.*$" space=^personal
+done
+# Set config options for personal space
+for ((i = 1; i <= "${#PERSONAL_OPTS[@]}"; i++)); do
+	yabai -m config --space "personal" ${PERSONAL_OPTS[(($i - 1))]}
+done
+
+yabai -m rule --apply
+
+# Keep yabai up to date automatically
+# updates from github repo
+# YABAI_CERT=yabai-cert sh -c ~/.config/yabai/update.sh &
+
+echo "yabai configuration loaded.."

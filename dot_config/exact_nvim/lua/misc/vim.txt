@@ -1,0 +1,48 @@
+      #
+ ////###  ///
+  ///####  //
+  ///#####//
+  ///####//
+ #///###//##
+##///##//####
+ #///#//####
+  /////####
+  ////####
+  ///####
+  // ###
+      #
+
+These two are made by Erling Westenvik:
+
+        ________ ++     ________
+       /VVVVVVVV\++++  /VVVVVVVV\
+       \VVVVVVVV/++++++\VVVVVVVV/
+        |VVVVVV|++++++++/VVVVV/'
+        |VVVVVV|++++++/VVVVV/'
+       +|VVVVVV|++++/VVVVV/'+
+     +++|VVVVVV|++/VVVVV/'+++++
+   +++++|VVVVVV|/VVV___++++++++++
+     +++|VVVVVVVVVV/##/ +_+_+_+_
+       +|VVVVVVVVV___ +/#_#,#_#,\
+        |VVVVVVV//##/+/#/+/#/'/#/
+        |VVVVV/'+/#/+/#/+/#/ /#/
+        |VVV/'++/#/+/#/ /#/ /#/
+        'V/'  /##//##//##//###/
+                 ++
+
+        ________ ++     ________
+       /VVVVVVVV\++++  /VVVVVVVV\
+       \VVVVVVVV/++++++\VVVVVVVV/
+        |VVVVVV|++++++++/VVVVV/'
+        |VVVVVV|++++++/VVVVV/'
+       +|VVVVVV|++++/VVVVV/'+
+     +++|VVVVVV|++/VVVVV/'+++++
+   +++++|VVVVVV|/VVVVV/'+++++++++
+     +++|VVVVVVVVVVV/'+++++++++
+       +|VVVVVVVVV/'+++++++++
+        |VVVVVVV/'+++++++++
+        |VVVVV/'+++++++++
+        |VVV/'+++++++++
+        'V/'   ++++++
+                 ++
+

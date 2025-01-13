@@ -1,0 +1,90 @@
+name: Initial Public Repo Setup
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: write
+
+jobs:
+  check_repo:
+    runs-on: ubuntu-latest
+    outputs:
+      should_run: ${{ steps.check.outputs.should_run }}
+    steps:
+      - id: check
+        run: |
+          if [[ "${{ github.repository }}" == "krbylit/dotfiles" ]]; then
+            echo "should_run=true" >> $GITHUB_OUTPUT
+          else
+            echo "should_run=false" >> $GITHUB_OUTPUT
+          fi
+
+  setup:
+    needs: check_repo
+    if: needs.check_repo.outputs.should_run == 'true'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Public Repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Setup Git
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Clean and Setup Main Branch
+        run: |
+          # Create new orphan branch (this disconnects from all history)
+          git checkout --orphan temp_main
+
+          # Remove everything except .github directory
+          find . -mindepth 1 ! -regex '^./.git\(/.*\)?' ! -regex '^./.github\(/.*\)?' -delete
+
+          # Add private repo
+          mkdir -p ~/.ssh
+          echo "${{ secrets.DOTFILES_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          eval "$(ssh-agent -s)"
+          ssh-add ~/.ssh/id_ed25519
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+
+          # Clone private and copy contents
+          git clone --branch main git@github.com:krbylit/dotfiles-private.git temp
+          cp -r temp/* .
+          rm -rf temp
+
+          # Initial commit on new main branch
+          git add -A
+          git commit -m "Initial sync from private repository"
+
+          # Force push to main, completely replacing history
+          git branch -D main || true
+          git branch -m main
+          git push origin main --force
+
+      - name: Setup Dev Branch
+        run: |
+          # Create new orphan branch for dev
+          git checkout --orphan temp_dev
+
+          # Remove everything except .github
+          find . -mindepth 1 ! -regex '^./.git\(/.*\)?' ! -regex '^./.github\(/.*\)?' -delete
+
+          # Clone private dev and copy contents
+          git clone --branch dev git@github.com:krbylit/dotfiles-private.git temp
+          cp -r temp/* .
+          rm -rf temp
+
+          # Initial commit on new dev branch
+          git add -A
+          git commit -m "Initial sync from private repository"
+
+          # Force push to dev, completely replacing history
+          git branch -D dev || true
+          git branch -m dev
+          git push origin dev --force

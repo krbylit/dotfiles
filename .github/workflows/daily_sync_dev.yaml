@@ -1,0 +1,92 @@
+name: Daily Sync from Private Dev
+
+on:
+  schedule:
+    - cron: "0 1 * * *" # Runs daily at 1 AM UTC
+  workflow_dispatch: # Allows manual triggering if needed
+
+permissions:
+  contents: write
+  actions: write
+
+jobs:
+  # We don't want this running on `dotfiles-private`, but workflow defs must be in private or else they override themselves in public.
+  check_repo:
+    runs-on: ubuntu-latest
+    outputs:
+      should_run: ${{ steps.check.outputs.should_run }}
+    steps:
+      - id: check
+        run: |
+          if [[ "${{ github.repository }}" == "krbylit/dotfiles" ]]; then
+            echo "should_run=true" >> $GITHUB_OUTPUT
+          else
+            echo "should_run=false" >> $GITHUB_OUTPUT
+          fi
+
+  sync_dev:
+    needs: check_repo
+    if: needs.check_repo.outputs.should_run == 'true'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Public Dev Branch
+        uses: actions/checkout@v4
+        with:
+          ref: dev # Fetch only the dev branch
+
+      - name: Set Up Git User (GitHub Actions Bot)
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      # Add Private Repo with SSH Authentication
+      - name: Add Private Repo as Remote
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.DOTFILES_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          eval "$(ssh-agent -s)"
+          ssh-add ~/.ssh/id_ed25519
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+          git remote add private git@github.com:krbylit/dotfiles-private.git
+          git fetch private dev
+
+      # Force Sync Private Dev into Public Dev
+      - name: Force Sync Private Dev into Public Dev
+        run: |
+          git fetch private dev
+          git checkout dev
+          git pull origin dev || true
+
+          # Full overwrite: Replace working directory with private repo state
+          git rm -rf .
+          git checkout private/dev -- .
+          git add -A
+
+          # Get the latest commit hash from private
+          LATEST_PRIVATE=$(git rev-parse private/dev)
+
+          # Find the last synced private commit by looking through our commit messages
+          LAST_SYNCED=$(git log origin/dev --format=%B -n 100 | grep -o -m 1 '[0-9a-f]\{40\}' || true)
+
+          # Capture commit messages and write to a temporary file
+          echo "$LATEST_PRIVATE $(date)" > commit_message.txt
+          if [ -n "$LAST_SYNCED" ]; then
+            # Get commits between last synced private commit and current private state
+            git log $LAST_SYNCED..$LATEST_PRIVATE --pretty=format:'%h - %s%n%b%nAuthor: %an <%ae>%n---' --reverse >> commit_message.txt
+          else
+            # If no previous sync found, get all commits
+            git log private/dev --since="24 hours ago" --pretty=format:'%h - %s%n%b%nAuthor: %an <%ae>%n---' --reverse >> commit_message.txt
+          fi
+
+          # Check if the commit message file is too large
+          if [ $(wc -c <commit_message.txt) -ge 10240 ]; then
+            echo "$LATEST_PRIVATE $(date)" > commit_message.txt
+            echo "Too many commits to log." >> commit_message.txt
+          fi
+
+          # Create a squashed commit using the commit message file
+          git commit -F commit_message.txt
+          rm -f commit_message.txt
+          git push origin dev --force

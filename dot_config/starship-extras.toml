@@ -1,0 +1,250 @@
+# Get editor completions based on the config schema
+"$schema" = 'https://starship.rs/config-schema.json'
+
+
+# ================ Prompts ================
+# Angular Prompt
+format = """
+$directory $fill( ($status )($cmd_duration ))\
+(\n${custom.angular_indent_repo}($container )($git_branch )($git_status )($git_state )($nodejs )($python ))
+${custom.angular_indent_when_repo}${custom.angular_indent}$character($sudo )
+"""
+right_format = '''
+$username $hostname $time'''
+
+# Block Prompt
+# Fancy
+format = """
+${custom.block_indent}$directory $fill( ($status )($cmd_duration ))\
+(\n${custom.block_indent_repo}($container )($git_branch )($git_status )($git_state )($nodejs )($python )\n${custom.block_indent_when_repo}) $character($sudo )
+"""
+right_format = '''
+$username $hostname $time'''
+
+# Minimal
+# No customs
+format = """
+[█▓▒](flamingo) $directory $fill( $status )[┓](bold surface1)
+[▓▒░](flamingo) $character($sudo )
+"""
+right_format = '''
+(($git_branch )($nodejs )($python ))[░▒▓](flamingo)[┣┛](bold surface1)
+'''
+# With custom git repo module
+format = """
+[█▓▒](flamingo) $directory $fill( ($status ))( $cmd_duration )${custom.block_rprompt_repo_top}
+[▓▒░](flamingo) $character($sudo )
+"""
+right_format = '''
+(($git_branch )($nodejs )($python )[┛](bold surface1))
+'''
+
+# Curvy prompt
+format = """
+[╭](bold surface1) $directory $fill( ($status )($cmd_duration ))\
+(\n[├─](bold surface1) ($container )($git_branch )($git_status )($git_state )($nodejs )($python ))
+[╰─${custom.when_repo}](bold surface1) $character($sudo )"""
+right_format = '''
+$username $hostname $time'''
+# Curvy Prompt w/ custom modules instead of inline chars
+format = """
+${custom.curvy_indent_start}$directory $fill( ($status )($cmd_duration ))\
+(\n${custom.curvy_indent_middle}($container )($git_branch )($git_status )($git_state )($nodejs )($python ))
+${custom.curvy_indent_end}${custom.curvy_indent_end_repo} $character($sudo )"""
+right_format = '''
+$username $hostname $time'''
+
+continuation_prompt = ' '
+
+# ================ Block prompt indents ================
+[custom.block_rprompt_repo_top]
+when = true
+require_repo = true
+format = "[┓](bold surface1)"
+[custom.block_rprompt_repo_bottom]
+when = true
+require_repo = true
+format = "[┛](bold surface1)"
+
+[custom.block_indent]
+when = true
+format = "[█ ](bold yellow)"
+
+[custom.block_indent_repo]
+when = true
+require_repo = true
+format = "[▓▒ ](bold yellow)"
+
+[custom.block_indent_when_repo]
+when = true
+require_repo = true
+format = "[ ░](bold yellow)"
+
+# ================ Angular prompt indents ================
+[custom.angular_indent]
+when = true
+format = "[┗ ](bold surface1)"
+
+[custom.angular_indent_repo]
+when = true
+require_repo = true
+format = "[┗ ](bold surface1)"
+
+[custom.angular_indent_when_repo]
+when = true
+require_repo = true
+format = "[  ](bold surface1)"
+
+# [custom.when_repo]
+# when = true
+# require_repo = true
+# format = "[─](bold surface1)"
+
+# ================ Curvy prompt indents ================
+[custom.curvy_indent_start]
+when = true
+format = "[╭ ](bold surface1)"
+
+[custom.curvy_indent_middle]
+when = true
+require_repo = true
+format = "[├─ ](bold surface1)"
+
+[custom.curvy_indent_end]
+when = true
+format = "[╰─](bold surface1)"
+
+[custom.curvy_indent_end_repo]
+when = true
+require_repo = true
+format = "[─](bold surface1)"
+
+# ================ Transient prompts ================
+# Angular LEFT
+[custom.angular_transient_prompt]
+command = 'starship module directory; echo -n " "; starship module git_branch; echo " "; starship module custom.angular_indent; starship module character; starship module custom.time'
+style = 'yellow'
+when = true
+format = "[$output]($style) $symbol "
+symbol = "[](green)"
+
+# Curvy LEFT
+[custom.curvy_transient_prompt]
+command = 'starship module custom.curvy_indent_start; starship module directory; echo -n " "; starship module git_branch; echo " "; starship module custom.curvy_indent_end; echo -n " "; starship module character; starship module custom.time'
+style = 'yellow'
+when = true
+format = "[$output]($style) $symbol "
+symbol = "[](green)"
+
+# RIGHT
+[custom.transient_rprompt]
+command = "echo '░▒▓█'"
+style = 'yellow'
+when = true
+format = "[$output]($style)"
+
+# Glpyhs and colors for modules
+#    
+#  
+# ╰ ╮ ╯ └ │ ┌ ├ ╭ ┤ ┗ ┓ ┏ ┛ ┫ ━ █ ▓ ▒ ░
+# Phosphor icons 
+# old icons  󰟀  󰝰 󱦟
+#   󰞰 󱑃 󰫃 󰫄 󱫍 󱦟 󰕗 󱑎 󱉎 
+# 󰽡 󰽣 󰽥 󰽦 󰽧 󰽨
+
+[character]
+# success_symbol = "[](bold #2ea043)"
+# error_symbol = "[](bold #F44747)"
+# #F44747 #f85149
+# Phosphor icons 
+# Old icons  
+#      nvim icons
+#    󰌖 󰐤 󰳁 󰚀  󰘳 󰄾 󰧚 󰬪 󰫎 λ 
+# 󰁮 󰫋 󰯈 󰚌  󰹿  󰹾
+
+[username]
+# #2488db #0078d4 #4daafc
+# style_user = "bold #4daafc"
+# 󰀉 󱌼  󰭕 󱌽 󱍅 󱟳 󱌿    
+
+[hostname]
+# #2ea043 #CD9731 #0078d4
+# style = 'bold #CD9731'
+#   󰟀 󰇄 󰟒 󰥻 󱄄 󰪫 󱁍 󱤓   󰌢 󰍹 󰨇 󰌌 󰥻
+
+[directory]
+# #d7ba7d #f85149
+# before_repo_root_style = "#bdb197"
+# style = "#d7ba7d"
+# repo_root_style = "bold #d7ba7d"
+#  󰉐  🔒
+#   󰉖 󰝰  󰷏 󰮧 󰟙 󱣤    󰝰 
+
+[git_branch]
+# style = "bold #CE9178"
+# #CE9178 #707070 #D16969
+# 󰘬 󰳏   󰘬  󰊢     󰊤      
+
+[sudo]
+# Phosphor icons  
+# Old icons 
+
+[nodejs]
+#  
+
+[python]
+# style = "bold #4daafc"
+#   🐍 󰒋  󰢹    
+# style = "bold #4daafc"
+
+[container]
+# Phosphor icons 
+# Old icons ⬢ 
+
+[cmd_duration]
+# format = "[󱦟](#bdb197) [$duration]($style)"
+# 󱎫 ⏱ 󰔟 󱦟  
+
+[time]
+# 󰾨 󰥔  󱑂  
+
+[custom.time]
+# Old icons 
+# format = "[{  $output }]($style)"
+
+[fill]
+symbol = '─' # For Curvy prompt
+symbol = '━' # For Block Prompt
+
+
+palette = "catp"
+[palettes.catp]
+rosewater = "#f4dbd6"
+flamingo = "#f0c6c6"
+pink = "#f5bde6"
+mauve = "#c6a0f6"
+red = "#ed8796"
+dark_red = "#e64553"
+maroon = "#ee99a0"
+peach = "#f5a97f"
+yellow = "#eed49f"
+green = "#a6da95"
+green2 = "#a6d189"
+dark_green = "#40a02b"
+teal = "#8bd5ca"
+sky = "#91d7e3"
+sapphire = "#7dc4e4"
+blue = "#8aadf4"
+lavender = "#b7bdf8"
+text = "#cad3f5"
+subtext1 = "#b8c0e0"
+subtext0 = "#a5adcb"
+overlay2 = "#939ab7"
+overlay1 = "#8087a2"
+overlay0 = "#6e738d"
+surface2 = "#5b6078"
+surface1 = "#494d64"
+surface0 = "#363a4f"
+base = "#24273a"
+mantle = "#1e2030"
+crust = "#181926"

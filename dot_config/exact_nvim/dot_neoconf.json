@@ -1,0 +1,10 @@
+// Local neoconf settings
+{
+  "neoconf": {
+    "plugins": {
+      "lua_ls": {
+        "enabled": true
+      }
+    }
+  }
+}

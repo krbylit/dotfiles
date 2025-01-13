@@ -1,0 +1,79 @@
+local M = {}
+-- local dirman = require("neorg").modules.get_module("core.dirman")
+-- -- get all workspaces with dirman
+-- local function get_workspaces()
+-- 	return dirman.get_workspaces()
+-- end
+-- -- open workspaces in telescope
+-- local conf = require("telescope.config").values
+-- local function toggle_telescope(workspaces)
+-- 	local file_paths = {}
+-- 	for _, item in ipairs(workspaces.items) do
+-- 		table.insert(file_paths, item.value)
+-- 	end
+--
+-- 	require("telescope.pickers")
+-- 		.new({}, {
+-- 			prompt_title = "Workspaces",
+-- 			finder = require("telescope.finders").new_table({
+-- 				results = file_paths,
+-- 			}),
+-- 			previewer = conf.file_previewer({}),
+-- 			sorter = conf.generic_sorter({}),
+-- 		})
+-- 		:find()
+-- end
+-- dirman.create_file("my_file", "my_ws", {
+-- 	no_open = false, -- open file after creation?
+-- 	force = false, -- overwrite file if exists
+-- 	metadata = {}, -- key-value table for metadata fields
+-- })
+-- M.setup = function()
+-- 	local todo_module = require("neorg").modules.get_module("core.qol.todo_items")
+-- 	local task_cycle = todo_module["task-cycle"]
+-- 	local which_key = require("which-key")
+-- 	which_key.add({
+-- 		{
+-- 			"<LocalLeader> ",
+-- 			function()
+-- 				task_cycle()
+-- 			end,
+-- 			desc = "Cycle status",
+-- 			remap = false,
+-- 			silent = false,
+-- 			mode = { "n" },
+-- 			-- Set the keymap for only the current buffer
+-- 			buffer = 0,
+-- 			cond = function()
+-- 				if vim.bo.filetype == "norg" then
+-- 					return true
+-- 				end
+-- 			end,
+-- 		},
+-- 	})
+-- 	-- which_key.add({
+-- 	-- 	-- Add keymap group
+-- 	-- 	{ "<leader>n", group = "Neorg" },
+-- 	-- 	-- Add keymaps
+-- 	-- 	{
+-- 	-- 		-- Browse workspaces in telescope
+-- 	-- 		"<leader>nw",
+-- 	-- 		-- keymap rhs can also be string
+-- 	-- 		-- ":lua require('module').function()<CR>", -- This one doesn't work well
+-- 	-- 		-- "<cmd>command<CR>",
+-- 	-- 		toggle_telescope(get_workspaces()),
+-- 	-- 		desc = "Browse workspaces",
+-- 	-- 		remap = false,
+-- 	-- 		silent = true,
+-- 	-- 		mode = { "n" },
+-- 	-- 		-- group = "Neorg",
+-- 	-- 		-- cond = function()
+-- 	-- 		-- 	return true
+-- 	-- 		-- end,
+-- 	-- 		-- hidden = false,
+-- 	-- 		-- icon = "",
+-- 	-- 	},
+-- 	-- })
+-- end
+--
+return M

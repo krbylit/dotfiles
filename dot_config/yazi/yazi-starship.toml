@@ -1,0 +1,40 @@
+# Get editor completions based on the config schema
+"$schema" = 'https://starship.rs/config-schema.json'
+
+format = '''$directory( $git_branch)( $git_status)( $git_state)( $nodejs)( $python)'''
+# format = '$all'
+add_newline = false
+
+[directory]
+read_only = '🔒'
+read_only_style = 'red'
+home_symbol = '~'
+truncation_length = 0
+before_repo_root_style = "#37c8b0"
+truncate_to_repo = false
+style = "#94e2d5"
+repo_root_style = "bold #94e2d5"
+repo_root_format = "[󰝰 $before_root_path]($before_repo_root_style)[$repo_root]($repo_root_style)[$path]($style)( [$read_only]($read_only_style))"
+format = "[󰝰 $path]($style)( [$read_only]($read_only_style))"
+
+[git_branch]
+symbol = ""
+style = "bold #CE9178"
+format = '([$symbol $branch]($style))'
+
+[git_status]
+format = '([\[$conflicted$deleted$renamed$modified$typechanged$staged$untracked$ahead_behind\]]($style))'
+
+[git_state]
+format = '\([$state( $progress_current/$progress_total)]($style)\)'
+style = 'bold yellow'
+
+[nodejs]
+style = 'bold green'
+symbol = ''
+format = 'via [$symbol ($version )]($style)($engines_version)(not_capable_style)'
+
+[python]
+style = "bold #4daafc"
+symbol = '🐍'
+format = 'via [$symbol $pyenv_prefix($version )(\($virtualenv\))]($style)'
