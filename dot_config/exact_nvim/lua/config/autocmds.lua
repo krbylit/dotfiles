@@ -3,6 +3,17 @@
 -- ================================================================
 -- CUSTOM AUTO COMMANDS
 -- ================================================================
+-- ================================================================
+-- Filetype specific autocmds
+-- ================================================================
+-- Use 2 spaces for markdown files
+vim.api.nvim_create_autocmd("FileType", {
+	pattern = "markdown",
+	callback = function()
+		vim.bo.tabstop = 2
+		vim.bo.shiftwidth = 2
+	end,
+})
 -- Fix any jittering caused by high `scrolloff` value when near EOF or elsewhere
 vim.api.nvim_create_autocmd("InsertEnter", {
 	callback = function()

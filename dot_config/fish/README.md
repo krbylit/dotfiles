@@ -1,5 +1,9 @@
 # Fish shell
 
+> [!TODO]
+>
+> - Add feature to `s.fish` to store locally a hash of the files to copy and check for modifications that way before calling `rsync`, then also do not make `rsync` do the hash check
+
 ## Tips
 
 - `fzf` (e.g. <c-f>) can easily search with glob-like patterns

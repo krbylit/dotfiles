@@ -1,5 +1,9 @@
 function s --wraps='ssh' --description 'SSH with custom config'
     set -l host $argv[-1]
+    set -l CUSTOM_HOSTNAME $host
+    # if not grep -qE "^Host[[:space:]]+$host$" ~/.ssh/config
+    #     set CUSTOM_HOSTNAME ""
+    # end
     if string match -q -- "-*" $host
         command ssh $argv
         return
@@ -23,5 +27,6 @@ function s --wraps='ssh' --description 'SSH with custom config'
     # kill $animation_pid
 
     # Execute SSH with remaining arguments
-    command ssh $argv
+    command ssh -t $argv "export CUSTOM_HOSTNAME=$CUSTOM_HOSTNAME; (zsh --login 2>/dev/null || bash --login)"
+
 end

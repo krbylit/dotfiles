@@ -23,6 +23,8 @@ These are not installed by chezmoi, so must be installed manually.
 > [!TODO]
 >
 > - Currently we have to manually sync any changes to workflow yamls. If we change workflow in private repo and try to sync, we get a permission error even though repos appear to be configured to allow bots to change workflows.
+> - Finish setup for handling no error on empty diff between private and public.
+> - Add step to `rm -f` `encrypted_` chezmoi files before committing to public, making clone and initial setup easier for others.
 
 ### Setup of public dotfiles repo
 
