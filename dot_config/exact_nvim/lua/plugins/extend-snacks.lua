@@ -43,6 +43,15 @@ return {
 				inlay_hints = false,
 			},
 		},
+		---@type snacks.picker.Config
+		picker = {
+			---@type snacks.picker.layout.Config
+			layout = {
+				preset = "ivy",
+				reverse = false,
+			},
+		},
+		---@type snacks.dashboard.Config
 		dashboard = {
 			enabled = true,
 			-- height = terminal_height,
@@ -50,6 +59,7 @@ return {
 			-- row = 1,
 			-- col = 1,
 			pane_gap = 4,
+			---@type snacks.dashboard.sections.Config
 			sections = {
 				{
 					pane = 1,
@@ -120,6 +130,7 @@ return {
 					"SnacksIndent8",
 				},
 			},
+			---@class snacks.animate.Config
 			animate = {
 				enabled = vim.fn.has("nvim-0.10") == 1,
 				easing = "linear",
@@ -139,6 +150,7 @@ return {
 				only_current = true, -- only show scope in the current window
 				hl = "SnacksIndentScope", ---@type string|string[] hl group for scopes
 			},
+			---@class snacks.indent.Chunk.Config: snacks.scope.Config
 			chunk = {
 				-- when enabled, scopes will be rendered as chunks, except for the
 				-- top-level scope which will be rendered as a scope.
@@ -157,6 +169,7 @@ return {
 					-- arrow = "─",
 				},
 			},
+			---@class snacks.indent.Blank.Config: snacks.scope.Config
 			blank = {
 				char = " ",
 				-- char = "·",

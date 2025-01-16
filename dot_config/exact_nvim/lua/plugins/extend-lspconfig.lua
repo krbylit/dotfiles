@@ -190,15 +190,17 @@ return {
 							},
 						},
 					},
+					on_attach = function(client, bufnr)
+						-- Keep Pyright's core capabilities but disable hover
+						client.server_capabilities.hoverProvider = false
+					end,
 				},
 				ruff_lsp = {
 					on_attach = function(client, bufnr)
-						-- Disable Ruff's formatting capabilities (if enabled by default)
 						client.server_capabilities.documentFormattingProvider = false
 						client.server_capabilities.hoverProvider = false
 					end,
 					init_options = {
-						-- Configure Ruff-LSP to handle only linting
 						settings = {
 							args = {},
 						},
@@ -216,9 +218,19 @@ return {
 						},
 					},
 					on_attach = function(client, buffer)
-						-- Disable formatting since we want from yapf
+						-- Disable formatting since we want it from yapf
 						client.server_capabilities.documentFormattingProvider = false
+
+						-- Keep hover enabled for Jedi
 						client.server_capabilities.hoverProvider = true
+
+						-- Disable other capabilities to avoid duplication with Pyright
+						client.server_capabilities.definitionProvider = false
+						client.server_capabilities.referencesProvider = false
+						client.server_capabilities.documentSymbolProvider = false
+						client.server_capabilities.workspaceSymbolProvider = false
+						client.server_capabilities.implementationProvider = false
+						client.server_capabilities.declarationProvider = false
 					end,
 				},
 				lua_ls = {
