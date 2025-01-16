@@ -60,7 +60,8 @@ fzf_configure_bindings --history=\cS --directory=\cF --processes=\cP --git_log=\
 # Set ctrl+o to open selected file in EDITOR. Appended to defaults.
 set -gx fzf_directory_opts --bind "ctrl-o:execute($EDITOR {} &> /dev/tty)"
 # Set fzf.fish `fd` opts for searching files/dirs. Appended to defaults.
-set -gx fzf_fd_opts --hidden
+# Set to show dot files and gitignored files
+set -gx fzf_fd_opts --hidden --no-ignore
 # Set fzf.fish cmd for listing dirs (e.g. `ls`)
 # Defaults to `command ls -A -F "$file_path"`
 set -gx fzf_preview_dir_cmd "eza --all --color=always"

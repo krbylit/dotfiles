@@ -10,6 +10,8 @@
 	ff = only
 [init]
 	defaultBranch = main
+[status]
+	; submoduleSummary = false
 
 # Diff with Delta settings
 [delta]
@@ -40,6 +42,7 @@
 	tool = nvimdiff
 
 [diff]
+    ; ignoreSubmodules = all
     colorMoved = default
 	tool = nvimdiff
 	; tool = delta

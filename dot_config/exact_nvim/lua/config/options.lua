@@ -113,6 +113,7 @@ vim.filetype.add({
 		[".*dot_zshrc"] = "zsh",
 		[".*dot_gitconfig"] = "gitconfig",
 		[".*dot_bash.*"] = "bash",
+		[".*ssh/.*config"] = "sshconfig",
 	},
 	-- pattern = {
 	-- 	[".*gitconfig$"] = "gitconfig",

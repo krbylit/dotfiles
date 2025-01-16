@@ -4,10 +4,7 @@
 
 ### On macOS
 
-- Probably want to disable press-and-hold on macOS `defaults write -g ApplePressAndHoldEnabled -bool false`
-  - This has some annoying implications when using KB navigation (e.g. holding `k` to scroll up pops up the macOS character selector)
-- Disable macOS font smoothing, it prevents pixel perfect text rendering `defaults -currentHost write -g AppleFontSmoothing -int 0` (then restart)
-- `defaults write -g NSServicesMinimumItemCountForContextSubmenu -int 5` sets the number of items required for the "Services" submenu to appear in the right-click context menu. Setting to a number higher than the number of services selected in `Settings > Keyboard > Shortcuts > Services` will prevent the submenu from appearing. This allows us to "replace" the default "New Terminal Tab at Folder" that appears in the main context menu with our custom terminal service e.g. "New Ghostty Tab Here".
+- Some macOS settings are changed in the `..macos-settings.sh` Chezmoi script in `.chezmoiscripts/`.
 
 ## Dependencies
 
