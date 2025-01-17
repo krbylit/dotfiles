@@ -61,3 +61,6 @@ fi
 # Install our gitleaks pre-commit hook
 cd $(chezmoi source-path) && pre-commit autoupdate
 cd $(chezmoi source-path) && pre-commit install
+
+# Copy .gitmodules for secrets submodule
+cp $(chezmoi source-path)/secrets/dot_gitmodules $(chezmoi source-path)/.gitmodules

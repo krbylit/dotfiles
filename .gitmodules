@@ -1,4 +1,0 @@
-[submodule "secrets"]
-	path = secrets
-	url = git@github.com:krbylit/dotfiles-private.git
-    ; ignore = dirty
