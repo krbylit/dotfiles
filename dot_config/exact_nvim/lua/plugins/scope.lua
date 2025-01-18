@@ -1,23 +1,23 @@
 -- Scope buffers to tabs
 return {
-	"tiagovla/scope.nvim",
-	config = function()
-		require("scope").setup({
-			require("telescope").load_extension("scope"),
-			require("which-key").add({
-				{
-					"<leader>bm",
-					"<cmd>ScopeMoveBuf<cr>",
-					remap = false,
-					desc = "Move buffer to tab",
-				},
-				{
-					"<leader>bf",
-					"<cmd>Telescope scope buffers<cr>",
-					remap = false,
-					desc = "Find buffer",
-				},
-			}),
-		})
-	end,
+	-- "tiagovla/scope.nvim",
+	-- config = function()
+	-- 	require("scope").setup({
+	-- 		require("telescope").load_extension("scope"),
+	-- 		require("which-key").add({
+	-- 			{
+	-- 				"<leader>bm",
+	-- 				"<cmd>ScopeMoveBuf<cr>",
+	-- 				remap = false,
+	-- 				desc = "Move buffer to tab",
+	-- 			},
+	-- 			{
+	-- 				"<leader>bf",
+	-- 				"<cmd>Telescope scope buffers<cr>",
+	-- 				remap = false,
+	-- 				desc = "Find buffer",
+	-- 			},
+	-- 		}),
+	-- 	})
+	-- end,
 }

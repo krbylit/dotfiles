@@ -115,6 +115,9 @@ end
 return {
 	"echasnovski/mini.statusline",
 	version = false,
+	-- cond = function()
+	-- 	return vim.bo.filetype ~= "snacks_dashboard"
+	-- end,
 	config = function()
 		-- Your existing highlight groups
 		vim.api.nvim_set_hl(
@@ -155,11 +158,11 @@ return {
 		require("mini.statusline").setup({
 			content = {
 				active = function()
-					if vim.bo.filetype == "snacks_dashboard" then
-						return MiniStatusline.combine_groups({
-							{ hl = "MiniStatuslineDashboard", strings = { mode } },
-						})
-					end
+					-- if vim.bo.filetype == "snacks_dashboard" then
+					-- 	return MiniStatusline.combine_groups({
+					-- 		{ hl = "MiniStatuslineDashboard", strings = { mode } },
+					-- 	})
+					-- end
 					local mode, mode_hl = MiniStatusline.section_mode({ trunc_width = 120 })
 					local git = MiniStatusline.section_git({ trunc_width = 40 })
 					local diff = MiniStatusline.section_diff({ trunc_width = 75 })

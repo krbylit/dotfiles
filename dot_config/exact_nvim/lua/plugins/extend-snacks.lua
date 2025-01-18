@@ -45,10 +45,47 @@ return {
 		},
 		---@type snacks.picker.Config
 		picker = {
+			---@type snacks.picker.matcher.Config
+			matcher = {},
+			---@type snacks.picker.sources.Config
+			sources = {
+				---@type snacks.picker.files.Config: snacks.picker.proc.Config
+				files = {
+					hidden = true,
+					ignored = true,
+					-- Exclude dirs from file search
+					exclude = { "**/node_modules/**", "**/dist/**", "**/build/**" },
+				},
+				---@type snacks.picker.grep.Config
+				grep = {
+					hidden = true,
+					ignored = true,
+					-- Exclude dirs from text search
+					exclude = { "**/node_modules/**", "**/dist/**", "**/build/**" },
+				},
+				---@type snacks.picker.lsp.Config
+				lsp_declarations = {},
+				---@type snacks.picker.lsp.Config
+				lsp_definitions = {},
+				---@type snacks.picker.lsp.Config
+				lsp_implementations = {},
+				---@type snacks.picker.lsp.Config
+				lsp_references = {},
+				---@type snacks.picker.lsp.Config
+				lsp_symbols = {},
+				---@type snacks.picker.lsp.Config
+				lsp_type_definitions = {},
+			},
 			---@type snacks.picker.layout.Config
 			layout = {
 				preset = "ivy",
 				reverse = false,
+			},
+			---@type snacks.picker.formatters.Config
+			formatters = {
+				file = {
+					filename_first = true,
+				},
 			},
 		},
 		---@type snacks.dashboard.Config
@@ -107,9 +144,9 @@ return {
 				},
 			},
 		},
+		---@class snacks.indent
 		indent = {
 			---@class snacks.indent.Config
-			---@field enabled? boolean
 			indent = {
 				enabled = false, -- enable indent guides
 				char = "│",
@@ -130,7 +167,7 @@ return {
 					"SnacksIndent8",
 				},
 			},
-			---@class snacks.animate.Config
+			---@class snacks.indent.animate
 			animate = {
 				enabled = vim.fn.has("nvim-0.10") == 1,
 				easing = "linear",
@@ -142,9 +179,6 @@ return {
 			---@class snacks.indent.Scope.Config: snacks.scope.Config
 			scope = {
 				enabled = true, -- enable highlighting the current scope
-				-- animate scopes. Enabled by default for Neovim >= 0.10
-				-- Works on older versions but has to trigger redraws during animation.
-				---@type snacks.animate.Config|{enabled?: boolean}
 				char = "│",
 				underline = false, -- underline the start of the scope
 				only_current = true, -- only show scope in the current window
