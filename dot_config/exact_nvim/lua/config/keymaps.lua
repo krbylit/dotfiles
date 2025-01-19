@@ -2,9 +2,22 @@
 
 local map = vim.keymap.set
 local wk = require("which-key")
+local MiniFiles = require("mini.files")
 
 -- Load plugin specific keymaps from `plugin-keymaps` module
 require("plugin-keymaps").setup()
+
+-- ================================================================
+-- MOVEMENT
+-- ================================================================
+-- Make basic movement operate on visual lines rather than logical lines when word-wrapped.
+map({ "n", "v" }, "j", "gj", { noremap = true, silent = true })
+map({ "n", "v" }, "k", "gk", { noremap = true, silent = true })
+map({ "n", "v" }, "^", "g^", { noremap = true, silent = true })
+map({ "n", "v" }, "$", "g$", { noremap = true, silent = true })
+-- Scrolling
+map({ "n", "v" }, "<C-j>", "10j", { noremap = true, silent = true })
+map({ "n", "v" }, "<C-k>", "10k", { noremap = true, silent = true })
 
 -- ================================================================
 -- COMMENTS
@@ -36,9 +49,9 @@ local dd = function()
 		return "dd"
 	end
 end
-vim.keymap.set("n", "dd", dd, { noremap = true, expr = true })
+map("n", "dd", dd, { noremap = true, expr = true })
 -- Unbind ctrl-z so it doesn't suspend terminal
-vim.keymap.set({ "n", "v", "i" }, "<c-z>", "<Nop>", { noremap = true, expr = true })
+map({ "n", "v", "i" }, "<c-z>", "<Nop>", { noremap = true, expr = true })
 
 -- ================================================================
 -- FILES
@@ -55,12 +68,6 @@ map("n", "<c-q>", function()
 end)
 
 -- Map ",e" to toggle mini.files
-local minifiles_toggle = function(...)
-	if not MiniFiles.close() then
-		MiniFiles.open(...)
-		-- MiniFiles.open(vim.api.nvim_buf_get_name(0))
-	end
-end
 local function is_snacks_dashboard()
 	return vim.bo.filetype == "snacks_dashboard"
 end

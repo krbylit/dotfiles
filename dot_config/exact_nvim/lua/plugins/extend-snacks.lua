@@ -45,8 +45,8 @@ return {
 		},
 		---@type snacks.picker.Config
 		picker = {
-			---@type snacks.picker.matcher.Config
-			matcher = {},
+			-- ---@type snacks.picker.matcher.Config
+			-- matcher = {},
 			---@type snacks.picker.sources.Config
 			sources = {
 				---@type snacks.picker.files.Config: snacks.picker.proc.Config

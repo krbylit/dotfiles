@@ -237,10 +237,10 @@ return {
 					remote_op = { restore = true },
 					label = { before = true, after = true, style = "inline" },
 				},
-				-- -- options used for remote flash
-				-- remote = {
-				-- 	remote_op = { restore = true, motion = true },
-				-- },
+				-- options used for remote flash
+				remote = {
+					remote_op = { restore = true, motion = true },
+				},
 				-- -- options for the floating window that shows the prompt,
 				-- -- for regular jumps
 				-- -- `require("flash").prompt()` is always available to get the prompt text
