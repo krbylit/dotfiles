@@ -5,7 +5,9 @@ local wk = require("which-key")
 local MiniFiles = require("mini.files")
 
 -- Load plugin specific keymaps from `plugin-keymaps` module
-require("plugin-keymaps").setup()
+if vim.g.started_by_firenvim == false then
+	require("plugin-keymaps").setup()
+end
 
 -- ================================================================
 -- MOVEMENT
@@ -16,8 +18,9 @@ map({ "n", "v" }, "k", "gk", { noremap = true, silent = true })
 map({ "n", "v" }, "^", "g^", { noremap = true, silent = true })
 map({ "n", "v" }, "$", "g$", { noremap = true, silent = true })
 -- Scrolling
-map({ "n", "v" }, "<C-j>", "10j", { noremap = true, silent = true })
-map({ "n", "v" }, "<C-k>", "10k", { noremap = true, silent = true })
+-- TODO: figure out other maps, these conflict with window movement
+-- map({ "n", "v" }, "<C-j>", "10j", { noremap = true, silent = true })
+-- map({ "n", "v" }, "<C-k>", "10k", { noremap = true, silent = true })
 
 -- ================================================================
 -- COMMENTS

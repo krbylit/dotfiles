@@ -11,6 +11,7 @@ local logo_file = require("misc.dash-helpers").random_logo_file()
 local measure_logo_file = require("misc.dash-helpers").measure_logo_file
 local logo_width, logo_height = measure_logo_file(logo_file)
 local pane_width = math.floor(terminal_width / 4)
+---@type LazySpec
 return {
 	"folke/snacks.nvim",
 	priority = 1000,

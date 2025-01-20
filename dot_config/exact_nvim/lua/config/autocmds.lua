@@ -6,6 +6,16 @@
 -- ================================================================
 -- Filetype specific autocmds
 -- ================================================================
+-- Enter zen mode if in firenvim
+-- NOTE: not the best way to achieve this
+-- vim.api.nvim_create_autocmd("BufEnter", {
+-- 	callback = function()
+-- 		if vim.g.started_by_firenvim then
+-- 			vim.cmd("lua Snacks.zen()")
+-- 		end
+-- 	end,
+-- 	desc = "Run Snacks.zen() if started by Firenvim",
+-- })
 -- Use 2 spaces for markdown files
 vim.api.nvim_create_autocmd("FileType", {
 	pattern = "markdown",

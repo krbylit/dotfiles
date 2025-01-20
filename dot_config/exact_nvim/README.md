@@ -57,6 +57,25 @@ Based on LazyVim, with separate config options for nvim in VS Code and in the te
 - [LazyVim Install](https://www.lazyvim.org/installation)
 - [LazyVim Starter Template](https://github.com/LazyVim/starter)
 
+## Firenvim Setup
+
+### Browser maps
+
+- `<c-e>`: turn focused element into firenvim iframe
+- `<c-,>`: toggle firenvim for the current tab
+
+In order to be able to use <C-w> with Firenvim, you need to "give" this shortcut to Firenvim. You can do so by performing the following actions:
+
+    Go to about://addons.
+
+    Click on Extensions in the column on the left.
+
+    Click on the cog icon under the search bar.
+
+    Select Manage Extension Shortcuts in the drop down menu.
+
+    Click on the input field labelled Send <C-w> to firenvim and then press <C-w>.
+
 ## Extending vs Overriding Plugin Configurations in LazyVim
 
 LazyVim makes it easy to extend or override default plugin configurations. Here's how it works:

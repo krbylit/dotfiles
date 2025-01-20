@@ -1,4 +1,4 @@
-local cmp = require("cmp")
+-- local cmp = require("cmp")
 -- local blink = require("blink.cmp")
 -- local cmp_active = true
 -- local function toggle_cmp(enable)
@@ -33,35 +33,35 @@ return {
 	dependencies = {
 		-- NOTE: necessary here otherwise copilot shows up in LazyVim as disabled, possibly a LazyVim bug
 		{ "zbirenbaum/copilot.lua", enabled = true, opts = {} },
-		{
-			"hrsh7th/cmp-cmdline",
-			config = function()
-				-- Completion on buffer search
-				-- `/` cmdline setup.
-				cmp.setup.cmdline("/", {
-					mapping = cmp.mapping.preset.cmdline(),
-					sources = {
-						{ name = "buffer" },
-					},
-				})
-				-- Completion on nvim command line
-				-- `:` cmdline setup.
-				cmp.setup.cmdline(":", {
-					mapping = cmp.mapping.preset.cmdline(),
-					sources = cmp.config.sources({
-						-- { name = "neorg" },
-						{ name = "path" },
-					}, {
-						{
-							name = "cmdline",
-							option = {
-								ignore_cmds = { "Man", "!" },
-							},
-						},
-					}),
-				})
-			end,
-		},
+		-- {
+		-- 	"hrsh7th/cmp-cmdline",
+		-- 	config = function()
+		-- 		-- Completion on buffer search
+		-- 		-- `/` cmdline setup.
+		-- 		cmp.setup.cmdline("/", {
+		-- 			mapping = cmp.mapping.preset.cmdline(),
+		-- 			sources = {
+		-- 				{ name = "buffer" },
+		-- 			},
+		-- 		})
+		-- 		-- Completion on nvim command line
+		-- 		-- `:` cmdline setup.
+		-- 		cmp.setup.cmdline(":", {
+		-- 			mapping = cmp.mapping.preset.cmdline(),
+		-- 			sources = cmp.config.sources({
+		-- 				-- { name = "neorg" },
+		-- 				{ name = "path" },
+		-- 			}, {
+		-- 				{
+		-- 					name = "cmdline",
+		-- 					option = {
+		-- 						ignore_cmds = { "Man", "!" },
+		-- 					},
+		-- 				},
+		-- 			}),
+		-- 		})
+		-- 	end,
+		-- },
 		-- {
 		-- 	"hrsh7th/nvim-cmp",
 		-- 	enabled = true,
