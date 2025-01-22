@@ -14,6 +14,10 @@ These are not installed by chezmoi, so must be installed manually.
 
 - Docker
 - [YabaiIndicator](https://github.com/xiamaz/YabaiIndicator)
+- Firefox extensions:
+  - Sidebery (horizontal tabs)
+  - Vimium
+  - Firenvim
 
 ## GitHub Actions notes
 

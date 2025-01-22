@@ -44,55 +44,6 @@ M.setup = function()
 			end,
 			desc = "Add Current File to Harpoon",
 		},
-		{
-			"<C-e>",
-			function()
-				harpoon.ui:toggle_quick_menu(harpoon:list())
-			end,
-			desc = "Toggle Harpoon Quick Menu",
-		},
-		{
-			"<C-1>",
-			function()
-				harpoon:list():select(1)
-			end,
-			desc = "Quick Select Harpoon Buffer 1",
-		},
-		{
-			"<C-2>",
-			function()
-				harpoon:list():select(2)
-			end,
-			desc = "Quick Select Harpoon Buffer 2",
-		},
-		{
-			"<C-3>",
-			function()
-				harpoon:list():select(3)
-			end,
-			desc = "Quick Select Harpoon Buffer 3",
-		},
-		{
-			"<C-4>",
-			function()
-				harpoon:list():select(4)
-			end,
-			desc = "Quick Select Harpoon Buffer 4",
-		},
-		-- {
-		-- 	"<C-S-K>",
-		-- 	function()
-		-- 		harpoon:list():prev()
-		-- 	end,
-		-- 	desc = "Harpoon Previous Buffer",
-		-- },
-		-- {
-		-- 	"<C-S-J>",
-		-- 	function()
-		-- 		harpoon:list():next()
-		-- 	end,
-		-- 	desc = "Harpoon Next Buffer",
-		-- },
 	})
 end
 

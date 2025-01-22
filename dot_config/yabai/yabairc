@@ -104,6 +104,8 @@ yabai -m rule --add label=term_ghostty app="^Ghostty$" space=^term
 yabai -m rule --add label=comms_Slack app="^Slack$" space=^comms
 yabai -m rule --add label=comms_Edge app="^Microsoft Edge$" space=^comms
 yabai -m rule --add label=comms_Outlook app="^Microsoft Outlook$" space=^comms
+yabai -m rule --add label=comms_Firefox app="^Firefox$" space=^comms
+yabai -m rule --add label=comms_Thunderbird app="^Thunderbird$" space=^comms
 
 # ================================================================
 # CODE
@@ -150,7 +152,7 @@ yabai -m rule --add label=util_Karabiner app="^Karabiner-Elements$" space=^util
 # ================================================================
 # PERSONAL
 # ================================================================
-yabai -m rule --add label=personal_Firefox app="^Firefox$" space=^personal
+# yabai -m rule --add label=personal_Firefox app="^Firefox$" space=^personal
 yabai -m rule --add label=personal_Safari app="^Safari$" space=^personal
 yabai -m rule --add label=personal_Zoom app="^zoom" space=^personal
 

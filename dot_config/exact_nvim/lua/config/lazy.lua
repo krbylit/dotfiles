@@ -13,9 +13,8 @@ if vim.g.started_by_firenvim then
 			"LazyVim/LazyVim",
 			import = "lazyvim.plugins",
 		},
-		{
-			import = "plugins",
-		},
+		{ import = "plugins" },
+		{ import = "firenvim-config.plugins" },
 	}
 else
 	spec = {
@@ -23,9 +22,7 @@ else
 			"LazyVim/LazyVim",
 			import = "lazyvim.plugins",
 		},
-		{
-			import = "plugins",
-		},
+		{ import = "plugins" },
 	}
 end
 
@@ -57,3 +54,7 @@ require("lazy").setup({
 		},
 	},
 })
+
+if vim.g.started_by_firenvim then
+	require("firenvim-config").setup()
+end

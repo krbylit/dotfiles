@@ -55,14 +55,28 @@ return {
 					hidden = true,
 					ignored = true,
 					-- Exclude dirs from file search
-					exclude = { "**/node_modules/**", "**/dist/**", "**/build/**" },
+					exclude = {
+						"**/.venv/**",
+						"**/venv/**",
+						"**/virtual_env/**",
+						"**/node_modules/**",
+						"**/dist/**",
+						"**/build/**",
+					},
 				},
 				---@type snacks.picker.grep.Config
 				grep = {
 					hidden = true,
 					ignored = true,
 					-- Exclude dirs from text search
-					exclude = { "**/node_modules/**", "**/dist/**", "**/build/**" },
+					exclude = {
+						"**/.venv/**",
+						"**/venv/**",
+						"**/virtual_env/**",
+						"**/node_modules/**",
+						"**/dist/**",
+						"**/build/**",
+					},
 				},
 				---@type snacks.picker.lsp.Config
 				lsp_declarations = {},

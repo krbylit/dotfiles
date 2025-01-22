@@ -5,7 +5,10 @@ local wk = require("which-key")
 local MiniFiles = require("mini.files")
 
 -- Load plugin specific keymaps from `plugin-keymaps` module
-if vim.g.started_by_firenvim == false then
+if vim.g.started_by_firenvim == true then
+	-- NOTE: Firenvim keymaps need to be loaded here, in the normal execution order of loading keymaps
+	require("firenvim-config.keymaps").setup()
+else
 	require("plugin-keymaps").setup()
 end
 

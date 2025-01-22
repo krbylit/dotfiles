@@ -11,6 +11,7 @@ PS1="${DIR_PROMPT} ${GIT_PROMPT}\n${USER_PROMPT} \[$(tput setaf 2)\]\$ \[$(tput 
 
 export DOCKER_BUILDKIT=1
 
+# Aliases
 # alias l='ls --color=auto'
 # alias la='ls -A --color=auto'
 alias l='ls -lFh --color=auto'
@@ -20,7 +21,7 @@ alias grep='grep --color=auto'
 alias ..="cd .."
 alias ...="cd ../.."
 alias ~="cd ~"
-alias v='vim'
+alias v='sudo -E vim'
 alias dbuildup="nohup docker compose up --build > docker.log 2>&1 &"
 alias dbuildlog="tail -f docker.log"
 
