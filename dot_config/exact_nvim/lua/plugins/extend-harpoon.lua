@@ -1,6 +1,5 @@
 -- Highly configurable bookmarking plugin
 -- https://github.com/ThePrimeagen/harpoon/tree/harpoon2
-local harpoon = require("harpoon")
 
 return {
 	"ThePrimeagen/harpoon",
@@ -14,37 +13,32 @@ return {
 	},
 	-- Override default keys so they don't show in our main which-key menu
 	keys = function()
-		return {
+		local harpoon = require("harpoon")
+		local keys = {
+			{
+				"<leader>H",
+				function()
+					harpoon:list():add()
+				end,
+				desc = "Harpoon File",
+			},
 			{
 				"<C-e>",
 				function()
 					harpoon.ui:toggle_quick_menu(harpoon:list())
 				end,
-			},
-			{
-				"<C-1>",
-				function()
-					harpoon:list():select(1)
-				end,
-			},
-			{
-				"<C-2>",
-				function()
-					harpoon:list():select(2)
-				end,
-			},
-			{
-				"<C-3>",
-				function()
-					harpoon:list():select(3)
-				end,
-			},
-			{
-				"<C-4>",
-				function()
-					harpoon:list():select(4)
-				end,
+				desc = "Harpoon Quick Menu",
 			},
 		}
+		for i = 1, 5 do
+			table.insert(keys, {
+				"<C-" .. i .. ">",
+				function()
+					harpoon:list():select(i)
+				end,
+				desc = "Harpoon to File " .. i,
+			})
+		end
+		return keys
 	end,
 }

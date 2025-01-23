@@ -8,8 +8,6 @@ local MiniFiles = require("mini.files")
 if vim.g.started_by_firenvim == true then
 	-- NOTE: Firenvim keymaps need to be loaded here, in the normal execution order of loading keymaps
 	require("firenvim-config.keymaps").setup()
-else
-	require("plugin-keymaps").setup()
 end
 
 -- ================================================================

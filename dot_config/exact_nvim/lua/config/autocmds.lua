@@ -7,6 +7,27 @@
 -- ================================================================
 -- Filetype specific autocmds
 -- ================================================================
+-- Reset all options when leaving snacks dashboard by requiring options module
+-- NOTE: solves issue of options.lua not being reset when opening a file with fuzzy finder from dashboard
+-- Recent update from Snacks may have fixed this. No longer an issue when opened from snacks.picker, but still an issue when opened from Harpoon.
+-- vim.api.nvim_create_autocmd("BufDelete", {
+-- 	callback = function(ev)
+-- 		-- Check if the buffer being deleted is a dashboard
+-- 		if vim.bo[ev.buf].filetype == "snacks_dashboard" then
+-- 			-- Check if there are any other dashboard buffers
+-- 			local dashboard_buffers = vim.tbl_filter(function(buf)
+-- 				return buf ~= ev.buf and vim.bo[buf].filetype == "snacks_dashboard"
+-- 			end, vim.api.nvim_list_bufs())
+--
+-- 			-- Only reload options if no other dashboard buffers exist
+-- 			if #dashboard_buffers == 0 then
+-- 				package.loaded["config.options"] = nil
+-- 				require("config.options")
+-- 			end
+-- 		end
+-- 	end,
+-- })
+
 -- Use 2 spaces for markdown files
 vim.api.nvim_create_autocmd("FileType", {
 	pattern = "markdown",

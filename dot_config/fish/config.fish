@@ -1,4 +1,4 @@
-# Path setup (Homebrew, nvim, etc.)
+# PATH setup (Homebrew, nvim, etc.)
 set -gx PATH $PATH /usr/local/bin # Homebrew on Intel silicon
 set -gx PATH $PATH /opt/homebrew/bin # Homebrew on Apple silicon
 set -gx PATH $PATH /opt/homebrew/sbin
@@ -8,7 +8,6 @@ set -gx PATH $PATH $HOME/.local/bin
 set -gx PATH $PATH /nix/var/nix/profiles/default/bin
 set -gx PATH $PATH $HOME/.local/share/uv/python
 set -gx PATH $PATH $PYENV_ROOT/shims
-set -gx PYTHONPATH "$HOME/src/expansion/expansion:$PYTHONPATH"
 
 set -Ux nvm_default_version v18.20.5
 
@@ -34,7 +33,7 @@ set -gx MANPAGER "sh -c 'col -bx | bat -l man -p'"
 # Git diff tool
 set -gx GIT_EXTERNAL_DIFF delta
 
-# Keymaps
+# KEYMAPS
 # with vi mode enabled, bindings default to normal mode
 # so we must specify insert mode for binding as such:
 # NOTE: we can use `fish_key_reader` to see key code for a key
@@ -50,7 +49,6 @@ bind --mode default yy vi_copy_to_clipboard
 # bind sunbeam to ctrl+space
 bind --mode insert -k nul sunbeam
 bind --mode default -k nul sunbeam
-
 
 # fzf keymaps and options
 # https://github.com/PatrickF1/fzf.fish
@@ -108,6 +106,7 @@ set fish_cursor_external line
 # The following variable can be used to configure cursor shape in
 # visual mode, but due to fish_cursor_default, is redundant here
 set fish_cursor_visual block blink
+
 
 if status is-interactive
     # Commands to run in interactive sessions can go here

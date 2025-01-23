@@ -50,12 +50,7 @@ vim.diagnostic.disable()
 opt.autochdir = true
 -- FORMATTING
 -- default "tcqj"
--- opt.formatoptions:set -=c -- Do not auto-wrap comments using textwidth
--- opt.formatoptions:set(+= r) -- Do not continue comment when pressing enter
--- asdlfkj
--- opt.formatoptions:set(-= o) -- Do not continue comment when inserting a new line
--- opt.formatoptions = "tcqjor"
--- opt.formatoptions:append({ "o", "r" })
+opt.formatoptions = "qnlj"
 vim.g.autoformat = true
 vim.g.lazyvim_prettier_needs_config = false
 if vim.fn.has("nvim-0.10") == 1 then

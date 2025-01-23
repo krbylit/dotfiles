@@ -62,6 +62,7 @@ return {
 						"**/node_modules/**",
 						"**/dist/**",
 						"**/build/**",
+						"**/__pycache__/**",
 					},
 				},
 				---@type snacks.picker.grep.Config
@@ -76,6 +77,7 @@ return {
 						"**/node_modules/**",
 						"**/dist/**",
 						"**/build/**",
+						"**/__pycache__/**",
 					},
 				},
 				---@type snacks.picker.lsp.Config
