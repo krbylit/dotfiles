@@ -1,5 +1,9 @@
 # Fish shell
 
+> [!TODO]
+>
+> - Add feature to `s.fish` to store locally a hash of the files to copy and check for modifications that way before calling `rsync`, then also do not make `rsync` do the hash check
+
 ## Tips
 
 - `fzf` (e.g. <c-f>) can easily search with glob-like patterns
@@ -38,7 +42,13 @@
 - `zoxide` can be very helpfully used in interactive mode with `zi` cmd
   - e.g. `zi dir` pulls up results in `fzf`
 - `fifc` provides fzf over cmd completions
+
   - e.g. `grep --` > <tab> > shows fzf of completions for all grep arguments, along with preview of man page docs
+
+- We can profile the startup time of Fish:
+  `fish --profile-startup /tmp/fish.profile -i -c exit && v /tmp/fish.profile`
+  and sort by time (in microseconds) with `sort -nk2 /tmp/fish.profile | less`
+  Or just run our function `profile_fish`
 
 ## Plugin docs
 

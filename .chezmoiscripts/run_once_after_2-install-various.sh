@@ -58,6 +58,18 @@ if ! command -v yapf &>/dev/null; then
 	pip install yapf
 fi
 
+# Install aider chat
+if ! command -v aider &>/dev/null; then
+	python -m pip install aider-install
+	# NOTE: need to source config again as this wasn't immediately available in PATH
+	source ~/.config/fish/config.fish
+	aider-install
+	python -m pip install -U aider-chat
+fi
+
 # Install our gitleaks pre-commit hook
 cd $(chezmoi source-path) && pre-commit autoupdate
 cd $(chezmoi source-path) && pre-commit install
+
+# Copy .gitmodules for secrets submodule
+cp $(chezmoi source-path)/secrets/dot_gitmodules $(chezmoi source-path)/.gitmodules

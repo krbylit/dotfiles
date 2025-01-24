@@ -64,8 +64,12 @@ yabai -m space personal --display $(($(yabai -m query --displays | jq '. | lengt
 
 # Rules for Excluded Applications
 yabai -m rule --add label=Finder app="^Finder$" title="(Co(py|nnect)|Move|Info|Pref)" manage=off
-yabai -m rule --add label=Safari app="^Safari$" title="^(General|(Tab|Password|Website|Extension)s|AutoFill|Se(arch|curity)|Privacy|Advance)$" manage=off
+# yabai -m rule --add label=Safari app="^Safari$" title="^(General|(Tab|Password|Website|Extension)s|AutoFill|Se(arch|curity)|Privacy|Advance)$" manage=off
 yabai -m rule --add label="About This Mac" app="System Information" title="About This Mac" manage=off
+# Don't manage 1Pass pop-ups
+yabai -m rule --add label="1Password Item" app="^1Password$" title="!^All Accounts" manage=off
+# Only manage applications that are explicitly specified
+# yabai -m rule --add app=".*" manage=off
 
 # Unmanaged Applications
 yabai -m rule --add label=unmanage_Alfred app="^Alfred$" manage=off
@@ -100,6 +104,8 @@ yabai -m rule --add label=term_ghostty app="^Ghostty$" space=^term
 yabai -m rule --add label=comms_Slack app="^Slack$" space=^comms
 yabai -m rule --add label=comms_Edge app="^Microsoft Edge$" space=^comms
 yabai -m rule --add label=comms_Outlook app="^Microsoft Outlook$" space=^comms
+yabai -m rule --add label=comms_Firefox app="^Firefox$" space=^comms
+yabai -m rule --add label=comms_Thunderbird app="^Thunderbird$" space=^comms
 
 # ================================================================
 # CODE
@@ -127,6 +133,7 @@ yabai -m rule --add label=misc_Finder app="^Finder$" space=^misc
 # REF
 # ================================================================
 yabai -m rule --add label=ref_Notion app="^Notion$" space=^ref
+yabai -m rule --add label=ref_ChatGPT app="^ChatGPT$" title="ChatGPT" space=^ref
 
 # ================================================================
 # DEBUG
@@ -138,14 +145,15 @@ yabai -m rule --add label=debug_Chrome app="^Google Chrome$" space=^debug
 # ================================================================
 yabai -m rule --add label=term_kitty app="^kitty$" space=^util
 yabai -m rule --add label=util_Figma app="^Figma$" space=^util
-yabai -m rule --add label=util_1Password app="^1Password$" space=util
+yabai -m rule --add label=util_1Password app="^1Password$" title="^All Accounts" space=util
 yabai -m rule --add label=util_ActivityMonitor app="^Activity Monitor$" space=^util
 yabai -m rule --add label=util_Karabiner app="^Karabiner-Elements$" space=^util
 
 # ================================================================
 # PERSONAL
 # ================================================================
-yabai -m rule --add label=personal_Firefox app="^Firefox$" space=^personal
+# yabai -m rule --add label=personal_Firefox app="^Firefox$" space=^personal
+yabai -m rule --add label=personal_Safari app="^Safari$" space=^personal
 yabai -m rule --add label=personal_Zoom app="^zoom" space=^personal
 
 # Space-Specific Configurations

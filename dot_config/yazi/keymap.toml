@@ -158,7 +158,7 @@ keymap = [
 
 	# Find
 	{ on = "/", run = "find --smart", desc = "Find next file" },
-	{ on = "?", run = "find --previous --smart", desc = "Find previous file" },
+	# { on = "?", run = "find --previous --smart", desc = "Find previous file" },
 	{ on = "n", run = "find_arrow", desc = "Go to the next found" },
 	{ on = "N", run = "find_arrow --previous", desc = "Go to the previous found" },
 
@@ -276,6 +276,7 @@ keymap = [
 
 	# Help
 	{ on = "~", run = "help", desc = "Open help" },
+	{ on = "?", run = "help", desc = "Open help" },
 	{ on = "<F1>", run = "help", desc = "Open help" },
 ]
 
@@ -298,10 +299,11 @@ keymap = [
 
 	# Help
 	{ on = "~", run = "help", desc = "Open help" },
+	{ on = "?", run = "help", desc = "Open help" },
 	{ on = "<F1>", run = "help", desc = "Open help" },
 ]
 
-[select]
+[pick]
 
 keymap = [
 	{ on = "<Esc>", run = "close", desc = "Cancel selection" },
@@ -317,6 +319,7 @@ keymap = [
 
 	# Help
 	{ on = "~", run = "help", desc = "Open help" },
+	{ on = "?", run = "help", desc = "Open help" },
 	{ on = "<F1>", run = "help", desc = "Open help" },
 ]
 
@@ -406,6 +409,7 @@ keymap = [
 
 	# Help
 	{ on = "~", run = "help", desc = "Open help" },
+	{ on = "?", run = "help", desc = "Open help" },
 	{ on = "<F1>", run = "help", desc = "Open help" },
 ]
 
@@ -427,6 +431,7 @@ keymap = [
 
 	# Help
 	{ on = "~", run = "help", desc = "Open help" },
+	{ on = "?", run = "help", desc = "Open help" },
 	{ on = "<F1>", run = "help", desc = "Open help" },
 ]
 
@@ -451,6 +456,7 @@ keymap = [
 
 	# Help
 	{ on = "~", run = "help", desc = "Open help" },
+	{ on = "?", run = "help", desc = "Open help" },
 	{ on = "<F1>", run = "help", desc = "Open help" },
 ]
 

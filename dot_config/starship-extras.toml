@@ -122,7 +122,7 @@ format = "[─](bold surface1)"
 # ================ Transient prompts ================
 # Angular LEFT
 [custom.angular_transient_prompt]
-command = 'starship module directory; echo -n " "; starship module git_branch; echo " "; starship module custom.angular_indent; starship module character; starship module custom.time'
+command = 'starship module directory; echo -n " "; starship module git_branch; echo ""; echo -n "┗ "; starship module character; starship module custom.time'
 style = 'yellow'
 when = true
 format = "[$output]($style) $symbol "

@@ -3,6 +3,39 @@
 -- ================================================================
 -- CUSTOM AUTO COMMANDS
 -- ================================================================
+
+-- ================================================================
+-- Filetype specific autocmds
+-- ================================================================
+-- Reset all options when leaving snacks dashboard by requiring options module
+-- NOTE: solves issue of options.lua not being reset when opening a file with fuzzy finder from dashboard
+-- Recent update from Snacks may have fixed this. No longer an issue when opened from snacks.picker, but still an issue when opened from Harpoon.
+-- vim.api.nvim_create_autocmd("BufDelete", {
+-- 	callback = function(ev)
+-- 		-- Check if the buffer being deleted is a dashboard
+-- 		if vim.bo[ev.buf].filetype == "snacks_dashboard" then
+-- 			-- Check if there are any other dashboard buffers
+-- 			local dashboard_buffers = vim.tbl_filter(function(buf)
+-- 				return buf ~= ev.buf and vim.bo[buf].filetype == "snacks_dashboard"
+-- 			end, vim.api.nvim_list_bufs())
+--
+-- 			-- Only reload options if no other dashboard buffers exist
+-- 			if #dashboard_buffers == 0 then
+-- 				package.loaded["config.options"] = nil
+-- 				require("config.options")
+-- 			end
+-- 		end
+-- 	end,
+-- })
+
+-- Use 2 spaces for markdown files
+vim.api.nvim_create_autocmd("FileType", {
+	pattern = "markdown",
+	callback = function()
+		vim.bo.tabstop = 2
+		vim.bo.shiftwidth = 2
+	end,
+})
 -- Fix any jittering caused by high `scrolloff` value when near EOF or elsewhere
 vim.api.nvim_create_autocmd("InsertEnter", {
 	callback = function()
@@ -12,59 +45,6 @@ vim.api.nvim_create_autocmd("InsertEnter", {
 vim.api.nvim_create_autocmd("InsertLeave", {
 	callback = function()
 		vim.o.scrolloff = 999
-	end,
-})
-
--- Fallback Buffer Detection (this will tell us if the input buffer is the "[No Name]" buffer that opens when all others close)
-local function is_fallback_buffer(buf)
-	-- No associated file and not backed by a real file on disk
-	local has_no_file = buf.name == "" or vim.fn.filereadable(vim.fn.fnamemodify(buf.name, ":p")) == 0
-
-	return has_no_file -- No associated file
-		and buf.linecount <= 1 -- Empty or nearly empty
-		and buf.listed == 1 -- It's a listed buffer
-end
-vim.api.nvim_create_autocmd("BufWinLeave", {
-	pattern = "*",
-	callback = function()
-		if vim.bo.filetype == "snacks_dashboard" then
-			-- Get the list of listed and loaded buffers
-			local listed_buffers = vim.fn.getbufinfo({ buflisted = 1, bufloaded = 1 })
-
-			-- Detect if the fallback buffer exists
-			local fallback_bufnr = nil
-			for _, buf in ipairs(listed_buffers) do
-				if is_fallback_buffer(buf) then
-					fallback_bufnr = buf.bufnr
-					break
-				end
-			end
-
-			if fallback_bufnr then
-				vim.api.nvim_buf_delete(fallback_bufnr, { force = true }) -- Close fallback buffer
-			end
-		end
-	end,
-})
--- Delete fallback buffer when closing MiniFilesExplorer
-vim.api.nvim_create_autocmd("User", {
-	pattern = "MiniFilesExplorerClose",
-	callback = function()
-		-- Get the list of listed and loaded buffers
-		local listed_buffers = vim.fn.getbufinfo({ buflisted = 1, bufloaded = 1 })
-
-		-- Detect if the fallback buffer exists
-		local fallback_bufnr = nil
-		for _, buf in ipairs(listed_buffers) do
-			if is_fallback_buffer(buf) then
-				fallback_bufnr = buf.bufnr
-				break
-			end
-		end
-
-		if fallback_bufnr then
-			vim.api.nvim_buf_delete(fallback_bufnr, { force = true }) -- Close fallback buffer
-		end
 	end,
 })
 

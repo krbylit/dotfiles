@@ -22,7 +22,8 @@ vim.opt.listchars = {
 -- Remove 'blank' from sessionoptions to avoid opening empty unnamed buffers
 vim.opt.sessionoptions:remove("blank")
 -- use bash for shell, fish is very slow in nvim
-opt.shell = "/bin/zsh"
+-- opt.shell = "/bin/zsh"
+opt.shell = "/opt/homebrew/bin/fish"
 opt.undofile = true -- Save undo history between sessions
 opt.tabstop = 4 -- A tab is equal to 4 spaces
 opt.shiftwidth = 4 -- Number of spaces to use for each step of (auto)indent
@@ -50,12 +51,7 @@ vim.diagnostic.disable()
 opt.autochdir = true
 -- FORMATTING
 -- default "tcqj"
--- opt.formatoptions:set -=c -- Do not auto-wrap comments using textwidth
--- opt.formatoptions:set(+= r) -- Do not continue comment when pressing enter
--- asdlfkj
--- opt.formatoptions:set(-= o) -- Do not continue comment when inserting a new line
--- opt.formatoptions = "tcqjor"
--- opt.formatoptions:append({ "o", "r" })
+opt.formatoptions = "qnlj"
 vim.g.autoformat = true
 vim.g.lazyvim_prettier_needs_config = false
 if vim.fn.has("nvim-0.10") == 1 then
@@ -113,6 +109,7 @@ vim.filetype.add({
 		[".*dot_zshrc"] = "zsh",
 		[".*dot_gitconfig"] = "gitconfig",
 		[".*dot_bash.*"] = "bash",
+		[".*ssh/.*config"] = "sshconfig",
 	},
 	-- pattern = {
 	-- 	[".*gitconfig$"] = "gitconfig",

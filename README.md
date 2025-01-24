@@ -4,10 +4,7 @@
 
 ### On macOS
 
-- Probably want to disable press-and-hold on macOS `defaults write -g ApplePressAndHoldEnabled -bool false`
-  - This has some annoying implications when using KB navigation (e.g. holding `k` to scroll up pops up the macOS character selector)
-- Disable macOS font smoothing, it prevents pixel perfect text rendering `defaults -currentHost write -g AppleFontSmoothing -int 0` (then restart)
-- `defaults write -g NSServicesMinimumItemCountForContextSubmenu -int 5` sets the number of items required for the "Services" submenu to appear in the right-click context menu. Setting to a number higher than the number of services selected in `Settings > Keyboard > Shortcuts > Services` will prevent the submenu from appearing. This allows us to "replace" the default "New Terminal Tab at Folder" that appears in the main context menu with our custom terminal service e.g. "New Ghostty Tab Here".
+- Some macOS settings are changed in the `..macos-settings.sh` Chezmoi script in `.chezmoiscripts/`.
 
 ## Dependencies
 
@@ -17,12 +14,18 @@ These are not installed by chezmoi, so must be installed manually.
 
 - Docker
 - [YabaiIndicator](https://github.com/xiamaz/YabaiIndicator)
+- Firefox extensions:
+  - Sidebery (horizontal tabs)
+  - Vimium
+  - Firenvim
 
 ## GitHub Actions notes
 
 > [!TODO]
 >
 > - Currently we have to manually sync any changes to workflow yamls. If we change workflow in private repo and try to sync, we get a permission error even though repos appear to be configured to allow bots to change workflows.
+> - Finish setup for handling no error on empty diff between private and public.
+> - Add step to `rm -f` `encrypted_` chezmoi files before committing to public, making clone and initial setup easier for others.
 
 ### Setup of public dotfiles repo
 

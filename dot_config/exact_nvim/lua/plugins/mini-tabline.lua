@@ -2,6 +2,9 @@ return {
 	"echasnovski/mini.tabline",
 	version = false,
 	dependencies = { "echasnovski/mini.icons" },
+	-- cond = function()
+	-- 	return vim.bo.filetype ~= "snacks_dashboard"
+	-- end,
 	config = function()
 		-- #f4dbd6 #f0c6c6 #c6a0f6 #ed8796 #8087a2 #939ab7 #a5adcb #f5a97f #b7bdf8 #363a4f #494d64
 		vim.api.nvim_set_hl(
@@ -26,9 +29,9 @@ return {
 			-- format = nil,
 
 			format = function(buf_id, label)
-				if vim.bo.filetype == "snacks_dashboard" then
-					return "" -- Hide tabline label
-				end
+				-- if vim.bo.filetype == "snacks_dashboard" then
+				-- 	return "" -- Hide tabline label
+				-- end
 				-- Add a `+` to the end of the tab label if the buffer is modified
 				local suffix = vim.bo[buf_id].modified and "+ " or ""
 				return MiniTabline.default_format(buf_id, label) .. suffix

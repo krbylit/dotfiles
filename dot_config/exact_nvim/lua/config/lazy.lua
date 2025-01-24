@@ -6,17 +6,28 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(vim.env.LAZY or lazypath)
 
-require("lazy").setup({
+local spec = nil
+if vim.g.started_by_firenvim then
 	spec = {
-		-- Import core LazyVim plugins, cannot change
 		{
 			"LazyVim/LazyVim",
 			import = "lazyvim.plugins",
 		},
+		{ import = "plugins" },
+		{ import = "firenvim-config.plugins" },
+	}
+else
+	spec = {
 		{
-			import = "plugins",
+			"LazyVim/LazyVim",
+			import = "lazyvim.plugins",
 		},
-	},
+		{ import = "plugins" },
+	}
+end
+
+require("lazy").setup({
+	spec = spec,
 	defaults = {
 		-- By default, only LazyVim plugins will be lazy-loaded. Your custom plugins will load during startup.
 		-- If you know what you're doing, you can set this to `true` to have all your custom plugins lazy-loaded by default.
@@ -43,3 +54,7 @@ require("lazy").setup({
 		},
 	},
 })
+
+if vim.g.started_by_firenvim then
+	require("firenvim-config").setup()
+end

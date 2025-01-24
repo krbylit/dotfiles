@@ -1,3 +1,6 @@
 .DS_Store
 .gp.md
 commit_message.txt
+.gitmodules
+.aider*
+!.aiderignore

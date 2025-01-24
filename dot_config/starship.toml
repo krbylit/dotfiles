@@ -61,18 +61,24 @@ format = "[┛](bold surface1)"
 # ================ Transient prompts ================
 # Angular LEFT
 [custom.angular_transient_prompt]
-command = 'starship module directory; echo -n " "; starship module git_branch; echo ""; echo -n "┗ "; starship module character; starship module custom.time'
+command = 'starship module custom.transient_lprompt; starship module directory; echo -n " "; starship module git_branch; echo ""; echo -n "     "; echo -n "┗ "; starship module character; starship module custom.time'
 style = 'bold surface1'
 when = true
 format = "[$output]($style) $symbol "
 symbol = "[](green)"
+
+[custom.transient_lprompt]
+command = "echo -n '█▓▒░'"
+style = 'yellow'
+when = true
+format = "[$output]($style) "
 
 # RIGHT
 [custom.transient_rprompt]
 command = "echo -n '░▒▓█'"
 style = 'yellow'
 when = true
-format = "[$output]($style)"
+format = " [$output]($style)"
 
 [fill]
 symbol = '━'            # For Block Prompt

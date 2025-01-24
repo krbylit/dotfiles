@@ -1,11 +1,17 @@
 DIR_PROMPT="\[$(tput setaf 6)\]\w"
 GIT_PROMPT="\[$(tput setaf 5)\]\$(git symbolic-ref --short HEAD 2>/dev/null)"
-USER_PROMPT="\[$(tput setaf 4)\]\u\[$(tput setaf 2)\]@\[$(tput setaf 4)\]\h"
+# Check if CUSTOM_HOSTNAME is set by ~/.ssh/config and use it in the prompt, otherwise use the default hostname
+if [ -n "$CUSTOM_HOSTNAME" ]; then
+	USER_PROMPT="\[$(tput setaf 4)\]\u\[$(tput setaf 2)\]@\[$(tput setaf 4)\]$CUSTOM_HOSTNAME"
+else
+	USER_PROMPT="\[$(tput setaf 4)\]\u\[$(tput setaf 2)\]@\[$(tput setaf 4)\]\h"
+fi
 
 PS1="${DIR_PROMPT} ${GIT_PROMPT}\n${USER_PROMPT} \[$(tput setaf 2)\]\$ \[$(tput sgr0)\]"
 
 export DOCKER_BUILDKIT=1
 
+# Aliases
 # alias l='ls --color=auto'
 # alias la='ls -A --color=auto'
 alias l='ls -lFh --color=auto'
@@ -15,7 +21,7 @@ alias grep='grep --color=auto'
 alias ..="cd .."
 alias ...="cd ../.."
 alias ~="cd ~"
-alias v='vim'
+alias v='sudo -E vim'
 alias dbuildup="nohup docker compose up --build > docker.log 2>&1 &"
 alias dbuildlog="tail -f docker.log"
 

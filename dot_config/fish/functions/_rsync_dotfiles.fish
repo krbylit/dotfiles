@@ -1,7 +1,7 @@
 function _rsync_dotfiles
     set -l host $argv[-1]
     # Copy over terminfo for Ghostty if it doesn't exist
-    set -l remote_terminfo (ssh -T $host "toe | grep ghostty")
+    set -l remote_terminfo (ssh -T $host "toe | grep ghostty" 2>/dev/null)
     if test -z "$remote_terminfo"
         echo "xterm-ghostty not found, installing..."
         infocmp -x | ssh $host -- tic -x -
@@ -19,6 +19,7 @@ function _rsync_dotfiles
         --backup-dir=~/.dotfiles-backup \
         --chmod=ugo=rwX \
         ~/.ssh-dotfiles/ \
-        $host:~/
+        # $host:~/
+        $host:~/ 1>/dev/null 2>/dev/null
     return
 end

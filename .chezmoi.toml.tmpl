@@ -3,6 +3,9 @@
 
 progress = true
 
+# Prompt for secrets repo URL, defaulting to my private repo
+{{ $secretsRepo := promptString "Enter `git@github.com` URL to optional repo containing dotfile secrets" -}}
+
 # Set `gpg` for encrypting files symmetrically with a passphrase
 # Prompt for passphrase
 {{ $passphrase := promptStringOnce . "passphrase" "passphrase" -}}
@@ -14,7 +17,7 @@ encryption = "gpg"
 
 # Set chezmoi to auto-push config changes
 [git]
-    autoCommit = true # auto commit on source state changes
+    autoCommit = false # auto commit on source state changes
     autoPush = false # auto push to GitHub on source state changes
     autoAdd = true # auto `git add .`
 
@@ -22,9 +25,10 @@ encryption = "gpg"
 [onepassword]
     mode = "service"
 
-# Store passphrase in config file on local machine
+# Store passphrase and secrets repo URL in config file on local machine
 [data]
     passphrase = {{ $passphrase | quote }}
+    secretsRepo = {{ $secretsRepo | quote }}
 
 [gpg]
     symmetric = true

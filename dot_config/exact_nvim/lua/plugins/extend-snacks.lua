@@ -11,19 +11,30 @@ local logo_file = require("misc.dash-helpers").random_logo_file()
 local measure_logo_file = require("misc.dash-helpers").measure_logo_file
 local logo_width, logo_height = measure_logo_file(logo_file)
 local pane_width = math.floor(terminal_width / 4)
+
+local picker = require("snacks.picker")
+
+---@type LazySpec
 return {
 	"folke/snacks.nvim",
 	priority = 1000,
 	lazy = false,
 	---@type snacks.Config
 	opts = {
+		---@type snacks.win.Config
 		styles = {
 			notification = {
 				wo = { wrap = true }, -- Wrap notifications
 			},
+			lazygit = {
+				-- Make lazygit fullscreen
+				height = 0,
+				width = 0,
+			},
 		},
 		bigfile = { enabled = true },
 		input = { enabled = true },
+		---@type snacks.lazygit.Config: snacks.terminal.Opts
 		lazygit = { enabled = true },
 		notifier = {
 			style = "fancy", -- "compact" | "minimal" | "fancy"
@@ -43,6 +54,85 @@ return {
 				inlay_hints = false,
 			},
 		},
+		---@type snacks.picker.Config
+		picker = {
+			-- ---@type snacks.picker.matcher.Config
+			-- matcher = {},
+			---@type snacks.picker.sources.Config
+			win = {
+				-- input window
+				input = {
+					keys = {
+						-- Make <C-c> close in normal as well as insert mode
+						["<C-c>"] = { "close", mode = { "i", "n" } },
+					},
+				},
+				-- result list window
+				list = {
+					keys = {
+						-- Make <C-c> close in normal as well as insert mode
+						["<C-c>"] = { "close", mode = { "i", "n" } },
+					},
+				},
+			},
+			---@type snacks.picker.sources.Config
+			sources = {
+				---@type snacks.picker.files.Config: snacks.picker.proc.Config
+				files = {
+					hidden = true,
+					ignored = true,
+					-- Exclude dirs from file search
+					exclude = {
+						"**/.venv/**",
+						"**/venv/**",
+						"**/virtual_env/**",
+						"**/node_modules/**",
+						"**/dist/**",
+						"**/build/**",
+						"**/__pycache__/**",
+					},
+				},
+				---@type snacks.picker.grep.Config
+				grep = {
+					hidden = true,
+					ignored = true,
+					-- Exclude dirs from text search
+					exclude = {
+						"**/.venv/**",
+						"**/venv/**",
+						"**/virtual_env/**",
+						"**/node_modules/**",
+						"**/dist/**",
+						"**/build/**",
+						"**/__pycache__/**",
+					},
+				},
+				---@type snacks.picker.lsp.Config
+				lsp_declarations = {},
+				---@type snacks.picker.lsp.Config
+				lsp_definitions = {},
+				---@type snacks.picker.lsp.Config
+				lsp_implementations = {},
+				---@type snacks.picker.lsp.Config
+				lsp_references = {},
+				---@type snacks.picker.lsp.Config
+				lsp_symbols = {},
+				---@type snacks.picker.lsp.Config
+				lsp_type_definitions = {},
+			},
+			---@type snacks.picker.layout.Config
+			layout = {
+				preset = "ivy",
+				reverse = false,
+			},
+			---@type snacks.picker.formatters.Config
+			formatters = {
+				file = {
+					filename_first = true,
+				},
+			},
+		},
+		---@type snacks.dashboard.Config
 		dashboard = {
 			enabled = true,
 			-- height = terminal_height,
@@ -50,14 +140,15 @@ return {
 			-- row = 1,
 			-- col = 1,
 			pane_gap = 4,
+			---@type snacks.dashboard.sections.Config
 			sections = {
 				{
 					pane = 1,
 					section = "terminal",
 					-- cmd = 'cat "' .. logo_file .. '" | lolcat -a -d 2 -s 15 -F 0.3 -t -p 100 -f',
-					cmd = 'while true; do clear; cat "'
+					cmd = 'fish -c "for i in (seq 10); clear; cat "'
 						.. logo_file
-						.. '" | lolcat -a -d 4 -s 15 -F 0.3 -t -p 100 -f; sleep 4; done',
+						.. '" | lolcat -a -d 4 -s 15 -F 0.3 -t -p 100 -f; sleep 4; end"',
 					height = logo_height,
 					width = logo_width,
 					-- height = math.floor(terminal_height / 3),
@@ -97,9 +188,9 @@ return {
 				},
 			},
 		},
+		---@class snacks.indent
 		indent = {
 			---@class snacks.indent.Config
-			---@field enabled? boolean
 			indent = {
 				enabled = false, -- enable indent guides
 				char = "│",
@@ -120,6 +211,7 @@ return {
 					"SnacksIndent8",
 				},
 			},
+			---@class snacks.indent.animate
 			animate = {
 				enabled = vim.fn.has("nvim-0.10") == 1,
 				easing = "linear",
@@ -131,14 +223,12 @@ return {
 			---@class snacks.indent.Scope.Config: snacks.scope.Config
 			scope = {
 				enabled = true, -- enable highlighting the current scope
-				-- animate scopes. Enabled by default for Neovim >= 0.10
-				-- Works on older versions but has to trigger redraws during animation.
-				---@type snacks.animate.Config|{enabled?: boolean}
 				char = "│",
 				underline = false, -- underline the start of the scope
 				only_current = true, -- only show scope in the current window
 				hl = "SnacksIndentScope", ---@type string|string[] hl group for scopes
 			},
+			---@class snacks.indent.Chunk.Config: snacks.scope.Config
 			chunk = {
 				-- when enabled, scopes will be rendered as chunks, except for the
 				-- top-level scope which will be rendered as a scope.
@@ -157,6 +247,7 @@ return {
 					-- arrow = "─",
 				},
 			},
+			---@class snacks.indent.Blank.Config: snacks.scope.Config
 			blank = {
 				char = " ",
 				-- char = "·",

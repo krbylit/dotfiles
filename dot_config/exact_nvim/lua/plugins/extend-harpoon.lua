@@ -11,4 +11,34 @@ return {
 			sync_on_ui_close = true,
 		},
 	},
+	-- Override default keys so they don't show in our main which-key menu
+	keys = function()
+		local harpoon = require("harpoon")
+		local keys = {
+			{
+				"<leader>H",
+				function()
+					harpoon:list():add()
+				end,
+				desc = "Harpoon File",
+			},
+			{
+				"<C-e>",
+				function()
+					harpoon.ui:toggle_quick_menu(harpoon:list())
+				end,
+				desc = "Harpoon Quick Menu",
+			},
+		}
+		for i = 1, 5 do
+			table.insert(keys, {
+				"<C-" .. i .. ">",
+				function()
+					harpoon:list():select(i)
+				end,
+				desc = "Harpoon to File " .. i,
+			})
+		end
+		return keys
+	end,
 }

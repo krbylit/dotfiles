@@ -1,4 +1,4 @@
-# Import user-specific settings (e.g. `user.name`, `user.email`)
+; Import user-specific settings (e.g. `user.name`, `user.email`)
 [include]
 	path = ~/.my.gitconfig
 [filter "lfs"]
@@ -10,19 +10,22 @@
 	ff = only
 [init]
 	defaultBranch = main
+[status]
+	; submoduleSummary = false
 
-# Diff with Delta settings
+; Diff with Delta settings
 [delta]
-	# Enable configs and themes from ~/.config/delta/
-	features = unobtrusive-line-numbers decorations mellow-barbet# gruvmax-fang
+	; Enable configs and themes from ~/.config/delta/
+	; gruvmax-fang
+	features = unobtrusive-line-numbers decorations mellow-barbet
 	navigate = true    # use n and N to move between diff sections
 	side-by-side = true # diff view
 
-# Import themes
+; Import themes
 [include]
 	path = ~/.config/delta/themes.gitconfig
 
-# Import configs
+; Import configs
 [include]
 	path = ~/.config/delta/delta.gitconfig
 
@@ -34,21 +37,18 @@
     diffFilter = delta --color-only
 
 [merge]
-	; conflictstyle = zdiff3
+	conflictstyle = zdiff3 ; truncates same lines from both sides in the conflict
 	; conflictstyle = diff2
-	conflictstyle = diff3
+	; conflictstyle = diff3
 	tool = nvimdiff
 
 [diff]
+    ; ignoreSubmodules = all
     colorMoved = default
 	tool = nvimdiff
 	; tool = delta
 
-; # FIXME: delta not working for external diffs w/ lazygit (ctrl+t on files)
+; ; FIXME: delta not working for external diffs w/ lazygit (ctrl+t on files)
 ; [difftool "delta"]
-; cmd = "delta $LOCAL $REMOTE"
-; cmd = "delta --paging=never $LOCAL $REMOTE"
-
-# turn off color as it interacts oddly w/ set colorschemes
-# [color]
-#	ui = false
+; 	cmd = "delta $LOCAL $REMOTE"
+; 	cmd = "delta --paging=never $LOCAL $REMOTE"

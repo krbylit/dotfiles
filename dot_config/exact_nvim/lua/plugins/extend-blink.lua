@@ -1,4 +1,4 @@
-local cmp = require("cmp")
+-- local cmp = require("cmp")
 -- local blink = require("blink.cmp")
 -- local cmp_active = true
 -- local function toggle_cmp(enable)
@@ -33,35 +33,35 @@ return {
 	dependencies = {
 		-- NOTE: necessary here otherwise copilot shows up in LazyVim as disabled, possibly a LazyVim bug
 		{ "zbirenbaum/copilot.lua", enabled = true, opts = {} },
-		{
-			"hrsh7th/cmp-cmdline",
-			config = function()
-				-- Completion on buffer search
-				-- `/` cmdline setup.
-				cmp.setup.cmdline("/", {
-					mapping = cmp.mapping.preset.cmdline(),
-					sources = {
-						{ name = "buffer" },
-					},
-				})
-				-- Completion on nvim command line
-				-- `:` cmdline setup.
-				cmp.setup.cmdline(":", {
-					mapping = cmp.mapping.preset.cmdline(),
-					sources = cmp.config.sources({
-						-- { name = "neorg" },
-						{ name = "path" },
-					}, {
-						{
-							name = "cmdline",
-							option = {
-								ignore_cmds = { "Man", "!" },
-							},
-						},
-					}),
-				})
-			end,
-		},
+		-- {
+		-- 	"hrsh7th/cmp-cmdline",
+		-- 	config = function()
+		-- 		-- Completion on buffer search
+		-- 		-- `/` cmdline setup.
+		-- 		cmp.setup.cmdline("/", {
+		-- 			mapping = cmp.mapping.preset.cmdline(),
+		-- 			sources = {
+		-- 				{ name = "buffer" },
+		-- 			},
+		-- 		})
+		-- 		-- Completion on nvim command line
+		-- 		-- `:` cmdline setup.
+		-- 		cmp.setup.cmdline(":", {
+		-- 			mapping = cmp.mapping.preset.cmdline(),
+		-- 			sources = cmp.config.sources({
+		-- 				-- { name = "neorg" },
+		-- 				{ name = "path" },
+		-- 			}, {
+		-- 				{
+		-- 					name = "cmdline",
+		-- 					option = {
+		-- 						ignore_cmds = { "Man", "!" },
+		-- 					},
+		-- 				},
+		-- 			}),
+		-- 		})
+		-- 	end,
+		-- },
 		-- {
 		-- 	"hrsh7th/nvim-cmp",
 		-- 	enabled = true,
@@ -117,7 +117,11 @@ return {
 		sources = {
 			default = { "lsp", "path", "snippets", "buffer", "copilot", "cmdline" },
 			-- cmdline = {},
-			-- compat = {},
+			compat = {
+				"avante_commands",
+				"avante_mentions",
+				"avante_files",
+			},
 			--- @type blink.cmp.SourceProviderConfig
 			providers = {
 				copilot = {
@@ -125,6 +129,24 @@ return {
 					module = "blink-cmp-copilot",
 					kind = "Copilot",
 					score_offset = 999, -- Boost Copilot's score (adjust as needed) so it comes first
+				},
+				avante_commands = {
+					name = "avante_commands",
+					module = "blink.compat.source",
+					score_offset = 90, -- show at a higher priority than lsp
+					opts = {},
+				},
+				avante_files = {
+					name = "avante_files",
+					module = "blink.compat.source",
+					score_offset = 100, -- show at a higher priority than lsp
+					opts = {},
+				},
+				avante_mentions = {
+					name = "avante_mentions",
+					module = "blink.compat.source",
+					score_offset = 1000, -- show at a higher priority than lsp
+					opts = {},
 				},
 			},
 		},
