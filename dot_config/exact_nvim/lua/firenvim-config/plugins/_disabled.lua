@@ -22,5 +22,5 @@ return {
 	{ "xvzc/chezmoi.nvim", cond = false },
 	{ "folke/drop.nvim", cond = false },
 	{ "neovim/nvim-lspconfig", cond = false }, -- NOTE: may not work to disable this
-	{ "folke/noice.nvim", cond = false }, -- NOTE: may not work to disable this
+	-- { "folke/noice.nvim", cond = false }, -- NOTE: may not work to disable this
 }

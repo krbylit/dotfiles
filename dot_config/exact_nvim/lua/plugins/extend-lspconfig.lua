@@ -17,13 +17,33 @@ return {
 				"williamboman/mason.nvim",
 				opts = {
 					ensure_installed = {
-						"yapf", -- Install yapf with Mason
-						"ruff-lsp",
-						"pyright",
+						"prettierd",
+						"eslint_d",
+						"bash-language-server",
+						"docker-compose-language-service",
+						"dockerfile-language-server",
 						"eslint-lsp",
+						"hadolint",
 						"jedi-language-server",
+						"js-debug-adapter",
+						"json-lsp",
 						"lua-language-server",
+						"markdown-toc",
+						"markdownlint-cli2",
+						"marksman",
+						"nil",
+						"prettier",
+						"pyright",
+						"ruff",
+						"ruff-lsp",
+						"shellcheck",
+						"shfmt",
+						"stylua",
+						"taplo",
 						"typescript-language-server",
+						-- "vtsls",
+						"yaml-language-server",
+						"yapf",
 					},
 				},
 			},
@@ -133,12 +153,31 @@ return {
 					on_attach = function(client, buffer)
 						client.server_capabilities.hoverProvider = false
 						client.server_capabilities.formattingProvider = true
+						client.server_capabilities.documentRangeFormattingProvider = true
+						-- NOTE: autocmd for debugging. On save, prints all the formatters that ran
+						-- vim.api.nvim_create_autocmd("BufWritePre", {
+						-- 	callback = function()
+						-- 		local clients = vim.lsp.get_active_clients({ bufnr = 0 })
+						-- 		for _, client in ipairs(clients) do
+						-- 			if client.supports_method("textDocument/formatting") then
+						-- 				print("Formatter:", client.name)
+						-- 			end
+						-- 		end
+						-- 	end,
+						-- })
+						vim.api.nvim_create_autocmd("BufWritePre", {
+							buffer = bufnr,
+							-- NOTE: This command correctly applies our project-specific ESLint config
+							command = "EslintFixAll",
+						})
 					end,
 					settings = {},
 				},
 				ts_ls = {
 					on_attach = function(client, buffer)
 						client.server_capabilities.hoverProvider = true
+						client.server_capabilities.documentFormattingProvider = false
+						client.server_capabilities.documentRangeFormattingProvider = false
 					end,
 					-- root_dir = util.root_pattern("tsconfig.json", "jsconfig.json", "package.json", ".git"), -- default config
 					root_dir = require("lspconfig").util.root_pattern(
