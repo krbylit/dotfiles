@@ -2,3 +2,5 @@
 .gp.md
 commit_message.txt
 .gitmodules
+.aider*
+!.aiderignore

@@ -11,6 +11,9 @@ local logo_file = require("misc.dash-helpers").random_logo_file()
 local measure_logo_file = require("misc.dash-helpers").measure_logo_file
 local logo_width, logo_height = measure_logo_file(logo_file)
 local pane_width = math.floor(terminal_width / 4)
+
+local picker = require("snacks.picker")
+
 ---@type LazySpec
 return {
 	"folke/snacks.nvim",
@@ -18,13 +21,20 @@ return {
 	lazy = false,
 	---@type snacks.Config
 	opts = {
+		---@type snacks.win.Config
 		styles = {
 			notification = {
 				wo = { wrap = true }, -- Wrap notifications
 			},
+			lazygit = {
+				-- Make lazygit fullscreen
+				height = 0,
+				width = 0,
+			},
 		},
 		bigfile = { enabled = true },
 		input = { enabled = true },
+		---@type snacks.lazygit.Config: snacks.terminal.Opts
 		lazygit = { enabled = true },
 		notifier = {
 			style = "fancy", -- "compact" | "minimal" | "fancy"
@@ -48,6 +58,23 @@ return {
 		picker = {
 			-- ---@type snacks.picker.matcher.Config
 			-- matcher = {},
+			---@type snacks.picker.sources.Config
+			win = {
+				-- input window
+				input = {
+					keys = {
+						-- Make <C-c> close in normal as well as insert mode
+						["<C-c>"] = { "close", mode = { "i", "n" } },
+					},
+				},
+				-- result list window
+				list = {
+					keys = {
+						-- Make <C-c> close in normal as well as insert mode
+						["<C-c>"] = { "close", mode = { "i", "n" } },
+					},
+				},
+			},
 			---@type snacks.picker.sources.Config
 			sources = {
 				---@type snacks.picker.files.Config: snacks.picker.proc.Config
@@ -119,9 +146,9 @@ return {
 					pane = 1,
 					section = "terminal",
 					-- cmd = 'cat "' .. logo_file .. '" | lolcat -a -d 2 -s 15 -F 0.3 -t -p 100 -f',
-					cmd = 'while true; do clear; cat "'
+					cmd = 'zsh -c "while true; do clear; cat "'
 						.. logo_file
-						.. '" | lolcat -a -d 4 -s 15 -F 0.3 -t -p 100 -f; sleep 4; done',
+						.. '" | lolcat -a -d 4 -s 15 -F 0.3 -t -p 100 -f; sleep 4; done"',
 					height = logo_height,
 					width = logo_width,
 					-- height = math.floor(terminal_height / 3),

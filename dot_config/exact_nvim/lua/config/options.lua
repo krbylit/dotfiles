@@ -22,7 +22,8 @@ vim.opt.listchars = {
 -- Remove 'blank' from sessionoptions to avoid opening empty unnamed buffers
 vim.opt.sessionoptions:remove("blank")
 -- use bash for shell, fish is very slow in nvim
-opt.shell = "/bin/zsh"
+-- opt.shell = "/bin/zsh"
+opt.shell = "/opt/homebrew/bin/fish"
 opt.undofile = true -- Save undo history between sessions
 opt.tabstop = 4 -- A tab is equal to 4 spaces
 opt.shiftwidth = 4 -- Number of spaces to use for each step of (auto)indent

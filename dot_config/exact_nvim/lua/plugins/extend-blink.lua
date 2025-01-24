@@ -117,7 +117,11 @@ return {
 		sources = {
 			default = { "lsp", "path", "snippets", "buffer", "copilot", "cmdline" },
 			-- cmdline = {},
-			-- compat = {},
+			compat = {
+				"avante_commands",
+				"avante_mentions",
+				"avante_files",
+			},
 			--- @type blink.cmp.SourceProviderConfig
 			providers = {
 				copilot = {
@@ -125,6 +129,24 @@ return {
 					module = "blink-cmp-copilot",
 					kind = "Copilot",
 					score_offset = 999, -- Boost Copilot's score (adjust as needed) so it comes first
+				},
+				avante_commands = {
+					name = "avante_commands",
+					module = "blink.compat.source",
+					score_offset = 90, -- show at a higher priority than lsp
+					opts = {},
+				},
+				avante_files = {
+					name = "avante_files",
+					module = "blink.compat.source",
+					score_offset = 100, -- show at a higher priority than lsp
+					opts = {},
+				},
+				avante_mentions = {
+					name = "avante_mentions",
+					module = "blink.compat.source",
+					score_offset = 1000, -- show at a higher priority than lsp
+					opts = {},
 				},
 			},
 		},

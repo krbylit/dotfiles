@@ -1,0 +1,14 @@
+secrets/
+secrets/**
+Library/
+Library/**
+Pictures/
+Pictures/**
+dot_hammerspoon/
+dot_hammerspoon/**
+cm-util/pkg-backups/
+cm-util/pkg-backups/**
+.git/
+.git/**
+.github/
+.github/**
