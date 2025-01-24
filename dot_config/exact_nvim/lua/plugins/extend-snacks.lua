@@ -146,9 +146,9 @@ return {
 					pane = 1,
 					section = "terminal",
 					-- cmd = 'cat "' .. logo_file .. '" | lolcat -a -d 2 -s 15 -F 0.3 -t -p 100 -f',
-					cmd = 'fish -c "for i in (seq 10); clear; cat "'
+					cmd = 'bash -c "for i in {1..10}; do clear; cat "'
 						.. logo_file
-						.. '" | lolcat -a -d 4 -s 15 -F 0.3 -t -p 100 -f; sleep 4; end"',
+						.. '" | lolcat -a -d 4 -s 15 -F 0.3 -t -p 100 -f; sleep 4; done"',
 					height = logo_height,
 					width = logo_width,
 					-- height = math.floor(terminal_height / 3),
