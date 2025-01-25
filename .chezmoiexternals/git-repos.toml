@@ -5,4 +5,5 @@ type = "git-repo"
 url = {{ .secretsRepo | quote }}
 branch = "main"
 refreshPeriod = "8h"
+clone.args = [{{ .secretsRepo | quote }}, "secrets"]
 {{ end }}
