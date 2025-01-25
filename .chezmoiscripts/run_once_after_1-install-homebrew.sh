@@ -15,17 +15,11 @@ fi
 
 # Run brew bundle and capture stderr
 log "Running brew bundle..."
-{
-	brew bundle --cleanup --file="$HOME/Brewfile"
-} 2> >(
-	errors=$(cat)
-	typeset -p errors >&2
-)
-
-# Check if there were errors
-if [ -n "$errors" ]; then
-	log "brew bundle encountered the following errors:"
-	echo "$errors"
+tmp_err=$(mktemp) # Create a temporary file for stderr
+if ! brew bundle --cleanup --file="$HOME/Brewfile" 2>"$tmp_err"; then
+	log "brew bundle encountered errors:"
+	cat "$tmp_err"
 else
 	log "brew bundle completed successfully without errors."
 fi
+rm -f "$tmp_err" # Clean up the temporary file

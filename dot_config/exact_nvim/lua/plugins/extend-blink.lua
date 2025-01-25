@@ -33,6 +33,7 @@ return {
 	dependencies = {
 		-- NOTE: necessary here otherwise copilot shows up in LazyVim as disabled, possibly a LazyVim bug
 		{ "zbirenbaum/copilot.lua", enabled = true, opts = {} },
+		{ "saghen/blink.compat" },
 		-- {
 		-- 	"hrsh7th/cmp-cmdline",
 		-- 	config = function()

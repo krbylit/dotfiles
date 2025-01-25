@@ -3,6 +3,10 @@
 # Install Vi-Mongo
 # curl -LO https://github.com/kopecmaciej/vi-mongo/releases/download/v0.1.18/vi-mongo_Darwin_x86_64.tar.gz && tar -xzf vi-mongo_Darwin_x86_64.tar.gz && chmod +x vi-mongo && sudo mv vi-mongo /opt && rm vi-mongo_Darwin_x86_64.tar.gz
 
+uv python install 3.13 --preview
+uv tool install pip
+uv tool install pipx
+
 # Install Hammerspoon and VimMode
 if [ ! -d "$HOME/.hammerspoon/Spoons/VimMode.spoon" ]; then
 	curl -s https://raw.githubusercontent.com/dbalatero/VimMode.spoon/master/bin/installer | bash
@@ -20,7 +24,7 @@ fi
 
 # Install ruff-lsp for Neovim
 if ! command -v ruff-lsp &>/dev/null; then
-	pip install ruff-lsp
+	uv tool install ruff-lsp
 fi
 
 # # Install sbarlua, required for our sketchybar config
@@ -42,29 +46,29 @@ fi
 
 # Install pre-commit for commit hooks
 if ! command -v pre-commit &>/dev/null; then
-	pip install pre-commit
+	uv tool install pre-commit
 fi
 
 # Install ruff
 if ! command -v ruff &>/dev/null; then
-	pip install ruff
+	uv tool install ruff
 fi
 if ! command -v ruff-lsp &>/dev/null; then
-	pip install ruff-lsp
+	uv tool install ruff-lsp
 fi
 
 # Install yapf
 if ! command -v yapf &>/dev/null; then
-	pip install yapf
+	uv tool install yapf
 fi
 
 # Install aider chat
 if ! command -v aider &>/dev/null; then
-	python -m pip install aider-install
+	uv tool install aider-install
 	# NOTE: need to source config again as this wasn't immediately available in PATH
 	source ~/.config/fish/config.fish
 	aider-install
-	python -m pip install -U aider-chat
+	uv tool install --force --python python3.12 aider-chat@latest
 fi
 
 # Install our gitleaks pre-commit hook
@@ -73,3 +77,6 @@ cd $(chezmoi source-path) && pre-commit install
 
 # Copy .gitmodules for secrets submodule
 cp $(chezmoi source-path)/secrets/dot_gitmodules $(chezmoi source-path)/.gitmodules
+
+# Update system-wide Python CLI tools
+uv tool upgrade --all
