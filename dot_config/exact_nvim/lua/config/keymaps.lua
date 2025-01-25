@@ -62,6 +62,9 @@ map({ "n", "v", "i" }, "<c-z>", "<Nop>", { noremap = true, expr = true })
 -- ================================================================
 -- Buffer maps
 map("n", "<c-q>", function()
+	if vim.bo.filetype == "snacks_dashboard" then
+		vim.cmd("q") -- Close the dashboard
+	end
 	local listed_buffers = vim.fn.getbufinfo({ buflisted = 1, bufloaded = 1 })
 	-- If closing last buffer, open dashboard
 	if #listed_buffers == 1 then
