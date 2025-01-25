@@ -1,1 +1,4 @@
-{{ .chezmoi.sourceDir }}{{ .path.secrets }}/.ssh/private_config
+{{- $privateConfig := (joinPath .chezmoi.sourceDir .path.secrets ".ssh" "private_config") -}}
+{{- if (stat $privateConfig) -}}
+{{ $privateConfig }}
+{{- end -}}

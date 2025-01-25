@@ -1,1 +1,5 @@
-{{ .chezmoi.sourceDir }}{{ .path.secrets }}/.config/gh/private_hosts.yml
+{{- $ghHosts := (joinPath .chezmoi.sourceDir .path.secrets ".config" "gh" "private_hosts.yml") -}}
+{{- if (stat $ghHosts) -}}
+{{ $ghHosts }}
+{{- end -}}
+
