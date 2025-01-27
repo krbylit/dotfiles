@@ -13,6 +13,6 @@ bind \cw backward-kill-word
 bind --mode default yy vi_copy_to_clipboard
 
 # Atuin keymaps
-set -gx ATUIN_NOBIND true
-bind \cA _atuin_search
-bind -M insert \cA _atuin_search
+# set -gx ATUIN_NOBIND true
+# bind \cA _atuin_search
+# bind -M insert \cA _atuin_search

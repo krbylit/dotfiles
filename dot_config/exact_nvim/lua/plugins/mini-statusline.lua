@@ -26,7 +26,12 @@ end
 
 -- Autocmd to update the git info whenever a buffer is entered or switched
 vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
-	callback = update_git_info,
+	callback = function()
+		local cb = function()
+			update_git_info()
+		end
+		vim.schedule(cb)
+	end,
 })
 
 -- Function to get path relative to git root

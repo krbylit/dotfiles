@@ -75,8 +75,13 @@ fi
 cd $(chezmoi source-path) && pre-commit autoupdate
 cd $(chezmoi source-path) && pre-commit install
 
-# Copy .gitmodules for secrets submodule
-cp $(chezmoi source-path)/secrets/dot_gitmodules $(chezmoi source-path)/.gitmodules
+# NOTE: handling this with submodule setup script now
+# # Copy .gitmodules for secrets submodule
+# cp $(chezmoi source-path)/secrets/dot_gitmodules $(chezmoi source-path)/.gitmodules
 
 # Update system-wide Python CLI tools
 uv tool upgrade --all
+
+fish -c "fisher update"
+# TODO: Need a better way to handle setting fish theme than here
+# fish -c 'fish_config theme save "Catppuccin Mocha"'

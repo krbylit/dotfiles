@@ -21,6 +21,11 @@ vim.opt.listchars = {
 }
 -- Remove 'blank' from sessionoptions to avoid opening empty unnamed buffers
 vim.opt.sessionoptions:remove("blank")
+-- Change dir to currently open buffer
+-- FIXME: something is setting this to false after options load. doesn't seem to be mini.misc auto root
+opt.autochdir = true
+-- Add '-' to keyword so kebab case is considered a word (i.e. 'variable-name' is one word)
+vim.opt.iskeyword:append("-")
 -- use bash for shell, fish is very slow in nvim
 opt.shell = "bash"
 -- opt.shell = "/opt/homebrew/bin/fish"
@@ -48,7 +53,6 @@ opt.winminheight = 1 -- Minimum window height
 opt.clipboard = vim.env.SSH_TTY and "" or "unnamedplus" -- Sync with system clipboard
 -- Disable diagnostics by default
 vim.diagnostic.disable()
-opt.autochdir = true
 -- FORMATTING
 -- default "tcqj"
 opt.formatoptions = "qnlj"
