@@ -4,11 +4,12 @@
 -- CUSTOM AUTO COMMANDS
 -- ================================================================
 -- NOTE: Workaround since something is overriding this since we have it set in options. Remove once we figure out what is overriding.
-vim.api.nvim_create_autocmd("BufEnter", {
-	callback = function()
-		vim.opt.autochdir = true
-	end,
-})
+-- Disabling for now as having root dir set works with persistence.nvim better
+-- vim.api.nvim_create_autocmd("BufEnter", {
+-- 	callback = function()
+-- 		vim.opt.autochdir = true
+-- 	end,
+-- })
 -- ================================================================
 -- Filetype specific autocmds
 -- ================================================================

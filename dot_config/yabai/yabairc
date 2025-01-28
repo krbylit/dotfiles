@@ -41,26 +41,26 @@ yabai -m config mouse_follows_focus off
 
 # Space Labels
 yabai -m space 1 --label term
-yabai -m space 2 --label comms
+yabai -m space 2 --label browser
 yabai -m space 3 --label code
 yabai -m space 4 --label dev
-yabai -m space 5 --label misc
+yabai -m space 5 --label comms
 yabai -m space 6 --label ref
-yabai -m space 7 --label debug
-yabai -m space 8 --label util
-yabai -m space 9 --label personal
+yabai -m space 7 --label misc
+yabai -m space 8 --label debug
+yabai -m space 9 --label util
 
 # Assign Spaces to Displays
 yabai -m space term --display 1
-yabai -m space comms --display 1
+yabai -m space browser --display 1
 yabai -m space code --display 1
 yabai -m space dev --display 1
-yabai -m space misc --display 1
 # Conditionally assign spaces to display 2 if more than one display exists, otherwise assign to display 1
+yabai -m space comms --display $(($(yabai -m query --displays | jq '. | length') > 1 ? 2 : 1))
 yabai -m space ref --display $(($(yabai -m query --displays | jq '. | length') > 1 ? 2 : 1))
+yabai -m space misc --display $(($(yabai -m query --displays | jq '. | length') > 1 ? 2 : 1))
 yabai -m space debug --display $(($(yabai -m query --displays | jq '. | length') > 1 ? 2 : 1))
 yabai -m space util --display $(($(yabai -m query --displays | jq '. | length') > 1 ? 2 : 1))
-yabai -m space personal --display $(($(yabai -m query --displays | jq '. | length') > 1 ? 2 : 1))
 
 # Rules for Excluded Applications
 yabai -m rule --add label=Finder app="^Finder$" title="(Co(py|nnect)|Move|Info|Pref)" manage=off
@@ -99,20 +99,18 @@ yabai -m rule --add label=sticky_SystemSettings app="^System Settings$" sticky=o
 yabai -m rule --add label=term_ghostty app="^Ghostty$" space=^term
 
 # ================================================================
-# COMMS
+# BROWSER
 # ================================================================
-yabai -m rule --add label=comms_Slack app="^Slack$" space=^comms
-yabai -m rule --add label=comms_Edge app="^Microsoft Edge$" space=^comms
-yabai -m rule --add label=comms_Outlook app="^Microsoft Outlook$" space=^comms
-yabai -m rule --add label=comms_Firefox app="^Firefox$" space=^comms
-yabai -m rule --add label=comms_Thunderbird app="^Thunderbird$" space=^comms
+yabai -m rule --add label=browser_Edge app="^Microsoft Edge$" space=^browser
+yabai -m rule --add label=browser_Firefox app="^Firefox$" space=^browser
+yabai -m rule --add label=browser_Safari app="^Safari$" space=^browser
 
 # ================================================================
 # CODE
 # ================================================================
 yabai -m rule --add label=code_Code app="^Code$" space=^code
 yabai -m rule --add label=code_VS app="^Visual Studio$" space=^code
-yabai -m rule --add label=code_VS app="^Cursor$" space=^code
+yabai -m rule --add label=code_Cursor app="^Cursor$" space=^code
 yabai -m rule --add label=code_Sublime app="^Sublime Text$" space=^code
 
 # ================================================================
@@ -125,15 +123,23 @@ yabai -m rule --add label=dev_DockerDesktop app="^Docker Desktop$" space=^dev
 yabai -m rule --add label=dev_Cyberduck app="^Cyberduck$" space=^dev
 
 # ================================================================
-# MISC
+# COMMS
 # ================================================================
-yabai -m rule --add label=misc_Finder app="^Finder$" space=^misc
+yabai -m rule --add label=comms_Zoom app="^zoom" space=^comms
+yabai -m rule --add label=comms_Slack app="^Slack$" space=^comms
+yabai -m rule --add label=comms_Outlook app="^Microsoft Outlook$" space=^comms
+yabai -m rule --add label=comms_Thunderbird app="^Thunderbird$" space=^comms
 
 # ================================================================
 # REF
 # ================================================================
 yabai -m rule --add label=ref_Notion app="^Notion$" space=^ref
 yabai -m rule --add label=ref_ChatGPT app="^ChatGPT$" title="ChatGPT" space=^ref
+
+# ================================================================
+# MISC
+# ================================================================
+yabai -m rule --add label=misc_Finder app="^Finder$" space=^misc
 
 # ================================================================
 # DEBUG
@@ -149,23 +155,17 @@ yabai -m rule --add label=util_1Password app="^1Password$" title="^All Accounts"
 yabai -m rule --add label=util_ActivityMonitor app="^Activity Monitor$" space=^util
 yabai -m rule --add label=util_Karabiner app="^Karabiner-Elements$" space=^util
 
-# ================================================================
-# PERSONAL
-# ================================================================
-# yabai -m rule --add label=personal_Firefox app="^Firefox$" space=^personal
-yabai -m rule --add label=personal_Safari app="^Safari$" space=^personal
-yabai -m rule --add label=personal_Zoom app="^zoom" space=^personal
 
 # Space-Specific Configurations
 yabai -m config --space term layout stack window_gap 6 window_opacity off top_padding 0 bottom_padding 0 left_padding 0 right_padding 0
-yabai -m config --space comms layout stack
-yabai -m config --space code
-yabai -m config --space dev
-yabai -m config --space misc
-yabai -m config --space ref
+yabai -m config --space browser layout bsp
+yabai -m config --space code layout stack
+yabai -m config --space dev layout bsp
+yabai -m config --space comms layout bsp
+yabai -m config --space ref layout bsp
+yabai -m config --space misc layout bsp
 yabai -m config --space debug
-yabai -m config --space util
-yabai -m config --space personal layout bsp
+yabai -m config --space util layout bsp
 
 # Signals
 yabai -m signal --add event=display_added action="yabai --restart-service; yabai -m rule --apply"

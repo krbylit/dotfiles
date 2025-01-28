@@ -8,7 +8,7 @@ log() {
 # Check if Homebrew is installed
 if ! command -v brew &>/dev/null; then
 	log "Homebrew is not installed. Installing Homebrew..."
-	/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+	NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 	export PATH="/opt/homebrew/bin:$PATH"
 	export PATH="/usr/local/bin:$PATH"
 else

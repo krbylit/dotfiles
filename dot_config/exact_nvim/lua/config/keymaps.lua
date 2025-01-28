@@ -102,7 +102,7 @@ wk.add({
 		"<leader>E",
 		function()
 			if not MiniFiles.close() then
-				MiniFiles.open(MiniFiles.get_latest_path())
+				MiniFiles.open(vim.cmd.pwd())
 			end
 		end,
 		desc = "MiniFiles Explorer (cwd)",

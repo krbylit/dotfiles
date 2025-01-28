@@ -79,9 +79,16 @@ return {
 			---@type snacks.picker.sources.Config
 			sources = {
 				---@type snacks.picker.files.Config: snacks.picker.proc.Config
+				---@field cmd? string
+				---@field hidden? boolean show hidden files
+				---@field ignored? boolean show ignored files
+				---@field dirs? string[] directories to search
+				---@field follow? boolean follow symlinks
+				---@field exclude? string[] exclude patterns
+				---@field args? string[] additional arguments
 				files = {
-					hidden = true,
-					ignored = true,
+					hidden = false,
+					ignored = false,
 					-- Exclude dirs from file search
 					exclude = {
 						"**/.venv/**",
@@ -95,8 +102,8 @@ return {
 				},
 				---@type snacks.picker.grep.Config
 				grep = {
-					hidden = true,
-					ignored = true,
+					hidden = false,
+					ignored = false,
 					-- Exclude dirs from text search
 					exclude = {
 						"**/.venv/**",

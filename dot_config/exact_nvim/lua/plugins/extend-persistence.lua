@@ -43,6 +43,7 @@ return {
 			desc = "Don't save session on exit",
 		},
 	},
+	---@type Persistence.Config
 	opts = {
 		dir = vim.fn.stdpath("state") .. "/sessions/", -- directory where session files are saved
 		-- minimum number of file buffers that need to be open to save

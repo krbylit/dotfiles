@@ -8,7 +8,7 @@ vim.g.maplocalleader = " " -- Set local leader key to space
 -- Set global for `$(chezmoi source-path)`
 local cm_path = vim.fn.system("chezmoi source-path")
 vim.g.chezmoi_source_path = cm_path
-vim.g.root_spec = { { ".git", "lua" }, "lsp", "cwd" }
+vim.g.root_spec = { { ".git" }, "lua", "lsp", "cwd" }
 
 -- Ensure the 'list' option is enabled
 vim.opt.list = true
@@ -21,9 +21,14 @@ vim.opt.listchars = {
 }
 -- Remove 'blank' from sessionoptions to avoid opening empty unnamed buffers
 vim.opt.sessionoptions:remove("blank")
+vim.opt.sessionoptions:remove("help")
+vim.opt.sessionoptions:remove("skiprtp")
+-- vim.opt.sessionoptions:remove("curdir")
+vim.opt.sessionoptions:append("localoptions")
+vim.opt.sessionoptions:append("options")
 -- Change dir to currently open buffer
--- FIXME: something is setting this to false after options load. doesn't seem to be mini.misc auto root
-opt.autochdir = true
+-- FIXME: something is setting this to false after options load. doesn't seem to be mini.misc auto root, or project.nvim
+-- opt.autochdir = true
 -- Add '-' to keyword so kebab case is considered a word (i.e. 'variable-name' is one word)
 vim.opt.iskeyword:append("-")
 -- use bash for shell, fish is very slow in nvim
@@ -52,7 +57,7 @@ opt.winheight = 1 -- Minimum window height
 opt.winminheight = 1 -- Minimum window height
 opt.clipboard = vim.env.SSH_TTY and "" or "unnamedplus" -- Sync with system clipboard
 -- Disable diagnostics by default
-vim.diagnostic.disable()
+vim.diagnostic.enable(false)
 -- FORMATTING
 -- default "tcqj"
 opt.formatoptions = "qnlj"
