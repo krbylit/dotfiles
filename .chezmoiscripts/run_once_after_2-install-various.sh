@@ -1,11 +1,7 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Install Vi-Mongo
 # curl -LO https://github.com/kopecmaciej/vi-mongo/releases/download/v0.1.18/vi-mongo_Darwin_x86_64.tar.gz && tar -xzf vi-mongo_Darwin_x86_64.tar.gz && chmod +x vi-mongo && sudo mv vi-mongo /opt && rm vi-mongo_Darwin_x86_64.tar.gz
-
-uv python install 3.13 --preview
-uv tool install pip
-uv tool install pipx
 
 # Install Hammerspoon and VimMode
 if [ ! -d "$HOME/.hammerspoon/Spoons/VimMode.spoon" ]; then
@@ -20,11 +16,6 @@ fi
 # Install nix. Needed for nil-ls in nvim
 if ! command -v nix &>/dev/null; then
 	curl -L https://nixos.org/nix/install | sh
-fi
-
-# Install ruff-lsp for Neovim
-if ! command -v ruff-lsp &>/dev/null; then
-	uv tool install ruff-lsp
 fi
 
 # # Install sbarlua, required for our sketchybar config
@@ -44,24 +35,6 @@ if [ ! -d "$HOME/.tmux/plugins/tpm" ]; then
 	git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 fi
 
-# Install pre-commit for commit hooks
-if ! command -v pre-commit &>/dev/null; then
-	uv tool install pre-commit
-fi
-
-# Install ruff
-if ! command -v ruff &>/dev/null; then
-	uv tool install ruff
-fi
-if ! command -v ruff-lsp &>/dev/null; then
-	uv tool install ruff-lsp
-fi
-
-# Install yapf
-if ! command -v yapf &>/dev/null; then
-	uv tool install yapf
-fi
-
 # Install aider chat
 if ! command -v aider &>/dev/null; then
 	uv tool install aider-install
@@ -72,16 +45,12 @@ if ! command -v aider &>/dev/null; then
 fi
 
 # Install our gitleaks pre-commit hook
-cd $(chezmoi source-path) && pre-commit autoupdate
-cd $(chezmoi source-path) && pre-commit install
+cd $HOME/.local/share/chezmoi && pre-commit autoupdate
+cd $HOME/.local/share/chezmoi && pre-commit install
 
 # NOTE: handling this with submodule setup script now
 # # Copy .gitmodules for secrets submodule
 # cp $(chezmoi source-path)/secrets/dot_gitmodules $(chezmoi source-path)/.gitmodules
 
-# Update system-wide Python CLI tools
-uv tool upgrade --all
-
+# Update fisher plugins
 fish -c "fisher update"
-# TODO: Need a better way to handle setting fish theme than here
-# fish -c 'fish_config theme save "Catppuccin Mocha"'

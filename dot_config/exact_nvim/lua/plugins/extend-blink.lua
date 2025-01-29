@@ -110,7 +110,7 @@ return {
 		--- @type blink.cmp.CompletionConfig,
 		--- @type blink.cmp.SignatureConfig,
 		signature = {
-			enabled = true,
+			enabled = false,
 			-- window = { border = "single" }
 		},
 		completion = {

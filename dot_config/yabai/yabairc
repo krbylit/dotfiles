@@ -6,9 +6,9 @@ sudo yabai --load-sa
 
 BAR_HEIGHT=$(sketchybar -m --query bar | jq -r '.height')
 TOP_PADDING=$((${BAR_HEIGHT} + 6))
+
 # General Configurations
 # yabai -m config external_bar "${BAR_HEIGHT}":0
-yabai -m config split_type auto
 yabai -m config split_ratio 0.5
 yabai -m config auto_balance off
 yabai -m config insert_feedback_color 0xff7793d1
@@ -24,7 +24,23 @@ yabai -m config normal_window_opacity 0.95
 yabai -m config window_opacity_duration 0.15
 
 # Layout Configurations
+# Set default layout
 yabai -m config layout bsp
+
+# Configure layouts per display
+displays=$(yabai -m query --displays)
+echo "$displays" | jq -c '.[]' | while read -r display; do
+	index=$(echo "$display" | jq '.index')
+	frame=$(echo "$display" | jq '.frame')
+	width=$(echo "$frame" | jq '.w')
+	height=$(echo "$frame" | jq '.h')
+
+	if [ "$height" -gt "$width" ]; then
+		yabai -m config --display $index layout stack
+	else
+		yabai -m config --display $index layout bsp
+	fi
+done
 yabai -m config top_padding 6
 yabai -m config bottom_padding 6
 yabai -m config left_padding 6
@@ -155,7 +171,6 @@ yabai -m rule --add label=util_1Password app="^1Password$" title="^All Accounts"
 yabai -m rule --add label=util_ActivityMonitor app="^Activity Monitor$" space=^util
 yabai -m rule --add label=util_Karabiner app="^Karabiner-Elements$" space=^util
 
-
 # Space-Specific Configurations
 yabai -m config --space term layout stack window_gap 6 window_opacity off top_padding 0 bottom_padding 0 left_padding 0 right_padding 0
 yabai -m config --space browser layout bsp
@@ -167,9 +182,6 @@ yabai -m config --space misc layout bsp
 yabai -m config --space debug
 yabai -m config --space util layout bsp
 
-# Signals
-yabai -m signal --add event=display_added action="yabai --restart-service; yabai -m rule --apply"
-yabai -m signal --add event=display_removed action="yabai --restart-service; yabai -m rule --apply"
 # Signals for `YabaiIndicator`
 yabai -m signal --add event=mission_control_exit action='echo "refresh" | nc -U /tmp/yabai-indicator.socket'
 yabai -m signal --add event=display_added action='echo "refresh" | nc -U /tmp/yabai-indicator.socket'

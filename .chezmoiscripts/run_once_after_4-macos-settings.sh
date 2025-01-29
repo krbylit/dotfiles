@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Show cmd + tab App Switcher on all displays
 defaults write com.apple.dock appswitcher-all-displays -bool true
