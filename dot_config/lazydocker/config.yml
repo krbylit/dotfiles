@@ -1,3 +1,4 @@
+# yaml-language-server: $schema=https://json.schemastore.org/lazydocker.json
 gui:
   scrollHeight: 2
   language: "auto" # one of 'auto' | 'en' | 'pl' | 'nl' | 'de' | 'tr'
@@ -61,3 +62,9 @@ stats:
     - caption: Memory (%)
       statPath: DerivedStats.MemoryPercentage
       color: green
+customCommands:
+  containers:
+    - name: bash
+      attach: true
+      command: "docker exec -it {{ .Container.ID }} bash"
+      serviceNames: []
