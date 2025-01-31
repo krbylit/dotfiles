@@ -56,7 +56,8 @@
                       "^net\\.kovidgoyal\\.kitty$",
                       "^com\\.mitchellh\\.ghostty$",
                       "^com\\.todesktop\\.230313mzl4w4u92$",
-                      "^org\\.mozilla\\.firefox"
+                      "^org\\.mozilla\\.firefox",
+                      "^com\\.raycast\\.macos$"
                     ],
                     "type": "frontmost_application_unless"
                   },
@@ -95,7 +96,8 @@
                       "^net\\.kovidgoyal\\.kitty$",
                       "^com\\.mitchellh\\.ghostty$",
                       "^com\\.todesktop\\.230313mzl4w4u92$",
-                      "^org\\.mozilla\\.firefox"
+                      "^org\\.mozilla\\.firefox",
+                      "^com\\.raycast\\.macos$"
                     ],
                     "type": "frontmost_application_unless"
                   },
@@ -125,7 +127,7 @@
             ]
           },
           {
-            "description": "Ctrl to Esc and Ctrl (HHKB, only for Kitty)",
+            "description": "Ctrl to Esc and Ctrl (HHKB)",
             "manipulators": [
               {
                 "conditions": [
@@ -159,7 +161,7 @@
             ]
           },
           {
-            "description": "(Mac KB) Control to Alt/Option",
+            "description": "Ctrl to Alt/Option (Mac KB)",
             "manipulators": [
               {
                 "conditions": [
@@ -183,7 +185,7 @@
             ]
           },
           {
-            "description": "Caps Lock to Esc and Ctrl (Mac KB, only for Kitty)",
+            "description": "Caps Lock to Esc and Ctrl (Mac KB)",
             "manipulators": [
               {
                 "conditions": [
@@ -192,7 +194,8 @@
                       "^net\\.kovidgoyal\\.kitty$",
                       "^com\\.mitchellh\\.ghostty$",
                       "^com\\.todesktop\\.230313mzl4w4u92$",
-                      "^org\\.mozilla\\.firefox"
+                      "^org\\.mozilla\\.firefox",
+                      "^com\\.raycast\\.macos$"
                     ],
                     "type": "frontmost_application_if"
                   },
