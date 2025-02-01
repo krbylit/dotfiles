@@ -125,6 +125,7 @@ DEV_APPS=(
 	Docker
 	"Docker Desktop"
 	Cyberduck
+	"LM Studio"
 )
 
 COMMS_APPS=(
@@ -162,7 +163,7 @@ assign_to_space() {
 	shift
 	for app in "$@"; do
 		label="${space}_${app// /_}"
-		yabai -m rule --add label="$label" app="^${app}$" space="^${space}"
+		yabai -m rule --add label="$label" app="^${app}" space="^${space}"
 	done
 }
 

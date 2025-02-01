@@ -66,6 +66,7 @@ return {
 					keys = {
 						-- Make <C-c> close in normal as well as insert mode
 						["<C-c>"] = { "close", mode = { "i", "n" } },
+						["<a-w>"] = { "toggle_cwd", mode = { "n", "i" } },
 					},
 				},
 				-- result list window
@@ -359,13 +360,6 @@ return {
 		},
 	},
 	keys = {
-		{
-			"<leader>sp",
-			function()
-				Snacks.picker.lazy()
-			end,
-			desc = "Search for Plugin Spec",
-		},
 		{
 			"<leader>z",
 			function()

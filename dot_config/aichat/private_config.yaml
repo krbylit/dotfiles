@@ -28,7 +28,8 @@ document_loaders:
   docx: "pandoc --to plain $1"
 
 # ---- LLM Configuration ----
-model: ollama:deepseek-r1:14b
+# model: ollama:deepseek-r1:14b
+model: lm-studio:deepseek-coder-v2-lite-instruct-mlx
 # temperature: 0.7                 # Controls the creativity and randomness of the LLM's response.
 # top_p: 0.9                       # Alternative way to control LLM's output diversity, affecting the probability distribution of tokens.
 
@@ -36,4 +37,7 @@ model: ollama:deepseek-r1:14b
 clients:
   - type: openai-compatible
     name: ollama
+    api_base: http://localhost:11434/v1
+  - type: openai-compatible
+    name: lm-studio
     api_base: http://localhost:11434/v1
