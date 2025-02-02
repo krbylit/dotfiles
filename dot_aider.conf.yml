@@ -124,7 +124,7 @@ openai-api-base: http://127.0.0.1:11434/v1
 #edit-format: xxx
 
 ## Use architect edit format for the main chat
-#architect: false
+architect: true
 
 ## Specify the model to use for commit messages and chat history summarization (default depends on --model)
 #weak-model: xxx
@@ -157,7 +157,7 @@ openai-api-base: http://127.0.0.1:11434/v1
 #map-tokens: xxx
 
 ## Control how often the repo map is refreshed. Options: auto, always, files, manual (default: auto)
-map-refresh: always
+map-refresh: auto
 
 ## Multiplier for map tokens when no files are specified (default: 2)
 #map-multiplier-no-files: true
@@ -241,25 +241,24 @@ assistant-output-color: #0088ff
 #subtree-only: false
 
 ## Enable/disable auto commit of LLM changes (default: True)
-#auto-commits: true
-
+auto-commits: false
 ## Enable/disable commits when repo is found dirty (default: True)
 #dirty-commits: true
 
 ## Attribute aider code changes in the git author name (default: True)
-#attribute-author: true
+attribute-author: false
 
 ## Attribute aider commits in the git committer name (default: True)
-#attribute-committer: true
+attribute-committer: false
 
 ## Prefix commit messages with 'aider: ' if aider authored the changes (default: False)
-#attribute-commit-message-author: false
+attribute-commit-message-author: false
 
 ## Prefix all commit messages with 'aider: ' (default: False)
-#attribute-commit-message-committer: false
+attribute-commit-message-committer: false
 
 ## Commit all pending changes with a suitable commit message, then exit
-#commit: false
+commit: false
 
 ## Specify a custom prompt for generating commit messages
 #commit-prompt: xxx
@@ -271,7 +270,7 @@ assistant-output-color: #0088ff
 #skip-sanity-check-repo: false
 
 ## Enable/disable watching files for ai coding comments (default: False)
-#watch-files: false
+watch-files: true
 
 ########################
 # Fixing and committing:
@@ -427,10 +426,10 @@ assistant-output-color: #0088ff
 #fancy-input: true
 
 ## Enable/disable multi-line input mode with Meta-Enter to submit (default: False)
-#multiline: false
+multiline: true
 
 ## Enable/disable detection and offering to add URLs to chat (default: True)
-#detect-urls: true
+detect-urls: true
 
 ## Specify which editor to use for the /editor command
-#editor: xxx
+editor: nvim
