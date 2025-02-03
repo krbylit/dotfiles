@@ -229,7 +229,7 @@ assistant-output-color: #0088ff
 # Git settings:
 
 ## Enable/disable looking for a git repo (default: True)
-#git: true
+git: true
 
 ## Enable/disable adding .aider* to .gitignore (default: True)
 #gitignore: true
@@ -267,7 +267,7 @@ commit: false
 #dry-run: false
 
 ## Skip the sanity check for the git repository (default: False)
-#skip-sanity-check-repo: false
+skip-sanity-check-repo: false
 
 ## Enable/disable watching files for ai coding comments (default: False)
 watch-files: true
@@ -393,7 +393,7 @@ watch-files: true
 #  - zzz
 
 ## Use VI editing mode in the terminal (default: False)
-#vim: false
+vim: true
 
 ## Specify the language to use in the chat (default: None, uses system settings)
 #chat-language: xxx

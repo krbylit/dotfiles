@@ -6,4 +6,7 @@
 README.md
 cm-util
 secrets
-.aider*
+.aiderignore
+.aider.input.history
+.aider.chat.history.md
+.aider.tags*
