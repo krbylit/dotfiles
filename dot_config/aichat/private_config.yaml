@@ -8,7 +8,8 @@ wrap: auto # Enable automatic text wrapping
 wrap_code: false
 
 # ---- RAG Configuration ----
-rag_embedding_model: ollama:nomic-embed-text # Embedding model for context retrieval
+# rag_embedding_model: ollama:nomic-embed-text # Embedding model for Ollama
+rag_embedding_model: lm-studio:text-embedding-nomic-embed-text-v1.5 # Embedding model for LM Studio
 rag_reranker_model: null # Reranker model (set to null if not used)
 rag_top_k: 5 # Number of documents to retrieve for answering queries
 rag_chunk_size: 500 # Size of document chunks in characters
@@ -37,7 +38,28 @@ model: lm-studio:deepseek-coder-v2-lite-instruct-mlx
 clients:
   - type: openai-compatible
     name: ollama
-    api_base: http://localhost:11434/v1
+    api_base: http://localhost:1234/v1
   - type: openai-compatible
     name: lm-studio
-    api_base: http://localhost:11434/v1
+    api_base: http://localhost:1234/v1
+    models:
+    - name: lm-studio:deepseek-coder-v2-lite-instruct-mlx
+      max_input_tokens: 200000
+      # max_tokens_per_chunk: 2000
+      # default_chunk_size: 1500                        
+      # max_batch_size: 100
+      supports_vision: true
+      supports_function_calling: true
+        # FIXME: getting "Model is not embedding" error w/ this
+    - name: phi-3-mini-4k-instruct-no-q-embed
+      type: embedding
+      max_input_tokens: 200000
+      max_tokens_per_chunk: 2000
+      default_chunk_size: 1500                        
+      max_batch_size: 100
+    - name: text-embedding-nomic-embed-text-v1.5
+      type: embedding
+      max_input_tokens: 200000
+      max_tokens_per_chunk: 2000
+      default_chunk_size: 1500                        
+      max_batch_size: 100

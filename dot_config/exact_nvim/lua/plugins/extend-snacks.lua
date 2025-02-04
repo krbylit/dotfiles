@@ -67,6 +67,9 @@ return {
 						-- Make <C-c> close in normal as well as insert mode
 						["<C-c>"] = { "close", mode = { "i", "n" } },
 						["<a-w>"] = { "toggle_cwd", mode = { "n", "i" } },
+						["<C-p>"] = { "focus_preview", mode = { "i", "n" } }, -- or any other key you prefer
+						["<C-i>"] = { "focus_input", mode = { "i", "n" } }, -- or any other key you prefer
+						["<C-l>"] = { "focus_list", mode = { "i", "n" } }, -- or any other key you prefer
 					},
 				},
 				-- result list window
@@ -74,11 +77,27 @@ return {
 					keys = {
 						-- Make <C-c> close in normal as well as insert mode
 						["<C-c>"] = { "close", mode = { "i", "n" } },
+						["<C-p>"] = { "focus_preview", mode = { "i", "n" } }, -- or any other key you prefer
+						["<C-i>"] = { "focus_input", mode = { "i", "n" } }, -- or any other key you prefer
+						["<C-l>"] = { "focus_list", mode = { "i", "n" } }, -- or any other key you prefer
+					},
+				},
+				-- preview window
+				preview = {
+					keys = {
+						-- Make <C-c> close in normal as well as insert mode
+						["<C-c>"] = { "close", mode = { "i", "n" } },
+						["<C-p>"] = { "focus_preview", mode = { "i", "n" } }, -- or any other key you prefer
+						["<C-i>"] = { "focus_input", mode = { "i", "n" } }, -- or any other key you prefer
+						["<C-l>"] = { "focus_list", mode = { "i", "n" } }, -- or any other key you prefer
 					},
 				},
 			},
 			---@type snacks.picker.sources.Config
 			sources = {
+				---@type snacks.picker.notifications.Config: snacks.picker.Config
+				---@field filter? snacks.notifier.level|fun(notif: snacks.notifier.Notif): boolean
+				-- notifications = {},
 				---@type snacks.picker.files.Config: snacks.picker.proc.Config
 				---@field cmd? string
 				---@field hidden? boolean show hidden files

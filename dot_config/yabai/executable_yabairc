@@ -100,6 +100,10 @@ done
 yabai -m rule --add label=sticky_SystemPreferences app="^System Preferences$" sticky=on
 yabai -m rule --add label=sticky_SystemSettings app="^System Settings$" sticky=on
 
+# Special rules
+# Hide the YabaiIndicator options that pop up every time it restarts
+yabai -m rule --add app="^YabaiIndicator$" opacity=0 layer=below
+
 # Space assignments using arrays
 TERM_APPS=(
 	Ghostty
@@ -125,7 +129,6 @@ DEV_APPS=(
 	Docker
 	"Docker Desktop"
 	Cyberduck
-	"LM Studio"
 )
 
 COMMS_APPS=(
@@ -138,6 +141,7 @@ COMMS_APPS=(
 
 REF_APPS=(
 	Notion
+	"LM Studio"
 	ChatGPT
 	Ollama
 )
@@ -153,6 +157,7 @@ DEBUG_APPS=(
 UTIL_APPS=(
 	Figma
 	1Password
+	# YabaiIndicator
 	"Activity Monitor"
 	"Karabiner-Elements"
 )
