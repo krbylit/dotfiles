@@ -156,7 +156,7 @@ return {
 		},
 		--- @type blink.cmp.SourceConfig
 		sources = {
-			default = { "lsp", "path", "snippets", "buffer", "copilot", "cmdline", "ripgrep" },
+			default = { "lsp", "path", "snippets", "buffer", "copilot", "ripgrep" },
 			-- min_keyword_length = function(ctx)
 			-- 	-- Don't show menu when typing 2 char commands in cmdline
 			-- 	-- only applies when typing a command, doesn't apply to arguments

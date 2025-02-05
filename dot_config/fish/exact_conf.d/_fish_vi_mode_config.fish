@@ -1,5 +1,9 @@
 # Config Vi-mode in Fish
 set -g fish_key_bindings fish_vi_key_bindings
+# # Erase keymaps we want to specify ourselves
+# FIXME: running this in CLI works but this here does not erase the keymap
+# bind --erase --preset ctrl-r
+
 # Set the normal and visual mode cursors to a block
 set fish_cursor_default block blink
 # Set the insert mode cursor to a line

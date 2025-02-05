@@ -11,6 +11,8 @@ bind --mode default \v up-or-search
 bind \cu backward-kill-line
 bind \cw backward-kill-word
 bind --mode default yy vi_copy_to_clipboard
+bind --mode insert ctrl-s 'commandline -f repaint; ripgrep_live (commandline -b)'
+bind --mode default ctrl-s 'commandline -f repaint; ripgrep_live (commandline -b)'
 
 # Atuin keymaps
 # set -gx ATUIN_NOBIND true
