@@ -17,7 +17,8 @@
 [delta]
 	; Enable configs and themes from ~/.config/delta/
 	; gruvmax-fang
-	features = unobtrusive-line-numbers decorations mellow-barbet
+	; features = unobtrusive-line-numbers decorations mellow-barbet
+	features = unobtrusive-line-numbers decorations
 	navigate = true    # use n and N to move between diff sections
 	side-by-side = true # diff view
 
