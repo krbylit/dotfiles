@@ -12,3 +12,4 @@ cm-util/pkg-backups/**
 .git/**
 .github/
 .github/**
+.gitmodules

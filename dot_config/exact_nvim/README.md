@@ -57,6 +57,11 @@ Based on LazyVim, with separate config options for nvim in VS Code and in the te
 - [LazyVim Install](https://www.lazyvim.org/installation)
 - [LazyVim Starter Template](https://github.com/LazyVim/starter)
 
+## Octo and `gh` Setup
+
+- Logging in with the following permissions allows Octo to do PR reviews:
+  `'admin:public_key', 'codespace', 'gist', 'notifications', 'project', 'read:repo_hook', 'repo', 'user', 'workflow', 'write:discussion', 'write:org', 'write:packages'`
+
 ## Firenvim Setup
 
 ### Browser maps

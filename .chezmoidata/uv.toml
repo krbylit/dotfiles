@@ -1,0 +1,11 @@
+[uv]
+tools = [
+    { name = "pip", version = "latest" },
+    { name = "pipx", version = "latest" },
+    { name = "ruff-lsp", version = "latest" },
+    { name = "ruff", version = "latest" },
+    { name = "pre-commit", version = "latest" },
+    { name = "yapf", version = "latest" },
+    { name = "bagels", version = "latest" },
+    { name = "cfn-lint", version = "latest" },
+]

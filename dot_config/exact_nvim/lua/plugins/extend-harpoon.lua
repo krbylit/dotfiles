@@ -5,10 +5,16 @@ return {
 	"ThePrimeagen/harpoon",
 	branch = "harpoon2",
 	dependencies = { "nvim-lua/plenary.nvim" },
+	---@type HarpoonSettings
 	opts = {
 		settings = {
 			save_on_toggle = true,
 			sync_on_ui_close = true,
+			key = function()
+				-- return vim.loop.cwd()
+				-- NOTE: This let's us get harpoon list when in child dirs under project.
+				return Snacks.git.get_root()
+			end,
 		},
 	},
 	-- Override default keys so they don't show in our main which-key menu

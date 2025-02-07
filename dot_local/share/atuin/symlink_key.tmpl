@@ -1,1 +1,4 @@
-{{ .chezmoi.sourceDir }}{{ .path.secrets }}/.local/share/atuin/private_key
+{{- $privateKey := (joinPath .chezmoi.sourceDir .path.secrets ".local" "share" "atuin" "private_key") -}}
+{{- if (stat $privateKey) -}}
+{{ $privateKey }}
+{{- end -}}

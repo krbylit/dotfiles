@@ -1,0 +1,122 @@
+# see https://github.com/sigoden/aichat/blob/main/config.example.yaml
+# ---- Behavior Settings ----
+stream: true # Enable streaming responses
+save: true # Persist messages
+keybindings: vi # Choose keybinding style (options: emacs, vi)
+editor: nvim # Command to edit input buffer or session
+wrap: auto # Enable automatic text wrapping
+wrap_code: false
+
+# ---- apperence ----
+highlight: true                  # Controls syntax highlighting
+light_theme: false               # Activates a light color theme when true. env: AICHAT_LIGHT_THEME
+# Custom REPL left/right prompts, see https://github.com/sigoden/aichat/wiki/Custom-REPL-Prompt for more details
+left_prompt:
+  '{color.green}{?session {?agent {agent}>}{session}{?role /}}{!session {?agent {agent}>}}{role}{?rag @{rag}}{color.cyan}{?session )}{!session >}{color.reset} '
+right_prompt:
+  '{color.purple}{?session {?consume_tokens {consume_tokens}({consume_percent}%)}{!consume_tokens {consume_tokens}}}{color.reset}'
+
+# ---- session ----
+# Controls the persistence of the session. if true, auto save; if false, not save; if null, asking the user
+save_session: true
+# Compress session when token count reaches or exceeds this threshold
+compress_threshold: 4000
+# Text prompt used for creating a concise summary of session message
+summarize_prompt: 'Summarize the discussion briefly in 200 words or less to use as a prompt for future context.'
+# Text prompt used for including the summary of the entire session
+summary_prompt: 'This is a summary of the chat history as a recap: '
+
+# ---- RAG Configuration ----
+# rag_embedding_model: ollama:nomic-embed-text # Embedding model for Ollama
+rag_embedding_model: lm-studio:text-embedding-nomic-embed-text-v1.5 # Embedding model for LM Studio
+# FIXME: all models attempted are throwing error `Model '<modelName>' is not a reranker model`
+# rag_reranker_model: lm-studio:bge-reranker-v2-gemma # Reranker model (set to null if not used)
+# rag_reranker_model: lm-studio:serp-reranker-0.5b-4k # Reranker model (set to null if not used)
+rag_top_k: 10 # Number of documents to retrieve for answering queries
+rag_chunk_size: 1000 # Size of document chunks in characters
+rag_chunk_overlap: 250 # Overlap between chunks in characters
+rag_template: |
+  Answer the query based on the context while respecting the rules. (user query, some textual context and rules, all inside xml tags)
+
+  <context>
+  __CONTEXT__
+  </context>
+
+  <rules>
+  - If you don't know, just say so.
+  - If you are not sure, ask for clarification.
+  - Answer in the same language as the user query.
+  - If the context appears unreadable or of poor quality, tell the user then answer as best as you can.
+  - If the answer is not in the context but you think you know the answer, explain that to the user then answer with your own knowledge.
+  - Answer directly and without using xml tags.
+  </rules>
+
+  <user_query>
+  __INPUT__
+  </user_query>
+
+# ---- Document Loaders ----
+document_loaders:
+  pdf: "pdftotext $1 -" # Command to load .pdf files
+  docx: "pandoc --to plain $1"
+
+# ---- LLM Configuration ----
+# model: ollama:deepseek-r1:14b
+model: lm-studio:deepseek-r1-distill-qwen-32b
+# temperature: 0.7                 # Controls the creativity and randomness of the LLM's response.
+# top_p: 0.9                       # Alternative way to control LLM's output diversity, affecting the probability distribution of tokens.
+
+# ---- Clients Configuration ----
+clients:
+  - type: openai-compatible
+    name: ollama
+    api_base: http://localhost:1234/v1
+  - type: openai-compatible
+    name: lm-studio
+    api_base: http://localhost:1234/v1
+    patch:                                          # Patch api
+      rerank:                             # Api type, possible values: chat_completions, embeddings, and rerank
+        '.*':                                    # The regex to match model names, e.g. '.*' 'gpt-4o' 'gpt-4o|gpt-4-.*'
+          url: 'http://localhost:1234/v1/embeddings'                                   # Patch request url
+          # body:                                     # Patch request body
+          #   <json>
+          # headers:                                  # Patch request headers
+          #   <key>: <value>
+  - type: openai-compatible
+    name: lm-studio
+    api_base: http://localhost:1234/v1
+    models:
+      - name: lm-studio:deepseek-r1-distill-qwen-32b
+        max_input_tokens: 200000
+        supports_vision: true
+        supports_function_calling: true
+      - name: lm-studio:deepseek-coder-v2-lite-instruct-mlx
+        max_input_tokens: 200000
+        supports_vision: true
+        supports_function_calling:
+          true
+          # FIXME: getting "Model is not embedding" error w/ this
+      - name: phi-3-mini-4k-instruct-no-q-embed
+        type: embedding
+        max_input_tokens: 200000
+        max_tokens_per_chunk: 2000
+        default_chunk_size: 1500
+        max_batch_size: 100
+      # - name: serp-reranker-0.5b-4k
+      #   type: embedding
+      #   max_input_tokens: 200000
+      #   max_tokens_per_chunk: 2000
+      #   default_chunk_size: 1500
+      #   max_batch_size: 100
+      # - name: bge-reranker-v2-gemma
+      #   type: embedding
+      #   max_input_tokens: 200000
+      #   max_tokens_per_chunk: 2000
+      #   default_chunk_size: 1500
+      #   max_batch_size: 100
+      - name: text-embedding-nomic-embed-text-v1.5
+        type: embedding
+        max_input_tokens: 200000
+        max_tokens_per_chunk: 2000
+        default_chunk_size: 1500
+        max_batch_size: 100

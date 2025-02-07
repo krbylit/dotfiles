@@ -4,7 +4,9 @@
 # `dir/**/*` will ignore all files in all subdirs, but still copy the empty dir.
 # `dir` will ignore the dir and all its contents.
 README.md
-.pre-commit-config.yaml
-.gitleaksignore
 cm-util
 secrets
+.aiderignore
+.aider.input.history
+.aider.chat.history.md
+.aider.tags*

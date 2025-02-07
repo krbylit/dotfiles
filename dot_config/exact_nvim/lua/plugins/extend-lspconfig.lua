@@ -5,6 +5,8 @@
 -- NOTE: `lua =vim.lsp.get_active_clients()[1].name` to get active lsp clients for debugging
 -- NOTE: `lua =vim.lsp.get_active_clients()[1].server_capabilities` to show what that client is doing
 
+---@type LazySpec
+---@diagnostic disable: missing-fields
 return {
 	{
 		"neovim/nvim-lspconfig",
@@ -17,12 +19,13 @@ return {
 				"williamboman/mason.nvim",
 				opts = {
 					ensure_installed = {
-						"prettierd",
-						"eslint_d",
 						"bash-language-server",
+						"cfn-lint",
+						"codelldb",
 						"docker-compose-language-service",
 						"dockerfile-language-server",
 						"eslint-lsp",
+						"eslint_d",
 						"hadolint",
 						"jedi-language-server",
 						"js-debug-adapter",
@@ -33,15 +36,18 @@ return {
 						"marksman",
 						"nil",
 						"prettier",
+						"prettierd",
+						"pylint",
 						"pyright",
 						"ruff",
 						"ruff-lsp",
+						"rust-analyzer",
 						"shellcheck",
 						"shfmt",
 						"stylua",
 						"taplo",
 						"typescript-language-server",
-						-- "vtsls",
+						"vim-language-server",
 						"yaml-language-server",
 						"yapf",
 					},
@@ -128,11 +134,17 @@ return {
 			},
 			-- LSP Server Settings
 			---@type lspconfig.options
+			---@diagnostic disable: missing-fields
 			servers = {
 				yamlls = {
-					filetypes = { "yaml" },
+					filetypes = { "yaml", "yml" },
 					settings = {
 						yaml = {
+							schemas = {
+								["https://json.schemastore.org/github-workflow.json"] = "/.github/workflows/*",
+								-- FIXME: CFN schemas not applying
+								["https://s3.amazonaws.com/cfn-resource-specifications-us-east-1-prod/schemas/2.15.0/all-spec.json"] = "/**/cloudFormation/**",
+							},
 							schemaStore = {
 								enable = true,
 							},
@@ -275,6 +287,10 @@ return {
 				lua_ls = {
 					settings = {
 						Lua = {
+							-- diagnostics = {
+							-- NOTE: don't show all missing fields from lazy specs. alternatively add the `---@diagnostic disable: missing-fields` to type defs
+							-- 	disable = { "missing-fields" },
+							-- },
 							workspace = {
 								checkThirdParty = false,
 							},

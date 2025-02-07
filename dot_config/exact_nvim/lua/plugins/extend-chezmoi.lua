@@ -8,6 +8,7 @@ vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
 	callback = function(ev)
 		local bufnr = ev.buf
 		local edit_watch = function()
+			-- TODO: See if we can re-source nvim config after chezmoi apply
 			require("chezmoi.commands.__edit").watch(bufnr)
 		end
 		vim.schedule(edit_watch)

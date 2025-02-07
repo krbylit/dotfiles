@@ -9,3 +9,4 @@
 --bind ctrl-d:half-page-down
 --bind ctrl-u:half-page-up
 --bind ctrl-p:toggle-preview
+--bind 'ctrl-o:execute($EDITOR {})'

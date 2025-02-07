@@ -15,6 +15,7 @@ local pane_width = math.floor(terminal_width / 4)
 local picker = require("snacks.picker")
 
 ---@type LazySpec
+---@diagnostic disable: missing-fields
 return {
 	"folke/snacks.nvim",
 	priority = 1000,
@@ -65,6 +66,10 @@ return {
 					keys = {
 						-- Make <C-c> close in normal as well as insert mode
 						["<C-c>"] = { "close", mode = { "i", "n" } },
+						["<a-w>"] = { "toggle_cwd", mode = { "n", "i" } },
+						["<C-p>"] = { "focus_preview", mode = { "i", "n" } }, -- or any other key you prefer
+						["<C-i>"] = { "focus_input", mode = { "i", "n" } }, -- or any other key you prefer
+						["<C-l>"] = { "focus_list", mode = { "i", "n" } }, -- or any other key you prefer
 					},
 				},
 				-- result list window
@@ -72,15 +77,38 @@ return {
 					keys = {
 						-- Make <C-c> close in normal as well as insert mode
 						["<C-c>"] = { "close", mode = { "i", "n" } },
+						["<C-p>"] = { "focus_preview", mode = { "i", "n" } }, -- or any other key you prefer
+						["<C-i>"] = { "focus_input", mode = { "i", "n" } }, -- or any other key you prefer
+						["<C-l>"] = { "focus_list", mode = { "i", "n" } }, -- or any other key you prefer
+					},
+				},
+				-- preview window
+				preview = {
+					keys = {
+						-- Make <C-c> close in normal as well as insert mode
+						["<C-c>"] = { "close", mode = { "i", "n" } },
+						["<C-p>"] = { "focus_preview", mode = { "i", "n" } }, -- or any other key you prefer
+						["<C-i>"] = { "focus_input", mode = { "i", "n" } }, -- or any other key you prefer
+						["<C-l>"] = { "focus_list", mode = { "i", "n" } }, -- or any other key you prefer
 					},
 				},
 			},
 			---@type snacks.picker.sources.Config
 			sources = {
+				---@type snacks.picker.notifications.Config: snacks.picker.Config
+				---@field filter? snacks.notifier.level|fun(notif: snacks.notifier.Notif): boolean
+				-- notifications = {},
 				---@type snacks.picker.files.Config: snacks.picker.proc.Config
+				---@field cmd? string
+				---@field hidden? boolean show hidden files
+				---@field ignored? boolean show ignored files
+				---@field dirs? string[] directories to search
+				---@field follow? boolean follow symlinks
+				---@field exclude? string[] exclude patterns
+				---@field args? string[] additional arguments
 				files = {
-					hidden = true,
-					ignored = true,
+					hidden = false,
+					ignored = false,
 					-- Exclude dirs from file search
 					exclude = {
 						"**/.venv/**",
@@ -94,8 +122,8 @@ return {
 				},
 				---@type snacks.picker.grep.Config
 				grep = {
-					hidden = true,
-					ignored = true,
+					hidden = false,
+					ignored = false,
 					-- Exclude dirs from text search
 					exclude = {
 						"**/.venv/**",
@@ -140,15 +168,14 @@ return {
 			-- row = 1,
 			-- col = 1,
 			pane_gap = 4,
-			---@type snacks.dashboard.sections.Config
 			sections = {
 				{
 					pane = 1,
 					section = "terminal",
 					-- cmd = 'cat "' .. logo_file .. '" | lolcat -a -d 2 -s 15 -F 0.3 -t -p 100 -f',
-					cmd = 'fish -c "for i in (seq 10); clear; cat "'
+					cmd = 'bash -c "for i in {1..10}; do clear; cat "'
 						.. logo_file
-						.. '" | lolcat -a -d 4 -s 15 -F 0.3 -t -p 100 -f; sleep 4; end"',
+						.. '" | lolcat -a -d 4 -s 15 -F 0.3 -t -p 100 -f; sleep 4; done"',
 					height = logo_height,
 					width = logo_width,
 					-- height = math.floor(terminal_height / 3),
@@ -188,9 +215,9 @@ return {
 				},
 			},
 		},
-		---@class snacks.indent
+		---@type snacks.indent
 		indent = {
-			---@class snacks.indent.Config
+			---@type snacks.indent.Config
 			indent = {
 				enabled = false, -- enable indent guides
 				char = "│",
@@ -211,7 +238,7 @@ return {
 					"SnacksIndent8",
 				},
 			},
-			---@class snacks.indent.animate
+			---@type snacks.indent.animate
 			animate = {
 				enabled = vim.fn.has("nvim-0.10") == 1,
 				easing = "linear",
@@ -220,7 +247,7 @@ return {
 					total = 500, -- maximum duration
 				},
 			},
-			---@class snacks.indent.Scope.Config: snacks.scope.Config
+			---@type snacks.indent.Scope.Config: snacks.scope.Config
 			scope = {
 				enabled = true, -- enable highlighting the current scope
 				char = "│",
@@ -228,7 +255,6 @@ return {
 				only_current = true, -- only show scope in the current window
 				hl = "SnacksIndentScope", ---@type string|string[] hl group for scopes
 			},
-			---@class snacks.indent.Chunk.Config: snacks.scope.Config
 			chunk = {
 				-- when enabled, scopes will be rendered as chunks, except for the
 				-- top-level scope which will be rendered as a scope.
@@ -247,7 +273,6 @@ return {
 					-- arrow = "─",
 				},
 			},
-			---@class snacks.indent.Blank.Config: snacks.scope.Config
 			blank = {
 				char = " ",
 				-- char = "·",
@@ -259,5 +284,115 @@ return {
 			end,
 			priority = 200,
 		},
+		profiler = {
+			opts = function(_, opts)
+				---@type snacks.profiler.Config
+				opts = vim.tbl_deep_extend("force", opts or {}, {
+					-- Toggle the profiler
+					-- Snacks.toggle.profiler():map("<leader>pp"),
+					-- -- Toggle the profiler highlights
+					-- Snacks.toggle.profiler_highlights():map("<leader>ph"),
+					autocmds = true,
+					runtime = vim.env.VIMRUNTIME, ---@type string
+					-- thresholds for buttons to be shown as info, warn or error
+					-- value is a tuple of [warn, error]
+					thresholds = {
+						time = { 2, 10 },
+						pct = { 10, 20 },
+						count = { 10, 100 },
+					},
+					on_stop = {
+						highlights = true, -- highlight entries after stopping the profiler
+						pick = true, -- show a picker after stopping the profiler (uses the `on_stop` preset)
+					},
+					---@type snacks.profiler.Highlights
+					highlights = {
+						min_time = 0, -- only highlight entries with time > min_time (in ms)
+						max_shade = 20, -- time in ms for the darkest shade
+						badges = { "time", "pct", "count", "trace" },
+						align = 80,
+					},
+					pick = {
+						picker = "snacks", ---@type snacks.profiler.Picker
+						---@type snacks.profiler.Badge.type[]
+						badges = { "time", "count", "name" },
+						---@type snacks.profiler.Highlights
+						preview = {
+							badges = { "time", "pct", "count" },
+							align = "right",
+						},
+					},
+					startup = {
+						event = "VimEnter", -- stop profiler on this event. Defaults to `VimEnter`
+						after = true, -- stop the profiler **after** the event. When false it stops **at** the event
+						pattern = nil, -- pattern to match for the autocmd
+						pick = true, -- show a picker after starting the profiler (uses the `startup` preset)
+					},
+					---@type table<string, snacks.profiler.Pick|fun():snacks.profiler.Pick?>
+					presets = {
+						startup = { min_time = 1, sort = false },
+						on_stop = {},
+						filter_by_plugin = function()
+							return { filter = { def_plugin = vim.fn.input("Filter by plugin: ") } }
+						end,
+					},
+					---@type string[]
+					globals = {
+						-- "vim",
+						-- "vim.api",
+						-- "vim.keymap",
+						-- "Snacks.dashboard.Dashboard",
+					},
+					-- filter modules by pattern.
+					-- longest patterns are matched first
+					filter_mod = {
+						default = true, -- default value for unmatched patterns
+						["^vim%."] = false,
+						["mason-core.functional"] = false,
+						["mason-core.functional.data"] = false,
+						["mason-core.optional"] = false,
+						["which-key.state"] = false,
+					},
+					filter_fn = {
+						default = true,
+						["^.*%._[^%.]*$"] = false,
+						["trouble.filter.is"] = false,
+						["trouble.item.__index"] = false,
+						["which-key.node.__index"] = false,
+						["smear_cursor.draw.wo"] = false,
+						["^ibl%.utils%."] = false,
+					},
+					icons = {
+						time = " ",
+						pct = " ",
+						count = " ",
+						require = "󰋺 ",
+						modname = "󰆼 ",
+						plugin = " ",
+						autocmd = "⚡",
+						file = " ",
+						fn = "󰊕 ",
+						status = "󰈸 ",
+					},
+				})
+			end,
+		},
+	},
+	keys = {
+		{
+			"<leader>z",
+			function()
+				Snacks.picker.zoxide()
+			end,
+			desc = "Zoxide",
+		},
+		-- {
+		-- 	-- FIXME: conflicting with yanky keymap
+		-- 	"<leader>ps",
+		-- 	function()
+		-- 		Snacks.profiler.scratch()
+		-- 	end,
+		-- 	desc = "Profiler Scratch Bufer",
+		-- },
 	},
 }

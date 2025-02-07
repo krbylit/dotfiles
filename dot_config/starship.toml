@@ -145,12 +145,12 @@ format = '[\[$status - $common_meaning\]]($style)'
 [nodejs]
 style = 'bold green2'
 symbol = ''
-format = 'via [$symbol ($version)]($style)($engines_version)(not_capable_style)'
+format = '[$symbol ($version)]($style)($engines_version)(not_capable_style)'
 
 [python]
 style = "bold pink"
 symbol = ''
-format = 'via [$symbol $pyenv_prefix($version)(  $virtualenv)]($style)'
+format = '[$symbol $pyenv_prefix($version)(  $virtualenv)]($style)'
 
 [container]
 disabled = true

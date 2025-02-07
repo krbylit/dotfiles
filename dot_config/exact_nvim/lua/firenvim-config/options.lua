@@ -28,6 +28,10 @@ M.setup = function()
 	opt.number = false
 	opt.relativenumber = false
 	opt.cursorline = false
+	-- Don't show cmdline at all unless in use
+	opt.cmdheight = 0
+	-- Suppress cmdline messages
+	opt.shortmess = ""
 	-- vim.cmd("hi Normal guibg=NONE ctermbg=NONE")
 end
 
