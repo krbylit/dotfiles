@@ -3,7 +3,6 @@ function fish_greeting
     fish_logo blue cyan green
     echo "░░░░░░▒░▒▒░▒▒▒▒▒▓▒▓▓▓█▓████▓▓▒▒▒░"
     echo " "
-    # echo "░░░░░▒▒▒▒▒▓▓▓▓█████▓▓▓▓▒▒▒▒▒░░░░░"
 end
 
 if status is-interactive

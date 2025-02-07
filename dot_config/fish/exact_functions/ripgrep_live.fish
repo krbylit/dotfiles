@@ -1,6 +1,8 @@
 # Yanked from https://junegunn.github.io/fzf/tips/ripgrep-integration/
 # ripgrep->fzf->vim [QUERY]
 function ripgrep_live
+    # Use our custom config
+    set -gx RIPGREP_CONFIG_PATH $HOME/.config/ripgrep/.ripgreprc
     set -l RELOAD "reload:rg --column --color=always --smart-case {q} || :"
     set -l OPENER '
         if test $FZF_SELECT_COUNT -eq 0
@@ -19,4 +21,6 @@ function ripgrep_live
         --preview 'bat --style=full --color=always --highlight-line {2} {1}' \
         --preview-window '~4,+{2}+4/3,<80(up)' \
         --query "$argv"
+    # Unset custom config so `rg <pattern>` works as it normally would
+    set -e RIPGREP_CONFIG_PATH
 end
