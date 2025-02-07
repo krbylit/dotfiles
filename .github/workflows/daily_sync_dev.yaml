@@ -68,23 +68,23 @@ jobs:
           LATEST_PRIVATE=$(git rev-parse private/dev)
 
           # Find the last synced private commit by looking through our commit messages
-          LAST_SYNCED=$(git log origin/dev --format=%B -n 100 | grep -o -m 1 '[0-9a-f]\{40\}' || true)
+          # LAST_SYNCED=$(git log origin/dev --format=%B -n 100 | grep -o -m 1 '[0-9a-f]\{40\}' || true)
 
           # Capture commit messages and write to a temporary file
           echo "$LATEST_PRIVATE $(date)" > commit_message.txt
-          if [ -n "$LAST_SYNCED" ]; then
-            # Get commits between last synced private commit and current private state
-            git log $LAST_SYNCED..$LATEST_PRIVATE --pretty=format:'%h - %s%n%b%nAuthor: %an <%ae>%n---' --reverse >> commit_message.txt
-          else
-            # If no previous sync found, get all commits
-            git log private/dev --since="24 hours ago" --pretty=format:'%h - %s%n%b%nAuthor: %an <%ae>%n---' --reverse >> commit_message.txt
-          fi
-
-          # Check if the commit message file is too large
-          if [ $(wc -c <commit_message.txt) -ge 10240 ]; then
-            echo "$LATEST_PRIVATE $(date)" > commit_message.txt
-            echo "Too many commits to log." >> commit_message.txt
-          fi
+          # if [ -n "$LAST_SYNCED" ]; then
+          #   # Get commits between last synced private commit and current private state
+          #   git log $LAST_SYNCED..$LATEST_PRIVATE --pretty=format:'%h - %s%n%b%nAuthor: %an <%ae>%n---' --reverse >> commit_message.txt
+          # else
+          #   # If no previous sync found, get all commits
+          #   git log private/dev --since="24 hours ago" --pretty=format:'%h - %s%n%b%nAuthor: %an <%ae>%n---' --reverse >> commit_message.txt
+          # fi
+          #
+          # # Check if the commit message file is too large
+          # if [ $(wc -c <commit_message.txt) -ge 10240 ]; then
+          #   echo "$LATEST_PRIVATE $(date)" > commit_message.txt
+          #   echo "Too many commits to log." >> commit_message.txt
+          # fi
 
           # Create a squashed commit using the commit message file
           git commit -F commit_message.txt
