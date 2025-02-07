@@ -12,8 +12,6 @@ function load_fzf_bindings --on-event fish_prompt
 end
 
 # `fzf_directory_opts` is appended onto default opts passed to `fd`
-# Set ctrl+o to open selected file in EDITOR. Appended to defaults.
-set -gx fzf_directory_opts --bind "ctrl-o:execute($EDITOR {} &> /dev/tty)"
 
 # Set fzf.fish `fd` opts for searching files/dirs. Appended to defaults.
 # Set to show dot files and gitignored files

@@ -4,7 +4,6 @@ set -gx fifc_editor nvim
 
 # Env vars
 set -gx CM_PATH "$HOME/.local/share/chezmoi"
-set -gx CONFIG_DIR "$HOME/.config/lazygit" # Lazygit config
 set -gx XDG_CONFIG_HOME "$HOME/.config"
 set -gx fisher_path "$XDG_CONFIG_HOME/fish/fisher"
 # set -gx fish_function_path $fish_function_path "$XDG_CONFIG_HOME/fish/fisher/functions"

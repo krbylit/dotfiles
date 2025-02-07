@@ -9,6 +9,4 @@
 --bind ctrl-d:half-page-down
 --bind ctrl-u:half-page-up
 --bind ctrl-p:toggle-preview
-# FIXME: this seems to be correct syntax but `become` just hangs
-# --bind 'enter:become($EDITOR {1})'
-# --bind 'ctrl-o:execute($EDITOR {})'
+--bind 'ctrl-o:execute($EDITOR {})'

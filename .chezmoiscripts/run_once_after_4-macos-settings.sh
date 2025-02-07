@@ -8,3 +8,6 @@ defaults write -g ApplePressAndHoldEnabled -bool false
 defaults -currentHost write -g AppleFontSmoothing -int 0
 # Set the number of items required for the "Services" submenu to appear in the right-click context menu. Setting to a number higher than the number of services selected in `Settings > Keyboard > Shortcuts > Services` will prevent the submenu from appearing. This allows us to "replace" the default "New Terminal Tab at Folder" that appears in the main context menu with our custom terminal service e.g. "New Ghostty Tab Here".
 defaults write -g NSServicesMinimumItemCountForContextSubmenu -int 5
+# Increase key repeat rate
+defaults write -g InitialKeyRepeat -int 25
+defaults write -g KeyRepeat -int 1

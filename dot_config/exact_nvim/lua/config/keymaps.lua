@@ -66,7 +66,7 @@ map({ "n", "v", "i" }, "<c-z>", "<Nop>", { noremap = true, expr = true })
 -- FILES
 -- ================================================================
 -- Buffer maps
-map("n", "<c-q>", function()
+map("n", "<c-x>", function()
 	if vim.bo.filetype == "snacks_dashboard" then
 		vim.cmd("q") -- Close the dashboard
 	end
@@ -75,7 +75,7 @@ map("n", "<c-q>", function()
 	if #listed_buffers == 1 then
 		vim.cmd("lua Snacks.dashboard({win=0})") -- Open the dashboard
 	else
-		require("snacks").bufdelete() -- enable once we use `snacks` again
+		require("snacks").bufdelete.delete() -- enable once we use `snacks` again
 	end
 end)
 

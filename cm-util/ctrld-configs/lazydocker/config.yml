@@ -63,8 +63,18 @@ stats:
       statPath: DerivedStats.MemoryPercentage
       color: green
 customCommands:
-  containers:
-    - name: bash
+  services:
+    - name: "Rebuild no cache:"
       attach: true
-      command: "docker exec -it {{ .Container.ID }} bash"
+      command: "{{ .DockerCompose }} build --no-cache {{ .Service.Name }}"
+      serviceNames: []
+  images:
+    - name: "Full clean:"
+      attach: true
+      command: "docker system prune -af --volumes"
+      serviceNames: []
+  containers:
+    - name: "sh:"
+      attach: true
+      command: "docker exec -it {{ .Container.ID }} sh"
       serviceNames: []
