@@ -124,29 +124,16 @@ return {
 	-- 	return vim.bo.filetype ~= "snacks_dashboard"
 	-- end,
 	config = function()
-		-- Your existing highlight groups
-		vim.api.nvim_set_hl(
-			0,
-			"MiniStatuslineBoldFileName",
-			{ italic = true, bold = true, fg = "#f4dbd6", bg = "#1e2030" }
-		)
-		vim.api.nvim_set_hl(
-			0,
-			"MiniStatuslineBoldRepoName",
-			{ italic = false, bold = true, fg = "#f5a97f", bg = "#1e2030" }
-		)
-		vim.api.nvim_set_hl(
-			0,
-			"MiniStatuslineRepoIcon",
-			{ italic = false, bold = false, fg = "#f5a97f", bg = "#1e2030" }
-		)
+		vim.api.nvim_set_hl(0, "MiniStatuslineBoldFileName", { italic = true, bold = true, fg = "#f4dbd6" })
+		vim.api.nvim_set_hl(0, "MiniStatuslineBoldRepoName", { italic = false, bold = true, fg = "#f5a97f" })
+		vim.api.nvim_set_hl(0, "MiniStatuslineRepoIcon", { italic = false, bold = false, fg = "#f5a97f" })
 		vim.api.nvim_set_hl(
 			0,
 			"MiniStatuslineBoldBranchName",
 			-- #ee99a0
 			-- #c6a0f6
 			-- #f5bde6
-			{ italic = false, bold = true, fg = "#f5bde6", bg = "#1e2030" }
+			{ italic = false, bold = true, fg = "#f5bde6" }
 		)
 		vim.api.nvim_set_hl(
 			0,
@@ -154,10 +141,10 @@ return {
 			-- #ee99a0
 			-- #c6a0f6
 			-- #f5bde6
-			{ italic = false, bold = false, fg = "#f5bde6", bg = "#1e2030" }
+			{ italic = false, bold = false, fg = "#f5bde6" }
 		)
-		vim.api.nvim_set_hl(0, "MiniStatuslinePathName", { fg = "#939ab7", bg = "#1e2030" })
-		vim.api.nvim_set_hl(0, "MiniStatuslineDashboard", { fg = "#24273A", bg = "#24273A" })
+		vim.api.nvim_set_hl(0, "MiniStatuslinePathName", { fg = "#939ab7" })
+		vim.api.nvim_set_hl(0, "MiniStatuslineDashboard", { fg = "#24273A" })
 		vim.api.nvim_set_hl(0, "MiniStatuslineRecording", { fg = "#181926", bg = "#ed8796" })
 
 		require("mini.statusline").setup({
