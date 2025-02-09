@@ -57,13 +57,37 @@ opt.mousehide = true -- Hide mouse cursor while typing
 opt.winheight = 1 -- Minimum window height
 opt.winminheight = 1 -- Minimum window height
 opt.clipboard = vim.env.SSH_TTY and "" or "unnamedplus" -- Sync with system clipboard
--- Disable diagnostics by default
-vim.diagnostic.enable(false)
+-- Enable diagnostics by default
+vim.diagnostic.enable(true)
 -- FORMATTING
 -- default "tcqj"
 opt.formatoptions = "qnlj"
 vim.g.autoformat = true
 vim.g.lazyvim_prettier_needs_config = false
+-- Disable diagnostics in certain filetypes
+local diagnostics_disabled_fts = {
+	"markdown",
+	"txt",
+	"json",
+	"sh",
+	"bash",
+	"zsh",
+	"fish",
+	"conf",
+	"cfg",
+	"ini",
+	"toml",
+	"yaml",
+	"yml",
+	"env",
+	"gitconfig",
+} -- Add your desired filetypes here
+vim.api.nvim_create_autocmd("FileType", {
+	pattern = diagnostics_disabled_fts,
+	callback = function()
+		vim.diagnostic.enable(false, { bufnr = 0 })
+	end,
+})
 if vim.fn.has("nvim-0.10") == 1 then
 	opt.smoothscroll = true
 	opt.foldexpr = "v:lua.require'lazyvim.util'.ui.foldexpr()"
