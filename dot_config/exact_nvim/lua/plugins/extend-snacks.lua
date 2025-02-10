@@ -14,7 +14,6 @@ local pane_width = math.floor(terminal_width / 4)
 
 local picker = require("snacks.picker")
 
----@type LazySpec
 ---@diagnostic disable: missing-fields
 return {
 	"folke/snacks.nvim",
@@ -95,17 +94,10 @@ return {
 			},
 			---@type snacks.picker.sources.Config
 			sources = {
-				---@type snacks.picker.notifications.Config: snacks.picker.Config
-				---@field filter? snacks.notifier.level|fun(notif: snacks.notifier.Notif): boolean
+				-- ---@type snacks.picker.notifications.Config: snacks.picker.Config
+				-- ---@field filter? snacks.notifier.level|fun(notif: snacks.notifier.Notif): boolean
 				-- notifications = {},
 				---@type snacks.picker.files.Config: snacks.picker.proc.Config
-				---@field cmd? string
-				---@field hidden? boolean show hidden files
-				---@field ignored? boolean show ignored files
-				---@field dirs? string[] directories to search
-				---@field follow? boolean follow symlinks
-				---@field exclude? string[] exclude patterns
-				---@field args? string[] additional arguments
 				files = {
 					hidden = false,
 					ignored = false,

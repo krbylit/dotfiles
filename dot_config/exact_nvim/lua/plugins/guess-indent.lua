@@ -18,7 +18,7 @@ return {
 				"prompt",
 			},
 			on_tab_options = { -- A table of vim options when tabs are detected
-				["expandtab"] = false,
+				["expandtab"] = true,
 			},
 			on_space_options = { -- A table of vim options when spaces are detected
 				["expandtab"] = true,
