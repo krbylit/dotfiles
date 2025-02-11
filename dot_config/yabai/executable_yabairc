@@ -12,16 +12,16 @@ TOP_PADDING=$((BAR_HEIGHT + 6))
 PADDING=6
 
 # Space names (in order)
-SPACES="term browser code dev comms ref misc debug util"
+SPACES="term browser code dev misc comms ref debug util"
 
 # Display detection
 DISPLAY_COUNT=$(yabai -m query --displays | jq '. | length')
 DISPLAY_2=$((DISPLAY_COUNT > 1 ? 2 : 1))
 
 # Main display spaces
-MAIN_SPACES="term browser code dev"
+MAIN_SPACES="term browser code dev misc"
 # Secondary display spaces
-SEC_SPACES="comms ref misc debug util"
+SEC_SPACES="comms ref debug util"
 
 # General Configurations
 # yabai -m config external_bar "${BAR_HEIGHT}":0
@@ -83,7 +83,7 @@ yabai -m rule --add label="About This Mac" app="System Information" title="About
 yabai -m rule --add label="1Password Item" app="^1Password$" title="!^All Accounts" manage=off
 
 # Unmanaged Applications
-UNMANAGED_APPS="Alfred 'App Store' 'Archive Utility' Calculator Dictionary FaceTime 'Photo Booth' Python 'Screen Sharing' Screens 'Software Update' Stats 'System Information' 'System Preferences' 'System Settings'"
+UNMANAGED_APPS="Alfred 'App Store' 'Archive Utility' Calculator Dictionary FaceTime 'Mountain Duck' 'Photo Booth' Python 'Screen Sharing' Screens 'Software Update' Stats 'System Information' 'System Preferences' 'System Settings'"
 
 for app in $UNMANAGED_APPS; do
 	yabai -m rule --add label="unmanage_${app}" app="^${app}$" manage=off
@@ -157,7 +157,6 @@ DEBUG_APPS=(
 UTIL_APPS=(
 	Figma
 	1Password
-	# YabaiIndicator
 	"Activity Monitor"
 	"Karabiner-Elements"
 )

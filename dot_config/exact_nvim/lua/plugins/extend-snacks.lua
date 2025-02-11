@@ -125,6 +125,7 @@ return {
 						"**/dist/**",
 						"**/build/**",
 						"**/__pycache__/**",
+						"package-lock.json",
 					},
 				},
 				---@type snacks.picker.lsp.Config

@@ -68,10 +68,28 @@ customCommands:
       attach: true
       command: "{{ .DockerCompose }} build --no-cache {{ .Service.Name }}"
       serviceNames: []
-  images:
-    - name: "Full clean:"
+    - name: "Rebuild:"
       attach: true
-      command: "docker system prune -af --volumes"
+      command: "{{ .DockerCompose }} build {{ .Service.Name }}"
+      serviceNames: []
+      # FIXME: `--label` not recognize, might be version of docker/docker compose we're trying
+    # - name: "Build prod-debug:"
+    #   attach: true
+    #   command: "{{ .DockerCompose }} build {{ .Service.Name }} --label preserve=true"
+    #   serviceNames: []
+  images:
+    - name: "Tag as prod-debug:"
+      attach: true
+      command: "docker image tag {{ .Image.Name }} {{ .Image.Name }}:prod-debug"
+      serviceNames: []
+    # - name: "Full clean (respect preserve):"
+    #   attach: true
+    #   # FIXME: getting `panic: Starting quote has no ending quote.`
+    #   command: docker images --format '{{.Repository}}:{{.Tag}} {{.ID}}' | awk '\$1 !~ /:prod-debug$/ { print \$2 }' | xargs -r docker rmi && docker container prune -f && docker volume prune -f && docker network prune -f
+    #   serviceNames: []
+    - name: "Remove all images:"
+      attach: true
+      command: "docker rmi $(docker images)"
       serviceNames: []
   containers:
     - name: "sh:"
