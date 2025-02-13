@@ -1,4 +1,6 @@
 -- TODO: implement truncation method for when window not big enough for file path
+local colors = require("tokyonight.colors").setup({ style = "night" })
+-- local colors = require("tokyonight").load({ style = "night" })
 local current_repo_name = ""
 local current_branch = ""
 
@@ -124,28 +126,47 @@ return {
 	-- 	return vim.bo.filetype ~= "snacks_dashboard"
 	-- end,
 	config = function()
-		vim.api.nvim_set_hl(0, "MiniStatuslineBoldFileName", { italic = true, bold = true, fg = "#f4dbd6" })
-		vim.api.nvim_set_hl(0, "MiniStatuslineBoldRepoName", { italic = false, bold = true, fg = "#f5a97f" })
-		vim.api.nvim_set_hl(0, "MiniStatuslineRepoIcon", { italic = false, bold = false, fg = "#f5a97f" })
+		vim.api.nvim_set_hl(
+			0,
+			"MiniStatuslineBoldFileName",
+			{ italic = true, bold = true, fg = colors.teal, bg = colors.bg }
+		)
+		vim.api.nvim_set_hl(
+			0,
+			"MiniStatuslineBoldRepoName",
+			{ italic = false, bold = true, fg = colors.orange, bg = colors.bg }
+		)
+		vim.api.nvim_set_hl(
+			0,
+			"MiniStatuslineRepoIcon",
+			{ italic = false, bold = false, fg = colors.orange, bg = colors.bg }
+		)
 		vim.api.nvim_set_hl(
 			0,
 			"MiniStatuslineBoldBranchName",
-			-- #ee99a0
-			-- #c6a0f6
-			-- #f5bde6
-			{ italic = false, bold = true, fg = "#f5bde6" }
+			{ italic = false, bold = true, fg = colors.cyan, bg = colors.bg }
 		)
 		vim.api.nvim_set_hl(
 			0,
 			"MiniStatuslineBranchIcon",
-			-- #ee99a0
-			-- #c6a0f6
-			-- #f5bde6
-			{ italic = false, bold = false, fg = "#f5bde6" }
+			{ italic = false, bold = false, fg = colors.cyan, bg = colors.bg }
 		)
-		vim.api.nvim_set_hl(0, "MiniStatuslinePathName", { fg = "#939ab7" })
-		vim.api.nvim_set_hl(0, "MiniStatuslineDashboard", { fg = "#24273A" })
-		vim.api.nvim_set_hl(0, "MiniStatuslineRecording", { fg = "#181926", bg = "#ed8796" })
+		vim.api.nvim_set_hl(0, "MiniStatuslinePathName", { fg = colors.fg_dark, bg = colors.bg })
+		vim.api.nvim_set_hl(0, "MiniStatuslineRecording", { fg = colors.bg_dark1, bg = colors.red })
+		-- Mode indicator hl groups
+		vim.api.nvim_set_hl(0, "MiniStatuslineModeNormal", { fg = colors.bg_dark1, bg = colors.blue })
+		vim.api.nvim_set_hl(0, "MiniStatuslineModeInsert", { fg = colors.bg_dark1, bg = colors.green })
+		vim.api.nvim_set_hl(0, "MiniStatuslineModeVisual", { fg = colors.bg_dark1, bg = colors.purple })
+		vim.api.nvim_set_hl(0, "MiniStatuslineModeReplace", { fg = colors.bg_dark1, bg = colors.magenta2 })
+		vim.api.nvim_set_hl(0, "MiniStatuslineModeCommand", { fg = colors.bg_dark1, bg = colors.orange })
+		vim.api.nvim_set_hl(0, "MiniStatuslineModeOther", { fg = colors.bg_dark1, bg = colors.teal })
+		-- General hl groups
+		vim.api.nvim_set_hl(0, "MiniStatuslineDevinfo", { fg = colors.fg, bg = colors.blue7 })
+		vim.api.nvim_set_hl(0, "MiniStatuslineFileinfo", { fg = colors.fg, bg = colors.blue7 })
+		-- vim.api.nvim_set_hl(0, "MiniStatuslineInactive", { fg = colors.bg_dark1, bg = colors.teal })
+		-- Nvim statusline hl groups
+		vim.api.nvim_set_hl(0, "StatusLine", { bg = colors.bg })
+		vim.api.nvim_set_hl(0, "StatusLineNC", { bg = colors.bg }) -- For inactive windows
 
 		require("mini.statusline").setup({
 			content = {
@@ -170,7 +191,7 @@ return {
 						{ hl = mode_hl, strings = { mode } },
 						{ hl = "MiniStatuslineDevinfo", strings = { git, diff, diagnostics, lsp } },
 						"%<", -- Mark general truncate point
-						{ hl = "MiniStatuslineFilename", strings = { filename } },
+						{ hl = "MiniStatuslinePathName", strings = { filename } },
 						"%=", -- End left alignment
 						{ hl = "MiniStatuslineRecording", strings = { mode_status } },
 						{ hl = "MiniStatuslineFileinfo", strings = { fileinfo } },
