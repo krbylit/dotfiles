@@ -72,6 +72,10 @@ customCommands:
       attach: true
       command: "{{ .DockerCompose }} build {{ .Service.Name }}"
       serviceNames: []
+    - name: "Clean system:"
+      attach: true
+      command: "docker system prune -a"
+      serviceNames: []
       # FIXME: `--label` not recognize, might be version of docker/docker compose we're trying
     # - name: "Build prod-debug:"
     #   attach: true

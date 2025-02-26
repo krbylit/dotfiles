@@ -44,6 +44,10 @@ if ! command -v aider &>/dev/null; then
 	uv tool install --force --python python3.12 aider-chat@latest
 fi
 
+if ! command -v claude &>/dev/null; then
+	npm install -g @anthropic-ai/claude-code
+fi
+
 # Install our gitleaks pre-commit hook
 cd $HOME/.local/share/chezmoi && pre-commit autoupdate
 cd $HOME/.local/share/chezmoi && pre-commit install
