@@ -22,8 +22,9 @@ alias ..="cd .."
 alias ...="cd ../.."
 alias ~="cd ~"
 alias v='sudo -E vim'
-alias dbuildup='LOGFILE="docker_$(date +%Y%m%d_%H%M%S).log"; echo "Logging to $LOGFILE"; nohup docker compose up --build > "$LOGFILE" 2>&1 & echo $! > docker.pid'
-alias dbuildlog='ls -t docker_*.log | head -n 1 | xargs tail -f'
+alias ddown='docker compose down'
+alias dup='LOGFILE="docker_$(date +%Y%m%d_%H%M%S).log"; echo "Logging to $LOGFILE"; nohup docker compose up --build > "$LOGFILE" 2>&1 & echo $! > docker.pid'
+alias dlog='ls -t docker_*.log | head -n 1 | xargs tail -f'
 
 export LESS='-RFX'
 
