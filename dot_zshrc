@@ -17,6 +17,7 @@ export PATH="/usr/local/bin:$PATH" # Homebrew on Intel silicon
 export PATH="/opt/homebrew/bin:$PATH" # Homebrew on Apple silicon
 export PATH="/opt/homebrew:$PATH" # Homebrew on Apple silicon
 export PATH="$HOME/.cargo/bin:$PATH" # Homebrew on Apple silicon
+export PATH="$HOME/.local/share/bob/nvim-bin" # Homebrew on Apple silicon
 export EDITOR="nvim"
 
 # ----------------------------------------------------------------

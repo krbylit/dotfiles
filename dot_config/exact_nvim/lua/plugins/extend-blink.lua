@@ -108,6 +108,19 @@ return {
 		-- fuzzy = {},
 		-- --- @type blink.cmp.SnippetsConfig,
 		-- snippets = {},
+		-- FIXME: completion menu stuck on "loading..."
+		-- cmdline = {
+		-- 	enabled = false,
+		-- 	keymap = {
+		-- 		preset = "cmdline",
+		-- 	},
+		-- 	completion = {
+		-- 		ghost_text = {
+		-- 			enabled = true,
+		-- 		},
+		-- 		-- menu = { auto_show = true },
+		-- 	},
+		-- },
 		--- @type blink.cmp.CompletionConfig,
 		--- @type blink.cmp.SignatureConfig,
 		signature = {
@@ -166,20 +179,20 @@ return {
 			-- 	end
 			-- 	return 0
 			-- end,
-			-- NOTE: this gets blink.cmp cmdline completiong working
-			cmdline = function()
-				local type = vim.fn.getcmdtype()
-				-- Search forward and backward
-				if type == "/" or type == "?" then
-					return { "buffer" }
-				end
-				-- Commands
-				-- FIXME: completions not coming up if we use LazyVim's Lua shorthand `=` in the cmdline
-				if type == ":" or type == "@" then
-					return { "cmdline" }
-				end
-				return {}
-			end,
+			-- -- NOTE: this gets blink.cmp cmdline completiong working
+			-- cmdline = function()
+			-- 	local type = vim.fn.getcmdtype()
+			-- 	-- Search forward and backward
+			-- 	if type == "/" or type == "?" then
+			-- 		return { "buffer" }
+			-- 	end
+			-- 	-- Commands
+			-- 	-- FIXME: completions not coming up if we use LazyVim's Lua shorthand `=` in the cmdline
+			-- 	if type == ":" or type == "@" then
+			-- 		return { "cmdline" }
+			-- 	end
+			-- 	return {}
+			-- end,
 			compat = {
 				"avante_commands",
 				"avante_mentions",
