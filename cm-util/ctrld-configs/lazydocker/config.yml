@@ -74,7 +74,7 @@ customCommands:
       serviceNames: []
     - name: "Clean system:"
       attach: true
-      command: "docker system prune -a"
+      command: "sh -c 'docker system prune -a --volumes --force && docker builder prune --all --force'"
       serviceNames: []
       # FIXME: `--label` not recognize, might be version of docker/docker compose we're trying
     # - name: "Build prod-debug:"
