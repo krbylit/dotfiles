@@ -100,8 +100,8 @@ return {
 				-- notifications = {},
 				---@type snacks.picker.files.Config: snacks.picker.proc.Config
 				files = {
-					hidden = false,
-					ignored = false,
+					hidden = true,
+					ignored = true,
 					-- Exclude dirs from file search
 					exclude = {
 						"**/.venv/**",
