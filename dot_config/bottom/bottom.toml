@@ -67,11 +67,11 @@
 # Displays the network widget using bytes.
 #network_use_bytes = false
 # Displays the network widget with a log scale.
-#network_use_log = false
+network_use_log = false
 # Hides advanced options to stop a process on Unix-like systems.
 #disable_advanced_kill = false
 # Shows GPU(s) information
-#enable_gpu = false
+enable_gpu = true
 # Shows cache and buffer memory
 #enable_cache_memory = false
 # How much data is stored at once in terms of time.
@@ -140,7 +140,7 @@
 #
 # This will have the lowest precedence if a custom colour palette is set,
 # or overridden if the command-line flag for a built-in theme is set.
-#theme = "default"
+theme = "default"
 
 #[styles.cpu]
 #all_entry_color = "green"

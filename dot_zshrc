@@ -221,46 +221,46 @@ commit() {
 # ZSH / Starship transient prompt implementation
 # ----------------------------------------------------------------
 # Transient prompt implementation from https://www.zsh.org/mla/users/2019/msg00633.html
-zle-line-init() {
-    STARSHIP=$(which starship)
-    TPROMPT=$($STARSHIP module custom.time)" "$($STARSHIP module directory)" "$($STARSHIP module character)
-    TRPROMPT=""
-    # TRPROMPT=$($STARSHIP module directory)
-    # TPROMPT=' '$($STARSHIP module directory)'  '$($STARSHIP module character)$($STARSHIP module character)
-    # TPROMPT=$($STARSHIP module custom.tprompt)
-    # TPROMPT=$($STARSHIP module directory)
-    # TPROMPT=$($STARSHIP module time)" "$($STARSHIP module directory)" "$($STARSHIP module character)$($STARSHIP module character)$($STARSHIP module character)
-
-    emulate -L zsh
-
-    [[ $CONTEXT == start ]] || return 0
-
-    while true; do
-    zle .recursive-edit
-    local -i ret=$?
-    [[ $ret == 0 && $KEYS == $'\4' ]] || break
-    [[ -o ignore_eof ]] || exit 0
-    done
-
-    local saved_prompt=$PROMPT
-    local saved_rprompt=$RPROMPT
-    # Transient prompts to print
-    PROMPT=$TPROMPT
-    RPROMPT=$TRPROMPT
-    # PROMPT='%# '
-    # RPROMPT=''
-    zle .reset-prompt
-    PROMPT=$saved_prompt
-    RPROMPT=$saved_rprompt
-
-    if (( ret )); then
-    zle .send-break
-    else
-    zle .accept-line
-    fi
-    return ret
-}
-zle -N zle-line-init
+# zle-line-init() {
+#     STARSHIP=$(which starship)
+#     TPROMPT=$($STARSHIP module custom.time)" "$($STARSHIP module directory)" "$($STARSHIP module character)
+#     TRPROMPT=""
+#     # TRPROMPT=$($STARSHIP module directory)
+#     # TPROMPT=' '$($STARSHIP module directory)'  '$($STARSHIP module character)$($STARSHIP module character)
+#     # TPROMPT=$($STARSHIP module custom.tprompt)
+#     # TPROMPT=$($STARSHIP module directory)
+#     # TPROMPT=$($STARSHIP module time)" "$($STARSHIP module directory)" "$($STARSHIP module character)$($STARSHIP module character)$($STARSHIP module character)
+#
+#     emulate -L zsh
+#
+#     [[ $CONTEXT == start ]] || return 0
+#
+#     while true; do
+#     zle .recursive-edit
+#     local -i ret=$?
+#     [[ $ret == 0 && $KEYS == $'\4' ]] || break
+#     [[ -o ignore_eof ]] || exit 0
+#     done
+#
+#     local saved_prompt=$PROMPT
+#     local saved_rprompt=$RPROMPT
+#     # Transient prompts to print
+#     PROMPT=$TPROMPT
+#     RPROMPT=$TRPROMPT
+#     # PROMPT='%# '
+#     # RPROMPT=''
+#     zle .reset-prompt
+#     PROMPT=$saved_prompt
+#     RPROMPT=$saved_rprompt
+#
+#     if (( ret )); then
+#     zle .send-break
+#     else
+#     zle .accept-line
+#     fi
+#     return ret
+# }
+# zle -N zle-line-init
 # eval "$(starship init zsh)"
 # Load zoxide
 znap eval zoxide 'zoxide init zsh'
