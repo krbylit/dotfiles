@@ -123,6 +123,8 @@ CODE_APPS=(
 )
 
 DEV_APPS=(
+    Postman
+    Wireshark
 	GitHub
 	"MongoDB Compass"
 	Docker
@@ -140,6 +142,7 @@ COMMS_APPS=(
 
 REF_APPS=(
 	Notion
+    "Notion Calendar"
 	"LM Studio"
 	ChatGPT
 	Ollama

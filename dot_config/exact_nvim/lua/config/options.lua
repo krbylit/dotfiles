@@ -24,8 +24,8 @@ vim.opt.sessionoptions:remove("blank")
 vim.opt.sessionoptions:remove("help")
 vim.opt.sessionoptions:remove("skiprtp")
 -- vim.opt.sessionoptions:remove("curdir")
-vim.opt.sessionoptions:append("localoptions")
 -- NOTE: adding options can result in unexpected behavior, e.g. if you make nvim config changes and load an existing session, those changes may not be integrated.
+-- vim.opt.sessionoptions:append("localoptions")
 -- vim.opt.sessionoptions:append("options")
 -- Change dir to currently open buffer
 -- FIXME: something is setting this to false after options load. doesn't seem to be mini.misc auto root, or project.nvim
