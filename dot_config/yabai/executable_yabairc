@@ -141,7 +141,7 @@ COMMS_APPS=(
 )
 
 REF_APPS=(
-	Notion
+	# Notion
     "Notion Calendar"
 	"LM Studio"
 	ChatGPT
@@ -214,3 +214,9 @@ yabai -m rule --add label="About This Mac" app="System Information" title="About
 # Don't manage 1Pass pop-ups
 yabai -m rule --add label="1Password Quick Access" app="^1Password$" title="^Quick Access — 1Password$" space=mouse
 
+# Special handling of Notion because the tab preview popup causes issues.
+yabai -m rule --add label="ref_Notion" \
+  app="^Notion$" \
+  title!="^Tab Preview$" \
+  space="^ref"
+yabai -m rule --add label="notion_tab_preview" app="^Notion$" title="^Tab Preview$" manage=off
