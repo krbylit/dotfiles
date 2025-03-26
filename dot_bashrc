@@ -2,9 +2,9 @@ DIR_PROMPT="\[$(tput setaf 6)\]\w"
 GIT_PROMPT="\[$(tput setaf 5)\]\$(git symbolic-ref --short HEAD 2>/dev/null)"
 # Check if CUSTOM_HOSTNAME is set by ~/.ssh/config and use it in the prompt, otherwise use the default hostname
 if [ -n "$CUSTOM_HOSTNAME" ]; then
-	USER_PROMPT="\[$(tput setaf 4)\]\u\[$(tput setaf 2)\]@\[$(tput setaf 4)\]$CUSTOM_HOSTNAME"
+    USER_PROMPT="\[$(tput setaf 4)\]\u\[$(tput setaf 2)\]@\[$(tput setaf 4)\]$CUSTOM_HOSTNAME"
 else
-	USER_PROMPT="\[$(tput setaf 4)\]\u\[$(tput setaf 2)\]@\[$(tput setaf 4)\]\h"
+    USER_PROMPT="\[$(tput setaf 4)\]\u\[$(tput setaf 2)\]@\[$(tput setaf 4)\]\h"
 fi
 
 PS1="${DIR_PROMPT} ${GIT_PROMPT}\n${USER_PROMPT} \[$(tput setaf 2)\]\$ \[$(tput sgr0)\]"
@@ -23,8 +23,92 @@ alias ...="cd ../.."
 alias ~="cd ~"
 alias v='sudo -E vim'
 alias ddown='docker compose down'
-alias dup='LOGFILE="docker_$(date +%Y%m%d_%H%M%S).log"; echo "Logging to $LOGFILE"; nohup docker compose up --build > "$LOGFILE" 2>&1 & echo $! > docker.pid'
+dup() {
+    local DATESTAMP
+    DATESTAMP=$(date +%Y%m%d)
+    local SESSION="docker-build"
+    local LOGFILE="docker_build_${DATESTAMP}_$(date +%H%M%S).log"
+
+    # If 'docker-build' session exists, kill it
+    if tmux has-session -t docker-build 2>/dev/null; then
+        SESSION="docker-build-${DATESTAMP}"
+        echo "⚠️ Existing 'docker-build' tmux session found."
+    fi
+
+    echo "🚀 Starting new tmux session: $SESSION"
+    echo "📄 Logging build output to: $LOGFILE"
+    echo "Run 'dlog' to tail build output."
+    echo "Run 'dtail' to tail container logs."
+    echo "Run 'exportlogs' to dump container logs to CWD."
+
+    tmux new-session -d -s "$SESSION" bash -c "
+    echo 'Logging to $LOGFILE';
+    docker compose build 2>&1 | tee \"$LOGFILE\";
+    docker compose up -d && tmux kill-session -t \"$SESSION\"
+  "
+}
 alias dlog='ls -t docker_*.log | head -n 1 | xargs tail -f'
+dtail() {
+    local names
+    names=$(docker ps --format '{{.Names}}')
+
+    if [ -z "$names" ]; then
+        echo "🚫 No running containers found."
+        return 1
+    fi
+
+    local filters=""
+    for name in $names; do
+        filters+="CONTAINER_NAME=$name "
+    done
+
+    echo "📦 Tailing logs for: $names"
+    journalctl -f -o short-iso $filters
+}
+
+# Function to export Docker logs on the server from `journald`
+exportlogs() {
+    if [ -z "$1" ]; then
+        echo "Usage: exportlogs <container-name> [YYYYMMDD or json] [json]"
+        return 1
+    fi
+
+    local name="$1"
+    local date=""
+    local format="short-iso"
+    local extension="txt"
+
+    # Argument shifting logic
+    if [ "$2" = "json" ]; then
+        format="json-pretty"
+        extension="json"
+    elif [[ "$2" =~ ^[0-9]{8}$ ]]; then
+        date="$2"
+    fi
+
+    if [ "$3" = "json" ]; then
+        format="json-pretty"
+        extension="json"
+    fi
+
+    local filename="${name}-logs.${extension}"
+
+    if [ -n "$date" ]; then
+        local since="${date:0:4}-${date:4:2}-${date:6:2} 00:00:00"
+        local until="${date:0:4}-${date:4:2}-${date:6:2} 23:59:59"
+        echo "📅 Exporting logs for '$name' on $date in $format format..."
+        journalctl CONTAINER_NAME="$name" --since="$since" --until="$until" -o "$format" >"$filename"
+    else
+        echo "📦 Exporting last 1000 logs for '$name' in $format format..."
+        journalctl CONTAINER_NAME="$name" -n 1000 -o "$format" >"$filename"
+    fi
+
+    if [ $? -eq 0 ]; then
+        echo "✅ Logs saved to $filename"
+    else
+        echo "❌ Failed to export logs. Check container name and journald configuration."
+    fi
+}
 
 export LESS='-RFX'
 
@@ -62,7 +146,7 @@ shopt -s checkwinsize
 
 # set variable identifying the chroot you work in (used in the prompt below)
 if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
-	debian_chroot=$(cat /etc/debian_chroot)
+    debian_chroot=$(cat /etc/debian_chroot)
 fi
 
 # set a fancy prompt (non-color, unless we know we "want" color)
@@ -76,14 +160,14 @@ esac
 #force_color_prompt=yes
 
 if [ -n "$force_color_prompt" ]; then
-	if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
-		# We have color support; assume it's compliant with Ecma-48
-		# (ISO/IEC-6429). (Lack of such support is extremely rare, and such
-		# a case would tend to support setf rather than setaf.)
-		color_prompt=yes
-	else
-		color_prompt=
-	fi
+    if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
+        # We have color support; assume it's compliant with Ecma-48
+        # (ISO/IEC-6429). (Lack of such support is extremely rare, and such
+        # a case would tend to support setf rather than setaf.)
+        color_prompt=yes
+    else
+        color_prompt=
+    fi
 fi
 
 # if [ "$color_prompt" = yes ]; then
@@ -104,14 +188,14 @@ unset color_prompt force_color_prompt
 
 # enable color support of ls and also add handy aliases
 if [ -x /usr/bin/dircolors ]; then
-	test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
-	alias ls='ls --color=auto'
-	#alias dir='dir --color=auto'
-	#alias vdir='vdir --color=auto'
+    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+    alias ls='ls --color=auto'
+    #alias dir='dir --color=auto'
+    #alias vdir='vdir --color=auto'
 
-	alias grep='grep --color=auto'
-	alias fgrep='fgrep --color=auto'
-	alias egrep='egrep --color=auto'
+    alias grep='grep --color=auto'
+    alias fgrep='fgrep --color=auto'
+    alias egrep='egrep --color=auto'
 fi
 
 # colored GCC warnings and errors
@@ -132,18 +216,18 @@ alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo
 # See /usr/share/doc/bash-doc/examples in the bash-doc package.
 
 if [ -f ~/.bash_aliases ]; then
-	. ~/.bash_aliases
+    . ~/.bash_aliases
 fi
 
 # enable programmable completion features (you don't need to enable
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
 # sources /etc/bash.bashrc).
 if ! shopt -oq posix; then
-	if [ -f /usr/share/bash-completion/bash_completion ]; then
-		. /usr/share/bash-completion/bash_completion
-	elif [ -f /etc/bash_completion ]; then
-		. /etc/bash_completion
-	fi
+    if [ -f /usr/share/bash-completion/bash_completion ]; then
+        . /usr/share/bash-completion/bash_completion
+    elif [ -f /etc/bash_completion ]; then
+        . /etc/bash_completion
+    fi
 fi
 
 export NVM_DIR="$HOME/.nvm"
