@@ -113,6 +113,16 @@ return {
                         "**/__pycache__/**",
                     },
                 },
+                zoxide = {
+                    finder = "files_zoxide",
+                    format = "file",
+                    formatters = {
+                        file = {
+                            full_path = true, -- This will show the full path instead of just the directory name
+                            truncate = false,
+                        },
+                    },
+                },
                 ---@type snacks.picker.grep.Config
                 grep = {
                     hidden = false,
