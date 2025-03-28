@@ -17,6 +17,12 @@ SPACES="term browser code dev misc comms ref debug util"
 # Display detection
 DISPLAY_COUNT=$(yabai -m query --displays | jq '. | length')
 DISPLAY_2=$((DISPLAY_COUNT > 1 ? 2 : 1))
+# Determine the layout based on the number of connected displays
+if [ "$DISPLAY_COUNT" -gt 1 ]; then
+    DEFAULT_LAYOUT="bsp"
+else
+    DEFAULT_LAYOUT="stack"
+fi
 
 # Main display spaces
 MAIN_SPACES="term browser code dev misc"
@@ -186,14 +192,14 @@ assign_to_space util "${UTIL_APPS[@]}"
 
 # Space-Specific Configurations
 yabai -m config --space term layout stack window_gap $PADDING window_opacity off top_padding 0 bottom_padding 0 left_padding 0 right_padding 0
-yabai -m config --space browser layout bsp
+yabai -m config --space browser layout stack
 yabai -m config --space code layout stack
-yabai -m config --space dev layout bsp
-yabai -m config --space comms layout bsp
-yabai -m config --space ref layout bsp
-yabai -m config --space misc layout bsp
-yabai -m config --space debug layout bsp
-yabai -m config --space util layout bsp
+yabai -m config --space dev layout $DEFAULT_LAYOUT
+yabai -m config --space comms layout $DEFAULT_LAYOUT
+yabai -m config --space ref layout $DEFAULT_LAYOUT
+yabai -m config --space misc layout $DEFAULT_LAYOUT
+yabai -m config --space debug layout $DEFAULT_LAYOUT
+yabai -m config --space util layout $DEFAULT_LAYOUT
 
 # Signals for `YabaiIndicator`
 yabai -m signal --add event=mission_control_exit action='echo "refresh" | nc -U /tmp/yabai-indicator.socket'
