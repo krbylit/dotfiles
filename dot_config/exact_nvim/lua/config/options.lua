@@ -80,6 +80,14 @@ end
 -- ================================================================
 -- FILETYPES
 -- ================================================================
+-- Enable `csvview.nvim` for CSV files
+vim.api.nvim_create_autocmd("FileType", {
+    pattern = "csv",
+    callback = function()
+        require("csvview").enable()
+        vim.opt_local.wrap = false
+    end,
+})
 
 -- Disable diagnostics in certain filetypes
 local diagnostics_disabled_fts = {

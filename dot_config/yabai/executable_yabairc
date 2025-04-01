@@ -135,6 +135,7 @@ CODE_APPS=(
 )
 
 DEV_APPS=(
+    Proxyman
     Postman
     Wireshark
 	GitHub
@@ -142,6 +143,7 @@ DEV_APPS=(
 	Docker
 	"Docker Desktop"
 	Cyberduck
+    Numbers
 )
 
 COMMS_APPS=(
