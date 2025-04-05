@@ -10,15 +10,16 @@ local vim = VimMode:new()
 -- For example, you don't want this plugin overriding your control of Terminal
 -- vim
 vim:disableForApp("Code")
-	:disableForApp("zoom.us")
-	:disableForApp("iTerm")
-	:disableForApp("iTerm2")
-	:disableForApp("Terminal")
-	:disableForApp("kitty")
+    :disableForApp("zoom.us")
+    :disableForApp("iTerm")
+    :disableForApp("iTerm2")
+    :disableForApp("Terminal")
+    :disableForApp("kitty")
+    :disableForApp("Ghostty")
 
 -- If you want the screen to dim (a la Flux) when you enter normal mode
 -- flip this to true.
-vim:shouldDimScreenInNormalMode(false)
+vim:shouldDimScreenInNormalMode(true)
 
 -- If you want to show an on-screen alert when you enter normal mode, set
 -- this to true

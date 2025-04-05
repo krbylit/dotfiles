@@ -15,9 +15,18 @@ These are not installed by chezmoi, so must be installed manually.
 - Docker
 - [YabaiIndicator](https://github.com/xiamaz/YabaiIndicator)
 - Firefox extensions:
-  - Sidebery (horizontal tabs)
-  - Vimium
-  - Firenvim
+
+  - [Sidebery (container mgmt)](https://addons.mozilla.org/en-US/firefox/addon/sidebery/)
+  - [Vimium](https://addons.mozilla.org/en-US/firefox/addon/vimium-ff/)
+  - [Firenvim](https://addons.mozilla.org/en-US/firefox/addon/firenvim/)
+
+### Solutions for Vim Motions on macOS
+
+- [ti-vim](https://vim.tonisives.com/index.html)
+- [kindaVim](https://github.com/godbout/kindaVim.blahblah)
+- [Homerow](https://www.homerow.app/)
+- [VimMotion](https://github.com/dwarvesf/VimMotionApp)
+- [VimMode](https://github.com/dbalatero/VimMode.spoon)
 
 ## GitHub Actions notes
 
