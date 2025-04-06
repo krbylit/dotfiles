@@ -1,6 +1,10 @@
 function s --wraps='ssh' --description 'SSH with custom config'
     set -l host $argv[-1]
     set -l CUSTOM_HOSTNAME $host
+    set -l GIT_ASKPASS "\$HOME/git_token.sh"
+    # Git user and token should be set in `secrets` module and exported to shell env.
+    set -l SSH_GIT_TOKEN $SSH_GIT_TOKEN
+    set -l GIT_USER $GIT_USER
     # if not grep -qE "^Host[[:space:]]+$host$" ~/.ssh/config
     #     set CUSTOM_HOSTNAME ""
     # end
@@ -27,6 +31,6 @@ function s --wraps='ssh' --description 'SSH with custom config'
     # kill $animation_pid
 
     # Execute SSH with remaining arguments
-    command ssh -t $argv "export CUSTOM_HOSTNAME=$CUSTOM_HOSTNAME; (zsh --login 2>/dev/null || bash --login)"
+    command ssh -t $argv "export GIT_USER=$GIT_USER; export SSH_GIT_TOKEN=$SSH_GIT_TOKEN; export GIT_ASKPASS=$GIT_ASKPASS; export CUSTOM_HOSTNAME=$CUSTOM_HOSTNAME; (zsh --login 2>/dev/null || bash --login)"
 
 end

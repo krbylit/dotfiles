@@ -5,6 +5,9 @@ set -gx fifc_editor nvim
 # Env vars
 set -gx CM_PATH "$HOME/.local/share/chezmoi"
 set -gx XDG_CONFIG_HOME "$HOME/.config"
+set -gx XDG_DATA_HOME "$HOME/.local/share"
+set -gx XDG_STATE_HOME "$HOME/.local/state"
+set -gx XDG_CACHE_HOME "$HOME/.cache"
 set -gx fisher_path "$XDG_CONFIG_HOME/fish/fisher"
 # set -gx fish_function_path $fish_function_path "$XDG_CONFIG_HOME/fish/fisher/functions"
 # set -gx fish_complete_path $fish_function_path "$XDG_CONFIG_HOME/fish/fisher/completions"
