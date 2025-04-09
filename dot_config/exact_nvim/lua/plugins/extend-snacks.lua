@@ -43,7 +43,7 @@ return {
         },
         quickfile = {},
         -- FIXME: disabling for now as upgrading from snacks #70afc4225ac8ae3e6c8af88d205b03991a173af3 makes scroll not work well (likely due to our high scrolloff setting?)
-        scroll = { enabled = true },
+        scroll = { enabled = false },
         scope = { enabled = true },
         statuscolumn = { enabled = true },
         words = { enabled = true },

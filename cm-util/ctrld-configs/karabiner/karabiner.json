@@ -52,15 +52,6 @@
               {
                 "conditions": [
                   {
-                    "bundle_identifiers": [
-                      "^net\\.kovidgoyal\\.kitty$",
-                      "^com\\.mitchellh\\.ghostty$",
-                      "^com\\.todesktop\\.230313mzl4w4u92$",
-                      "^org\\.mozilla\\.firefox"
-                    ],
-                    "type": "frontmost_application_if"
-                  },
-                  {
                     "identifiers": [
                       {
                         "product_id": 33,
