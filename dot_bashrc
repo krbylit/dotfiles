@@ -23,7 +23,8 @@ alias ...="cd ../.."
 alias ~="cd ~"
 alias v='sudo -E vim'
 alias ddown='docker compose down'
-dup() {
+alias dup='docker compose down && docker compose up -d'
+dbuild() {
     local DATESTAMP
     DATESTAMP=$(date +%Y%m%d)
     local SESSION="docker-build"
@@ -44,7 +45,9 @@ dup() {
     tmux new-session -d -s "$SESSION" bash -c "
     echo 'Logging to $LOGFILE';
     docker compose build 2>&1 | tee \"$LOGFILE\";
-    docker compose up -d && tmux kill-session -t \"$SESSION\"
+    docker compose down && \
+    docker compose up -d && \
+    tmux kill-session -t \"$SESSION\"
   "
 }
 alias dlog='ls -t docker_*.log | head -n 1 | xargs tail -f'

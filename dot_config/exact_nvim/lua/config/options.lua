@@ -34,7 +34,8 @@ vim.opt.sessionoptions:remove("skiprtp")
 -- Add '-' to keyword so kebab case is considered a word (i.e. 'variable-name' is one word)
 vim.opt.iskeyword:append("-")
 -- use bash for shell, fish is very slow in nvim
-opt.shell = "bash"
+-- opt.shell = "bash"
+opt.shell = "fish"
 -- opt.shell = "/opt/homebrew/bin/fish"
 opt.undofile = true -- Save undo history between sessions
 opt.tabstop = 4 -- A tab is equal to 4 spaces

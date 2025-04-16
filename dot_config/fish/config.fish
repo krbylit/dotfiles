@@ -1,8 +1,8 @@
 # Change greeting message. Leave empty to disable.
 function fish_greeting
-    fish_logo blue cyan green
-    echo "░░░░░░▒░▒▒░▒▒▒▒▒▓▒▓▓▓█▓████▓▓▒▒▒░"
-    echo " "
+    # fish_logo blue cyan green
+    # echo "░░░░░░▒░▒▒░▒▒▒▒▒▓▒▓▓▓█▓████▓▓▒▒▒░"
+    # echo " "
 end
 
 if status is-interactive
