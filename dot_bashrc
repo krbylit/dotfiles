@@ -45,6 +45,30 @@ dbuild() {
     tmux new-session -d -s "$SESSION" bash -c "
     echo 'Logging to $LOGFILE';
     docker compose build 2>&1 | tee \"$LOGFILE\";
+    tmux kill-session -t \"$SESSION\"
+  "
+}
+ddeploy() {
+    local DATESTAMP
+    DATESTAMP=$(date +%Y%m%d)
+    local SESSION="docker-build"
+    local LOGFILE="docker_build_${DATESTAMP}_$(date +%H%M%S).log"
+
+    # If 'docker-build' session exists, kill it
+    if tmux has-session -t docker-build 2>/dev/null; then
+        SESSION="docker-build-${DATESTAMP}"
+        echo "⚠️ Existing 'docker-build' tmux session found."
+    fi
+
+    echo "🚀 Starting new tmux session: $SESSION"
+    echo "📄 Logging build output to: $LOGFILE"
+    echo "Run 'dlog' to tail build output."
+    echo "Run 'dtail' to tail container logs."
+    echo "Run 'exportlogs' to dump container logs to CWD."
+
+    tmux new-session -d -s "$SESSION" bash -c "
+    echo 'Logging to $LOGFILE';
+    docker compose build 2>&1 | tee \"$LOGFILE\" && \
     docker compose down && \
     docker compose up -d && \
     tmux kill-session -t \"$SESSION\"
