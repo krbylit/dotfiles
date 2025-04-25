@@ -64,6 +64,12 @@ jobs:
           git checkout private/dev -- .
           git add -A
 
+          # Check if there are any changes (porcelain gives machine-parseable output)
+          if [ -z "$(git status --porcelain)" ]; then
+            echo "No changes to commit. Branch is up to date."
+            exit 0
+          fi
+
           # Get the latest commit hash from private
           LATEST_PRIVATE=$(git rev-parse private/dev)
 
