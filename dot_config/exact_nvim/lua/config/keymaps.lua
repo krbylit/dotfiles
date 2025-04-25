@@ -66,7 +66,7 @@ map({ "n", "v", "i" }, "<c-z>", "<Nop>", { noremap = true, expr = true })
 -- FILES
 -- ================================================================
 -- Buffer maps
-map("n", "<c-x>", function()
+map("n", "<c-q>", function()
 	if vim.bo.filetype == "snacks_dashboard" then
 		vim.cmd("q") -- Close the dashboard
 	end

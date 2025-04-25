@@ -1,40 +1,28 @@
--- TODO: Fix this plugin up or disable
--- local wk = require("which-key")
--- wk.add({
--- 	"<leader>um",
--- 	function()
--- 		require("markview").commands.toggleAll()
--- 	end,
--- 	desc = "Toggle Markview",
--- })
 return {
-	-- "OXY2DEV/markview.nvim",
-	-- lazy = false, -- Recommended
-	-- ft = "markdown" -- If you decide to lazy-load anyway
-
-	-- dependencies = {
-	-- 	"nvim-treesitter/nvim-treesitter",
-	-- 	"nvim-tree/nvim-web-devicons",
-	-- },
-	-- dependencies = { "nvim-treesitter/nvim-treesitter", "echasnovski/mini.icons" }, -- if you use standalone mini plugins
-	-- config = function(_, opts)
-	-- 	MiniIcons.mock_nvim_web_devicons()
-	-- 	require("markview").setup(opts)
-	-- 	Snacks.toggle({
-	-- 		name = "Markview",
-	-- 		get = function()
-	-- 			return require("markview").state.enable
-	-- 		end,
-	-- 		set = function(enabled)
-	-- 			local m = require("markview")
-	-- 			if enabled then
-	-- 				m.commands.enableAll()
-	-- 			else
-	-- 				m.commands.disableAll()
-	-- 			end
-	-- 		end,
-	-- 	}):map("<leader>um")
-	-- end,
+	"OXY2DEV/markview.nvim",
+	lazy = false, -- Recommended
+	ft = "markdown", -- If you decide to lazy-load anyway
+	dependencies = {
+		"nvim-treesitter/nvim-treesitter",
+		"echasnovski/mini.icons",
+		{ "MeanderingProgrammer/render-markdown.nvim", enabled = false },
+	},
+	config = function(_, opts)
+		local MiniIcons = require("mini.icons")
+		MiniIcons.mock_nvim_web_devicons()
+		require("markview").setup(opts)
+		Snacks.toggle({
+			name = "Markview",
+			get = function()
+				local bufnr = vim.api.nvim_get_current_buf()
+				local state = require("markview").state.buffer_states[bufnr]
+				return state and state.enable or false
+			end,
+			set = function()
+				return vim.cmd("Markview toggle")
+			end,
+		}):map("<leader>um")
+	end,
 	-- opts = {
 	-- 	--- When true, markdown, html, latex aren't rendered inside
 	-- 	--- of code blocks
@@ -259,7 +247,7 @@ return {
 	-- 		---   • "", Disables icons
 	-- 		---
 	-- 		---@type "devicons" | "mini" | "internal" | ""
-	-- 		icons = "internal",
+	-- 		icons = "mini",
 	--
 	-- 		--- Render style for the code block.
 	-- 		---
@@ -278,7 +266,7 @@ return {
 	--
 	-- 		--- Highlight group for the info string
 	-- 		---@type string[]
-	-- 		info_hl = "MarkviewCodeInfo",
+	-- 		info_hl = { "MarkviewCodeInfo" },
 	--
 	-- 		--- Minimum width of a code block.
 	-- 		---@type integer

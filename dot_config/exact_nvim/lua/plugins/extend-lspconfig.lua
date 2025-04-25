@@ -183,7 +183,28 @@ return {
 							command = "EslintFixAll",
 						})
 					end,
-					settings = {},
+					root_dir = require("lspconfig").util.root_pattern(
+						"package.json",
+						".git",
+						"tsconfig.json",
+						"jsconfig.json"
+					), -- search for typescript last
+					filetypes = {
+						"javascript",
+						"javascriptreact",
+						"javascript.jsx",
+						"typescript",
+						"typescriptreact",
+						"typescript.tsx",
+					},
+					settings = {
+						javascript = {
+							format = {
+								enable = true,
+								autoformat = true,
+							},
+						},
+					},
 				},
 				ts_ls = {
 					on_attach = function(client, buffer)
@@ -224,8 +245,8 @@ return {
 								enable = true,
 							},
 							format = {
-								enable = true,
-								autoformat = true,
+								enable = false,
+								autoformat = false,
 							},
 						},
 					},

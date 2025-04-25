@@ -4,7 +4,8 @@ local opt = vim.opt
 
 -- Global options for VS Code and console use
 vim.g.mapleader = "," -- Set leader key to comma
-vim.g.maplocalleader = " " -- Set local leader key to space
+vim.api.nvim_set_keymap("", " ", "<Nop>", { noremap = true, silent = true })
+vim.g.maplocalleader = " "
 -- Set global for `$(chezmoi source-path)`
 local cm_path = vim.fn.system("chezmoi source-path")
 vim.g.chezmoi_source_path = cm_path
@@ -14,18 +15,18 @@ vim.g.root_spec = { { ".git" }, "lua", "lsp", "cwd" }
 vim.opt.list = true
 -- Set 'listchars' to only display trailing spaces
 vim.opt.listchars = {
-	trail = "-", -- Show trailing spaces as `-`
-	tab = "  ", -- A tab will appear as spaces (effectively hidden)
-	nbsp = " ", -- Hide non-breaking spaces
-	space = " ", -- Hide space indicators
+    trail = "-", -- Show trailing spaces as `-`
+    tab = "  ", -- A tab will appear as spaces (effectively hidden)
+    nbsp = " ", -- Hide non-breaking spaces
+    space = " ", -- Hide space indicators
 }
 -- Remove 'blank' from sessionoptions to avoid opening empty unnamed buffers
 vim.opt.sessionoptions:remove("blank")
 vim.opt.sessionoptions:remove("help")
 vim.opt.sessionoptions:remove("skiprtp")
 -- vim.opt.sessionoptions:remove("curdir")
-vim.opt.sessionoptions:append("localoptions")
 -- NOTE: adding options can result in unexpected behavior, e.g. if you make nvim config changes and load an existing session, those changes may not be integrated.
+-- vim.opt.sessionoptions:append("localoptions")
 -- vim.opt.sessionoptions:append("options")
 -- Change dir to currently open buffer
 -- FIXME: something is setting this to false after options load. doesn't seem to be mini.misc auto root, or project.nvim
@@ -33,12 +34,14 @@ vim.opt.sessionoptions:append("localoptions")
 -- Add '-' to keyword so kebab case is considered a word (i.e. 'variable-name' is one word)
 vim.opt.iskeyword:append("-")
 -- use bash for shell, fish is very slow in nvim
-opt.shell = "bash"
+-- opt.shell = "bash"
+opt.shell = "fish"
 -- opt.shell = "/opt/homebrew/bin/fish"
 opt.undofile = true -- Save undo history between sessions
 opt.tabstop = 4 -- A tab is equal to 4 spaces
-opt.shiftwidth = 4 -- Number of spaces to use for each step of (auto)indent
+opt.shiftwidth = 0 -- Number of spaces to use for each step of (auto)indent
 opt.expandtab = true -- Convert tabs to spaces
+opt.autoindent = true
 opt.cursorline = true -- Enable highlighting of the current line
 opt.scrolloff = 999 -- Lines of context
 opt.relativenumber = true
@@ -57,74 +60,124 @@ opt.mousehide = true -- Hide mouse cursor while typing
 opt.winheight = 1 -- Minimum window height
 opt.winminheight = 1 -- Minimum window height
 opt.clipboard = vim.env.SSH_TTY and "" or "unnamedplus" -- Sync with system clipboard
--- Disable diagnostics by default
-vim.diagnostic.enable(false)
+-- Enable diagnostics by default
+vim.diagnostic.enable(true)
 -- FORMATTING
 -- default "tcqj"
 opt.formatoptions = "qnlj"
 vim.g.autoformat = true
 vim.g.lazyvim_prettier_needs_config = false
+
 if vim.fn.has("nvim-0.10") == 1 then
-	opt.smoothscroll = true
-	opt.foldexpr = "v:lua.require'lazyvim.util'.ui.foldexpr()"
-	opt.foldmethod = "expr"
-	opt.foldtext = ""
+    opt.smoothscroll = true
+    opt.foldexpr = "v:lua.require'lazyvim.util'.ui.foldexpr()"
+    opt.foldmethod = "expr"
+    opt.foldtext = ""
 else
-	opt.foldmethod = "indent"
-	opt.foldtext = "v:lua.require'lazyvim.util'.ui.foldtext()"
+    opt.foldmethod = "indent"
+    opt.foldtext = "v:lua.require'lazyvim.util'.ui.foldtext()"
 end
 
 -- ================================================================
 -- FILETYPES
 -- ================================================================
+-- Enable `csvview.nvim` for CSV files
+vim.api.nvim_create_autocmd("FileType", {
+    pattern = "csv",
+    callback = function()
+        require("csvview").enable()
+        vim.opt_local.wrap = false
+    end,
+})
+
+-- Disable diagnostics in certain filetypes
+local diagnostics_disabled_fts = {
+    "markdown",
+    "txt",
+    "json",
+    "sh",
+    "bash",
+    "zsh",
+    "fish",
+    "conf",
+    "cfg",
+    "ini",
+    "toml",
+    "yaml",
+    "yml",
+    "env",
+    "gitconfig",
+}
+vim.api.nvim_create_autocmd("FileType", {
+    pattern = diagnostics_disabled_fts,
+    callback = function()
+        -- Disable diagnostics only in current buffer.
+        vim.diagnostic.enable(false, { bufnr = 0 })
+    end,
+})
+
+local diagnostics_disabled_extensions = {
+    "*.tfvars",
+    "*.tfbackend",
+}
+-- Disable diagnostics by file extension
+vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
+    pattern = diagnostics_disabled_extensions,
+    callback = function()
+        -- Disable diagnostics only in current buffer.
+        vim.diagnostic.enable(false, { bufnr = 0 })
+    end,
+})
 
 -- Add chezmoi template files as filetypes to nvim so that yaml and toml LSPs can parse them
 -- TODO: move these to a separate options module and import here
 vim.filetype.add({
-	extension = {
-		tmpl = function(path, bufnr)
-			if path:find(".toml.tmpl") then
-				return "toml"
-			end
-			if path:find(".json.tmpl") then
-				return "json"
-			end
-			if path:find(".yaml.tmpl") then
-				return "yaml"
-			end
-			if path:find(".sh.tmpl") then
-				return "sh"
-			end
-			if path:find(".conf.tmpl") then
-				return "conf"
-			end
-		end,
-		chezmoiignore = "gitignore",
-		watchmanconfig = "json",
-		gitconfig = "gitconfig",
-		json = function(path, bufnr)
-			if path:find("neoconf") then
-				return "jsonc"
-			end
-			return "json"
-		end,
-	},
-	filename = {
-		-- ["dot_zshrc"] = "zsh",
-		-- ["dot_gitconfig"] = "gitconfig",
-		-- ["dot_neoconf"] = "jsonc", -- NOTE: this one isn't working for some reason, hence above json func
-		-- ["neoconf"] = "jsonc",
-	},
-	pattern = {
-		[".*dot_zshrc"] = "zsh",
-		[".*dot_gitconfig"] = "gitconfig",
-		[".*dot_bash.*"] = "bash",
-		[".*ssh/.*config"] = "sshconfig",
-	},
-	-- pattern = {
-	-- 	[".*gitconfig$"] = "gitconfig",
-	-- 	[".*zshrc$"] = "zsh",
-	-- 	-- 	[".*%.toml%.tmpl$"] = "toml",
-	-- 	-- 	[".*%.yaml%.tmpl$"] = "yaml",
-	-- },
+    extension = {
+        tmpl = function(path, bufnr)
+            if path:find(".toml.tmpl") then
+                return "toml"
+            end
+            if path:find(".json.tmpl") then
+                return "json"
+            end
+            if path:find(".yaml.tmpl") then
+                return "yaml"
+            end
+            if path:find(".sh.tmpl") then
+                return "sh"
+            end
+            if path:find(".conf.tmpl") then
+                return "conf"
+            end
+        end,
+        chezmoiignore = "gitignore",
+        watchmanconfig = "json",
+        gitconfig = "gitconfig",
+        json = function(path, bufnr)
+            if path:find("neoconf") then
+                return "jsonc"
+            end
+            return "json"
+        end,
+        tfvars = "terraform",
+        tfbackend = "terraform",
+    },
+    filename = {
+        -- ["dot_zshrc"] = "zsh",
+        -- ["dot_gitconfig"] = "gitconfig",
+        -- ["dot_neoconf"] = "jsonc", -- NOTE: this one isn't working for some reason, hence above json func
+        -- ["neoconf"] = "jsonc",
+    },
+    pattern = {
+        [".*dot_zshrc"] = "zsh",
+        [".*dot_gitconfig"] = "gitconfig",
+        [".*dot_bash.*"] = "bash",
+        [".*ssh/.*config"] = "sshconfig",
+    },
+    -- pattern = {
+    -- 	[".*gitconfig$"] = "gitconfig",
+    -- 	[".*zshrc$"] = "zsh",
+    -- 	-- 	[".*%.toml%.tmpl$"] = "toml",
+    -- 	-- 	[".*%.yaml%.tmpl$"] = "yaml",
+    -- },
 })

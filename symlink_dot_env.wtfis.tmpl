@@ -1,0 +1,4 @@
+{{- $wtfis := (joinPath .chezmoi.sourceDir .path.secrets "env/dot_env.wtfis") -}}
+{{- if (stat $wtfis) -}}
+{{ $wtfis }}
+{{- end -}}

@@ -1,0 +1,1 @@
+echo $SSH_GIT_TOKEN

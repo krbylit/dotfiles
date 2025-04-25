@@ -1,5 +1,34 @@
-[plugin]
-deps = [{ use = "Reledia/glow", rev = "5ce76dc" }, { use = "AnirudhG07/rich-preview", rev = "8be4d27" }, { use = "yazi-rs/plugins:diff", rev = "600614a" }, { use = "yazi-rs/plugins:full-border", rev = "600614a" }, { use = "Rolv-Apneseth/starship", rev = "9c37d37" }, { use = "Lil-Dank/lazygit", rev = "c82794f" }]
+[[plugin.deps]]
+use = "Reledia/glow"
+rev = "c76bf4f"
+hash = "a6b78bf9af5390e3a85a6951fbb7b93"
 
-[flavor]
-deps = []
+[[plugin.deps]]
+use = "AnirudhG07/rich-preview"
+rev = "2559e5f"
+hash = "c9a3d0731e7d7340e2c6d6126b1f3aa3"
+
+[[plugin.deps]]
+use = "yazi-rs/plugins:diff"
+rev = "3d0c7c6"
+hash = "7a08e303167d5b655c06da6d570f0333"
+
+[[plugin.deps]]
+use = "yazi-rs/plugins:full-border"
+rev = "3d0c7c6"
+hash = "9dce00232a0e0e2502565c7aa2b0ed4e"
+
+[[plugin.deps]]
+use = "Rolv-Apneseth/starship"
+rev = "6c639b4"
+hash = "5614c46d5de76623c283d415bfac8025"
+
+[[plugin.deps]]
+use = "Lil-Dank/lazygit"
+rev = "9f924e3"
+hash = "2b0c33928986f126d5c5a4cac31a6b46"
+
+[[flavor.deps]]
+use = "kalidyasin/yazi-flavors:tokyonight-night"
+rev = "92a09a6"
+hash = "845c5ee33e147b1a57f48728e42600ee"

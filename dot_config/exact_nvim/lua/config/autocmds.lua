@@ -34,6 +34,12 @@
 -- 	end,
 -- })
 
+-- Trim trailing whitespace on save
+vim.api.nvim_create_autocmd("BufWritePre", {
+	pattern = "*", -- Applies to all files
+	command = [[%s/\s\+$//e]],
+})
+
 -- Use 2 spaces for markdown files
 vim.api.nvim_create_autocmd("FileType", {
 	pattern = "markdown",

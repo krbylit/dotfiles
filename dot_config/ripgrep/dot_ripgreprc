@@ -2,6 +2,7 @@
 --hidden
 --smart-case
 --colors=match:fg:green
+--pcre2
 
 --glob
 !**/node_modules/**

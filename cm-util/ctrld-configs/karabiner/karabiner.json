@@ -47,99 +47,10 @@
             ]
           },
           {
-            "description": "Caps Lock to enter VimMode NORMAL (Mac KB)",
-            "manipulators": [
-              {
-                "conditions": [
-                  {
-                    "bundle_identifiers": [
-                      "^net\\.kovidgoyal\\.kitty$",
-                      "^com\\.mitchellh\\.ghostty$",
-                      "^com\\.todesktop\\.230313mzl4w4u92$",
-                      "^org\\.mozilla\\.firefox",
-                      "^com\\.raycast\\.macos$"
-                    ],
-                    "type": "frontmost_application_unless"
-                  },
-                  {
-                    "identifiers": [
-                      {
-                        "product_id": 33,
-                        "vendor_id": 1278
-                      }
-                    ],
-                    "type": "device_unless"
-                  }
-                ],
-                "from": {
-                  "key_code": "caps_lock",
-                  "modifiers": { "optional": ["any"] }
-                },
-                "to": [{ "key_code": "left_control" }],
-                "to_if_alone": [
-                  {
-                    "key_code": "open_bracket",
-                    "modifiers": ["left_control"]
-                  }
-                ],
-                "type": "basic"
-              }
-            ]
-          },
-          {
-            "description": "Ctrl to enter VimMode NORMAL (HHKB)",
-            "manipulators": [
-              {
-                "conditions": [
-                  {
-                    "bundle_identifiers": [
-                      "^net\\.kovidgoyal\\.kitty$",
-                      "^com\\.mitchellh\\.ghostty$",
-                      "^com\\.todesktop\\.230313mzl4w4u92$",
-                      "^org\\.mozilla\\.firefox",
-                      "^com\\.raycast\\.macos$"
-                    ],
-                    "type": "frontmost_application_unless"
-                  },
-                  {
-                    "identifiers": [
-                      {
-                        "product_id": 33,
-                        "vendor_id": 1278
-                      }
-                    ],
-                    "type": "device_if"
-                  }
-                ],
-                "from": {
-                  "key_code": "left_control",
-                  "modifiers": { "optional": ["any"] }
-                },
-                "to": [{ "key_code": "left_control" }],
-                "to_if_alone": [
-                  {
-                    "key_code": "open_bracket",
-                    "modifiers": ["left_control"]
-                  }
-                ],
-                "type": "basic"
-              }
-            ]
-          },
-          {
             "description": "Ctrl to Esc and Ctrl (HHKB)",
             "manipulators": [
               {
                 "conditions": [
-                  {
-                    "bundle_identifiers": [
-                      "^net\\.kovidgoyal\\.kitty$",
-                      "^com\\.mitchellh\\.ghostty$",
-                      "^com\\.todesktop\\.230313mzl4w4u92$",
-                      "^org\\.mozilla\\.firefox"
-                    ],
-                    "type": "frontmost_application_if"
-                  },
                   {
                     "identifiers": [
                       {
@@ -189,16 +100,6 @@
             "manipulators": [
               {
                 "conditions": [
-                  {
-                    "bundle_identifiers": [
-                      "^net\\.kovidgoyal\\.kitty$",
-                      "^com\\.mitchellh\\.ghostty$",
-                      "^com\\.todesktop\\.230313mzl4w4u92$",
-                      "^org\\.mozilla\\.firefox",
-                      "^com\\.raycast\\.macos$"
-                    ],
-                    "type": "frontmost_application_if"
-                  },
                   {
                     "identifiers": [
                       {

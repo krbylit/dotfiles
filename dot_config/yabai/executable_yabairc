@@ -3,32 +3,43 @@
 # find "${HOME}/.config/yabai" -type f -perm +111 -exec {} \;
 # Load scripting addition (requires root and SIP disabled)
 yabai -m signal --add event=dock_did_restart action="sudo yabai --load-sa"
+# Restart and apply rules on display add/remove
+yabai -m signal --add event=display_added action="yabai --restart-service && sleep 3 && yabai -m rule --apply"
+yabai -m signal --add event=display_removed action="yabai --restart-service && sleep 3 && yabai -m rule --apply"
+yabai -m signal --add event=display_moved action="yabai --restart-service && sleep 3 && yabai -m rule --apply"
+# If above aren't working, we might try: `bass source ~/.config/yabai/yabairc`
+
 
 sudo yabai --load-sa
 
 # Basic variables
-BAR_HEIGHT=$(sketchybar -m --query bar | jq -r '.height')
-TOP_PADDING=$((BAR_HEIGHT + 6))
+# BAR_HEIGHT=$(sketchybar -m --query bar | jq -r '.height')
+# TOP_PADDING=$((BAR_HEIGHT + 6))
 PADDING=6
 
 # Space names (in order)
-SPACES="term browser code dev comms ref misc debug util"
+SPACES="term browser code dev misc comms ref debug util"
 
 # Display detection
 DISPLAY_COUNT=$(yabai -m query --displays | jq '. | length')
 DISPLAY_2=$((DISPLAY_COUNT > 1 ? 2 : 1))
+# Determine the layout based on the number of connected displays
+if [ "$DISPLAY_COUNT" -gt 1 ]; then
+    DEFAULT_LAYOUT="bsp"
+else
+    DEFAULT_LAYOUT="stack"
+fi
 
 # Main display spaces
-MAIN_SPACES="term browser code dev"
+MAIN_SPACES="term browser code dev misc"
 # Secondary display spaces
-SEC_SPACES="comms ref misc debug util"
+SEC_SPACES="comms ref debug util"
 
 # General Configurations
 # yabai -m config external_bar "${BAR_HEIGHT}":0
 yabai -m config split_ratio 0.5
 yabai -m config auto_balance off
 yabai -m config insert_feedback_color 0xff7793d1
-yabai -m config mouse_follows_focus on
 
 # Window Configurations
 yabai -m config window_placement second_child
@@ -75,15 +86,15 @@ for space in $SEC_SPACES; do
 	yabai -m space $space --display $DISPLAY_2
 done
 
-# Rules for Excluded Applications
-yabai -m rule --add label=Finder app="^Finder$" title="(Co(py|nnect)|Move|Info|Pref)" manage=off
-# yabai -m rule --add label=Safari app="^Safari$" title="^(General|(Tab|Password|Website|Extension)s|AutoFill|Se(arch|curity)|Privacy|Advance)$" manage=off
-yabai -m rule --add label="About This Mac" app="System Information" title="About This Mac" manage=off
-# Don't manage 1Pass pop-ups
-yabai -m rule --add label="1Password Item" app="^1Password$" title="!^All Accounts" manage=off
+# # Rules for Excluded Applications
+# yabai -m rule --add label=Finder app="^Finder$" title="(Co(py|nnect)|Move|Info|Pref)" manage=off
+# # yabai -m rule --add label=Safari app="^Safari$" title="^(General|(Tab|Password|Website|Extension)s|AutoFill|Se(arch|curity)|Privacy|Advance)$" manage=off
+# yabai -m rule --add label="About This Mac" app="System Information" title="About This Mac" manage=off
+# # Don't manage 1Pass pop-ups
+# yabai -m rule --add label="1Password Item" app="^1Password$" title="^Quick Access — 1Password$" manage=off
 
 # Unmanaged Applications
-UNMANAGED_APPS="Alfred 'App Store' 'Archive Utility' Calculator Dictionary FaceTime 'Photo Booth' Python 'Screen Sharing' Screens 'Software Update' Stats 'System Information' 'System Preferences' 'System Settings'"
+UNMANAGED_APPS="Alfred 'App Store' 'Archive Utility' Calculator Dictionary FaceTime 'Mountain Duck' 'Photo Booth' Python 'Screen Sharing' Screens 'Software Update' Stats 'System Information' 'System Preferences' 'System Settings'"
 
 for app in $UNMANAGED_APPS; do
 	yabai -m rule --add label="unmanage_${app}" app="^${app}$" manage=off
@@ -102,7 +113,7 @@ yabai -m rule --add label=sticky_SystemSettings app="^System Settings$" sticky=o
 
 # Special rules
 # Hide the YabaiIndicator options that pop up every time it restarts
-yabai -m rule --add app="^YabaiIndicator$" opacity=0 layer=below
+yabai -m rule --add app="^YabaiIndicator$" opacity=0
 
 # Space assignments using arrays
 TERM_APPS=(
@@ -124,11 +135,15 @@ CODE_APPS=(
 )
 
 DEV_APPS=(
+    Proxyman
+    Postman
+    Wireshark
 	GitHub
 	"MongoDB Compass"
 	Docker
 	"Docker Desktop"
 	Cyberduck
+    Numbers
 )
 
 COMMS_APPS=(
@@ -140,7 +155,8 @@ COMMS_APPS=(
 )
 
 REF_APPS=(
-	Notion
+	# Notion
+    "Notion Calendar"
 	"LM Studio"
 	ChatGPT
 	Ollama
@@ -157,7 +173,6 @@ DEBUG_APPS=(
 UTIL_APPS=(
 	Figma
 	1Password
-	# YabaiIndicator
 	"Activity Monitor"
 	"Karabiner-Elements"
 )
@@ -185,14 +200,14 @@ assign_to_space util "${UTIL_APPS[@]}"
 
 # Space-Specific Configurations
 yabai -m config --space term layout stack window_gap $PADDING window_opacity off top_padding 0 bottom_padding 0 left_padding 0 right_padding 0
-yabai -m config --space browser layout bsp
+yabai -m config --space browser layout stack
 yabai -m config --space code layout stack
-yabai -m config --space dev layout bsp
-yabai -m config --space comms layout bsp
-yabai -m config --space ref layout bsp
-yabai -m config --space misc layout bsp
-yabai -m config --space debug layout bsp
-yabai -m config --space util layout bsp
+yabai -m config --space dev layout $DEFAULT_LAYOUT
+yabai -m config --space comms layout $DEFAULT_LAYOUT
+yabai -m config --space ref layout $DEFAULT_LAYOUT
+yabai -m config --space misc layout $DEFAULT_LAYOUT
+yabai -m config --space debug layout $DEFAULT_LAYOUT
+yabai -m config --space util layout $DEFAULT_LAYOUT
 
 # Signals for `YabaiIndicator`
 yabai -m signal --add event=mission_control_exit action='echo "refresh" | nc -U /tmp/yabai-indicator.socket'
@@ -205,3 +220,18 @@ yabai -m signal --add event=window_moved action='echo "refresh windows" | nc -U 
 yabai -m signal --add event=window_resized action='echo "refresh windows" | nc -U /tmp/yabai-indicator.socket'
 yabai -m signal --add event=window_minimized action='echo "refresh windows" | nc -U /tmp/yabai-indicator.socket'
 yabai -m signal --add event=window_deminimized action='echo "refresh windows" | nc -U /tmp/yabai-indicator.socket'
+
+# Rules for Excluded Applications
+yabai -m rule --add label=Finder app="^Finder$" title="(Co(py|nnect)|Move|Info|Pref)" manage=off
+# yabai -m rule --add label=Safari app="^Safari$" title="^(General|(Tab|Password|Website|Extension)s|AutoFill|Se(arch|curity)|Privacy|Advance)$" manage=off
+yabai -m rule --add label="About This Mac" app="System Information" title="About This Mac" manage=off
+# Don't manage 1Pass pop-ups
+yabai -m rule --add label="1Password Quick Access" app="^1Password$" title="^Quick Access — 1Password$" space=mouse
+yabai -m rule --add label="ChatGPT popup" app="^ChatGPT$" title!="^ChatGPT$" space=mouse
+
+# Special handling of Notion because the tab preview popup causes issues.
+yabai -m rule --add label="ref_Notion" \
+  app="^Notion$" \
+  title!="^Tab Preview$" \
+  space="^ref"
+yabai -m rule --add label="notion_tab_preview" app="^Notion$" title="^Tab Preview$" manage=off
