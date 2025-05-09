@@ -146,24 +146,24 @@ DEV_APPS=(
     Numbers
 )
 
+MISC_APPS=(
+	Finder
+)
+
 COMMS_APPS=(
-	"Spark Mail"
-	zoom.us
-	Slack
-	"Microsoft Outlook"
-	Thunderbird
+    "Spark Mail"
+    zoom.us
+    Slack
+    "Microsoft Outlook"
+    Thunderbird
 )
 
 REF_APPS=(
-	# Notion
+    # Notion
     "Notion Calendar"
-	"LM Studio"
-	ChatGPT
-	Ollama
-)
-
-MISC_APPS=(
-	Finder
+    "LM Studio"
+    ChatGPT
+    Ollama
 )
 
 DEBUG_APPS=(

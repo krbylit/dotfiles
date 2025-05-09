@@ -5,17 +5,17 @@
 
 # Install Hammerspoon and VimMode
 if [ ! -d "$HOME/.hammerspoon/Spoons/VimMode.spoon" ]; then
-	curl -s https://raw.githubusercontent.com/dbalatero/VimMode.spoon/master/bin/installer | bash
+    curl -s https://raw.githubusercontent.com/dbalatero/VimMode.spoon/master/bin/installer | bash
 fi
 
 # Install Rust. brew install doesn't seem to play nice
 if ! command -v rustup &>/dev/null; then
-	curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 fi
 
 # Install nix. Needed for nil-ls in nvim
 if ! command -v nix &>/dev/null; then
-	curl -L https://nixos.org/nix/install | sh
+    curl -L https://nixos.org/nix/install | sh
 fi
 
 # # Install sbarlua, required for our sketchybar config
@@ -23,33 +23,37 @@ fi
 
 # Install Ghostty ascii animation (`ghostty_animation`)
 if ! command -v ghostty_animation &>/dev/null; then
-	cd ~/Downloads
-	git clone https://github.com/lukeshere/ghostty-animation-command
-	cd ghostty-animation-command
-	cargo build
-	mv target/debug/ghostty_animation /usr/local/bin
+    cd ~/Downloads
+    git clone https://github.com/lukeshere/ghostty-animation-command
+    cd ghostty-animation-command
+    cargo build
+    mv target/debug/ghostty_animation /usr/local/bin
 fi
 
 # Install tmux plugin manager
 if [ ! -d "$HOME/.tmux/plugins/tpm" ]; then
-	git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+    git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 fi
 
 # Install aider chat
 if ! command -v aider &>/dev/null; then
-	uv tool install aider-install
-	# NOTE: need to source config again as this wasn't immediately available in PATH
-	source ~/.config/fish/config.fish
-	aider-install
-	uv tool install --force --python python3.12 aider-chat@latest
+    uv tool install aider-install
+    # NOTE: need to source config again as this wasn't immediately available in PATH
+    source ~/.config/fish/config.fish
+    aider-install
+    uv tool install --force --python python3.12 aider-chat@latest
 fi
 
 if ! command -v claude &>/dev/null; then
-	npm install -g @anthropic-ai/claude-code
+    npm install -g @anthropic-ai/claude-code
 fi
 
 if ! command -v tclock &>/dev/null; then
-	cargo install clock-tui
+    cargo install clock-tui
+fi
+
+if ! command -v regname &>/dev/null; then
+    cargo install --locked --git https://github.com/linkdd/regname
 fi
 
 # Install our gitleaks pre-commit hook
