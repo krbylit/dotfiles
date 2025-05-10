@@ -10,7 +10,6 @@ function _rsync_dotfiles
     # Copy configs
     rsync --recursive \
         --compress \
-        --copy-links \
         --checksum \
         --progress \
         --partial \
@@ -19,7 +18,19 @@ function _rsync_dotfiles
         --backup-dir=~/.dotfiles-backup \
         --chmod=ugo=rwX \
         ~/.ssh-dotfiles/ \
-        # $host:~/
+        $host:~/.ssh-dotfiles/ 1>/dev/null 2>/dev/null
+
+    # Then sync specific dotfiles
+    rsync --compress \
+        --checksum \
+        --progress \
+        --partial \
+        --partial-dir=~/.rsync-partials \
+        --backup \
+        --backup-dir=~/.dotfiles-backup \
+        --chmod=ugo=rwX \
+        ~/.bashrc \
+        ~/.vimrc \
         $host:~/ 1>/dev/null 2>/dev/null
     return
 end

@@ -1,7 +1,7 @@
 function s --wraps='ssh' --description 'SSH with custom config'
     set -l host $argv[-1]
     set -l CUSTOM_HOSTNAME $host
-    set -l GIT_ASKPASS "\$HOME/git_token.sh"
+    set -l GIT_ASKPASS "\$HOME/.ssh-dotfiles/git_token.sh"
     # Git user and token should be set in `secrets` module and exported to shell env.
     set -l SSH_GIT_TOKEN $SSH_GIT_TOKEN
     set -l GIT_USER $GIT_USER
