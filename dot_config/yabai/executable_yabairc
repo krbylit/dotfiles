@@ -162,12 +162,12 @@ REF_APPS=(
     # Notion
     "Notion Calendar"
     "LM Studio"
-    ChatGPT
     Ollama
 )
 
 DEBUG_APPS=(
 	"Google Chrome"
+    ChatGPT
 )
 
 UTIL_APPS=(

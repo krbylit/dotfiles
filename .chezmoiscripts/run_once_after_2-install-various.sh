@@ -56,6 +56,10 @@ if ! command -v regname &>/dev/null; then
     cargo install --locked --git https://github.com/linkdd/regname
 fi
 
+if ! command -v nerdlog &>/dev/null; then
+    go install github.com/dimonomid/nerdlog/cmd/nerdlog@master
+fi
+
 # Install our gitleaks pre-commit hook
 cd $HOME/.local/share/chezmoi && pre-commit autoupdate
 cd $HOME/.local/share/chezmoi && pre-commit install
