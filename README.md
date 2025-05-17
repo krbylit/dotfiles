@@ -23,8 +23,8 @@ These are not installed by chezmoi, so must be installed manually.
 ### Solutions for Vim Motions on macOS
 
 - [ti-vim](https://vim.tonisives.com/index.html)
-- [kindaVim](https://github.com/godbout/kindaVim.blahblah)
-- [Homerow](https://www.homerow.app/)
+- [kindaVim](https://github.com/godbout/kindaVim.blahblah): Gives Vim motions on text. Works the best of these that I've tried. License required to not be annoying though.
+- [Homerow](https://www.homerow.app/): Gives Vimium-like labelled-link mouseless interaction. Fantastic app, works great on nearly everything (Notion can be hit-or-miss, restart Notion usually brings back labels), and using free version is completely viable.
 - [VimMotion](https://github.com/dwarvesf/VimMotionApp)
 - [VimMode](https://github.com/dbalatero/VimMode.spoon)
 

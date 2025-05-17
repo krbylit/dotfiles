@@ -114,4 +114,5 @@ shift + alt - q : yabai -m space --destroy
 ctrl + alt - q : yabai --stop-service
 ctrl + alt - s : yabai --start-service
 ctrl + alt - r : yabai --restart-service
-alt - r : yabai -m rule --apply
+alt - r : skhd --restart-service && yabai --restart-service && sleep 1 && yabai -m rule --apply
+alt - a : yabai -m rule --apply
