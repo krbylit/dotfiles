@@ -39,8 +39,8 @@ return {
                         "prettierd",
                         "pylint",
                         "pyright",
-                        "ruff",
-                        "ruff-lsp",
+                        -- "ruff",
+                        -- "ruff-lsp",
                         "rust-analyzer",
                         "shellcheck",
                         "shfmt",
@@ -267,22 +267,22 @@ return {
                             },
                         },
                     },
-                    -- on_attach = function(client, bufnr)
-                    --     -- Keep Pyright's core capabilities but disable hover
-                    --     client.server_capabilities.hoverProvider = false
-                    -- end,
-                },
-                ruff_lsp = {
                     on_attach = function(client, bufnr)
-                        client.server_capabilities.documentFormattingProvider = false
+                        -- Keep Pyright's core capabilities but disable hover
                         client.server_capabilities.hoverProvider = false
                     end,
-                    init_options = {
-                        settings = {
-                            args = {},
-                        },
-                    },
                 },
+                -- ruff_lsp = {
+                --     on_attach = function(client, bufnr)
+                --         client.server_capabilities.documentFormattingProvider = false
+                --         client.server_capabilities.hoverProvider = false
+                --     end,
+                --     init_options = {
+                --         settings = {
+                --             args = {},
+                --         },
+                --     },
+                -- },
                 -- jedi_language_server = {
                 --     settings = {
                 --         jedi = {
