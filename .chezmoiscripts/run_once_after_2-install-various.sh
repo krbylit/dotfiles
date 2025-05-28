@@ -60,6 +60,14 @@ if ! command -v nerdlog &>/dev/null; then
     go install github.com/dimonomid/nerdlog/cmd/nerdlog@master
 fi
 
+if ! command -v zellij &>/dev/null; then
+    cargo install --locked zellij
+fi
+
+if ! command -v ziina &>/dev/null; then
+    go install github.com/ziinaio/ziina@latest
+fi
+
 # Install our gitleaks pre-commit hook
 cd $HOME/.local/share/chezmoi && pre-commit autoupdate
 cd $HOME/.local/share/chezmoi && pre-commit install
