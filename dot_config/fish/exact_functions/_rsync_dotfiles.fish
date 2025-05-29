@@ -30,6 +30,7 @@ function _rsync_dotfiles
         --backup-dir=~/.dotfiles-backup \
         --chmod=ugo=rwX \
         ~/.bashrc \
+        ~/private.bashrc \
         ~/.vimrc \
         $host:~/ 1>/dev/null 2>/dev/null
     return
