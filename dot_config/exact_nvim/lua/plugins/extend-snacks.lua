@@ -1,6 +1,5 @@
 -- QoL mini-plugins
 -- https://github.com/folke/snacks.nvim
--- FIXME: disabling for now because `notifier` having odd behavior: not responding to disabling it, doesn't play with my current telescope extension to search previous notis
 local function get_terminal_size()
     local width = vim.api.nvim_get_option("columns") -- Get terminal width
     local height = vim.api.nvim_get_option("lines") -- Get terminal height
