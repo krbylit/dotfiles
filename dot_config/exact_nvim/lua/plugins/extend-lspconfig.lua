@@ -27,7 +27,7 @@ return {
                         "eslint-lsp",
                         "eslint_d",
                         "hadolint",
-                        -- "jedi-language-server",
+                        "jedi-language-server",
                         "js-debug-adapter",
                         "json-lsp",
                         "lua-language-server",
@@ -283,35 +283,38 @@ return {
                 --         },
                 --     },
                 -- },
-                -- jedi_language_server = {
-                --     settings = {
-                --         jedi = {
-                --             workspace = {
-                --                 -- diagnosticMode = "openFilesOnly",
-                --                 diagnosticMode = "workspace",
-                --             },
-                --             analysis = {
-                --                 -- diagnosticMode = "openFilesOnly",
-                --                 diagnosticMode = "workspace",
-                --             },
-                --         },
-                --     },
-                --     on_attach = function(client, buffer)
-                --         -- Disable formatting since we want it from yapf
-                --         client.server_capabilities.documentFormattingProvider = false
-                --
-                --         -- Keep hover enabled for Jedi
-                --         client.server_capabilities.hoverProvider = true
-                --
-                --         -- Disable other capabilities to avoid duplication with Pyright
-                --         client.server_capabilities.definitionProvider = false
-                --         client.server_capabilities.referencesProvider = false
-                --         client.server_capabilities.documentSymbolProvider = false
-                --         client.server_capabilities.workspaceSymbolProvider = false
-                --         client.server_capabilities.implementationProvider = false
-                --         client.server_capabilities.declarationProvider = false
-                --     end,
-                -- },
+                jedi_language_server = {
+                    settings = {
+                        jedi = {
+                            workspace = {
+                                diagnosticMode = "openFilesOnly",
+                                -- diagnosticMode = "workspace",
+                            },
+                            analysis = {
+                                diagnosticMode = "openFilesOnly",
+                                -- diagnosticMode = "workspace",
+                            },
+                        },
+                    },
+                    on_attach = function(client, buffer)
+                        -- Keep hover enabled for Jedi
+                        client.server_capabilities.hoverProvider = true
+
+                        -- Disable other capabilities to avoid duplication with Pyright
+                        client.server_capabilities.documentFormattingProvider = false
+                        client.server_capabilities.definitionProvider = false
+                        client.server_capabilities.referencesProvider = false
+                        client.server_capabilities.documentSymbolProvider = false
+                        client.server_capabilities.workspaceSymbolProvider = false
+                        client.server_capabilities.implementationProvider = false
+                        client.server_capabilities.declarationProvider = false
+                        client.server_capabilities.renameProvider = false
+                        client.server_capabilities.codeActionProvider = false
+                        client.server_capabilities.signatureHelpProvider = false
+                        client.server_capabilities.semanticTokensProvider = nil
+                        client.server_capabilities.completionProvider = nil
+                    end,
+                },
                 lua_ls = {
                     settings = {
                         Lua = {
