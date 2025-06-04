@@ -17,13 +17,17 @@ return {
             -- 	-- optional
             -- 	api_key_name = "DEEPSEEK_API_KEY", -- default OPENAI_API_KEY if not set
             -- },
-            openai = {
-                -- Use local model run by LM Studio instead of OpenAI
-                endpoint = "http://127.0.0.1:1234/v1",
-                model = "deepseek-r1-distill-qwen-32b",
-                timeout = 30000, -- Timeout in milliseconds
-                temperature = 0,
-                max_tokens = 4096,
+            providers = {
+                openai = {
+                    -- Use local model run by LM Studio instead of OpenAI
+                    endpoint = "http://127.0.0.1:1234/v1",
+                    model = "deepseek-r1-distill-qwen-32b",
+                    timeout = 30000, -- Timeout in milliseconds
+                    extra_request_body = {
+                        temperature = 0,
+                    },
+                    max_tokens = 4096,
+                },
             },
             behaviour = {
                 auto_suggestions = false, -- Experimental stage
