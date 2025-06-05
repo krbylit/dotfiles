@@ -31,6 +31,6 @@ function s --wraps='ssh' --description 'SSH with custom config'
     # kill $animation_pid
 
     # Execute SSH with remaining arguments
-    command ssh -t $argv "export GIT_USER=$GIT_USER; export SSH_GIT_TOKEN=$SSH_GIT_TOKEN; export GIT_ASKPASS=$GIT_ASKPASS; export CUSTOM_HOSTNAME=$CUSTOM_HOSTNAME; (zsh --login 2>/dev/null || bash --login)"
+    command ssh -t $argv "export GIT_USER=$GIT_USER; export SSH_GIT_TOKEN=$SSH_GIT_TOKEN; export GIT_ASKPASS=$GIT_ASKPASS; export CUSTOM_HOSTNAME=$CUSTOM_HOSTNAME; (fish --login || bash --login)"
 
 end

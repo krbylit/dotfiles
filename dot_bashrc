@@ -27,8 +27,33 @@ alias ..="cd .."
 alias ...="cd ../.."
 alias ~="cd ~"
 alias v='sudo -E vim'
+alias zel='zellij'
+alias zs='zellij --session'
+alias lg='lazygit'
 
 export LESS='-RFX'
+
+# env setup
+# Homebrew
+if [ -x /home/linuxbrew/.linuxbrew/bin/brew ]; then
+    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+fi
+
+# PATH
+export PATH="$HOME/.local/share/bob/nvim-bin:$PATH"
+
+y() {
+    local tmp
+    tmp=$(mktemp -t "yazi-cwd.XXXXXX")
+
+    yazi "$@" --cwd-file="$tmp"
+    local cwd
+    cwd=$(cat "$tmp")
+    if [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
+        cd "$cwd"
+    fi
+    rm -f "$tmp"
+}
 
 # ~/.bashrc: executed by bash(1) for non-login shells.
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
@@ -151,3 +176,8 @@ fi
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"                   # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" # This loads nvm bash_completion
+
+# Start zoxide
+if [ -x zoxide ]; then
+    eval "$(zoxide init bash)"
+fi
