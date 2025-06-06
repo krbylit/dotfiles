@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+# Only run on macOS
+if [[ "$(uname)" != "Darwin" ]]; then
+    exit 0
+fi
+
 # Show cmd + tab App Switcher on all displays
 defaults write com.apple.dock appswitcher-all-displays -bool true
 # Disable press and hold on keyboard. Without disabled, hold brings up alt character selection. Disabled lets us do key repeat (e.g. hold `j` to continue scrolling in Vim)

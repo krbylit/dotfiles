@@ -6,7 +6,7 @@ command_timeout = 5000
 
 # ================ Prompts ================
 format = """
-[█▓▒](flamingo) $directory $fill( $status)( $username $hostname)( $cmd_duration )${custom.block_rprompt_repo_top} 
+[█▓▒](flamingo) $directory $fill( $status)( $username ${custom.hostname})( $cmd_duration )${custom.block_rprompt_repo_top}
 [▓▒░](flamingo) $character($sudo )
 """
 right_format = '''
@@ -98,6 +98,12 @@ style_user = "bold blue dimmed"
 style_root = "bold red"
 show_always = true
 format = '[ $user]($style)'
+
+[custom.hostname]
+command = "sh -c '[ -n \"$CUSTOM_HOSTNAME\" ] && echo \"$CUSTOM_HOSTNAME\" || hostname'"
+when = true
+style = 'bold peach dimmed'
+format = '[ $output]($style)'
 
 [hostname]
 ssh_only = false

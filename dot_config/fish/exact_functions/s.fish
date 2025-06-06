@@ -14,6 +14,22 @@ function s --wraps='ssh' --description 'SSH with custom config'
     end
 
     _rsync_dotfiles $host
+    # set -l dotfile_status $status
+    #
+    # set -l env_block "GIT_USER='$GIT_USER' SSH_GIT_TOKEN='$SSH_GIT_TOKEN' GIT_ASKPASS='$GIT_ASKPASS' CUSTOM_HOSTNAME='$CUSTOM_HOSTNAME'"
+    #
+    # switch $dotfile_status
+    #     case 0
+    #         set -l remote_cmd "env $env_block zellij --command 'fish --login'"
+    #     case 1
+    #         set -l remote_cmd "env $env_block zellij --command 'bash --login'"
+    #     case 2
+    #         set -l remote_cmd "env $env_block fish --login"
+    #     case 3
+    #         set -l remote_cmd "env $env_block bash --login"
+    # end
+    #
+    # command ssh -t $argv "bash -c 'exec $remote_cmd'"
 
     # tmux new-session -d -s ghostty_session ghostty_animation
     # tmux attach-session -t ghostty_session
@@ -31,6 +47,12 @@ function s --wraps='ssh' --description 'SSH with custom config'
     # kill $animation_pid
 
     # Execute SSH with remaining arguments
-    command ssh -t $argv "export GIT_USER=$GIT_USER; export SSH_GIT_TOKEN=$SSH_GIT_TOKEN; export GIT_ASKPASS=$GIT_ASKPASS; export CUSTOM_HOSTNAME=$CUSTOM_HOSTNAME; (fish --login || bash --login)"
+    command ssh -t $argv "
+        export GIT_USER=$GIT_USER;
+        export SSH_GIT_TOKEN=$SSH_GIT_TOKEN;
+        export GIT_ASKPASS=$GIT_ASKPASS;
+        export CUSTOM_HOSTNAME=$CUSTOM_HOSTNAME;
+        bash --login -c 'zellij attach kirby-$CUSTOM_HOSTNAME 2>/dev/null || zellij --session kirby-$CUSTOM_HOSTNAME 2>/dev/null || bash --login'
+    "
 
 end
