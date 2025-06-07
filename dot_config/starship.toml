@@ -7,7 +7,7 @@ command_timeout = 5000
 # ================ Prompts ================
 format = """
 [█▓▒](flamingo) $directory $fill( $status)( $username ${custom.hostname})( $cmd_duration )${custom.block_rprompt_repo_top}
-[▓▒░](flamingo) $character($sudo )
+[▓▒░](flamingo)( $terraform) $character($sudo )
 """
 right_format = '''
 (($git_branch )($nodejs )($python )[┛](bold surface1) )
@@ -170,6 +170,12 @@ min_time = 0
 show_milliseconds = true
 style = "green dimmed"
 format = "[ $duration]($style)"
+
+[terraform]
+disabled = false
+symbol = ''                            #    
+format = '[$symbol $workspace]($style)'
+style = 'bold 105'                      # default
 
 [time]
 disabled = false
