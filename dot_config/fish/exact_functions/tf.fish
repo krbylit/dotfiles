@@ -1,3 +1,3 @@
 function tf
-    tftui -d $argv
+    terraform $argv
 end
