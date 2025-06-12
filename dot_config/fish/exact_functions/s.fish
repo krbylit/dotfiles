@@ -1,6 +1,8 @@
 function s --wraps='ssh' --description 'SSH with custom config'
     set -l host $argv[-1]
     set -l CUSTOM_HOSTNAME $host
+    set -l session_name "kirby-$CUSTOM_HOSTNAME"
+
     set -l GIT_ASKPASS "\$HOME/.ssh-dotfiles/git_token.sh"
     # Git user and token should be set in `secrets` module and exported to shell env.
     set -l SSH_GIT_TOKEN $SSH_GIT_TOKEN
@@ -52,7 +54,7 @@ function s --wraps='ssh' --description 'SSH with custom config'
         export SSH_GIT_TOKEN=$SSH_GIT_TOKEN;
         export GIT_ASKPASS=$GIT_ASKPASS;
         export CUSTOM_HOSTNAME=$CUSTOM_HOSTNAME;
-        bash --login -c 'zellij attach kirby-$CUSTOM_HOSTNAME 2>/dev/null || zellij --session kirby-$CUSTOM_HOSTNAME 2>/dev/null || bash --login'
+        bash --login -c 'zellij attach $session_name 2>/dev/null || zellij --session $session_name 2>/dev/null || tmux new-session -A -s "$session_name" || bash --login'
     "
 
 end
