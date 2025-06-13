@@ -77,4 +77,10 @@ cd $HOME/.local/share/chezmoi && pre-commit install
 # cp $(chezmoi source-path)/secrets/dot_gitmodules $(chezmoi source-path)/.gitmodules
 
 # Update fisher plugins
-fish -c "fisher update"
+if command -v fish &>/dev/null; then
+    fish -c "fisher update"
+fi
+
+if command -v bob &>/dev/null; then
+    bob install stable && bob use stable
+fi

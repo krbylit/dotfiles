@@ -54,7 +54,7 @@ function s --wraps='ssh' --description 'SSH with custom config'
         export SSH_GIT_TOKEN=$SSH_GIT_TOKEN;
         export GIT_ASKPASS=$GIT_ASKPASS;
         export CUSTOM_HOSTNAME=$CUSTOM_HOSTNAME;
-        bash --login -c 'zellij attach $session_name 2>/dev/null || zellij --session $session_name 2>/dev/null || tmux new-session -A -s "$session_name" || bash --login'
+        bash --login -c 'zellij attach $session_name 2>/dev/null || zellij --session $session_name 2>/dev/null || bash --login'
     "
 
 end
