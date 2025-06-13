@@ -108,19 +108,18 @@ return {
         -- fuzzy = {},
         -- --- @type blink.cmp.SnippetsConfig,
         -- snippets = {},
-        -- FIXME: completion menu stuck on "loading..."
-        -- cmdline = {
-        -- 	enabled = false,
-        -- 	keymap = {
-        -- 		preset = "cmdline",
-        -- 	},
-        -- 	completion = {
-        -- 		ghost_text = {
-        -- 			enabled = true,
-        -- 		},
-        -- 		-- menu = { auto_show = true },
-        -- 	},
-        -- },
+        cmdline = {
+            enabled = true,
+            keymap = {
+                preset = "cmdline",
+            },
+            completion = {
+                ghost_text = {
+                    enabled = true,
+                },
+                menu = { auto_show = true },
+            },
+        },
         --- @type blink.cmp.CompletionConfig,
         --- @type blink.cmp.SignatureConfig,
         signature = {

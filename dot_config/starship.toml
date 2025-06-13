@@ -6,8 +6,8 @@ command_timeout = 5000
 
 # ================ Prompts ================
 format = """
-[█▓▒](flamingo) $directory $fill( $status)( $username $hostname)( $cmd_duration )${custom.block_rprompt_repo_top} 
-[▓▒░](flamingo) $character($sudo )
+[█▓▒](flamingo) $directory $fill( $status)( $username ${custom.hostname})( $cmd_duration )${custom.block_rprompt_repo_top}
+[▓▒░](flamingo)( $terraform) $character($sudo )
 """
 right_format = '''
 (($git_branch )($nodejs )($python )[┛](bold surface1) )
@@ -99,6 +99,12 @@ style_root = "bold red"
 show_always = true
 format = '[ $user]($style)'
 
+[custom.hostname]
+command = "sh -c '[ -n \"$CUSTOM_HOSTNAME\" ] && echo \"$CUSTOM_HOSTNAME\" || hostname'"
+when = true
+style = 'bold peach dimmed'
+format = '[ $output]($style)'
+
 [hostname]
 ssh_only = false
 ssh_symbol = ''
@@ -164,6 +170,12 @@ min_time = 0
 show_milliseconds = true
 style = "green dimmed"
 format = "[ $duration]($style)"
+
+[terraform]
+disabled = false
+symbol = ''                            #    
+format = '[$symbol $workspace]($style)'
+style = 'bold 105'                      # default
 
 [time]
 disabled = false

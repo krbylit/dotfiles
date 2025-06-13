@@ -1,0 +1,4 @@
+{{- $privateBashRc := (joinPath .chezmoi.sourceDir .path.secrets "private_dot_bashrc") -}}
+{{- if (stat $privateBashRc) -}}
+{{ include $privateBashRc | trim }}
+{{- end -}}
