@@ -7,6 +7,8 @@ function s --wraps='ssh' --description 'SSH with custom config'
     # Git user and token should be set in `secrets` module and exported to shell env.
     set -l SSH_GIT_TOKEN $SSH_GIT_TOKEN
     set -l GIT_USER $GIT_USER
+    set -l AWS_ACCESS_KEY_ID $AWS_ACCESS_KEY_ID
+    set -l AWS_SECRET_ACCESS_KEY $AWS_SECRET_ACCESS_KEY
     # if not grep -qE "^Host[[:space:]]+$host$" ~/.ssh/config
     #     set CUSTOM_HOSTNAME ""
     # end
@@ -54,6 +56,8 @@ function s --wraps='ssh' --description 'SSH with custom config'
         export SSH_GIT_TOKEN=$SSH_GIT_TOKEN;
         export GIT_ASKPASS=$GIT_ASKPASS;
         export CUSTOM_HOSTNAME=$CUSTOM_HOSTNAME;
+        export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY;
+        export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID;
         bash --login -c 'zellij attach $session_name 2>/dev/null || zellij --session $session_name 2>/dev/null || bash --login'
     "
 
