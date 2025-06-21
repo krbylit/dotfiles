@@ -20,3 +20,11 @@ set -gx MANPAGER "sh -c 'col -bx | bat -l man -p'"
 
 # some programs use FILTER to choose a fuzzy finder
 # set -gx FILTER "fzf --cycle --layout=reverse --border --height=90% --preview-window=wrap --marker="*" --bind ctrl-f:preview-down --bind ctrl-b:preview-up --bind ctrl-d:half-page-down --bind ctrl-u:half-page-up"
+
+# Set global env var if we are SSH'd into a remote machine
+# TODO: Use this for any further configuration specific to SSH envs. E.g. disable certain nvim plugins based on this.
+if set -q SSH_CONNECTION; or set -q SSH_CLIENT; or set -q SSH_TTY
+    set -gx IS_SSH 1
+else
+    set -gx IS_SSH 0
+end

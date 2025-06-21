@@ -2,6 +2,126 @@
 # If you encounter any issues, please make an issue at https://github.com/yazi-rs/schemas.
 "$schema" = "https://yazi-rs.github.io/schemas/keymap.json"
 
+# # FIXME: enabling this replaces `s` keymap from searchjump to using `fd`
+# # custom shell keymaps
+# [[mgr.prepend_keymap]]
+# on = ["'", ";"]
+# run = 'plugin custom-shell -- auto --interactive'
+# desc = "custom-shell as default, interactive"
+# [[mgr.prepend_keymap]]
+# on = ["'", ":"]
+# run = 'plugin custom-shell -- auto --interactive --block'
+# desc = "custom-shell as default, interactive, block"
+
+# # FIXME: enabling this replaces `s` keymap from searchjump to using `fd`
+# # copy all file contents to clipboard plugin
+# [[mgr.prepend_keymap]]
+# on = "<A-y>"
+# run = ["plugin copy-file-contents"]
+# desc = "Copy contents of file"
+
+# # restore.yazi plugin to restore deleted files
+# # FIXME: needs trash-cli installed but Brew isn't doin it
+# # FIXME: also replaces searchjump with `fd`
+# [[mgr.prepend_keymap]]
+# on = "u"
+# run = "plugin restore"
+# desc = "Restore last deleted files/folders"
+# # or use "d + u" like me
+# on = ["d", "u"]
+# run = "plugin restore"
+# desc = "Restore last deleted files/folders"
+
+
+# # ... Other keymaps
+# # what-size.yazi plugin keymap
+# # FIXME: seems to conflict with `s` keymap, uses `fd`
+# [[mgr.prepend_keymap]]
+# on = [".", "s"]
+# run = "plugin what-size"
+# desc = "Calc size of selection or cwd"
+
+# # diff plugin to diff two files
+# # FIXME: seems to use `fd`
+# [[mgr.prepend_keymap]]
+# on = "<C-d>"
+# run = "plugin diff"
+# desc = "Diff the selected with the hovered file"
+
+# # chmod plugin keymaps
+# FIXME: seems to use `fd`
+# [[mgr.prepend_keymap]]
+# on = ["c", "m"]
+# run = "plugin chmod"
+# desc = "Chmod on selected files"
+
+# vim-like bookmarks plugin keymaps
+[[manager.prepend_keymap]]
+on = ["m"]
+run = "plugin bookmarks save"
+desc = "Save current position as a bookmark"
+
+[[manager.prepend_keymap]]
+on = ["'"]
+run = "plugin bookmarks jump"
+desc = "Jump to a bookmark"
+
+[[manager.prepend_keymap]]
+on = ["b", "d"]
+run = "plugin bookmarks delete"
+desc = "Delete a bookmark"
+
+[[manager.prepend_keymap]]
+on = ["b", "D"]
+run = "plugin bookmarks delete_all"
+desc = "Delete all bookmarks"
+
+# relative-motion plugin vim motion keymaps
+[[manager.prepend_keymap]]
+on = ["1"]
+run = "plugin relative-motions 1"
+desc = "Move in relative steps"
+
+[[manager.prepend_keymap]]
+on = ["2"]
+run = "plugin relative-motions 2"
+desc = "Move in relative steps"
+
+[[manager.prepend_keymap]]
+on = ["3"]
+run = "plugin relative-motions 3"
+desc = "Move in relative steps"
+
+[[manager.prepend_keymap]]
+on = ["4"]
+run = "plugin relative-motions 4"
+desc = "Move in relative steps"
+
+[[manager.prepend_keymap]]
+on = ["5"]
+run = "plugin relative-motions 5"
+desc = "Move in relative steps"
+
+[[manager.prepend_keymap]]
+on = ["6"]
+run = "plugin relative-motions 6"
+desc = "Move in relative steps"
+
+[[manager.prepend_keymap]]
+on = ["7"]
+run = "plugin relative-motions 7"
+desc = "Move in relative steps"
+
+[[manager.prepend_keymap]]
+on = ["8"]
+run = "plugin relative-motions 8"
+desc = "Move in relative steps"
+
+[[manager.prepend_keymap]]
+on = ["9"]
+run = "plugin relative-motions 9"
+desc = "Move in relative steps"
+
 [[manager.prepend_keymap]]
 on = ["g", "m"]
 run = "cd ~/.local/share/chezmoi/"
