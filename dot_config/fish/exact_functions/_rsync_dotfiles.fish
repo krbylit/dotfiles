@@ -1,24 +1,19 @@
 function _rsync_dotfiles
     set -l host $argv[-1]
-    # set -l dotfile_status 0
+    set -l ssh_opts $argv[1..-2]
+    set -l local_term $TERM
 
-    # Copy over terminfo for Ghostty if it doesn't exist
-    set -l remote_terminfo (ssh -T $host "toe | grep ghostty" 2>/dev/null)
-    if test -z "$remote_terminfo"
-        echo "xterm-ghostty not found, installing..."
-        infocmp -x | ssh $host -- tic -x -
+    set -l ssh_cmd ssh $ssh_opts
+
+    # Check if terminfo exists on remote
+    set -l remote_terminfo (command $ssh_cmd -T $host "infocmp -T $local_term >/dev/null 2>&1; echo \$?")
+
+    if test "$remote_terminfo" -ne 0
+        infocmp -x | command $ssh_cmd $host -- tic -x -
     end
 
-    # # Check fish
-    # ssh -T $host "command -v fish >/dev/null" 2>/dev/null
-    # or set dotfile_status (math $dotfile_status + 1)
-    #
-    # # Check zellij
-    # ssh -T $host "command -v zellij >/dev/null" 2>/dev/null
-    # or set dotfile_status (math $dotfile_status + 2)
-
     # Copy configs
-    rsync --recursive \
+    rsync -e "ssh $ssh_opts" --recursive \
         --compress \
         --checksum \
         --progress \
@@ -31,7 +26,7 @@ function _rsync_dotfiles
         $host:~/.ssh-dotfiles/ 1>/dev/null 2>/dev/null
 
     # Then sync specific dotfiles
-    rsync --compress \
+    rsync -e "ssh $ssh_opts" --compress \
         --checksum \
         --progress \
         --partial \
@@ -43,6 +38,13 @@ function _rsync_dotfiles
         ~/private.bashrc \
         ~/.vimrc \
         $host:~/ 1>/dev/null 2>/dev/null
-    return
-    # return $dotfile_status
+
+    # Verify if terminfo is now available
+    set -l term_check (command $ssh_cmd -T $host "infocmp -T $local_term >/dev/null 2>&1; echo \$?")
+
+    if test "$term_check" -eq 0
+        echo $local_term
+    else
+        echo xterm-256color
+    end
 end
