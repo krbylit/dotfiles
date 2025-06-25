@@ -10,7 +10,7 @@ format = """
 [▓▒░](flamingo)( $terraform) $character($sudo )
 """
 right_format = '''
-(($git_branch )($nodejs )($python )[┛](bold surface1) )
+(($git_branch )($nodejs )($python )[┛](bold surface1))
 '''
 continuation_prompt = ' '
 
