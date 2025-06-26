@@ -33,7 +33,7 @@ return {
     "saghen/blink.cmp",
     dependencies = {
         -- NOTE: necessary here otherwise copilot shows up in LazyVim as disabled, possibly a LazyVim bug
-        { "zbirenbaum/copilot.lua", enabled = true, opts = {} },
+        { "zbirenbaum/copilot.lua", enabled = vim.env.IS_SSH ~= "1", opts = {} },
         { "saghen/blink.compat" },
         -- { "mikavilpas/blink-ripgrep.nvim" },
         -- {
@@ -296,12 +296,14 @@ return {
                         end,
                     },
                 },
-                copilot = {
-                    name = "copilot",
-                    module = "blink-cmp-copilot",
-                    kind = "Copilot",
-                    score_offset = 999, -- Boost Copilot's score (adjust as needed) so it comes first
-                },
+                copilot = vim.env.IS_SSH ~= "1"
+                        and {
+                            name = "copilot",
+                            module = "blink-cmp-copilot",
+                            kind = "Copilot",
+                            score_offset = 999, -- Boost Copilot's score (adjust as needed) so it comes first
+                        }
+                    or nil,
                 -- avante_commands = {
                 --     name = "avante_commands",
                 --     module = "blink.compat.source",
