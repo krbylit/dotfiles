@@ -31,6 +31,7 @@
 ---@diagnostic disable: missing-fields
 return {
     "saghen/blink.cmp",
+    enabled = vim.env.IS_SSH ~= "1",
     dependencies = {
         -- NOTE: necessary here otherwise copilot shows up in LazyVim as disabled, possibly a LazyVim bug
         { "zbirenbaum/copilot.lua", enabled = vim.env.IS_SSH ~= "1", opts = {} },

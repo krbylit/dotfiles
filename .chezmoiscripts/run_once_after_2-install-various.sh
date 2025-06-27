@@ -101,5 +101,8 @@ if command -v fish &>/dev/null; then
 fi
 
 if command -v bob &>/dev/null; then
-    bob install stable && bob use stable
+    bob install stable
+    if [ "${IS_SSH}" != "1" ]; then
+        bob use stable
+    fi
 fi
