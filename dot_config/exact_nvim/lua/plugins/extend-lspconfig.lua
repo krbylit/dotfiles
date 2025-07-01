@@ -177,11 +177,11 @@ return {
                         -- 		end
                         -- 	end,
                         -- })
-                        vim.api.nvim_create_autocmd("BufWritePre", {
-                            buffer = bufnr,
-                            -- NOTE: This command correctly applies our project-specific ESLint config
-                            command = "EslintFixAll",
-                        })
+                        -- vim.api.nvim_create_autocmd("BufWritePre", {
+                        --     buffer = bufnr,
+                        --     -- NOTE: This command correctly applies our project-specific ESLint config
+                        --     command = "EslintFixAll",
+                        -- })
                     end,
                     root_dir = require("lspconfig").util.root_pattern(
                         "package.json",
