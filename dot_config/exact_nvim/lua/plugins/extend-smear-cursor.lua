@@ -81,7 +81,7 @@ return {
         filetypes_disabled = {},
 
         -- Smear cursor when entering or leaving command line mode
-        smear_to_cmd = true,
+        smear_to_cmd = false,
 
         -- Smear cursor when switching buffers or windows.
         smear_between_buffers = true,
