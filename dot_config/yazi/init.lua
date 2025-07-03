@@ -62,6 +62,57 @@ require("bookmarks"):setup({
     },
 })
 
+-- projects.yazi, store and restore sessions
+require("projects"):setup({
+    save = {
+        -- method = "yazi", -- yazi | lua
+        method = "lua", -- yazi | lua
+        yazi_load_event = "@projects-load", -- event name when loading projects in `yazi` method
+        -- lua_save_path = "", -- path of saved file in `lua` method, comment out or assign explicitly
+        -- default value:
+        -- windows: "%APPDATA%/yazi/state/projects.json"
+        -- unix: "~/.local/state/yazi/projects.json"
+    },
+    last = {
+        update_after_save = true,
+        update_after_load = true,
+        -- NOTE: only works with `lua` save.method
+        load_after_start = true,
+    },
+    merge = {
+        event = "projects-merge",
+        quit_after_merge = false,
+    },
+    event = {
+        save = {
+            enable = true,
+            name = "project-saved",
+        },
+        load = {
+            enable = true,
+            name = "project-loaded",
+        },
+        delete = {
+            enable = true,
+            name = "project-deleted",
+        },
+        delete_all = {
+            enable = true,
+            name = "project-deleted-all",
+        },
+        merge = {
+            enable = true,
+            name = "project-merged",
+        },
+    },
+    notify = {
+        enable = true,
+        title = "Projects",
+        timeout = 3,
+        level = "info",
+    },
+})
+
 -- FIXME: the below replace searchjump with `fd`
 -- -- default restore.yazi
 -- require("restore"):setup({
