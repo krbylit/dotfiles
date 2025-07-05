@@ -3,17 +3,22 @@ PRIVATE_BASHRC="$HOME/private.bashrc"
 if [ -f "$PRIVATE_BASHRC" ]; then
     source "$PRIVATE_BASHRC"
 fi
-
-DIR_PROMPT="\[$(tput setaf 6)\]\w"
-GIT_PROMPT="\[$(tput setaf 5)\]\$(git symbolic-ref --short HEAD 2>/dev/null)"
-# Check if CUSTOM_HOSTNAME is set by ~/.ssh/config and use it in the prompt, otherwise use the default hostname
-if [ -n "$CUSTOM_HOSTNAME" ]; then
-    USER_PROMPT="\[$(tput setaf 4)\]\u\[$(tput setaf 2)\]@\[$(tput setaf 4)\]$CUSTOM_HOSTNAME"
+if [ -n "$TERM" ] && tput setaf 1 &>/dev/null; then
+    DIR_PROMPT="\[$(tput setaf 6)\]\w"
+    GIT_PROMPT="\[$(tput setaf 5)\]\$(git symbolic-ref --short HEAD 2>/dev/null)"
+    # Check if CUSTOM_HOSTNAME is set by ~/.ssh/config and use it in the prompt, otherwise use the default hostname
+    if [ -n "$CUSTOM_HOSTNAME" ]; then
+        USER_PROMPT="\[$(tput setaf 4)\]\u\[$(tput setaf 2)\]@\[$(tput setaf 4)\]$CUSTOM_HOSTNAME"
+    else
+        USER_PROMPT="\[$(tput setaf 4)\]\u\[$(tput setaf 2)\]@\[$(tput setaf 4)\]\h"
+    fi
+    PS1="${DIR_PROMPT} ${GIT_PROMPT}\n${USER_PROMPT} \[$(tput setaf 2)\]\$ \[$(tput sgr0)\]"
 else
-    USER_PROMPT="\[$(tput setaf 4)\]\u\[$(tput setaf 2)\]@\[$(tput setaf 4)\]\h"
+    DIR_PROMPT="\w"
+    GIT_PROMPT="\$(git symbolic-ref --short HEAD 2>/dev/null)"
+    USER_PROMPT="\u@\h"
+    PS1="${DIR_PROMPT} ${GIT_PROMPT}\n${USER_PROMPT} \$ "
 fi
-
-PS1="${DIR_PROMPT} ${GIT_PROMPT}\n${USER_PROMPT} \[$(tput setaf 2)\]\$ \[$(tput sgr0)\]"
 
 export DOCKER_BUILDKIT=1
 # Aliases
@@ -41,6 +46,7 @@ fi
 
 # PATH
 export PATH="$HOME/.local/share/bob/nvim-bin:$PATH"
+export PATH="$HOME/.local/bin:$PATH"
 
 y() {
     local tmp

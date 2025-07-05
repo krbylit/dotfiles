@@ -1,6 +1,7 @@
 return {
     "sphamba/smear-cursor.nvim",
     -- lazy = false,
+    enabled = vim.env.IS_SSH ~= "1",
 
     opts = {
         -- default, range
@@ -8,18 +9,29 @@ return {
         -- 0: no movement, 1: instantaneous
         stiffness = 1, -- 0.6      [0, 1]
 
+        -- Initial velocity factor in the direction opposite to the target
+        -- anticipation = 0.1, -- 0.55,
+
+        -- Velocity reduction over time. O: no reduction, 1: full reduction
+        -- Adjust "bounciness" of smear, higher reduces overshoot, lower more elastic smear
+        damping = 0.9, -- 0.65
+
         -- How fast the smear's tail moves towards the target.
         -- 0: no movement, 1: instantaneous
-        trailing_stiffness = 0.08, -- 0.3      [0, 1]
+        trailing_stiffness = 0.1, -- 0.3      [0, 1]
 
         -- How much the smear slows down when getting close to the target.
         -- < 0: less slowdown, > 0: more slowdown. Keep small, e.g. [-0.2, 0.2]
-        -- NOTE: new update throws many errors with this setting
+        -- NOTE: setting this seems to cause minor performance issues
         -- slowdown_exponent = -0.1,
 
         -- Controls if middle points are closer to the head or the tail.
         -- < 1: closer to the tail, > 1: closer to the head
         trailing_exponent = 1,
+
+        -- When to switch between rasterization methods
+        -- max_slope_horizontal = 0, -- 0.5,
+        -- min_slope_vertical = 0, -- 2,
 
         max_shade_no_matrix = 0, -- 0.75, -- 0: more overhangs, 1: more matrices
         matrix_pixel_threshold = 0, -- 0.7 -- 0: all pixels, 1: no pixel
@@ -69,7 +81,7 @@ return {
         filetypes_disabled = {},
 
         -- Smear cursor when entering or leaving command line mode
-        smear_to_cmd = true,
+        smear_to_cmd = false,
 
         -- Smear cursor when switching buffers or windows.
         smear_between_buffers = true,

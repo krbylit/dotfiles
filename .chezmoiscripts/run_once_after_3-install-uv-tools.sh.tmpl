@@ -1,11 +1,13 @@
 #!/usr/bin/env bash
 
-uv python install 3.13 --preview
+if command -v uv &>/dev/null; then
+    uv python install 3.13 --preview
 
-# Read and install Python packages from .chezmoidata/uv.toml
-{{ range .uv.tools -}}
-uv tool install {{ .name }}{{- if .version -}}{{- if eq (toString .version | regexMatch "^[0-9]") true -}}=={{- else -}}@{{- end }}{{ .version }}{{- end }}
-{{ end -}}
+    # Read and install Python packages from .chezmoidata/uv.toml
+    {{ range .uv.tools -}}
+    uv tool install {{ .name }}{{- if .version -}}{{- if eq (toString .version | regexMatch "^[0-9]") true -}}=={{- else -}}@{{- end }}{{ .version }}{{- end }}
+    {{ end -}}
 
-# Update system-wide Python CLI tools
-uv tool upgrade --all
+    # Update system-wide Python CLI tools
+    uv tool upgrade --all
+fi

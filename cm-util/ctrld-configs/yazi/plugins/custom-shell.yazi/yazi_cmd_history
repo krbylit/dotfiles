@@ -1,0 +1,4 @@
+fish -c 'echo hi;exit'
+fish -c 'sleep 10;exit'
+fish -c 'ls;exit'
+fish -c 'l;exit'

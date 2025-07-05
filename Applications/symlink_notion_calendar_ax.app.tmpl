@@ -1,0 +1,5 @@
+{{- $notion_cal := (joinPath .chezmoi.sourceDir .path.secrets "Applications/notion_calendar_ax.app") -}}
+{{- if (stat $notion_cal) -}}
+{{ $notion_cal }}
+{{- end -}}
+

@@ -118,7 +118,6 @@ yabai -m rule --add app="^YabaiIndicator$" opacity=0
 # Space assignments using arrays
 TERM_APPS=(
 	Ghostty
-	kitty
 )
 
 BROWSER_APPS=(
@@ -168,6 +167,7 @@ REF_APPS=(
 DEBUG_APPS=(
 	"Google Chrome"
     ChatGPT
+	kitty
 )
 
 UTIL_APPS=(

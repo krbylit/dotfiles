@@ -5,10 +5,19 @@
 # vim:fileencoding=utf-8:foldmethod=marker
 
 # : Flavor {{{
-
 [flavor]
-dark = "tokyonight-night"
+# dark = "tokyo-night"
+# # NOTE: tokyonight tabs are very difficult to read unless colored manually
+# [tabs]
+# active = { fg = "#2E3440", bg = "#8FBCBB", bold = true } # nord0 on nord7 (Teal/Mint)
+# inactive = { fg = "#8FBCBB", bg = "#3B4252" }            # nord7 on nord1
+
+# dark = "onedark"
+dark = "nord"
+# dark = "vscode-dark-plus"
+# dark = "rose-pine"
 # dark = "catppuccin-macchiato"
-light = "catppuccin-latte"
+# light = "catppuccin-latte"
+
 
 # : }}}

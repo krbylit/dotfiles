@@ -177,11 +177,11 @@ return {
                         -- 		end
                         -- 	end,
                         -- })
-                        vim.api.nvim_create_autocmd("BufWritePre", {
-                            buffer = bufnr,
-                            -- NOTE: This command correctly applies our project-specific ESLint config
-                            command = "EslintFixAll",
-                        })
+                        -- vim.api.nvim_create_autocmd("BufWritePre", {
+                        --     buffer = bufnr,
+                        --     -- NOTE: This command correctly applies our project-specific ESLint config
+                        --     command = "EslintFixAll",
+                        -- })
                     end,
                     root_dir = require("lspconfig").util.root_pattern(
                         "package.json",
@@ -206,50 +206,53 @@ return {
                         },
                     },
                 },
+                tsserver = { enabled = false },
+                vtsls = { enabled = false },
                 ts_ls = {
-                    on_attach = function(client, buffer)
-                        client.server_capabilities.hoverProvider = true
-                        client.server_capabilities.documentFormattingProvider = false
-                        client.server_capabilities.documentRangeFormattingProvider = false
-                    end,
-                    -- root_dir = util.root_pattern("tsconfig.json", "jsconfig.json", "package.json", ".git"), -- default config
-                    root_dir = require("lspconfig").util.root_pattern(
-                        "package.json",
-                        ".git",
-                        "tsconfig.json",
-                        "jsconfig.json"
-                    ), -- search for typescript last
-                    filetypes = {
-                        "javascript",
-                        "javascriptreact",
-                        "javascript.jsx",
-                        "typescript",
-                        "typescriptreact",
-                        "typescript.tsx",
-                    },
-                    settings = {
-                        -- implicitProjectConfiguration = {
-                        -- 	checkJs = false, -- NOTE: this seemed to fix the "no ts project" error in JS files, but hopefully the new root_dir fixes it
-                        -- },
-                        javascript = {
-                            suggest = {
-                                completeFunction = "Icon",
-                            },
-                            preferGoToSourceDefinition = true,
-                            referencesCodeLens = {
-                                enabled = true,
-                                showOn = "hover",
-                                showOnAllFunctions = true,
-                            },
-                            codeLens = {
-                                enable = true,
-                            },
-                            format = {
-                                enable = false,
-                                autoformat = false,
-                            },
-                        },
-                    },
+                    enabled = false,
+                    --     on_attach = function(client, buffer)
+                    --         client.server_capabilities.hoverProvider = true
+                    --         client.server_capabilities.documentFormattingProvider = false
+                    --         client.server_capabilities.documentRangeFormattingProvider = false
+                    --     end,
+                    --     -- root_dir = util.root_pattern("tsconfig.json", "jsconfig.json", "package.json", ".git"), -- default config
+                    --     root_dir = require("lspconfig").util.root_pattern(
+                    --         "package.json",
+                    --         ".git",
+                    --         "tsconfig.json",
+                    --         "jsconfig.json"
+                    --     ), -- search for typescript last
+                    --     filetypes = {
+                    --         "javascript",
+                    --         "javascriptreact",
+                    --         "javascript.jsx",
+                    --         "typescript",
+                    --         "typescriptreact",
+                    --         "typescript.tsx",
+                    --     },
+                    --     settings = {
+                    --         -- implicitProjectConfiguration = {
+                    --         -- 	checkJs = false, -- NOTE: this seemed to fix the "no ts project" error in JS files, but hopefully the new root_dir fixes it
+                    --         -- },
+                    --         javascript = {
+                    --             suggest = {
+                    --                 completeFunction = "Icon",
+                    --             },
+                    --             preferGoToSourceDefinition = true,
+                    --             referencesCodeLens = {
+                    --                 enabled = true,
+                    --                 showOn = "hover",
+                    --                 showOnAllFunctions = true,
+                    --             },
+                    --             codeLens = {
+                    --                 enable = true,
+                    --             },
+                    --             format = {
+                    --                 enable = false,
+                    --                 autoformat = false,
+                    --             },
+                    --         },
+                    --     },
                 },
                 pyright = {
                     settings = {

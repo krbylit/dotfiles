@@ -1,55 +1,64 @@
 ; Import user-specific settings (e.g. `user.name`, `user.email`)
 [include]
-	path = ~/.my.gitconfig
-[filter "lfs"]
-	clean = git-lfs clean -- %f
-	smudge = git-lfs smudge -- %f
-	process = git-lfs filter-process
-	required = true
-[pull]
-	ff = only
-[init]
-	defaultBranch = main
-[status]
-	; submoduleSummary = false
-
-; Diff with Delta settings
-[delta]
-	; Enable configs and themes from ~/.config/delta/
-	; gruvmax-fang
-	; features = unobtrusive-line-numbers decorations mellow-barbet
-	features = unobtrusive-line-numbers decorations
-	navigate = true    # use n and N to move between diff sections
-	side-by-side = true # diff view
-
+    path = ~/.my.gitconfig
 ; Import themes
 [include]
-	path = ~/.config/delta/themes.gitconfig
+    path = ~/.config/delta/themes.gitconfig
 
 ; Import configs
 [include]
-	path = ~/.config/delta/delta.gitconfig
+    path = ~/.config/delta/delta.gitconfig
+
+[filter "lfs"]
+    clean = git-lfs clean -- %f
+    smudge = git-lfs smudge -- %f
+    process = git-lfs filter-process
+    required = true
+
+[pull]
+    ff = only
+
+[init]
+    defaultBranch = main
+
+[status]
+    ; submoduleSummary = false
+
+; Diff with Delta settings
+[delta]
+    ; Enable configs and themes from ~/.config/delta/
+    ; gruvmax-fang
+    ; features = unobtrusive-line-numbers decorations mellow-barbet
+    features = unobtrusive-line-numbers decorations
+    navigate = true    # use n and N to move between diff sections
+    side-by-side = true # diff view
 
 [core]
-	pager = delta
-	editor = nvim
+    pager = delta
+    editor = nvim
 
 [interactive]
     diffFilter = delta --color-only
 
 [merge]
-	conflictstyle = zdiff3 ; truncates same lines from both sides in the conflict
-	; conflictstyle = diff2
-	; conflictstyle = diff3
-	tool = nvimdiff
+    conflictstyle = zdiff3 ; truncates same lines from both sides in the conflict
+    ; conflictstyle = diff2
+    ; conflictstyle = diff3
+    tool = nvimdiff
+
+; Color lines that have just been moved differently (enabled with `diff.colorMoved`)
+[color "diff"]
+    oldMoved = yellow bold
+    newMoved = cyan bold
 
 [diff]
     ; ignoreSubmodules = all
+    algorithm = histogram
     colorMoved = default
-	tool = nvimdiff
-	; tool = delta
+    tool = nvimdiff
+    ; tool = delta
 
 ; ; FIXME: delta not working for external diffs w/ lazygit (ctrl+t on files)
 ; [difftool "delta"]
-; 	cmd = "delta $LOCAL $REMOTE"
-; 	cmd = "delta --paging=never $LOCAL $REMOTE"
+    ; 	cmd = "delta $LOCAL $REMOTE"
+    ; 	cmd = "delta --paging=never $LOCAL $REMOTE"

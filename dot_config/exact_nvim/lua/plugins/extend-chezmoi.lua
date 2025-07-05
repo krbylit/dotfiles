@@ -3,33 +3,42 @@
 
 -- The below configuration wll allow you to automatically apply changes on files under chezmoi source path.
 --  e.g. ~/.local/share/chezmoi/*
-vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
-	pattern = { os.getenv("HOME") .. "/.local/share/chezmoi/*" },
-	callback = function(ev)
-		local bufnr = ev.buf
-		local edit_watch = function()
-			-- TODO: See if we can re-source nvim config after chezmoi apply
-			require("chezmoi.commands.__edit").watch(bufnr)
-		end
-		vim.schedule(edit_watch)
-	end,
-})
+if vim.env.IS_SSH ~= "1" then
+    vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
+        pattern = { os.getenv("HOME") .. "/.local/share/chezmoi/*" },
+        callback = function(ev)
+            local bufnr = ev.buf
+            local edit_watch = function()
+                -- TODO: See if we can re-source nvim config after chezmoi apply
+                require("chezmoi.commands.__edit").watch(bufnr)
+            end
+            vim.schedule(edit_watch)
+        end,
+    })
+end
 
 return {
-	"xvzc/chezmoi.nvim",
-	dependencies = { "nvim-lua/plenary.nvim" },
-	opts = {
-		edit = {
-			watch = false,
-			force = false,
-		},
-		notification = {
-			on_open = false,
-			on_apply = true,
-			on_watch = false,
-		},
-		telescope = {
-			select = { "<CR>" },
-		},
-	},
+    "xvzc/chezmoi.nvim",
+    enabled = vim.env.IS_SSH ~= "1",
+    dependencies = {
+        "nvim-lua/plenary.nvim",
+        {
+            "alker0/chezmoi.vim",
+            enabled = vim.env.IS_SSH ~= "1",
+        },
+    },
+    opts = {
+        edit = {
+            watch = false,
+            force = false,
+        },
+        notification = {
+            on_open = false,
+            on_apply = true,
+            on_watch = false,
+        },
+        telescope = {
+            select = { "<CR>" },
+        },
+    },
 }

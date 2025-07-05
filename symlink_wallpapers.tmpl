@@ -1,0 +1,5 @@
+{{- $wallpapers := (joinPath .chezmoi.sourceDir .path.secrets "wallpapers") -}}
+{{- if (stat $wallpapers) -}}
+{{ $wallpapers }}
+{{- end -}}
+
