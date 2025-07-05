@@ -62,6 +62,17 @@ require("bookmarks"):setup({
     },
 })
 
+-- FIXME: shell still not popping up for interactive use
+require("custom-shell"):setup({
+    history_path = "default",
+    save_history = false,
+})
+
+-- Allows yanked files to be pasted into ANY open yazi session
+require("session"):setup({
+    sync_yanked = true,
+})
+
 -- projects.yazi, store and restore sessions
 require("projects"):setup({
     save = {
