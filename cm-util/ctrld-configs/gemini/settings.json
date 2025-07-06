@@ -15,15 +15,6 @@
       "args": ["awslabs.terraform-mcp-server@latest"],
       "disabled": false
     },
-    "awslabs.aws-diagram-mcp-server": {
-      "autoApprove": [],
-      "env": {
-        "FASTMCP_LOG_LEVEL": "ERROR"
-      },
-      "command": "uvx",
-      "args": ["awslabs.aws-diagram-mcp-server"],
-      "disabled": false
-    },
     "fetch": {
       "args": ["{ABSOLUTE PATH TO FILE HERE}/dist/index.js"],
       "command": "node"
@@ -81,12 +72,7 @@
       "command": "npx"
     },
     "filesystem": {
-      "args": [
-        "-y",
-        "@modelcontextprotocol/server-filesystem",
-        "/Users/username/Desktop",
-        "/path/to/other/allowed/dir"
-      ],
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "~/"],
       "command": "npx"
     },
     "notionApi": {
@@ -105,9 +91,6 @@
         "GITHUB_PERSONAL_ACCESS_TOKEN",
         "ghcr.io/github/github-mcp-server"
       ],
-      "env": {
-        "GITHUB_PERSONAL_ACCESS_TOKEN": "<YOUR_TOKEN>"
-      },
       "command": "docker"
     },
     "awslabs.frontend-mcp-server": {
