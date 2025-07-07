@@ -26,6 +26,128 @@ require("full-border"):setup({
     type = ui.Border.ROUNDED,
 })
 
+-- Yaziline init and config
+require("yaziline"):setup({
+    -- color = "#98c379", -- main theme color
+    -- secondary_color = "#5A6078", -- secondary color
+    default_files_color = "darkgray", -- color of the file counter when it's inactive
+    selected_files_color = "white",
+    yanked_files_color = "green",
+    cut_files_color = "red",
+
+    separator_style = "curvy", -- "angly" | "curvy" | "liney" | "empty"
+    -- separator_open = "",
+    -- separator_close = "",
+    -- ░▒▓█
+    -- █▓▒░
+    separator_open = "░▒▓",
+    separator_close = "▓▒░",
+    separator_open_thin = "",
+    separator_close_thin = "",
+    separator_head = "",
+    separator_tail = "",
+    select_symbol = "",
+    yank_symbol = "󰆐",
+
+    filename_max_length = 24, -- truncate when filename > 24
+    filename_truncate_length = 6, -- leave 6 chars on both sides
+    filename_truncate_separator = "...", -- the separator of the truncated filename
+})
+
+-- -- Yatline theme must come before yatline init
+-- local tokyo_night_theme = require("yatline-tokyo-night"):setup("night") -- or moon/storm/day
+-- -- local gruvbox_material_theme = require("yatline-gruvbox-material"):setup({ mode = "dark", toughness = "medium" }) -- or "light" -- or "hard" | "soft"
+-- require("yatline"):setup({
+--     theme = tokyo_night_theme,
+--     -- theme = gruvbox_material_theme,
+--     section_separator = { open = "", close = "" },
+--     part_separator = { open = "", close = "" },
+--     inverse_separator = { open = "", close = "" },
+--
+--     style_a = {
+--         fg = "black",
+--         bg_mode = {
+--             normal = "white",
+--             select = "brightyellow",
+--             un_set = "brightred",
+--         },
+--     },
+--     style_b = { bg = "brightblack", fg = "brightwhite" },
+--     style_c = { bg = "black", fg = "brightwhite" },
+--
+--     permissions_t_fg = "green",
+--     permissions_r_fg = "yellow",
+--     permissions_w_fg = "red",
+--     permissions_x_fg = "cyan",
+--     permissions_s_fg = "white",
+--
+--     tab_width = 20,
+--     tab_use_inverse = true,
+--
+--     selected = { icon = "󰻭", fg = "yellow" },
+--     copied = { icon = "", fg = "green" },
+--     cut = { icon = "", fg = "red" },
+--
+--     total = { icon = "󰮍", fg = "yellow" },
+--     succ = { icon = "", fg = "green" },
+--     fail = { icon = "", fg = "red" },
+--     found = { icon = "󰮕", fg = "blue" },
+--     processed = { icon = "󰐍", fg = "green" },
+--
+--     show_background = false,
+--
+--     display_header_line = true,
+--     display_status_line = true,
+--
+--     component_positions = { "header", "tab", "status" },
+--
+--     header_line = {
+--         left = {
+--             section_a = {
+--                 { type = "line", custom = false, name = "tabs", params = { "left" } },
+--             },
+--             section_b = {},
+--             section_c = {},
+--         },
+--         right = {
+--             section_a = {
+--                 { type = "string", custom = false, name = "date", params = { "%A, %d %B %Y" } },
+--             },
+--             section_b = {
+--                 { type = "string", custom = false, name = "date", params = { "%X" } },
+--             },
+--             section_c = {},
+--         },
+--     },
+--
+--     status_line = {
+--         left = {
+--             section_a = {
+--                 { type = "string", custom = false, name = "tab_mode" },
+--             },
+--             section_b = {
+--                 { type = "string", custom = false, name = "hovered_size" },
+--             },
+--             section_c = {
+--                 { type = "string", custom = false, name = "hovered_path" },
+--                 { type = "coloreds", custom = false, name = "count" },
+--             },
+--         },
+--         right = {
+--             section_a = {
+--                 { type = "string", custom = false, name = "cursor_position" },
+--             },
+--             section_b = {
+--                 { type = "string", custom = false, name = "cursor_percentage" },
+--             },
+--             section_c = {
+--                 { type = "string", custom = false, name = "hovered_file_extension", params = { true } },
+--                 { type = "coloreds", custom = false, name = "permissions" },
+--             },
+--         },
+--     },
+-- })
+
 -- Custom right-hand display of size and last modified time
 function Linemode:size_and_mtime()
     local time = math.floor(self._file.cha.mtime or 0)
@@ -156,7 +278,7 @@ require("projects"):setup({
         update_after_save = true,
         update_after_load = true,
         -- NOTE: only works with `lua` save.method
-        load_after_start = true,
+        load_after_start = false,
     },
     merge = {
         event = "projects-merge",

@@ -83,6 +83,21 @@ use = "boydaihungst/pref-by-location"
 rev = "68f006d"
 hash = "67b7a8c5d39cba04d8e3c2f3581a3ab4"
 
+[[plugin.deps]]
+use = "imsi32/yatline"
+rev = "88bd1c5"
+hash = "981acbe9b758b1af3a8154c932bb936d"
+
+[[plugin.deps]]
+use = "wekauwau/yatline-tokyo-night"
+rev = "19dbd25"
+hash = "5f00a80a79b9f7fd8e24d6fa5dbb3ae"
+
+[[plugin.deps]]
+use = "llanosrocas/yaziline"
+rev = "e79b067"
+hash = "f590c5b7d0730e8d6023b1b34ddf7ead"
+
 [[flavor.deps]]
 use = "kalidyasin/yazi-flavors:tokyonight-night"
 rev = "fa19b40"
