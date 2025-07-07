@@ -73,6 +73,16 @@ use = "MasouShizuka/projects"
 rev = "a5e33db"
 hash = "3de26efded35814ba3e55e28f1c389a4"
 
+[[plugin.deps]]
+use = "boydaihungst/file-extra-metadata"
+rev = "ec035d6"
+hash = "b23b7db6beb2854a689c648a38843f8c"
+
+[[plugin.deps]]
+use = "boydaihungst/pref-by-location"
+rev = "68f006d"
+hash = "67b7a8c5d39cba04d8e3c2f3581a3ab4"
+
 [[flavor.deps]]
 use = "kalidyasin/yazi-flavors:tokyonight-night"
 rev = "fa19b40"
