@@ -1,5 +1,6 @@
 return {
     "ravitemer/mcphub.nvim",
+    enabled = vim.env.IS_SSH ~= "1",
     dependencies = {
         "nvim-lua/plenary.nvim",
     },

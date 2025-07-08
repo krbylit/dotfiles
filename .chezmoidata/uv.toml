@@ -8,4 +8,5 @@ tools = [
     { name = "yapf", version = "latest" },
     { name = "bagels", version = "latest" },
     { name = "cfn-lint", version = "latest" },
+    { name = "aider-chat", version = "latest" },
 ]
