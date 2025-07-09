@@ -14,10 +14,16 @@
 
 # dark = "onedark"
 dark = "nord"
+# dark = "kanagawa"
 # dark = "vscode-dark-plus"
 # dark = "rose-pine"
 # dark = "catppuccin-macchiato"
 # light = "catppuccin-latte"
+
+[mgr]
+# FIXME: doesn't seem to be making any effect
+# syntect_theme = "./flavors/catppuccin-macchiato.yazi/tmtheme.xml"
+# syntect_theme = "flavors/vscode-dark-modern.yazi/tmtheme.xml"
 
 
 # : }}}
