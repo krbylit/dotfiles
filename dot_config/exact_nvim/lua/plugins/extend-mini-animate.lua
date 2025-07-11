@@ -6,6 +6,7 @@
 local animate = require("mini.animate")
 return {
     "echasnovski/mini.animate",
+    enabled = vim.env.IS_SSH ~= "1",
     version = "*",
     opts = {
         -- Cursor path
