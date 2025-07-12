@@ -390,13 +390,5 @@ return {
             end,
             desc = "Zoxide",
         },
-        -- {
-        -- 	-- FIXME: conflicting with yanky keymap
-        -- 	"<leader>ps",
-        -- 	function()
-        -- 		Snacks.profiler.scratch()
-        -- 	end,
-        -- 	desc = "Profiler Scratch Bufer",
-        -- },
     },
 }

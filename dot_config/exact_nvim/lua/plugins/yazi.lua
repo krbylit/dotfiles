@@ -1,6 +1,7 @@
 ---@type LazySpec
 return {
     "mikavilpas/yazi.nvim",
+    lazy = true,
     event = "VeryLazy",
     dependencies = {
         { "nvim-lua/plenary.nvim", lazy = true },

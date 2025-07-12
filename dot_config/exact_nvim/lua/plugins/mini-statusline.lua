@@ -1,58 +1,98 @@
 -- TODO: implement truncation method for when window not big enough for file path
 local colors = require("tokyonight.colors").setup({ style = "night" })
 -- local colors = require("tokyonight").load({ style = "night" })
-local current_repo_name = ""
-local current_branch = ""
+
+-- Cache for git information to avoid repeated shell calls
+local git_cache = {
+    current_repo_name = "",
+    current_branch = "",
+    git_root = "",
+    last_dir = "",
+    is_exiting = false,
+}
 
 -- Function to update the repository name and branch based on the current buffer
 local function update_git_info()
+    -- Don't update during neovim exit
+    if git_cache.is_exiting then
+        return
+    end
+
     local current_dir = vim.fn.expand("%:p:h")
 
-    -- Get repo name
-    local git_dir = vim.fn.system("git -C " .. current_dir .. " rev-parse --show-toplevel 2>/dev/null")
+    -- Only update if directory has changed
+    if current_dir == git_cache.last_dir then
+        return
+    end
+
+    -- Get repo root (only call once)
+    local git_dir = vim.fn.system("git -C " .. vim.pesc(current_dir) .. " rev-parse --show-toplevel 2>/dev/null")
     if vim.v.shell_error == 0 then
-        current_repo_name = vim.fn.fnamemodify(git_dir, ":t"):gsub("\n", "")
+        git_cache.git_root = git_dir:gsub("\n", "")
+        git_cache.current_repo_name = vim.fn.fnamemodify(git_cache.git_root, ":t")
 
         -- Get branch name
-        local branch = vim.fn.system("git -C " .. current_dir .. " branch --show-current 2>/dev/null")
+        local branch = vim.fn.system("git -C " .. vim.pesc(current_dir) .. " branch --show-current 2>/dev/null")
         if vim.v.shell_error == 0 then
-            current_branch = branch:gsub("\n", "")
+            git_cache.current_branch = branch:gsub("\n", "")
         else
-            current_branch = ""
+            git_cache.current_branch = ""
         end
     else
-        current_repo_name = "" -- Reset if not in a git repo
-        current_branch = ""
+        -- Reset cache if not in a git repo
+        git_cache.current_repo_name = ""
+        git_cache.current_branch = ""
+        git_cache.git_root = ""
     end
+
+    git_cache.last_dir = current_dir
+end
+
+-- Function to get path relative to git root (using cached git_root)
+local function get_relative_path()
+    local full_path = vim.fn.expand("%:p")
+
+    -- Use cached git root instead of calling git again
+    if git_cache.git_root ~= "" then
+        local relative_path = full_path:gsub("^" .. vim.pesc(git_cache.git_root) .. "/?", "")
+        return relative_path
+    end
+
+    return full_path
 end
 
 -- Autocmd to update the git info whenever a buffer is entered or switched
-vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
+local autocmd_id = vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
     callback = function()
-        local cb = function()
-            update_git_info()
+        -- Use vim.schedule to avoid blocking UI, but check if we're exiting
+        if not git_cache.is_exiting then
+            vim.schedule(function()
+                if not git_cache.is_exiting then
+                    update_git_info()
+                end
+            end)
         end
-        vim.schedule(cb)
     end,
 })
 
--- Function to get path relative to git root
-local function get_relative_path()
-    local full_path = vim.fn.expand("%:p")
-    local git_root = vim.fn.system("git -C " .. vim.fn.expand("%:p:h") .. " rev-parse --show-toplevel"):gsub("\n", "")
-
-    -- If the path starts with git_root, remove it
-    local relative_path = full_path:gsub("^" .. vim.pesc(git_root) .. "/?", "")
-    return relative_path
-end
+-- Add autocmd to handle neovim exit
+vim.api.nvim_create_autocmd("VimLeavePre", {
+    callback = function()
+        git_cache.is_exiting = true
+        -- Clean up the buffer autocmd to prevent any scheduled callbacks
+        if autocmd_id then
+            pcall(vim.api.nvim_del_autocmd, autocmd_id)
+        end
+    end,
+})
 
 -- Custom section_filename to highlight the Git root directory and show branch
 local function custom_section_filename(args)
     local result = ""
 
-    -- If we're in a git repo
-    if current_repo_name ~= "" then
-        -- Get the relative path
+    -- If we're in a git repo (use cached values)
+    if git_cache.current_repo_name ~= "" then
+        -- Get the relative path (using cached git_root)
         local relative_path = get_relative_path()
         local parts = {}
         for part in relative_path:gmatch("[^/]+") do
@@ -66,14 +106,14 @@ local function custom_section_filename(args)
             "%%#MiniStatuslineBranchIcon#%s%%*",
             "" -- Branch icon
         )
-        result = result .. string.format("%%#MiniStatuslineBoldBranchName#%s%%*", current_branch)
+        result = result .. string.format("%%#MiniStatuslineBoldBranchName#%s%%*", git_cache.current_branch)
         -- Repo
         result = result
             .. string.format(
                 "%%#MiniStatuslineRepoIcon#%s%%*",
                 "" -- Repo icon
             )
-        result = result .. string.format("%%#MiniStatuslineBoldRepoName#%s%%*", current_repo_name)
+        result = result .. string.format("%%#MiniStatuslineBoldRepoName#%s%%*", git_cache.current_repo_name)
 
         -- Add the rest of the path if it exists
         if #parts > 0 then

@@ -1,4 +1,3 @@
-local wk = require("which-key")
 return {
     "folke/persistence.nvim",
     enabled = vim.env.IS_SSH ~= "1",

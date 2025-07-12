@@ -36,7 +36,7 @@ return {
 
             -- Subscroll generator based on total scroll
             -- subscroll = --<function: implements equal scroll with at most 60 steps>,
-            subscroll = animate.gen_subscroll.equal({ max_output_steps = 120 }),
+            subscroll = animate.gen_subscroll.equal({ max_output_steps = 60 }),
         },
 
         -- Window resize
@@ -58,17 +58,18 @@ return {
 
             -- Timing of animation (how steps will progress in time)
             -- timing = --<function: linear animation, total 250ms>,
+            timing = animate.gen_timing.linear({ duration = 800, unit = "total" }),
 
             -- Floating window config generator visualizing specific window
             -- winconfig = --<function: implements static window for 25 steps>,
             -- winconfig = animate.gen_winconfig.wipe({
-            --     predicate = is_not_single_window,
+            --     -- predicate = is_not_single_window,
             --     direction = "from_edge",
             -- }),
-            -- winconfig = animate.gen_winconfig.center({
-            --     predicate = is_not_single_window,
-            --     direction = "from_center",
-            -- }),
+            winconfig = animate.gen_winconfig.center({
+                -- predicate = is_not_single_window,
+                direction = "from_center",
+            }),
 
             -- 'winblend' (window transparency) generator for floating window
             -- winblend = --<function: implements equal linear steps from 80 to 100>,
@@ -81,17 +82,18 @@ return {
 
             -- Timing of animation (how steps will progress in time)
             -- timing = --<function: linear animation, total 250ms>,
+            timing = animate.gen_timing.linear({ duration = 800, unit = "total" }),
 
             -- Floating window config generator visualizing specific window
             -- winconfig = --<function: implements static window for 25 steps>,
             -- winconfig = animate.gen_winconfig.wipe({
-            --     predicate = is_not_single_window,
+            --     -- predicate = is_not_single_window,
             --     direction = "to_edge",
             -- }),
-            -- winconfig = animate.gen_winconfig.center({
-            --     predicate = is_not_single_window,
-            --     direction = "to_center",
-            -- }),
+            winconfig = animate.gen_winconfig.center({
+                -- predicate = is_not_single_window,
+                direction = "to_center",
+            }),
 
             -- 'winblend' (window transparency) generator for floating window
             -- winblend = --<function: implements equal linear steps from 80 to 100>,

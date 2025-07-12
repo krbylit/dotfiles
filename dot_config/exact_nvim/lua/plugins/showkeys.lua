@@ -3,6 +3,7 @@
 ---@type LazySpec
 return {
     "nvchad/showkeys",
+    lazy = true,
     cmd = "ShowkeysToggle",
     enabled = vim.env.IS_SSH ~= "1",
     opts = {
