@@ -132,6 +132,27 @@ on = ["P", "l"]
 run = "plugin projects load"
 desc = "Load project"
 
+# TODO: Figure out way to quick load certain projects. These maps just bring up the full project list like <P, l> does
+# [[mgr.prepend_keymap]]
+# on = ["P", "0"]
+# run = "plugin projects load 0"
+# desc = "Load project 0"
+#
+# [[mgr.prepend_keymap]]
+# on = ["P", "1"]
+# run = "plugin projects load 1"
+# desc = "Load project 1"
+#
+# [[mgr.prepend_keymap]]
+# on = ["P", "2"]
+# run = "plugin projects load 2"
+# desc = "Load project 2"
+#
+# [[mgr.prepend_keymap]]
+# on = ["P", "3"]
+# run = "plugin projects load 3"
+# desc = "Load project 3"
+
 [[mgr.prepend_keymap]]
 on = ["P", "P"]
 run = "plugin projects load_last"

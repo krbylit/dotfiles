@@ -36,7 +36,7 @@ return {
 
             -- Subscroll generator based on total scroll
             -- subscroll = --<function: implements equal scroll with at most 60 steps>,
-            subscroll = animate.gen_subscroll.equal({ max_output_steps = 60 }),
+            -- subscroll = animate.gen_subscroll.equal({ max_output_steps = 60 }),
         },
 
         -- Window resize
