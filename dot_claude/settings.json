@@ -1,0 +1,13 @@
+{
+    "enabledMcpjsonServers": [
+        "time",
+        "websearch",
+        "fetch",
+        "sequential-thinking",
+        "memory",
+        "git",
+        "filesystem",
+        "github",
+        "software-planning-tool"
+    ]
+}

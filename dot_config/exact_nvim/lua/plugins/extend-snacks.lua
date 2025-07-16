@@ -380,7 +380,9 @@ return {
                     },
                     ---@type string[]
                     globals = {
-                        -- "vim",
+                        "vim",
+                        "lazy",
+                        "require",
                         -- "vim.api",
                         -- "vim.keymap",
                         -- "Snacks.dashboard.Dashboard",

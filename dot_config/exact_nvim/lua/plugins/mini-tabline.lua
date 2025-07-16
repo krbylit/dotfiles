@@ -3,6 +3,9 @@ local colors = require("tokyonight.colors").setup({ style = "night" })
 
 return {
     "echasnovski/mini.tabline",
+    -- TODO: verify whether this is causing lag. It's showing up as top time spent when profiling.
+    -- e.g.      110.49 ms      121   󰊕  mini.tabline.make_tabline_string
+    enabled = true,
     version = false,
     dependencies = { "echasnovski/mini.icons" },
     -- cond = function()

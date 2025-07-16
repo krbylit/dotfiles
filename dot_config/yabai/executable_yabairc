@@ -166,6 +166,7 @@ REF_APPS=(
 
 DEBUG_APPS=(
 	"Google Chrome"
+    Claude
     ChatGPT
 	kitty
 )
@@ -228,6 +229,8 @@ yabai -m rule --add label="About This Mac" app="System Information" title="About
 # Don't manage 1Pass pop-ups
 yabai -m rule --add label="1Password Quick Access" app="^1Password$" title="^Quick Access — 1Password$" space=mouse
 yabai -m rule --add label="ChatGPT popup" app="^ChatGPT$" title!="^ChatGPT$" space=mouse
+# FIXME: Currently seems there's no great way to differentiate popup from main Claude window. May have to do it through scripting and checking float, sticky, level values, or window size.
+# yabai -m rule --add label="Claude popup" app="Claude" space=mouse
 
 # Special handling of Notion because the tab preview popup causes issues.
 yabai -m rule --add label="ref_Notion" \
