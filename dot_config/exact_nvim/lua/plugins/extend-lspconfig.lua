@@ -109,8 +109,9 @@ return {
             -- Enable this to enable the builtin LSP code lenses on Neovim >= 0.10.0
             -- Be aware that you also will need to properly configure your LSP server to
             -- provide the code lenses.
+            -- NOTE: Disabling codelens until we can get it under control. It seems this might be contributing to slowdown when many files are open.
             codelens = {
-                enabled = true,
+                enabled = false,
             },
             -- Enable lsp cursor word highlighting
             document_highlight = {
@@ -149,6 +150,9 @@ return {
                                 enable = true,
                             },
                         },
+                        codelens = {
+                            enabled = false,
+                        },
                     },
                 },
                 taplo = {
@@ -159,6 +163,9 @@ return {
                                 enable = true,
                             },
                         },
+                        codelens = {
+                            enabled = false,
+                        },
                     },
                 },
                 eslint = {
@@ -166,6 +173,8 @@ return {
                         client.server_capabilities.hoverProvider = false
                         client.server_capabilities.formattingProvider = true
                         client.server_capabilities.documentRangeFormattingProvider = true
+                        -- FIXME: trying to disable codelens here or below does not seem to work. It only takes effect if done at the global level above.
+                        client.server_capabilities.codeLensProvider = false
                         -- NOTE: autocmd for debugging. On save, prints all the formatters that ran
                         -- vim.api.nvim_create_autocmd("BufWritePre", {
                         -- 	callback = function()
@@ -203,6 +212,10 @@ return {
                                 enable = true,
                                 autoformat = true,
                             },
+                        },
+                        -- FIXME: trying to disable codelens here or above does not seem to work. It only takes effect if done at the global level above.
+                        codelens = {
+                            enabled = false,
                         },
                     },
                 },
@@ -269,10 +282,14 @@ return {
                                 provider = "yapf",
                             },
                         },
+                        codelens = {
+                            enabled = false,
+                        },
                     },
                     on_attach = function(client, bufnr)
                         -- Keep Pyright's core capabilities but disable hover
                         client.server_capabilities.hoverProvider = false
+                        client.server_capabilities.codeLensProvider = false
                     end,
                 },
                 -- ruff_lsp = {
@@ -298,6 +315,9 @@ return {
                                 -- diagnosticMode = "workspace",
                             },
                         },
+                        codelens = {
+                            enabled = false,
+                        },
                     },
                     on_attach = function(client, buffer)
                         -- Keep hover enabled for Jedi
@@ -316,6 +336,7 @@ return {
                         client.server_capabilities.signatureHelpProvider = false
                         client.server_capabilities.semanticTokensProvider = nil
                         client.server_capabilities.completionProvider = nil
+                        client.server_capabilities.codeLensProvider = false
                     end,
                 },
                 lua_ls = {
