@@ -59,7 +59,8 @@ opt.textwidth = 0
 opt.mousehide = true -- Hide mouse cursor while typing
 opt.winheight = 1 -- Minimum window height
 opt.winminheight = 1 -- Minimum window height
-opt.clipboard = vim.env.SSH_TTY and "" or "unnamedplus" -- Sync with system clipboard
+-- NOTE: after disabling/reenabling this, it seems to have the opposite affect. Perhaps yanky.nvim interaction?
+-- opt.clipboard = vim.env.IS_SSH and "" or "unnamedplus" -- Sync with system clipboard
 -- Enable diagnostics by default
 vim.diagnostic.enable(true)
 -- FORMATTING

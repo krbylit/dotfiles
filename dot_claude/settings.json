@@ -1,0 +1,36 @@
+{
+  "enabledMcpjsonServers": [
+    "time",
+    "websearch",
+    "fetch",
+    "sequential-thinking",
+    "memory",
+    "git",
+    "filesystem",
+    "github",
+    "software-planning-tool"
+  ],
+  "permissions": {
+    "allow": [
+      "Bash",
+      "Read",
+      "Edit",
+      "Glob",
+      "Grep",
+      "LS",
+      "MultiEdit",
+      "Task",
+      "TodoWrite",
+      "WebFetch",
+      "WebSearch",
+      "Write"
+    ],
+    "deny": []
+  },
+  "env": {
+    "DISABLE_NON_ESSENTIAL_MODEL_CALLS": "1",
+    "BASH_MAX_TIMEOUT_MS": "600000"
+  },
+  "includeCoAuthoredBy": false,
+  "cleanupPeriodDays": 90
+}

@@ -2,54 +2,178 @@
 # If you encounter any issues, please make an issue at https://github.com/yazi-rs/schemas.
 "$schema" = "https://yazi-rs.github.io/schemas/keymap.json"
 
-[[manager.prepend_keymap]]
+[[mgr.prepend_keymap]]
+on = "F"
+run = "plugin smart-filter"
+desc = "Smart filter"
+
+# FIXME: must-have keymaps for sort prefs by location plugin
+# [[mgr.prepend_keymap]]
+# on = ["."]
+# run = ["hidden toggle", "plugin pref-by-location -- save"]
+# desc = "Toggle the visibility of hidden files"
+# on = ["m", "s"]
+# run = ["linemode size", "plugin pref-by-location -- save"]
+# desc = "Linemode: size"
+# on = ["m", "p"]
+# run = ["linemode permissions", "plugin pref-by-location -- save"]
+# desc = "Linemode: permissions"
+# on = ["m", "b"]
+# run = ["linemode btime", "plugin pref-by-location -- save"]
+# desc = "Linemode: btime"
+# on = ["m", "m"]
+# run = ["linemode mtime", "plugin pref-by-location -- save"]
+# desc = "Linemode: mtime"
+# on = ["m", "o"]
+# run = ["linemode owner", "plugin pref-by-location -- save"]
+# desc = "Linemode: owner"
+# on = ["m", "n"]
+# run = ["linemode none", "plugin pref-by-location -- save"]
+# desc = "Linemode: none"
+# run = ["linemode size_and_mtime", "plugin pref-by-location -- save"]
+# desc = "Show Size and Modified time"
+# on = [",", "t"]
+# run = "plugin pref-by-location -- toggle"
+# desc = "Toggle auto-save preferences"
+# on = [",", "d"]
+# run = "plugin pref-by-location -- disable"
+# desc = "Disable auto-save preferences"
+# on = [",", "R"]
+# run = ["plugin pref-by-location -- reset"]
+# desc = "Reset preference of cwd"
+# on = [",", "m"]
+# run = [
+#     "sort mtime --reverse=no",
+#     "linemode mtime",
+#     "plugin pref-by-location -- save",
+# ]
+# desc = "Sort by modified time"
+# on = [",", "M"]
+# run = [
+#     "sort mtime --reverse",
+#     "linemode mtime",
+#     "plugin pref-by-location -- save",
+# ]
+# desc = "Sort by modified time (reverse)"
+# on = [",", "b"]
+# run = [
+#     "sort btime --reverse=no",
+#     "linemode btime",
+#     "plugin pref-by-location -- save",
+# ]
+# desc = "Sort by birth time"
+# on = [",", "B"]
+# run = [
+#     "sort btime --reverse",
+#     "linemode btime",
+#     "plugin pref-by-location -- save",
+# ]
+# desc = "Sort by birth time (reverse)"
+# on = [",", "e"]
+# run = ["sort extension --reverse=no", "plugin pref-by-location -- save"]
+# desc = "Sort by extension"
+# on = [",", "E"]
+# run = ["sort extension --reverse", "plugin pref-by-location -- save"]
+# desc = "Sort by extension (reverse)"
+# on = [",", "a"]
+# run = ["sort alphabetical --reverse=no", "plugin pref-by-location -- save"]
+# desc = "Sort alphabetically"
+# on = [",", "A"]
+# run = ["sort alphabetical --reverse", "plugin pref-by-location -- save"]
+# desc = "Sort alphabetically (reverse)"
+# on = [",", "n"]
+# run = ["sort natural --reverse=no", "plugin pref-by-location -- save"]
+# desc = "Sort naturally"
+# on = [",", "N"]
+# run = ["sort natural --reverse", "plugin pref-by-location -- save"]
+# desc = "Sort naturally (reverse)"
+# on = [",", "s"]
+# run = [
+#     "sort size --reverse=no",
+#     "linemode size",
+#     "plugin pref-by-location -- save",
+# ]
+# desc = "Sort by size"
+# on = [",", "S"]
+# run = [
+#     "sort size --reverse",
+#     "linemode size",
+#     "plugin pref-by-location -- save",
+# ]
+# desc = "Sort by size (reverse)"
+# on = [",", "r"]
+# run = ["sort random --reverse=no", "plugin pref-by-location -- save"]
+# desc = "Sort randomly"
+
+[[mgr.prepend_keymap]]
 on = ["'", ":"]
 run = 'plugin custom-shell -- auto --interactive --block'
 desc = "custom-shell as default, interactive, block"
 
-[[manager.prepend_keymap]]
+[[mgr.prepend_keymap]]
 on = ["'", ";"]
 run = 'plugin custom-shell -- auto --interactive'
 desc = "custom-shell as default, interactive"
 
 # Keymaps for projects.yazi, store and resume sessions
 # Save project on quit
-[[manager.prepend_keymap]]
+[[mgr.prepend_keymap]]
 on = ["q"]
 run = "plugin projects quit"
 desc = "Save last project and exit the process"
 
-[[manager.prepend_keymap]]
+[[mgr.prepend_keymap]]
 on = ["P", "s"]
 run = "plugin projects save"
 desc = "Save current project"
 
-[[manager.prepend_keymap]]
+[[mgr.prepend_keymap]]
 on = ["P", "l"]
 run = "plugin projects load"
 desc = "Load project"
 
-[[manager.prepend_keymap]]
+# TODO: Figure out way to quick load certain projects. These maps just bring up the full project list like <P, l> does
+# [[mgr.prepend_keymap]]
+# on = ["P", "0"]
+# run = "plugin projects load 0"
+# desc = "Load project 0"
+#
+# [[mgr.prepend_keymap]]
+# on = ["P", "1"]
+# run = "plugin projects load 1"
+# desc = "Load project 1"
+#
+# [[mgr.prepend_keymap]]
+# on = ["P", "2"]
+# run = "plugin projects load 2"
+# desc = "Load project 2"
+#
+# [[mgr.prepend_keymap]]
+# on = ["P", "3"]
+# run = "plugin projects load 3"
+# desc = "Load project 3"
+
+[[mgr.prepend_keymap]]
 on = ["P", "P"]
 run = "plugin projects load_last"
 desc = "Load last project"
 
-[[manager.prepend_keymap]]
+[[mgr.prepend_keymap]]
 on = ["P", "d"]
 run = "plugin projects delete"
 desc = "Delete project"
 
-[[manager.prepend_keymap]]
+[[mgr.prepend_keymap]]
 on = ["P", "D"]
 run = "plugin projects delete_all"
 desc = "Delete all projects"
 
-[[manager.prepend_keymap]]
+[[mgr.prepend_keymap]]
 on = ["P", "m"]
 run = "plugin projects 'merge current'"
 desc = "Merge current tab to other projects"
 
-[[manager.prepend_keymap]]
+[[mgr.prepend_keymap]]
 on = ["P", "M"]
 run = "plugin projects 'merge all'"
 desc = "Merge current project to other projects"
@@ -108,101 +232,101 @@ desc = "Merge current project to other projects"
 # desc = "Chmod on selected files"
 
 # vim-like bookmarks plugin keymaps
-[[manager.prepend_keymap]]
+[[mgr.prepend_keymap]]
 on = ["m"]
 run = "plugin bookmarks save"
 desc = "Save current position as a bookmark"
 
-[[manager.prepend_keymap]]
+[[mgr.prepend_keymap]]
 on = ["'"]
 run = "plugin bookmarks jump"
 desc = "Jump to a bookmark"
 
-[[manager.prepend_keymap]]
+[[mgr.prepend_keymap]]
 on = ["b", "d"]
 run = "plugin bookmarks delete"
 desc = "Delete a bookmark"
 
-[[manager.prepend_keymap]]
+[[mgr.prepend_keymap]]
 on = ["b", "D"]
 run = "plugin bookmarks delete_all"
 desc = "Delete all bookmarks"
 
 # relative-motion plugin vim motion keymaps
-[[manager.prepend_keymap]]
+[[mgr.prepend_keymap]]
 on = ["1"]
 run = "plugin relative-motions 1"
 desc = "Move in relative steps"
 
-[[manager.prepend_keymap]]
+[[mgr.prepend_keymap]]
 on = ["2"]
 run = "plugin relative-motions 2"
 desc = "Move in relative steps"
 
-[[manager.prepend_keymap]]
+[[mgr.prepend_keymap]]
 on = ["3"]
 run = "plugin relative-motions 3"
 desc = "Move in relative steps"
 
-[[manager.prepend_keymap]]
+[[mgr.prepend_keymap]]
 on = ["4"]
 run = "plugin relative-motions 4"
 desc = "Move in relative steps"
 
-[[manager.prepend_keymap]]
+[[mgr.prepend_keymap]]
 on = ["5"]
 run = "plugin relative-motions 5"
 desc = "Move in relative steps"
 
-[[manager.prepend_keymap]]
+[[mgr.prepend_keymap]]
 on = ["6"]
 run = "plugin relative-motions 6"
 desc = "Move in relative steps"
 
-[[manager.prepend_keymap]]
+[[mgr.prepend_keymap]]
 on = ["7"]
 run = "plugin relative-motions 7"
 desc = "Move in relative steps"
 
-[[manager.prepend_keymap]]
+[[mgr.prepend_keymap]]
 on = ["8"]
 run = "plugin relative-motions 8"
 desc = "Move in relative steps"
 
-[[manager.prepend_keymap]]
+[[mgr.prepend_keymap]]
 on = ["9"]
 run = "plugin relative-motions 9"
 desc = "Move in relative steps"
 
-[[manager.prepend_keymap]]
+[[mgr.prepend_keymap]]
 on = ["g", "m"]
 run = "cd ~/.local/share/chezmoi/"
 desc = "Go to the chezmoi directory"
 
-[[manager.prepend_keymap]]
+[[mgr.prepend_keymap]]
 on = ["s"]
 run = "plugin searchjump"
 desc = "searchjump mode"
 
 # install `ya pack -a Lil-Dank/lazygit`
-[[manager.prepend_keymap]]
+[[mgr.prepend_keymap]]
 on = ["g", "l"]
 run = "plugin lazygit"
 desc = "run lazygit"
 
-[[manager.prepend_keymap]]
+[[mgr.prepend_keymap]]
 # On macOS, open preview with Quick Look
 on = "<C-p>"
 run = '''
   shell 'qlmanage -p "$@"' --confirm
 '''
 
-[[manager.prepend_keymap]]
+[[mgr.prepend_keymap]]
 on = ["o", "f"]
 run = "shell 'open .'"
 desc = "Open Finder at the current directory"
 
-[manager]
+[mgr]
 
 keymap = [
     { on = "<Esc>", run = "escape", desc = "Exit visual mode, clear selected, or cancel search" },
@@ -432,6 +556,9 @@ keymap = [
         "<Space>",
     ], run = "cd --interactive", desc = "Go to a directory interactively" },
 
+    # Spotting
+    { on = "<Tab>", run = "spot", desc = "Spot hovered file" },
+
     # Tabs
     { on = "t", run = "tab_create --current", desc = "Create a new tab with CWD" },
 
@@ -480,6 +607,32 @@ keymap = [
     # Help
     { on = "~", run = "help", desc = "Open help" },
     { on = "?", run = "help", desc = "Open help" },
+    { on = "<F1>", run = "help", desc = "Open help" },
+]
+
+[spot]
+
+keymap = [
+    { on = "<Esc>", run = "close", desc = "Close the spot" },
+    { on = "<C-[>", run = "close", desc = "Close the spot" },
+    { on = "<C-c>", run = "close", desc = "Close the spot" },
+    { on = "<Tab>", run = "close", desc = "Close the spot" },
+
+    { on = "k", run = "arrow prev", desc = "Previous line" },
+    { on = "j", run = "arrow next", desc = "Next line" },
+    { on = "h", run = "swipe prev", desc = "Swipe to previous file" },
+    { on = "l", run = "swipe next", desc = "Swipe to next file" },
+
+    { on = "<Up>", run = "arrow prev", desc = "Previous line" },
+    { on = "<Down>", run = "arrow next", desc = "Next line" },
+    { on = "<Left>", run = "swipe prev", desc = "Swipe to previous file" },
+    { on = "<Right>", run = "swipe next", desc = "Swipe to next file" },
+
+    # Copy
+    { on = ["c", "c"], run = "copy cell", desc = "Copy selected cell" },
+
+    # Help
+    { on = "~", run = "help", desc = "Open help" },
     { on = "<F1>", run = "help", desc = "Open help" },
 ]
 
@@ -615,7 +768,7 @@ keymap = [
     { on = "<F1>", run = "help", desc = "Open help" },
 ]
 
-[completion]
+[cmp]
 
 keymap = [
     { on = "<C-c>", run = "close", desc = "Cancel completion" },

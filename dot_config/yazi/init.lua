@@ -26,6 +26,131 @@ require("full-border"):setup({
     type = ui.Border.ROUNDED,
 })
 
+-- Yaziline init and config
+-- FIXME: with this enabled, when we are in/go into an empty dir (even if there are dotfiles in the dir but we're not set to view them at the moment), all yazi UI disappears.
+-- It is because we had 'color' and 'secondary_color' commented out, and `Status:name()` looks for these
+-- TODO: Submit fix to yaziline. In `main.lua`, we just need to move `local style = self:style()` to the top of `function Status:name()`, because in empty dir it is referenced before declaration if we do not have `color` declared in setup options.
+require("yaziline"):setup({
+    color = "#8FBCBB", -- main theme color
+    secondary_color = "#434C5E", -- secondary color
+    default_files_color = "darkgray", -- color of the file counter when it's inactive
+    selected_files_color = "white",
+    yanked_files_color = "green",
+    cut_files_color = "red",
+
+    separator_style = "curvy", -- "angly" | "curvy" | "liney" | "empty"
+    -- separator_open = "",
+    -- separator_close = "",
+    -- ░▒▓█
+    -- █▓▒░
+    separator_open = "░▒▓",
+    separator_close = "▓▒░",
+    separator_open_thin = "",
+    separator_close_thin = "",
+    separator_head = "",
+    separator_tail = "",
+    select_symbol = "",
+    yank_symbol = "󰆐",
+
+    filename_max_length = 24, -- truncate when filename > 24
+    filename_truncate_length = 6, -- leave 6 chars on both sides
+    filename_truncate_separator = "...", -- the separator of the truncated filename
+})
+
+-- -- Yatline theme must come before yatline init
+-- local tokyo_night_theme = require("yatline-tokyo-night"):setup("night") -- or moon/storm/day
+-- -- local gruvbox_material_theme = require("yatline-gruvbox-material"):setup({ mode = "dark", toughness = "medium" }) -- or "light" -- or "hard" | "soft"
+-- require("yatline"):setup({
+--     theme = tokyo_night_theme,
+--     -- theme = gruvbox_material_theme,
+--     section_separator = { open = "", close = "" },
+--     part_separator = { open = "", close = "" },
+--     inverse_separator = { open = "", close = "" },
+--
+--     style_a = {
+--         fg = "black",
+--         bg_mode = {
+--             normal = "white",
+--             select = "brightyellow",
+--             un_set = "brightred",
+--         },
+--     },
+--     style_b = { bg = "brightblack", fg = "brightwhite" },
+--     style_c = { bg = "black", fg = "brightwhite" },
+--
+--     permissions_t_fg = "green",
+--     permissions_r_fg = "yellow",
+--     permissions_w_fg = "red",
+--     permissions_x_fg = "cyan",
+--     permissions_s_fg = "white",
+--
+--     tab_width = 20,
+--     tab_use_inverse = true,
+--
+--     selected = { icon = "󰻭", fg = "yellow" },
+--     copied = { icon = "", fg = "green" },
+--     cut = { icon = "", fg = "red" },
+--
+--     total = { icon = "󰮍", fg = "yellow" },
+--     succ = { icon = "", fg = "green" },
+--     fail = { icon = "", fg = "red" },
+--     found = { icon = "󰮕", fg = "blue" },
+--     processed = { icon = "󰐍", fg = "green" },
+--
+--     show_background = false,
+--
+--     display_header_line = true,
+--     display_status_line = true,
+--
+--     component_positions = { "header", "tab", "status" },
+--
+--     header_line = {
+--         left = {
+--             section_a = {
+--                 { type = "line", custom = false, name = "tabs", params = { "left" } },
+--             },
+--             section_b = {},
+--             section_c = {},
+--         },
+--         right = {
+--             section_a = {
+--                 { type = "string", custom = false, name = "date", params = { "%A, %d %B %Y" } },
+--             },
+--             section_b = {
+--                 { type = "string", custom = false, name = "date", params = { "%X" } },
+--             },
+--             section_c = {},
+--         },
+--     },
+--
+--     status_line = {
+--         left = {
+--             section_a = {
+--                 { type = "string", custom = false, name = "tab_mode" },
+--             },
+--             section_b = {
+--                 { type = "string", custom = false, name = "hovered_size" },
+--             },
+--             section_c = {
+--                 { type = "string", custom = false, name = "hovered_path" },
+--                 { type = "coloreds", custom = false, name = "count" },
+--             },
+--         },
+--         right = {
+--             section_a = {
+--                 { type = "string", custom = false, name = "cursor_position" },
+--             },
+--             section_b = {
+--                 { type = "string", custom = false, name = "cursor_percentage" },
+--             },
+--             section_c = {
+--                 { type = "string", custom = false, name = "hovered_file_extension", params = { true } },
+--                 { type = "coloreds", custom = false, name = "permissions" },
+--             },
+--         },
+--     },
+-- })
+
 -- Custom right-hand display of size and last modified time
 function Linemode:size_and_mtime()
     local time = math.floor(self._file.cha.mtime or 0)
@@ -62,6 +187,74 @@ require("bookmarks"):setup({
     },
 })
 
+-- file sort prefs by location
+local pref_by_location = require("pref-by-location")
+pref_by_location:setup({
+    -- -- Disable this plugin completely.
+    -- -- disabled = false -- true|false (Optional)
+    --
+    -- -- Hide "enable" and "disable" notifications.
+    -- -- no_notify = false -- true|false (Optional)
+    --
+    -- -- You can backup/restore this file. But don't use same file in the different OS.
+    -- -- save_path =  -- full path to save file (Optional)
+    -- --       - Linux/MacOS: os.getenv("HOME") .. "/.config/yazi/pref-by-location"
+    -- --       - Windows: os.getenv("APPDATA") .. "\\yazi\\config\\pref-by-location"
+    --
+    -- -- You don't have to set "prefs". Just use keymaps below work just fine
+    -- prefs = { -- (Optional)
+    --     -- location: String | Lua pattern (Required)
+    --     --   - Support literals full path, lua pattern (string.match pattern): https://www.lua.org/pil/20.2.html
+    --     --     And don't put ($) sign at the end of the location. %$ is ok.
+    --     --   - If you want to use special characters (such as . * ? + [ ] ( ) ^ $ %) in "location"
+    --     --     you need to escape them with a percent sign (%) or use a helper funtion `pref_by_location.is_literal_string`
+    --     --     Example: "/home/test/Hello (Lua) [world]" => { location = "/home/test/Hello %(Lua%) %[world%]", ....}
+    --     --     or { location = pref_by_location.is_literal_string("/home/test/Hello (Lua) [world]"), .....}
+    --
+    --     -- sort: {} (Optional) https://yazi-rs.github.io/docs/configuration/yazi#mgr.sort_by
+    --     --   - extension: "none"|"mtime"|"btime"|"extension"|"alphabetical"|"natural"|"size"|"random", (Optional)
+    --     --   - reverse: true|false (Optional)
+    --     --   - dir_first: true|false (Optional)
+    --     --   - translit: true|false (Optional)
+    --     --   - sensitive: true|false (Optional)
+    --
+    --     -- linemode: "none" |"size" |"btime" |"mtime" |"permissions" |"owner" (Optional) https://yazi-rs.github.io/docs/configuration/yazi#mgr.linemode
+    --     --   - Custom linemode also work. See the example below
+    --
+    --     -- show_hidden: true|false (Optional) https://yazi-rs.github.io/docs/configuration/yazi#mgr.show_hidden
+    --
+    --     -- Some examples:
+    --     -- Match any folder which has path start with "/mnt/remote/". Example: /mnt/remote/child/child2
+    --     { location = "^/mnt/remote/.*", sort = { "extension", reverse = false, dir_first = true, sensitive = false } },
+    --     -- Match any folder with name "Downloads"
+    --     { location = ".*/Downloads", sort = { "btime", reverse = true, dir_first = true }, linemode = "btime" },
+    --     -- Match exact folder with absolute path "/home/test/Videos".
+    --     -- Use helper function `pref_by_location.is_literal_string` to prevent the case where the path contains special characters
+    --     {
+    --         location = pref_by_location.is_literal_string("/home/test/Videos"),
+    --         sort = { "btime", reverse = true, dir_first = true },
+    --         linemode = "btime",
+    --     },
+    --
+    --     -- show_hidden for any folder with name "secret"
+    --     {
+    --         location = ".*/secret",
+    --         sort = { "natural", reverse = false, dir_first = true },
+    --         linemode = "size",
+    --         show_hidden = true,
+    --     },
+    --
+    --     -- Custom linemode also work
+    --     {
+    --         location = ".*/abc",
+    --         linemode = "size_and_mtime",
+    --     },
+    --     -- DO NOT ADD location = ".*". Which currently use your yazi.toml config as fallback.
+    --     -- That mean if none of the saved perferences is matched, then it will use your config from yazi.toml.
+    --     -- So change linemode, show_hidden, sort_xyz in yazi.toml instead.
+    -- },
+})
+
 -- FIXME: shell still not popping up for interactive use
 require("custom-shell"):setup({
     history_path = "default",
@@ -88,7 +281,7 @@ require("projects"):setup({
         update_after_save = true,
         update_after_load = true,
         -- NOTE: only works with `lua` save.method
-        load_after_start = true,
+        load_after_start = false,
     },
     merge = {
         event = "projects-merge",

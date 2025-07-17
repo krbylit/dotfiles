@@ -32,6 +32,6 @@ return {
         enabled = vim.env.IS_SSH ~= "1",
     },
     opts = {
-        model = "claude-3.5-sonnet",
+        model = "claude-sonnet-4",
     },
 }

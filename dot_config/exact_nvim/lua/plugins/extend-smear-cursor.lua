@@ -10,7 +10,7 @@ return {
         stiffness = 1, -- 0.6      [0, 1]
 
         -- Initial velocity factor in the direction opposite to the target
-        -- anticipation = 0.1, -- 0.55,
+        anticipation = 0.1, -- 0.55,
 
         -- Velocity reduction over time. O: no reduction, 1: full reduction
         -- Adjust "bounciness" of smear, higher reduces overshoot, lower more elastic smear
@@ -55,7 +55,7 @@ return {
         max_length = 120,
 
         -- Sets animation framerate
-        time_interval = 60, -- milliseconds
+        time_interval = 30, -- milliseconds
 
         -- Smear cursor in insert mode.
         -- See also `vertical_bar_cursor_insert_mode` and `distance_stop_animating_vertical_bar`.
@@ -65,7 +65,7 @@ return {
         -- Useful if the target changes and rapidly comes back to its original position.
         -- E.g. when hitting a keybinding that triggers CmdlineEnter.
         -- Increase if the cursor makes weird jumps when hitting keys.
-        delay_animation_start = 5, -- milliseconds
+        delay_animation_start = 1, -- milliseconds
 
         -- Amount of time the cursor has to stay still before triggering animation.
         -- Useful if the target changes and rapidly comes back to its original position.

@@ -28,6 +28,6 @@ function s --wraps='ssh' --description 'SSH with custom config'
         export CUSTOM_HOSTNAME=$CUSTOM_HOSTNAME;
         export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY;
         export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID;
-        bash --login -c 'zellij attach $session_name 2>/dev/null || zellij --session $session_name 2>/dev/null || bash --login'
+        bash --login -c 'zellij attach $session_name 2>/dev/null || zellij --session $session_name 2>/dev/null || tmux new-session -A -s "$session_name" || bash --login'
     "
 end

@@ -8,9 +8,6 @@ local disabled = {
     { "lukas-reineke/indent-blankline.nvim", enabled = false },
     { "ggandor/flit.nvim", enabled = false },
     { "glepnir/dashboard-nvim", enabled = false },
-    -- FIXME: Disabling SchemaStore for now as it loads a massive amount of schemas on LSP attach and slows things down, particularly slowing quitting nvim.
-    -- Disabling in `extend-lspconfig.lua` did not seem to stop it either.
-    -- { "b0o/SchemaStore.nvim", enabled = false },
 }
 
 -- NOTE: Alternative to disable based on SSH env. Can also set in plugin Lua file with

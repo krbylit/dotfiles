@@ -1,6 +1,10 @@
 # Get editor completions based on the config schema
 "$schema" = 'https://starship.rs/config-schema.json'
 
+# Icons
+#   
+#            
+
 # Set for git timeout error received in chezmoi dir (though may be due to using tethered connection)
 command_timeout = 5000
 

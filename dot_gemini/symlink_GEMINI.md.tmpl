@@ -1,0 +1,4 @@
+{{- $geminiInstruct := (joinPath .chezmoi.sourceDir .path.secrets "ctrld-configs/gemini/GEMINI.md") -}}
+{{- if (stat $geminiInstruct) -}}
+{{ $geminiInstruct }}
+{{- end -}}

@@ -58,6 +58,37 @@ return {
         picker = {
             -- ---@type snacks.picker.matcher.Config
             -- matcher = {},
+            actions = {
+                -- NOTE: Custom action to delete all buffers NOT selected in picker (inverse of <C-x>)
+                bufdelete_unselected = function(picker)
+                    -- Reset picker state BEFORE deleting buffers
+                    picker.preview:reset()
+
+                    local selected_items = picker:selected()
+                    local selected_bufs = {}
+                    for _, item in ipairs(selected_items) do
+                        if item.buf then
+                            selected_bufs[item.buf] = true
+                        end
+                    end
+
+                    local all_listed_bufs = vim.tbl_filter(function(bufnr)
+                        return vim.bo[bufnr].buflisted
+                    end, vim.api.nvim_list_bufs())
+
+                    for _, bufnr in ipairs(all_listed_bufs) do
+                        if not selected_bufs[bufnr] then
+                            require("snacks.bufdelete").delete(bufnr)
+                        end
+                    end
+
+                    -- Clear selection and reset target AFTER deleting
+                    picker.list:set_selected()
+                    picker.list:set_target()
+                    -- Refresh the picker to show the new state
+                    picker:find()
+                end,
+            },
             ---@type snacks.picker.sources.Config
             win = {
                 -- input window
@@ -69,6 +100,9 @@ return {
                         ["<C-p>"] = { "focus_preview", mode = { "i", "n" } }, -- or any other key you prefer
                         ["<C-i>"] = { "focus_input", mode = { "i", "n" } }, -- or any other key you prefer
                         ["<C-l>"] = { "focus_list", mode = { "i", "n" } }, -- or any other key you prefer
+                        -- NOTE: This lets us close all selected buffers. We get this from default snacks keymaps as <C-x>, but put here explicitly for documentation
+                        ["<C-x>"] = { "bufdelete", mode = { "n", "i" } },
+                        ["<C-o>"] = { "bufdelete_unselected", mode = { "n", "i" } },
                     },
                 },
                 -- result list window
@@ -79,6 +113,10 @@ return {
                         ["<C-p>"] = { "focus_preview", mode = { "i", "n" } }, -- or any other key you prefer
                         ["<C-i>"] = { "focus_input", mode = { "i", "n" } }, -- or any other key you prefer
                         ["<C-l>"] = { "focus_list", mode = { "i", "n" } }, -- or any other key you prefer
+                        ["<C-x>"] = { "bufdelete", mode = { "n", "i" } },
+                        -- NOTE: We also get this from default snacks keymaps.
+                        ["dd"] = "bufdelete",
+                        ["<C-o>"] = { "bufdelete_unselected", mode = { "n", "i" } },
                     },
                 },
                 -- preview window
@@ -342,7 +380,9 @@ return {
                     },
                     ---@type string[]
                     globals = {
-                        -- "vim",
+                        "vim",
+                        "lazy",
+                        "require",
                         -- "vim.api",
                         -- "vim.keymap",
                         -- "Snacks.dashboard.Dashboard",
@@ -390,13 +430,5 @@ return {
             end,
             desc = "Zoxide",
         },
-        -- {
-        -- 	-- FIXME: conflicting with yanky keymap
-        -- 	"<leader>ps",
-        -- 	function()
-        -- 		Snacks.profiler.scratch()
-        -- 	end,
-        -- 	desc = "Profiler Scratch Bufer",
-        -- },
     },
 }

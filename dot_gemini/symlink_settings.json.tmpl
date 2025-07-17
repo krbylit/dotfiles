@@ -1,1 +1,4 @@
-{{ .chezmoi.sourceDir }}{{ .path.ctrld_configs }}/gemini/settings.json
+{{- $geminiSettings := (joinPath .chezmoi.sourceDir .path.secrets "ctrld-configs/gemini/settings.json") -}}
+{{- if (stat $geminiSettings) -}}
+{{ $geminiSettings }}
+{{- end -}}

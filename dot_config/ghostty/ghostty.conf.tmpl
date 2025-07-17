@@ -65,6 +65,9 @@ keybind = super+j=next_tab
 keybind = super+r=new_split:right
 keybind = super+d=new_split:down
 
+keybind = super+alt+j=move_tab:1
+keybind = super+alt+k=move_tab:-1
+
 keybind = super+shift+l=goto_split:right
 keybind = super+shift+h=goto_split:left
 keybind = super+shift+k=goto_split:top
@@ -93,7 +96,9 @@ macos-auto-secure-input = false
 macos-secure-input-indication = true
 working-directory = home
 clipboard-read = allow
-shell-integration-features = true
+# shell-integration-features = true
+shell-integration = detect
+shell-integration-features = cursor,sudo,title
 
 # initial-command = ghostty -e fish ghostty_animation
 # command =

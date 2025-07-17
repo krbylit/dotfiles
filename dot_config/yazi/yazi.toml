@@ -119,6 +119,7 @@ image_bound = [0, 0]
 suppress_preload = false
 
 [plugin]
+spotters = [{ name = "*", run = "file-extra-metadata" }]
 prepend_previewers = [
     # Use rich-cli (Textual) for previews
     # `ya pack -a AnirudhG07/rich-preview`
