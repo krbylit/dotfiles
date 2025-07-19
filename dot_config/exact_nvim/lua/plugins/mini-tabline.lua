@@ -3,6 +3,7 @@ local colors = require("tokyonight.colors").setup({ style = "night" })
 
 return {
     "echasnovski/mini.tabline",
+    enabled = vim.env.IS_SSH ~= "1",
     -- TODO: verify whether this is causing lag. It's showing up as top time spent when profiling.
     -- e.g.      110.49 ms      121   󰊕  mini.tabline.make_tabline_string
     version = false,
@@ -51,9 +52,8 @@ return {
                     -- 	return "" -- Hide tabline label
                     -- end
                     -- Add a `+` to the end of the tab label if the buffer is modified
-                    -- local suffix = vim.bo[buf_id].modified and "+ " or ""
-                    -- return default_format(buf_id, label) .. suffix
-                    return default_format(buf_id, label)
+                    local suffix = vim.bo[buf_id].modified and "+ " or ""
+                    return default_format(buf_id, label) .. suffix
                 end
             end)(),
             -- Whether to set Vim's settings for tabline (make it always shown and

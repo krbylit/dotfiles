@@ -4,6 +4,14 @@
 -- JS troubleshooting: https://www.reddit.com/r/neovim/comments/pxcxku/getting_tsserver_to_work_with_javascript_instead/
 -- NOTE: `lua =vim.lsp.get_active_clients()[1].name` to get active lsp clients for debugging
 -- NOTE: `lua =vim.lsp.get_active_clients()[1].server_capabilities` to show what that client is doing
+-- NOTE: Disable watching files globally to see if it causes the slowdown after time
+local ok, wf = pcall(require, "vim.lsp._watchfiles")
+if ok then
+    -- disable lsp watcher. Too slow on linux
+    wf._watchfunc = function()
+        return function() end
+    end
+end
 
 ---@type LazySpec
 ---@diagnostic disable: missing-fields
@@ -24,7 +32,7 @@ return {
                         "codelldb",
                         "docker-compose-language-service",
                         "dockerfile-language-server",
-                        "eslint-lsp",
+                        -- "eslint-lsp",
                         "eslint_d",
                         "hadolint",
                         "jedi-language-server",
@@ -35,7 +43,7 @@ return {
                         "markdownlint-cli2",
                         "marksman",
                         "nil",
-                        "prettier",
+                        -- "prettier",
                         "prettierd",
                         "pylint",
                         "pyright",
@@ -45,10 +53,10 @@ return {
                         "shellcheck",
                         "shfmt",
                         "stylua",
-                        "taplo",
+                        -- "taplo",
                         "typescript-language-server",
                         "vim-language-server",
-                        "yaml-language-server",
+                        -- "yaml-language-server",
                         "yapf",
                     },
                 },
@@ -78,15 +86,16 @@ return {
             diagnostics = {
                 underline = true,
                 update_in_insert = false,
-                virtual_text = {
-                    virt_text_hide = false,
-                    spacing = 4,
-                    source = "if_many",
-                    prefix = "●",
-                    -- this will set set the prefix to a function that returns the diagnostics icon based on the severity
-                    -- this only works on a recent 0.10.0 build. Will be set to "●" when not supported
-                    -- prefix = "icons",
-                },
+                virtual_text = false,
+                -- virtual_text = {
+                --     virt_text_hide = true,
+                --     spacing = 4,
+                --     source = "if_many",
+                --     prefix = "●",
+                --     -- this will set set the prefix to a function that returns the diagnostics icon based on the severity
+                --     -- this only works on a recent 0.10.0 build. Will be set to "●" when not supported
+                --     -- prefix = "icons",
+                -- },
                 severity_sort = true,
                 signs = {
                     text = {
@@ -138,6 +147,7 @@ return {
             ---@diagnostic disable: missing-fields
             servers = {
                 yamlls = {
+                    enabled = false,
                     filetypes = { "yaml", "yml" },
                     settings = {
                         yaml = {
@@ -156,6 +166,7 @@ return {
                     },
                 },
                 taplo = {
+                    enabled = false,
                     filetypes = { "toml", "chezmoitomltmpl" },
                     settings = {
                         toml = {
@@ -169,6 +180,7 @@ return {
                     },
                 },
                 eslint = {
+                    enabled = true,
                     on_attach = function(client, buffer)
                         client.server_capabilities.hoverProvider = false
                         client.server_capabilities.formattingProvider = true
@@ -287,57 +299,64 @@ return {
                         },
                     },
                     on_attach = function(client, bufnr)
-                        -- Keep Pyright's core capabilities but disable hover
-                        client.server_capabilities.hoverProvider = false
-                        client.server_capabilities.codeLensProvider = false
+                        -- -- Keep Pyright's core capabilities but disable hover since we get that from Jedi
+                        -- client.server_capabilities.hoverProvider = false
+                        -- client.server_capabilities.codeLensProvider = false
+                        client.server_capabilities.hoverProvider = true
+                        client.server_capabilities.codeLensProvider = true
                     end,
                 },
-                -- ruff_lsp = {
-                --     on_attach = function(client, bufnr)
-                --         client.server_capabilities.documentFormattingProvider = false
-                --         client.server_capabilities.hoverProvider = false
-                --     end,
-                --     init_options = {
-                --         settings = {
-                --             args = {},
-                --         },
-                --     },
-                -- },
+                ruff = {
+                    enabled = false,
+                },
+                ruff_lsp = {
+                    enabled = false,
+                    --     on_attach = function(client, bufnr)
+                    --         client.server_capabilities.documentFormattingProvider = false
+                    --         client.server_capabilities.hoverProvider = false
+                    --     end,
+                    --     init_options = {
+                    --         settings = {
+                    --             args = {},
+                    --         },
+                    --     },
+                },
                 jedi_language_server = {
-                    settings = {
-                        jedi = {
-                            workspace = {
-                                diagnosticMode = "openFilesOnly",
-                                -- diagnosticMode = "workspace",
-                            },
-                            analysis = {
-                                diagnosticMode = "openFilesOnly",
-                                -- diagnosticMode = "workspace",
-                            },
-                        },
-                        codelens = {
-                            enabled = false,
-                        },
-                    },
-                    on_attach = function(client, buffer)
-                        -- Keep hover enabled for Jedi
-                        client.server_capabilities.hoverProvider = true
-
-                        -- Disable other capabilities to avoid duplication with Pyright
-                        client.server_capabilities.documentFormattingProvider = false
-                        client.server_capabilities.definitionProvider = false
-                        client.server_capabilities.referencesProvider = false
-                        client.server_capabilities.documentSymbolProvider = false
-                        client.server_capabilities.workspaceSymbolProvider = false
-                        client.server_capabilities.implementationProvider = false
-                        client.server_capabilities.declarationProvider = false
-                        client.server_capabilities.renameProvider = false
-                        client.server_capabilities.codeActionProvider = false
-                        client.server_capabilities.signatureHelpProvider = false
-                        client.server_capabilities.semanticTokensProvider = nil
-                        client.server_capabilities.completionProvider = nil
-                        client.server_capabilities.codeLensProvider = false
-                    end,
+                    enabled = false,
+                    -- settings = {
+                    --     jedi = {
+                    --         workspace = {
+                    --             diagnosticMode = "openFilesOnly",
+                    --             -- diagnosticMode = "workspace",
+                    --         },
+                    --         analysis = {
+                    --             diagnosticMode = "openFilesOnly",
+                    --             -- diagnosticMode = "workspace",
+                    --         },
+                    --     },
+                    --     codelens = {
+                    --         enabled = false,
+                    --     },
+                    -- },
+                    -- on_attach = function(client, buffer)
+                    --     -- Keep hover enabled for Jedi
+                    --     client.server_capabilities.hoverProvider = true
+                    --
+                    --     -- Disable other capabilities to avoid duplication with Pyright
+                    --     client.server_capabilities.documentFormattingProvider = false
+                    --     client.server_capabilities.definitionProvider = false
+                    --     client.server_capabilities.referencesProvider = false
+                    --     client.server_capabilities.documentSymbolProvider = false
+                    --     client.server_capabilities.workspaceSymbolProvider = false
+                    --     client.server_capabilities.implementationProvider = false
+                    --     client.server_capabilities.declarationProvider = false
+                    --     client.server_capabilities.renameProvider = false
+                    --     client.server_capabilities.codeActionProvider = false
+                    --     client.server_capabilities.signatureHelpProvider = false
+                    --     client.server_capabilities.semanticTokensProvider = nil
+                    --     client.server_capabilities.completionProvider = nil
+                    --     client.server_capabilities.codeLensProvider = false
+                    -- end,
                 },
                 lua_ls = {
                     settings = {

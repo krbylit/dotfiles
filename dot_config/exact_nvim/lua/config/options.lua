@@ -80,6 +80,12 @@ else
 end
 
 -- ================================================================
+-- LAZYVIM OPTS
+-- ================================================================
+-- Set to "basedpyright" to use basedpyright instead of pyright.
+vim.g.lazyvim_python_lsp = "pyright"
+
+-- ================================================================
 -- FILETYPES
 -- ================================================================
 -- Enable `csvview.nvim` for CSV files

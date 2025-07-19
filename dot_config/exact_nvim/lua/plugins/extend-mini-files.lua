@@ -94,9 +94,10 @@ return {
         -- General options
         options = {
             -- Whether to delete permanently or move into module-specific trash
-            permanent_delete = true,
+            -- NOTE: Enabled, trashed files to go ~/.local/share/nvim/mini.files/trash
+            permanent_delete = false,
             -- Whether to use for editing directories
-            use_as_default_explorer = true,
+            use_as_default_explorer = false,
         },
 
         -- Customization of explorer windows

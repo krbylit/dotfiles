@@ -3,7 +3,7 @@
 --     -- return #vim.api.nvim_tabpage_list_wins(tabpage_id) > 1
 --     return true
 -- end
-local animate = require("mini.animate")
+-- local animate = require("mini.animate")
 return {
     "echasnovski/mini.animate",
     -- enabled = vim.env.IS_SSH ~= "1",
@@ -21,7 +21,7 @@ return {
 
             -- Path generator for visualized cursor movement
             -- path = --<function: implements shortest line path no longer than 1000>,
-            path = animate.gen_path.line(),
+            -- path = animate.gen_path.line(),
             -- path = animate.gen_path.walls(),
             -- path = animate.gen_path.spiral(),
             -- path = animate.gen_path.angle(),
@@ -59,7 +59,7 @@ return {
 
             -- Timing of animation (how steps will progress in time)
             -- timing = --<function: linear animation, total 250ms>,
-            timing = animate.gen_timing.linear({ duration = 800, unit = "total" }),
+            -- timing = animate.gen_timing.linear({ duration = 800, unit = "total" }),
 
             -- Floating window config generator visualizing specific window
             -- winconfig = --<function: implements static window for 25 steps>,
@@ -67,10 +67,10 @@ return {
             --     -- predicate = is_not_single_window,
             --     direction = "from_edge",
             -- }),
-            winconfig = animate.gen_winconfig.center({
-                -- predicate = is_not_single_window,
-                direction = "from_center",
-            }),
+            -- winconfig = animate.gen_winconfig.center({
+            --     -- predicate = is_not_single_window,
+            --     direction = "from_center",
+            -- }),
 
             -- 'winblend' (window transparency) generator for floating window
             -- winblend = --<function: implements equal linear steps from 80 to 100>,
@@ -83,7 +83,7 @@ return {
 
             -- Timing of animation (how steps will progress in time)
             -- timing = --<function: linear animation, total 250ms>,
-            timing = animate.gen_timing.linear({ duration = 800, unit = "total" }),
+            -- timing = animate.gen_timing.linear({ duration = 800, unit = "total" }),
 
             -- Floating window config generator visualizing specific window
             -- winconfig = --<function: implements static window for 25 steps>,
@@ -91,10 +91,10 @@ return {
             --     -- predicate = is_not_single_window,
             --     direction = "to_edge",
             -- }),
-            winconfig = animate.gen_winconfig.center({
-                -- predicate = is_not_single_window,
-                direction = "to_center",
-            }),
+            -- winconfig = animate.gen_winconfig.center({
+            --     -- predicate = is_not_single_window,
+            --     direction = "to_center",
+            -- }),
 
             -- 'winblend' (window transparency) generator for floating window
             -- winblend = --<function: implements equal linear steps from 80 to 100>,
