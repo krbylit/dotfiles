@@ -332,11 +332,18 @@ confirmOnQuit: false
 quitOnTopLevelReturn: true
 # Config relating to things outside of Lazygit like how files are opened, copying to clipboard, etc
 os:
+  # FIXME: these attempt to force lazygit to open files with "o" keymap in the same nvim tab. This is what's creating multiple tabs in an nvim session.
+  # edit: 'nvr --remote {{filename}}'
+  # editAtLine: 'nvr --remote +{{line}} {{filename}}'
+  edit: 'nvr -s {{filename}}'
+  editAtLine: 'nvr -s +{{line}} {{filename}}'
+  # edit: 'nvr --remote-wait {{filename}}'
+  # editAtLine: 'nvr --remote-wait +{{line}} {{filename}}'
   # Command for editing a file. Should contain "{{filename}}".
-  edit: ""
+  # edit: ""
   # Command for editing a file at a given line number. Should contain
   # "{{filename}}", and may optionally contain "{{line}}".
-  editAtLine: ""
+  # editAtLine: ""
   # Same as EditAtLine, except that the command needs to wait until the
   # window is closed.
   editAtLineAndWait: ""

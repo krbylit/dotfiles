@@ -157,7 +157,7 @@ return {
                                 ["https://s3.amazonaws.com/cfn-resource-specifications-us-east-1-prod/schemas/2.15.0/all-spec.json"] = "/**/cloudFormation/**",
                             },
                             schemaStore = {
-                                enable = true,
+                                enable = false,
                             },
                         },
                         codelens = {
@@ -171,7 +171,7 @@ return {
                     settings = {
                         toml = {
                             schemaStore = {
-                                enable = true,
+                                enable = false,
                             },
                         },
                         codelens = {

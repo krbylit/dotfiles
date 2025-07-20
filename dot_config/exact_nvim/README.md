@@ -46,6 +46,7 @@ Based on LazyVim, with separate config options for nvim in VS Code and in the te
 ## Neovim Guides
 
 - [Basic Config Tutorial](https://martinlwx.github.io/en/config-neovim-from-scratch/)
+- [snacks.scratch custom picker](https://github.com/folke/snacks.nvim/discussions/765#discussion-7880347)
 
 ### Lua
 
