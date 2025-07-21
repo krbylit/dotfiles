@@ -5,13 +5,13 @@
 -- NOTE: `lua =vim.lsp.get_active_clients()[1].name` to get active lsp clients for debugging
 -- NOTE: `lua =vim.lsp.get_active_clients()[1].server_capabilities` to show what that client is doing
 -- NOTE: Disable watching files globally to see if it causes the slowdown after time
-local ok, wf = pcall(require, "vim.lsp._watchfiles")
-if ok then
-    -- disable lsp watcher. Too slow on linux
-    wf._watchfunc = function()
-        return function() end
-    end
-end
+-- local ok, wf = pcall(require, "vim.lsp._watchfiles")
+-- if ok then
+--     -- disable lsp watcher. Too slow on linux
+--     wf._watchfunc = function()
+--         return function() end
+--     end
+-- end
 
 ---@type LazySpec
 ---@diagnostic disable: missing-fields
@@ -86,16 +86,15 @@ return {
             diagnostics = {
                 underline = true,
                 update_in_insert = false,
-                virtual_text = false,
-                -- virtual_text = {
-                --     virt_text_hide = true,
-                --     spacing = 4,
-                --     source = "if_many",
-                --     prefix = "●",
-                --     -- this will set set the prefix to a function that returns the diagnostics icon based on the severity
-                --     -- this only works on a recent 0.10.0 build. Will be set to "●" when not supported
-                --     -- prefix = "icons",
-                -- },
+                virtual_text = {
+                    virt_text_hide = true,
+                    spacing = 4,
+                    source = "if_many",
+                    prefix = "●",
+                    -- this will set set the prefix to a function that returns the diagnostics icon based on the severity
+                    -- this only works on a recent 0.10.0 build. Will be set to "●" when not supported
+                    -- prefix = "icons",
+                },
                 severity_sort = true,
                 signs = {
                     text = {
@@ -120,7 +119,7 @@ return {
             -- provide the code lenses.
             -- NOTE: Disabling codelens until we can get it under control. It seems this might be contributing to slowdown when many files are open.
             codelens = {
-                enabled = false,
+                enabled = true,
             },
             -- Enable lsp cursor word highlighting
             document_highlight = {
@@ -161,7 +160,7 @@ return {
                             },
                         },
                         codelens = {
-                            enabled = false,
+                            enabled = true,
                         },
                     },
                 },
@@ -175,18 +174,21 @@ return {
                             },
                         },
                         codelens = {
-                            enabled = false,
+                            enabled = true,
                         },
                     },
                 },
                 eslint = {
                     enabled = true,
                     on_attach = function(client, buffer)
+                        -- Enable/disable diagnostics virt text for this server
+                        local namespace = vim.lsp.diagnostic.get_namespace(client.id)
+                        vim.diagnostic.config({ virtual_text = true }, namespace)
                         client.server_capabilities.hoverProvider = false
                         client.server_capabilities.formattingProvider = true
                         client.server_capabilities.documentRangeFormattingProvider = true
                         -- FIXME: trying to disable codelens here or below does not seem to work. It only takes effect if done at the global level above.
-                        client.server_capabilities.codeLensProvider = false
+                        client.server_capabilities.codeLensProvider = true
                         -- NOTE: autocmd for debugging. On save, prints all the formatters that ran
                         -- vim.api.nvim_create_autocmd("BufWritePre", {
                         -- 	callback = function()
@@ -227,7 +229,7 @@ return {
                         },
                         -- FIXME: trying to disable codelens here or above does not seem to work. It only takes effect if done at the global level above.
                         codelens = {
-                            enabled = false,
+                            enabled = true,
                         },
                     },
                 },
@@ -295,10 +297,13 @@ return {
                             },
                         },
                         codelens = {
-                            enabled = false,
+                            enabled = true,
                         },
                     },
                     on_attach = function(client, bufnr)
+                        -- Enable/disable diagnostics virt text for this server
+                        local namespace = vim.lsp.diagnostic.get_namespace(client.id)
+                        vim.diagnostic.config({ virtual_text = true }, namespace)
                         -- -- Keep Pyright's core capabilities but disable hover since we get that from Jedi
                         -- client.server_capabilities.hoverProvider = false
                         -- client.server_capabilities.codeLensProvider = false
