@@ -5,13 +5,12 @@
 -- NOTE: `lua =vim.lsp.get_active_clients()[1].name` to get active lsp clients for debugging
 -- NOTE: `lua =vim.lsp.get_active_clients()[1].server_capabilities` to show what that client is doing
 -- NOTE: Disable watching files globally to see if it causes the slowdown after time
--- local ok, wf = pcall(require, "vim.lsp._watchfiles")
--- if ok then
---     -- disable lsp watcher. Too slow on linux
---     wf._watchfunc = function()
---         return function() end
---     end
--- end
+local ok, wf = pcall(require, "vim.lsp._watchfiles")
+if ok then
+    wf._watchfunc = function()
+        return function() end
+    end
+end
 
 ---@type LazySpec
 ---@diagnostic disable: missing-fields
