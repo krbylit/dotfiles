@@ -1,0 +1,5 @@
+{{- $claudeConfig := (joinPath .chezmoi.sourceDir .path.secrets "ctrld-configs/claude/dot_claude.json") -}}
+{{- if (stat $claudeConfig) -}}
+{{ $claudeConfig }}
+{{- end -}}
+
