@@ -5,12 +5,12 @@
 -- NOTE: `lua =vim.lsp.get_active_clients()[1].name` to get active lsp clients for debugging
 -- NOTE: `lua =vim.lsp.get_active_clients()[1].server_capabilities` to show what that client is doing
 -- NOTE: Disable watching files globally to see if it causes the slowdown after time
-local ok, wf = pcall(require, "vim.lsp._watchfiles")
-if ok then
-    wf._watchfunc = function()
-        return function() end
-    end
-end
+-- local ok, wf = pcall(require, "vim.lsp._watchfiles")
+-- if ok then
+--     wf._watchfunc = function()
+--         return function() end
+--     end
+-- end
 
 ---@type LazySpec
 ---@diagnostic disable: missing-fields
@@ -89,10 +89,10 @@ return {
                     virt_text_hide = true,
                     spacing = 4,
                     source = "if_many",
-                    prefix = "●",
+                    -- prefix = "●",
                     -- this will set set the prefix to a function that returns the diagnostics icon based on the severity
                     -- this only works on a recent 0.10.0 build. Will be set to "●" when not supported
-                    -- prefix = "icons",
+                    prefix = "icons",
                 },
                 severity_sort = true,
                 signs = {
@@ -155,7 +155,7 @@ return {
                                 ["https://s3.amazonaws.com/cfn-resource-specifications-us-east-1-prod/schemas/2.15.0/all-spec.json"] = "/**/cloudFormation/**",
                             },
                             schemaStore = {
-                                enable = false,
+                                enable = true,
                             },
                         },
                         codelens = {
@@ -169,7 +169,7 @@ return {
                     settings = {
                         toml = {
                             schemaStore = {
-                                enable = false,
+                                enable = true,
                             },
                         },
                         codelens = {
@@ -233,52 +233,52 @@ return {
                     },
                 },
                 tsserver = { enabled = false },
-                vtsls = { enabled = false },
+                vtsls = { enabled = true },
                 ts_ls = {
-                    enabled = false,
-                    --     on_attach = function(client, buffer)
-                    --         client.server_capabilities.hoverProvider = true
-                    --         client.server_capabilities.documentFormattingProvider = false
-                    --         client.server_capabilities.documentRangeFormattingProvider = false
-                    --     end,
-                    --     -- root_dir = util.root_pattern("tsconfig.json", "jsconfig.json", "package.json", ".git"), -- default config
-                    --     root_dir = require("lspconfig").util.root_pattern(
-                    --         "package.json",
-                    --         ".git",
-                    --         "tsconfig.json",
-                    --         "jsconfig.json"
-                    --     ), -- search for typescript last
-                    --     filetypes = {
-                    --         "javascript",
-                    --         "javascriptreact",
-                    --         "javascript.jsx",
-                    --         "typescript",
-                    --         "typescriptreact",
-                    --         "typescript.tsx",
-                    --     },
-                    --     settings = {
-                    --         -- implicitProjectConfiguration = {
-                    --         -- 	checkJs = false, -- NOTE: this seemed to fix the "no ts project" error in JS files, but hopefully the new root_dir fixes it
-                    --         -- },
-                    --         javascript = {
-                    --             suggest = {
-                    --                 completeFunction = "Icon",
-                    --             },
-                    --             preferGoToSourceDefinition = true,
-                    --             referencesCodeLens = {
-                    --                 enabled = true,
-                    --                 showOn = "hover",
-                    --                 showOnAllFunctions = true,
-                    --             },
-                    --             codeLens = {
-                    --                 enable = true,
-                    --             },
-                    --             format = {
-                    --                 enable = false,
-                    --                 autoformat = false,
-                    --             },
-                    --         },
-                    --     },
+                    enabled = true,
+                    on_attach = function(client, buffer)
+                        client.server_capabilities.hoverProvider = true
+                        client.server_capabilities.documentFormattingProvider = false
+                        client.server_capabilities.documentRangeFormattingProvider = false
+                    end,
+                    -- root_dir = util.root_pattern("tsconfig.json", "jsconfig.json", "package.json", ".git"), -- default config
+                    root_dir = require("lspconfig").util.root_pattern(
+                        "package.json",
+                        ".git",
+                        "tsconfig.json",
+                        "jsconfig.json"
+                    ), -- search for typescript last
+                    filetypes = {
+                        "javascript",
+                        "javascriptreact",
+                        "javascript.jsx",
+                        "typescript",
+                        "typescriptreact",
+                        "typescript.tsx",
+                    },
+                    settings = {
+                        -- implicitProjectConfiguration = {
+                        -- 	checkJs = false, -- NOTE: this seemed to fix the "no ts project" error in JS files, but hopefully the new root_dir fixes it
+                        -- },
+                        javascript = {
+                            suggest = {
+                                completeFunction = "Icon",
+                            },
+                            preferGoToSourceDefinition = true,
+                            referencesCodeLens = {
+                                enabled = true,
+                                showOn = "hover",
+                                showOnAllFunctions = true,
+                            },
+                            codeLens = {
+                                enable = true,
+                            },
+                            format = {
+                                enable = false,
+                                autoformat = false,
+                            },
+                        },
+                    },
                 },
                 pyright = {
                     settings = {
