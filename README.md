@@ -55,7 +55,7 @@ We have a pre-commit hook that scans for secrets with `gitleaks` on every commit
 
 - Save `jsonextra.tmpl` in root dir:
 
-  ```
+  ```bash
   [{{ $lastFinding := (sub (len . ) 1) }}
   {{- range $i, $finding := . }}{{with $finding}}
       {

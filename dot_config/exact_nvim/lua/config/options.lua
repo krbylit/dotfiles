@@ -49,9 +49,10 @@ opt.smartindent = true -- Insert indents automatically
 -- opt.colorcolumn = "88" -- Shows a column line at 80 characters
 opt.wrap = true -- Set text display to wrap. Doesn't change text in buffer
 opt.linebreak = true -- wrap long lines at a blank
-opt.breakindent = true -- Enable break indent
-opt.breakindentopt = "shift:2,sbr,min:20"
-opt.showbreak = "↳" -- Show a symbol for a line break
+-- NOTE: Disabling line wrap indicators as we're getting these from statuscol.nvim
+-- opt.breakindent = true -- Enable break indent
+-- opt.breakindentopt = "shift:2,sbr,min:20"
+-- opt.showbreak = "↳" -- Show a symbol for a line break
 opt.wrapmargin = 0
 opt.textwidth = 0
 -- opt.showbreak = "	" -- Show a symbol for a line break
@@ -132,6 +133,23 @@ vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
     pattern = diagnostics_disabled_extensions,
     callback = function()
         -- Disable diagnostics only in current buffer.
+        vim.diagnostic.enable(false, { bufnr = 0 })
+    end,
+})
+
+-- Disable diagnostics by file path (useful for disabling diagnostics in Scratch buffers, where filetype is set as the buffer from which Scratch is opened).
+local raw_patterns = {
+    vim.fn.expand("$HOME") .. "/.local/share/nvim/scratch/*",
+    -- add more patterns here
+}
+-- Strip newlines if they exist, as `patterns` disallows those.
+-- local diagnostics_disabled_dirs = vim.tbl_map(function(p)
+--     return p:gsub("\n", "")
+-- end, raw_patterns)
+local diagnostics_disabled_dirs = raw_patterns
+vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
+    pattern = diagnostics_disabled_dirs,
+    callback = function()
         vim.diagnostic.enable(false, { bufnr = 0 })
     end,
 })

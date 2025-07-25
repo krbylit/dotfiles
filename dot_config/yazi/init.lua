@@ -27,9 +27,6 @@ require("full-border"):setup({
 })
 
 -- Yaziline init and config
--- FIXME: with this enabled, when we are in/go into an empty dir (even if there are dotfiles in the dir but we're not set to view them at the moment), all yazi UI disappears.
--- It is because we had 'color' and 'secondary_color' commented out, and `Status:name()` looks for these
--- TODO: Submit fix to yaziline. In `main.lua`, we just need to move `local style = self:style()` to the top of `function Status:name()`, because in empty dir it is referenced before declaration if we do not have `color` declared in setup options.
 require("yaziline"):setup({
     color = "#8FBCBB", -- main theme color
     secondary_color = "#434C5E", -- secondary color

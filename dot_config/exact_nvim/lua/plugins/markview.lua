@@ -25,6 +25,9 @@ return {
         }):map("<leader>um")
     end,
     opts = {
+        preview = {
+            hybrid_modes = { "n", "i" },
+        },
         experimental = {
             check_rtp = true,
             check_rtp_message = false,

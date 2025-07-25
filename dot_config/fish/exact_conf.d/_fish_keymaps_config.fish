@@ -13,8 +13,10 @@ bind \cw backward-kill-word
 bind --mode default yy vi_copy_to_clipboard
 bind --mode insert ctrl-s 'commandline -f repaint; ripgrep_live (commandline -b)'
 bind --mode default ctrl-s 'commandline -f repaint; ripgrep_live (commandline -b)'
-bind --mode insert ctrl-a search_and_replace
-bind --mode default ctrl-a search_and_replace
+bind --mode insert ctrl-z 'commandline -f repaint; zi (commandline -b)'
+bind --mode default ctrl-z 'commandline -f repaint; zi (commandline -b)'
+# bind --mode insert ctrl-a search_and_replace
+# bind --mode default ctrl-a search_and_replace
 
 # Atuin keymaps
 # set -gx ATUIN_NOBIND true

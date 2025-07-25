@@ -4,11 +4,15 @@
 >
 > - Add feature to `s.fish` to store locally a hash of the files to copy and check for modifications that way before calling `rsync`, then also do not make `rsync` do the hash check
 
+## CLI Tools
+
+- `serpl`: search and replace text tool
+
 ## Tips
 
 - `fzf` (e.g. <c-f>) can easily search with glob-like patterns
 
-  - https://junegunn.github.io/fzf/search-syntax/
+  - <https://junegunn.github.io/fzf/search-syntax/>
     How to get better results
     A common mistake is to type unnecessary spaces. You may type git add to search for git add something. But if you do so, fzf sees it as two separate terms and process them separately, so it will match add ... git which is not what you want.
 
@@ -29,10 +33,12 @@
   - e.g. `python !Library` search for 'python' excluding the Library/ dir
   - very useful to employ the available keymaps:
     - <c-f> to find files
-    - <c-s> to search command history
-    - <c-p> to search running processes (n.b. `kill ` > <tab> to fzf for a proc to kill)
+    - <c-s> to search with ripgrep
+    - <c-e> to search command history
+    - <c-p> to search running processes (n.b. `kill` > <tab> to fzf for a proc to kill)
     - <c-g> to search git commits
     - <c-v> to search env vars (nice instead of `echo $ENV_VAR`)
+    - <c-z> to search dirs with zoxide `zi`
     - <tab> brings up autocomplete suggestions in fzf finder (same as ctrl+i, but this doesn't use fzf). if done at empty prompt, we can browse all commands and their man page in the preview
 
 - `bang-bang` plugin allows prev cmd/arg substitution with `!!` for cmd and `!$` for arg
@@ -53,7 +59,7 @@
 ## Plugin docs
 
 - `eza`
-  - https://github.com/eza-community/eza
+  - <https://github.com/eza-community/eza>
 - jorgebucaran/fisher
 - patrickf1/fzf.fish
 - jorgebucaran/nvm.fish

@@ -56,7 +56,6 @@ if [ "${IS_SSH}" != "1" ]; then
         npm install -g @anthropic-ai/claude-code
     fi
 fi
-
 if [ "${IS_SSH}" != "1" ]; then
     if ! command -v tclock &>/dev/null; then
         cargo install clock-tui
@@ -70,8 +69,22 @@ if [ "${IS_SSH}" != "1" ]; then
 fi
 
 if [ "${IS_SSH}" != "1" ]; then
+    if ! command -v hygg &>/dev/null; then
+        cargo install --locked hygg
+    fi
+fi
+
+if [ "${IS_SSH}" != "1" ]; then
     if ! command -v nerdlog &>/dev/null; then
         go install github.com/dimonomid/nerdlog/cmd/nerdlog@master
+    fi
+fi
+
+if [ "${IS_SSH}" != "1" ]; then
+    if ! command -v stormy &>/dev/null; then
+        if command -v go &>/dev/null; then
+            go install github.com/ashish0kumar/stormy@latest
+        fi
     fi
 fi
 

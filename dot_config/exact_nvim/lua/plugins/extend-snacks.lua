@@ -6,8 +6,8 @@ local function get_terminal_size()
     return width, height
 end
 local terminal_width, terminal_height = get_terminal_size()
-local logo_file = require("misc.dash-helpers").random_logo_file()
-local measure_logo_file = require("misc.dash-helpers").measure_logo_file
+local logo_file = require("utils.dashboard.dash-helpers").random_logo_file()
+local measure_logo_file = require("utils.dashboard.dash-helpers").measure_logo_file
 local logo_width, logo_height = measure_logo_file(logo_file)
 local pane_width = math.floor(terminal_width / 4)
 
@@ -32,6 +32,10 @@ return {
             },
         },
         bigfile = { enabled = true },
+        ---@type snacks.terminal.Config
+        terminal = {
+            win = { style = "terminal" },
+        },
         input = { enabled = true },
         ---@type snacks.lazygit.Config: snacks.terminal.Opts
         lazygit = { enabled = true },
@@ -41,10 +45,26 @@ return {
             timeout = 3000,
         },
         quickfile = {},
-        -- FIXME: disabling for now as upgrading from snacks #70afc4225ac8ae3e6c8af88d205b03991a173af3 makes scroll not work well (likely due to our high scrolloff setting?)
+        -- FIX: disabling for now as upgrading from snacks #70afc4225ac8ae3e6c8af88d205b03991a173af3 makes scroll not work well (likely due to our high scrolloff setting?)
         scroll = { enabled = false },
         scope = { enabled = true },
-        statuscolumn = { enabled = true },
+        ---@type snacks.statuscolumn.Config
+        -- FIX: Doesn't appear to be working in conjunction with statuscol. We like snacks because the folds and git signs are nice.
+        statuscolumn = {
+            enabled = true,
+            left = { "mark", "sign" }, -- priority of signs on the left (high to low)
+            right = { "fold", "git" }, -- priority of signs on the right (high to low)
+            folds = {
+                open = true, -- show open fold icons
+                git_hl = true, -- use Git Signs hl for fold icons
+            },
+            git = {
+                -- patterns to match Git signs
+                patterns = { "GitSign", "MiniDiffSign" },
+            },
+            refresh = 100, -- refresh at most every 100ms
+        },
+        ---@type snacks.words.Config
         words = { enabled = true },
         ---@type snacks.zen.Config
         zen = {
