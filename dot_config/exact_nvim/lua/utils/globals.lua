@@ -221,3 +221,10 @@ tools.group_number = function(num, sep)
     num = tostring(num)
     return num:reverse():gsub("(%d%d%d)", "%1" .. sep):reverse():gsub("^,", "")
 end
+
+tools.is_scratch_buffer = function(bufnr)
+    local scratch_dir = vim.fn.expand("$HOME") .. "/.local/share/nvim/scratch/"
+    bufnr = bufnr or 0
+    local name = vim.api.nvim_buf_get_name(bufnr)
+    return name:match(scratch_dir) ~= nil
+end

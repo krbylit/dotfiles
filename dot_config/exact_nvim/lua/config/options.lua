@@ -50,8 +50,8 @@ opt.smartindent = true -- Insert indents automatically
 opt.wrap = true -- Set text display to wrap. Doesn't change text in buffer
 opt.linebreak = true -- wrap long lines at a blank
 -- NOTE: Disabling line wrap indicators as we're getting these from statuscol.nvim
--- opt.breakindent = true -- Enable break indent
--- opt.breakindentopt = "shift:2,sbr,min:20"
+opt.breakindent = true -- Enable break indent
+opt.breakindentopt = "shift:2,sbr,min:20"
 -- opt.showbreak = "↳" -- Show a symbol for a line break
 opt.wrapmargin = 0
 opt.textwidth = 0
@@ -75,9 +75,11 @@ if vim.fn.has("nvim-0.10") == 1 then
     opt.foldexpr = "v:lua.require'lazyvim.util'.ui.foldexpr()"
     opt.foldmethod = "expr"
     opt.foldtext = ""
+    opt.foldcolumn = "1"
 else
     opt.foldmethod = "indent"
     opt.foldtext = "v:lua.require'lazyvim.util'.ui.foldtext()"
+    opt.foldcolumn = "1"
 end
 
 -- ================================================================
@@ -124,32 +126,28 @@ vim.api.nvim_create_autocmd("FileType", {
     end,
 })
 
+-- Disable by file extension
 local diagnostics_disabled_extensions = {
     "*.tfvars",
     "*.tfbackend",
 }
--- Disable diagnostics by file extension
+-- Disable by file path
+local diagnostics_disabled_dirs = {
+    vim.fn.expand("$HOME") .. "/.local/share/nvim/scratch/*",
+}
+-- Combine for autocmd
+local diagnostics_disabled_patterns = {}
+vim.list_extend(diagnostics_disabled_patterns, diagnostics_disabled_dirs)
+vim.list_extend(diagnostics_disabled_patterns, diagnostics_disabled_extensions)
+-- Strip newlines if they exist, as `patterns` disallows those.
+diagnostics_disabled_patterns = vim.tbl_map(function(p)
+    return p:gsub("\n", "")
+end, diagnostics_disabled_patterns)
+-- Disable diagnostics by other patterns
 vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
-    pattern = diagnostics_disabled_extensions,
+    pattern = diagnostics_disabled_patterns,
     callback = function()
         -- Disable diagnostics only in current buffer.
-        vim.diagnostic.enable(false, { bufnr = 0 })
-    end,
-})
-
--- Disable diagnostics by file path (useful for disabling diagnostics in Scratch buffers, where filetype is set as the buffer from which Scratch is opened).
-local raw_patterns = {
-    vim.fn.expand("$HOME") .. "/.local/share/nvim/scratch/*",
-    -- add more patterns here
-}
--- Strip newlines if they exist, as `patterns` disallows those.
--- local diagnostics_disabled_dirs = vim.tbl_map(function(p)
---     return p:gsub("\n", "")
--- end, raw_patterns)
-local diagnostics_disabled_dirs = raw_patterns
-vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
-    pattern = diagnostics_disabled_dirs,
-    callback = function()
         vim.diagnostic.enable(false, { bufnr = 0 })
     end,
 })
@@ -196,6 +194,7 @@ vim.filetype.add({
     pattern = {
         [".*dot_zshrc"] = "zsh",
         [".*dot_gitconfig"] = "gitconfig",
+        [".*gitconfig$"] = "gitconfig",
         [".*dot_bash.*"] = "bash",
         [".*ssh/.*config"] = "sshconfig",
     },

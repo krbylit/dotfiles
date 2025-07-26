@@ -51,18 +51,18 @@ return {
         ---@type snacks.statuscolumn.Config
         -- FIX: Doesn't appear to be working in conjunction with statuscol. We like snacks because the folds and git signs are nice.
         statuscolumn = {
-            enabled = true,
-            left = { "mark", "sign" }, -- priority of signs on the left (high to low)
-            right = { "fold", "git" }, -- priority of signs on the right (high to low)
-            folds = {
-                open = true, -- show open fold icons
-                git_hl = true, -- use Git Signs hl for fold icons
-            },
-            git = {
-                -- patterns to match Git signs
-                patterns = { "GitSign", "MiniDiffSign" },
-            },
-            refresh = 100, -- refresh at most every 100ms
+            enabled = false,
+            -- left = { "mark", "sign" }, -- priority of signs on the left (high to low)
+            -- right = { "fold", "git" }, -- priority of signs on the right (high to low)
+            -- folds = {
+            --     open = true, -- show open fold icons
+            --     git_hl = true, -- use Git Signs hl for fold icons
+            -- },
+            -- git = {
+            --     -- patterns to match Git signs
+            --     patterns = { "GitSign", "MiniDiffSign" },
+            -- },
+            -- refresh = 100, -- refresh at most every 100ms
         },
         ---@type snacks.words.Config
         words = { enabled = true },

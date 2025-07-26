@@ -1,8 +1,10 @@
 -- Taken from: https://github.com/mcauley-penney/nvim/blob/main/lua/plugins/statuscol.lua
 
+-- TODO: Don't show statuscolumn at all in Scratch buffer. Add util for detecting Scratch buffer based off our diagnostic disable logic, use here and in diagnostic disable
 return {
     "luukvbaal/statuscol.nvim",
     config = function()
+        local builtin = require("statuscol.builtin")
         require("statuscol").setup({
             relculright = true,
             thousands = ",",
@@ -19,13 +21,16 @@ return {
                     },
                     condition = {
                         function()
+                            if tools.is_scratch_buffer() then
+                                return false
+                            end
                             return tools.diagnostics_available() or " "
                         end,
                     },
                 },
-                {
-                    text = { " " },
-                },
+                -- {
+                --     text = { " " },
+                -- },
                 {
                     text = {
                         "%=",
@@ -35,14 +40,14 @@ return {
 
                             -- case 1
                             if normalized_mode ~= "v" and vim.v.virtnum == 0 then
-                                return require("statuscol.builtin").lnumfunc(args)
+                                return builtin.lnumfunc(args)
                             end
 
                             if vim.v.virtnum < 0 then
                                 return "-"
                             end
 
-                            local line = require("statuscol.builtin").lnumfunc(args)
+                            local line = builtin.lnumfunc(args)
 
                             if vim.v.virtnum > 0 then
                                 local num_wraps = vim.api.nvim_win_text_height(args.win, {
@@ -83,31 +88,55 @@ return {
                     },
                 },
                 {
+                    -- Diff signs
                     sign = {
-                        namespace = { "gitsigns" },
+                        namespace = { "MiniDiff" },
                         maxwidth = 1,
                         colwidth = 1,
                     },
                     condition = {
                         function()
-                            local root = tools.get_path_root(vim.api.nvim_buf_get_name(0))
-                            return tools.get_git_remote_name(root) or " "
+                            if tools.is_scratch_buffer() then
+                                return false
+                            end
                         end,
                     },
                 },
+                -- {
+                -- Blank space
+                --     text = { " " },
+                -- },
                 {
-                    text = { " " },
-                },
-                {
-                    text = { require("statuscol.builtin").foldfunc },
+                    -- Fold signs
+                    text = { builtin.foldfunc },
+                    click = "v:lua.ScFa",
                     condition = {
                         function()
-                            return vim.api.nvim_get_option_value("modifiable", { buf = 0 }) or " "
+                            if tools.is_scratch_buffer() then
+                                return false
+                            end
                         end,
                     },
                 },
                 {
                     text = { " " },
+                    condition = {
+                        function()
+                            if tools.is_scratch_buffer() then
+                                return false
+                            end
+                        end,
+                    },
+                },
+                {
+                    text = { " " },
+                    condition = {
+                        function()
+                            if tools.is_scratch_buffer() then
+                                return false
+                            end
+                        end,
+                    },
                 },
             },
         })
