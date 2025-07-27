@@ -11,6 +11,16 @@
 --         return function() end
 --     end
 -- end
+-- Show line diagnostics when cursor rests on line
+-- vim.api.nvim_create_autocmd("CursorHold", {
+--     callback = function()
+--         vim.diagnostic.open_float(nil, {
+--             focusable = false,
+--             scope = "line",
+--             border = "rounded",
+--         })
+--     end,
+-- })
 
 ---@type LazySpec
 ---@diagnostic disable: missing-fields

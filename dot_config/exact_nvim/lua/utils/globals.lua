@@ -228,3 +228,32 @@ tools.is_scratch_buffer = function(bufnr)
     local name = vim.api.nvim_buf_get_name(bufnr)
     return name:match(scratch_dir) ~= nil
 end
+
+-- Helper function to get mark for current line
+function tools.get_mark_for_line(lnum)
+    -- Check buffer-local marks (a-z)
+    local buf_marks = vim.fn.getmarklist(vim.api.nvim_get_current_buf())
+    for _, mark in ipairs(buf_marks) do
+        if mark.pos[2] == lnum then
+            local mark_char = mark.mark:sub(2, 2)
+            -- Only show lowercase marks (a-z)
+            if mark_char:match("[a-z]") then
+                return mark_char
+            end
+        end
+    end
+
+    -- Check global marks (A-Z)
+    local global_marks = vim.fn.getmarklist()
+    for _, mark in ipairs(global_marks) do
+        if mark.pos[1] == vim.api.nvim_get_current_buf() and mark.pos[2] == lnum then
+            local mark_char = mark.mark:sub(2, 2)
+            -- Only show uppercase marks (A-Z)
+            if mark_char:match("[A-Z]") then
+                return mark_char
+            end
+        end
+    end
+
+    return " " -- Return space if no mark found
+end

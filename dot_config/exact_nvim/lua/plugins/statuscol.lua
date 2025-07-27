@@ -3,6 +3,9 @@
 -- TODO: Don't show statuscolumn at all in Scratch buffer. Add util for detecting Scratch buffer based off our diagnostic disable logic, use here and in diagnostic disable
 return {
     "luukvbaal/statuscol.nvim",
+    -- condition = function()
+    --     return tools.is_scratch_buffer()
+    -- end,
     config = function()
         local builtin = require("statuscol.builtin")
         require("statuscol").setup({
@@ -21,9 +24,7 @@ return {
                     },
                     condition = {
                         function()
-                            if tools.is_scratch_buffer() then
-                                return false
-                            end
+                            -- return tools.is_scratch_buffer() or tools.diagnostics_available() or " "
                             return tools.diagnostics_available() or " "
                         end,
                     },
@@ -94,11 +95,19 @@ return {
                         maxwidth = 1,
                         colwidth = 1,
                     },
-                    condition = {
-                        function()
-                            if tools.is_scratch_buffer() then
-                                return false
-                            end
+                    -- condition = {
+                    --     function()
+                    --         return tools.is_scratch_buffer()
+                    --     end,
+                    -- },
+                },
+                -- FIX: Big lag when going over a marked line
+                -- This may actually just be visual, but if we see slowdown this is a place to look.
+                {
+                    -- Mark signs
+                    text = {
+                        function(args)
+                            return tools.get_mark_for_line(args.lnum) or " "
                         end,
                     },
                 },
@@ -110,33 +119,28 @@ return {
                     -- Fold signs
                     text = { builtin.foldfunc },
                     click = "v:lua.ScFa",
-                    condition = {
-                        function()
-                            if tools.is_scratch_buffer() then
-                                return false
-                            end
-                        end,
-                    },
+                    -- FIX: With this condition check, segments are disabled always, not just scratch buffers.
+                    -- condition = {
+                    --     function()
+                    --         return tools.is_scratch_buffer()
+                    --     end,
+                    -- },
                 },
                 {
                     text = { " " },
-                    condition = {
-                        function()
-                            if tools.is_scratch_buffer() then
-                                return false
-                            end
-                        end,
-                    },
+                    -- condition = {
+                    --     function()
+                    --         return tools.is_scratch_buffer()
+                    --     end,
+                    -- },
                 },
                 {
                     text = { " " },
-                    condition = {
-                        function()
-                            if tools.is_scratch_buffer() then
-                                return false
-                            end
-                        end,
-                    },
+                    -- condition = {
+                    --     function()
+                    --         return tools.is_scratch_buffer()
+                    --     end,
+                    -- },
                 },
             },
         })
