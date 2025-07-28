@@ -121,7 +121,7 @@ return {
                         ["<C-i>"] = { "focus_input", mode = { "i", "n" } }, -- or any other key you prefer
                         ["<C-l>"] = { "focus_list", mode = { "i", "n" } }, -- or any other key you prefer
                         -- NOTE: This lets us close all selected buffers. We get this from default snacks keymaps as <C-x>, but put here explicitly for documentation
-                        ["<C-x>"] = { "bufdelete", mode = { "n", "i" } },
+                        -- ["<C-x>"] = { "bufdelete", mode = { "n", "i" } },
                         ["<C-o>"] = { "bufdelete_unselected", mode = { "n", "i" } },
                     },
                 },
@@ -133,7 +133,7 @@ return {
                         ["<C-p>"] = { "focus_preview", mode = { "i", "n" } }, -- or any other key you prefer
                         ["<C-i>"] = { "focus_input", mode = { "i", "n" } }, -- or any other key you prefer
                         ["<C-l>"] = { "focus_list", mode = { "i", "n" } }, -- or any other key you prefer
-                        ["<C-x>"] = { "bufdelete", mode = { "n", "i" } },
+                        -- ["<C-x>"] = { "bufdelete", mode = { "n", "i" } },
                         -- NOTE: We also get this from default snacks keymaps.
                         ["dd"] = "bufdelete",
                         ["<C-o>"] = { "bufdelete_unselected", mode = { "n", "i" } },

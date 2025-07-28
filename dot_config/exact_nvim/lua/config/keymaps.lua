@@ -21,12 +21,20 @@ end
 -- vim.keymap.set({ "n", "v", "x" }, "k", function()
 -- 	return vim.v.count == 0 and "gk" or "k"
 -- end, { noremap = true, expr = true, silent = true })
+-- Change half-screen scroll to move visual lines and not logical lines
+-- vim.keymap.set("n", "<C-d>", "25<C-e>", { noremap = true })
+-- vim.keymap.set("n", "<C-u>", "25<C-y>", { noremap = true })
 map({ "n", "v" }, "^", "g^", { noremap = true, silent = true })
 map({ "n", "v" }, "$", "g$", { noremap = true, silent = true })
 -- Scrolling
 -- TODO: figure out other maps, these conflict with window movement
 -- map({ "n", "v" }, "<C-j>", "10j", { noremap = true, silent = true })
 -- map({ "n", "v" }, "<C-k>", "10k", { noremap = true, silent = true })
+local toggle_scrolloff = function()
+    local enable = vim.wo.scrolloff == 999
+    vim.wo.scrolloff = enable and 8 or 999
+end
+map({ "n", "v", "i", "x" }, "<C-g>", toggle_scrolloff, { noremap = true, expr = true, silent = true })
 
 -- ================================================================
 -- COMMENTS

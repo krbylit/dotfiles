@@ -48,17 +48,18 @@ vim.api.nvim_create_autocmd("FileType", {
         vim.bo.shiftwidth = 2
     end,
 })
--- Fix any jittering caused by high `scrolloff` value when near EOF or elsewhere
-vim.api.nvim_create_autocmd("InsertEnter", {
-    callback = function()
-        vim.o.scrolloff = 1
-    end,
-})
-vim.api.nvim_create_autocmd("InsertLeave", {
-    callback = function()
-        vim.o.scrolloff = 999
-    end,
-})
+-- NOTE: Disabling to try manually controlling scrolloff
+-- -- Fix any jittering caused by high `scrolloff` value when near EOF or elsewhere
+-- vim.api.nvim_create_autocmd("InsertEnter", {
+--     callback = function()
+--         vim.o.scrolloff = 1
+--     end,
+-- })
+-- vim.api.nvim_create_autocmd("InsertLeave", {
+--     callback = function()
+--         vim.o.scrolloff = 999
+--     end,
+-- })
 
 -- Auto comment options
 vim.api.nvim_create_autocmd("BufEnter", {
