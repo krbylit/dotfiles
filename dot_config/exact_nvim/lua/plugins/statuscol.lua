@@ -102,7 +102,7 @@ return {
                     -- },
                 },
                 -- FIX: Big lag when going over a marked line
-                -- This may actually just be visual, but if we see slowdown this is a place to look.
+                -- What we were seeing here was actually just a long line that took a bit to render coming into our field of view. This is especially noticeable when we have scrolloff=999, where it feels like the lag is from moving up/down onto a particular line, but it is actually that the expensive render line is going into/out of view at the bottom or top of screen.
                 {
                     -- Mark signs
                     text = {
