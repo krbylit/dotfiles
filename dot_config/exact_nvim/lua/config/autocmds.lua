@@ -10,6 +10,26 @@
 -- 		vim.opt.autochdir = true
 -- 	end,
 -- })
+
+-- ================================================================
+-- Plugin specific autocmds
+-- ================================================================
+-- The below configuration wll allow you to automatically apply changes on files under chezmoi source path.
+--  e.g. ~/.local/share/chezmoi/*
+if vim.env.IS_SSH ~= "1" then
+    vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
+        pattern = { os.getenv("HOME") .. "/.local/share/chezmoi/*" },
+        callback = function(ev)
+            local bufnr = ev.buf
+            local edit_watch = function()
+                -- TODO: See if we can re-source nvim config after chezmoi apply
+                require("chezmoi.commands.__edit").watch(bufnr)
+            end
+            vim.schedule(edit_watch)
+        end,
+    })
+end
+
 -- ================================================================
 -- Filetype specific autocmds
 -- ================================================================
@@ -74,23 +94,55 @@ vim.api.nvim_create_autocmd("BufEnter", {
 function Remove_qf_item()
     local curqfidx = vim.fn.line(".")
     local qfall = vim.fn.getqflist()
-    -- Return if there are no items to remove
     if #qfall == 0 then
         return
     end
-    -- Remove the item from the quickfix list
     table.remove(qfall, curqfidx)
     vim.fn.setqflist(qfall, "r")
-    -- Reopen quickfix window to refresh the list
-    vim.cmd("copen")
-    -- If not at the end of the list, stay at the same index, otherwise, go one up.
-    local new_idx = curqfidx < #qfall and curqfidx or math.max(curqfidx - 1, 1)
-    -- Set the cursor position directly in the quickfix window
-    local winid = vim.fn.win_getid() -- Get the window ID of the quickfix window
-    vim.api.nvim_win_set_cursor(winid, { new_idx, 0 })
+    -- After removing, check if the list is empty
+    if #qfall == 0 then
+        -- Optionally close quickfix window
+        vim.cmd("cclose")
+        return
+    end
+    -- Reselect the appropriate line
+    local new_idx = math.min(curqfidx, #qfall)
+    vim.api.nvim_win_set_cursor(0, { new_idx, 0 })
 end
-vim.cmd("command! RemoveQFItem lua Remove_qf_item()")
-vim.api.nvim_command("autocmd FileType qf nnoremap <buffer> dd :RemoveQFItem<cr>")
+function Remove_qf_range()
+    local start_line = vim.fn.line("v")
+    local end_line = vim.fn.line(".")
+    if start_line > end_line then
+        start_line, end_line = end_line, start_line
+    end
+    local qfall = vim.fn.getqflist()
+    if #qfall == 0 then
+        return
+    end
+    -- Remove from end to start to avoid shifting indices
+    for i = end_line, start_line, -1 do
+        table.remove(qfall, i)
+    end
+    vim.fn.setqflist(qfall, "r")
+    -- After removing, check if the list is empty
+    if #qfall == 0 then
+        -- Optionally close quickfix window
+        vim.cmd("cclose")
+        return
+    end
+    local new_idx = math.min(start_line, #qfall)
+    vim.api.nvim_win_set_cursor(0, { new_idx, 0 })
+    -- Exit visual mode after deleting
+    vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Esc>", true, false, true), "n", true)
+end
+
+vim.api.nvim_create_autocmd("FileType", {
+    pattern = "qf",
+    callback = function()
+        vim.keymap.set("n", "dd", Remove_qf_item, { buffer = true })
+        vim.keymap.set("v", "d", Remove_qf_range, { buffer = true })
+    end,
+})
 
 -- Open help docs in a new tab
 vim.api.nvim_create_autocmd("BufEnter", {

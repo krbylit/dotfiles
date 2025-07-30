@@ -39,7 +39,7 @@ opt.shell = "fish"
 -- opt.shell = "/opt/homebrew/bin/fish"
 opt.undofile = true -- Save undo history between sessions
 opt.tabstop = 4 -- A tab is equal to 4 spaces
-opt.shiftwidth = 0 -- Number of spaces to use for each step of (auto)indent
+opt.shiftwidth = 0 -- Number of spaces to use for each step of (auto)indent; 0=use tabstop val
 opt.expandtab = true -- Convert tabs to spaces
 opt.autoindent = true
 opt.cursorline = true -- Enable highlighting of the current line
@@ -92,6 +92,7 @@ vim.g.lazyvim_python_lsp = "pyright"
 -- ================================================================
 -- FILETYPES
 -- ================================================================
+-- WARN: May want to move all autocmds to autocmds.lua to decrease the chance of an autocmd being loaded more than once.
 -- Enable `csvview.nvim` for CSV files
 vim.api.nvim_create_autocmd("FileType", {
     pattern = "csv",

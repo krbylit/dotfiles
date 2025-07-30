@@ -76,6 +76,7 @@ local autocmd_id = vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
 })
 
 -- Add autocmd to handle neovim exit
+-- Intended to mitigate hanging on nvim exit
 vim.api.nvim_create_autocmd("VimLeavePre", {
     callback = function()
         git_cache.is_exiting = true
