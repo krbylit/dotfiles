@@ -30,7 +30,7 @@ return {
                 desc = "Harpoon File",
             },
             {
-                "<C-e>",
+                "<C-n>",
                 function()
                     harpoon.ui:toggle_quick_menu(harpoon:list())
                 end,
