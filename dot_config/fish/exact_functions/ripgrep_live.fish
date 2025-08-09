@@ -16,7 +16,7 @@ function ripgrep_live
         --bind "start:$RELOAD" --bind "change:$RELOAD" \
         --bind "enter:become:$OPENER" \
         --bind "ctrl-o:execute:$OPENER" \
-        --bind "ctrl-a:select-all,ctrl-u:deselect-all,ctrl-/:toggle-preview" \
+        --bind "ctrl-a:select-all,ctrl-u:deselect-all,ctrl-p:toggle-preview" \
         --delimiter : \
         --preview 'bat --style=full --color=always --highlight-line {2} {1}' \
         --preview-window '~4,+{2}+4/3,<80(up)' \
