@@ -6,10 +6,13 @@ local opt = vim.opt
 vim.g.mapleader = "," -- Set leader key to comma
 vim.api.nvim_set_keymap("", " ", "<Nop>", { noremap = true, silent = true })
 vim.g.maplocalleader = " "
--- Set global for `$(chezmoi source-path)`
-local cm_path = vim.fn.system("chezmoi source-path")
-vim.g.chezmoi_source_path = cm_path
-vim.g.root_spec = { { ".git" }, "lua", "lsp", "cwd" }
+-- Asynchronously set global for `$(chezmoi source-path)`
+vim.schedule(function()
+    vim.g.chezmoi_source_path = vim.fn.system("chezmoi source-path")
+end)
+-- LazyVim root dir detection
+-- vim.g.root_spec = { { ".git" }, "lua", "lsp", "cwd" }
+vim.g.root_spec = { "lsp", { ".git", "lua" }, "cwd" } -- default
 
 -- Ensure the 'list' option is enabled
 vim.opt.list = true

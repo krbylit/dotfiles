@@ -11,6 +11,18 @@ local measure_logo_file = require("utils.dashboard.dash-helpers").measure_logo_f
 local logo_width, logo_height = measure_logo_file(logo_file)
 local pane_width = math.floor(terminal_width / 4)
 
+-- Calculate speed multiplier based on logo line count
+-- Adjusted to keep animation duration similar with different heights
+local logo_speed_multiplier = 1
+if logo_height > 20 then
+    logo_speed_multiplier = 1.75
+elseif logo_height > 15 then
+    logo_speed_multiplier = 1.5
+elseif logo_height > 10 then
+    logo_speed_multiplier = 1.25
+end
+local lolcat_delay = math.max(1, math.floor(4 / logo_speed_multiplier))
+
 local picker = require("snacks.picker")
 
 ---@diagnostic disable: missing-fields
@@ -302,9 +314,11 @@ return {
                     pane = 1,
                     section = "terminal",
                     -- cmd = 'cat "' .. logo_file .. '" | lolcat -a -d 2 -s 15 -F 0.3 -t -p 100 -f',
-                    cmd = 'bash -c "for i in {1..10}; do clear; cat "'
+                    cmd = 'bash -c "for i in {1..10}; do clear; cat \\"'
                         .. logo_file
-                        .. '" | lolcat -a -d 4 -s 15 -F 0.3 -t -p 100 -f; sleep 4; done"',
+                        .. '\\" | lolcat -a -d '
+                        .. lolcat_delay
+                        .. ' -s 15 -F 0.3 -t -p 100 -f; sleep 4; done"',
                     height = logo_height,
                     width = logo_width,
                     -- height = math.floor(terminal_height / 3),
