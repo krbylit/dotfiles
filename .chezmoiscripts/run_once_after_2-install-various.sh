@@ -10,6 +10,12 @@ if [ "${IS_SSH}" != "1" ]; then
     fi
 fi
 
+if [ "${IS_SSH}" != "1" ]; then
+    if ! command -v cursor-agent &>/dev/null; then
+        curl https://cursor.com/install -fsS | bash
+    fi
+fi
+
 # Install Rust. brew install doesn't seem to play nice
 if ! command -v rustup &>/dev/null; then
     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
@@ -113,9 +119,10 @@ if command -v fish &>/dev/null; then
     fish -c "fisher update"
 fi
 
-if command -v bob &>/dev/null; then
-    bob install stable
-    if [ "${IS_SSH}" != "1" ]; then
-        bob use stable
-    fi
-fi
+# FIX: Something is up with `bob` (maybe just local install). Can't find/use/install "stable" release.
+# if command -v bob &>/dev/null; then
+#     bob install stable
+#     if [ "${IS_SSH}" != "1" ]; then
+#         bob use stable
+#     fi
+# fi
