@@ -62,11 +62,20 @@ if [ "${IS_SSH}" != "1" ]; then
         npm install -g @anthropic-ai/claude-code
     fi
 fi
+
 if [ "${IS_SSH}" != "1" ]; then
     if ! command -v tclock &>/dev/null; then
         cargo install clock-tui
     fi
 fi
+
+# Terminal local network file sharing TUI
+if [ "${IS_SSH}" != "1" ]; then
+    if ! command -v jocalsend &>/dev/null; then
+        cargo install jocalsend
+    fi
+fi
+
 
 if [ "${IS_SSH}" != "1" ]; then
     if ! command -v regname &>/dev/null; then

@@ -21,7 +21,7 @@
                 "from": {
                   "key_code": "l",
                   "modifiers": {
-                    "mandatory": ["option"]
+                    "mandatory": ["right_option"]
                   }
                 },
                 "to": [
@@ -49,7 +49,7 @@
                 "from": {
                   "key_code": "k",
                   "modifiers": {
-                    "mandatory": ["option"]
+                    "mandatory": ["right_option"]
                   }
                 },
                 "to": [
@@ -77,7 +77,7 @@
                 "from": {
                   "key_code": "j",
                   "modifiers": {
-                    "mandatory": ["option"]
+                    "mandatory": ["right_option"]
                   }
                 },
                 "to": [
@@ -105,7 +105,7 @@
                 "from": {
                   "key_code": "h",
                   "modifiers": {
-                    "mandatory": ["option"]
+                    "mandatory": ["right_option"]
                   }
                 },
                 "to": [
