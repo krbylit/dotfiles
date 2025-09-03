@@ -76,7 +76,6 @@ if [ "${IS_SSH}" != "1" ]; then
     fi
 fi
 
-
 if [ "${IS_SSH}" != "1" ]; then
     if ! command -v regname &>/dev/null; then
         cargo install --locked --git https://github.com/linkdd/regname
@@ -103,8 +102,18 @@ if [ "${IS_SSH}" != "1" ]; then
     fi
 fi
 
+if [ "${IS_SSH}" == "1" ]; then
+    if ! command -v systemd-manager-tui &>/dev/null; then
+        if command -v cargo &>/dev/null; then
+            cargo install --locked systemd-manager-tui
+        fi
+    fi
+fi
+
 if ! command -v zellij &>/dev/null; then
-    cargo install --locked zellij
+    if command -v cargo &>/dev/null; then
+        cargo install --locked zellij
+    fi
 fi
 
 if [ "${IS_SSH}" != "1" ]; then
