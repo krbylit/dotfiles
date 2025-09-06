@@ -1,0 +1,4 @@
+{{- $sshListConfig := (joinPath .chezmoi.sourceDir .path.secrets ".ssh" "ssh-list.json") -}}
+{{- if (stat $sshListConfig) -}}
+{{ $sshListConfig }}
+{{- end -}}
