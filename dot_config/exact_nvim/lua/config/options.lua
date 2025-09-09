@@ -2,6 +2,8 @@
 
 local opt = vim.opt
 
+vim.api.nvim_set_hl(0, "WinSeparator", { fg = "#ed8796", bg = "" })
+
 -- Global options for VS Code and console use
 vim.g.mapleader = "," -- Set leader key to comma
 vim.api.nvim_set_keymap("", " ", "<Nop>", { noremap = true, silent = true })

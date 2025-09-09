@@ -298,7 +298,15 @@ return {
             --- function will be called with a Highlights and ColorScheme table
             ---@param highlights Highlights
             ---@param colors ColorScheme
-            on_highlights = function(highlights, colors) end,
+            on_highlights = function(highlights, colors)
+                ---@diagnostic disable-next-line: inject-field
+                -- Set window split border color
+                highlights.WinSeparator = {
+                    fg = "#ed8796",
+                    bg = "",
+                    bold = false,
+                }
+            end,
             cache = true, -- When set to true, the theme will be cached for better performance
             ---@type table<string, boolean|{enabled:boolean}>
             plugins = {
