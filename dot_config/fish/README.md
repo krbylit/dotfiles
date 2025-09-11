@@ -7,11 +7,11 @@
 ## CLI Tools
 
 - `serpl`: search and replace text tool
+- `cmdperf`: benchmark terminal commands
 
 ## Tips
 
 - `fzf` (e.g. <c-f>) can easily search with glob-like patterns
-
   - <https://junegunn.github.io/fzf/search-syntax/>
     How to get better results
     A common mistake is to type unnecessary spaces. You may type git add to search for git add something. But if you do so, fzf sees it as two separate terms and process them separately, so it will match add ... git which is not what you want.
@@ -48,7 +48,6 @@
 - `zoxide` can be very helpfully used in interactive mode with `zi` cmd
   - e.g. `zi dir` pulls up results in `fzf`
 - `fifc` provides fzf over cmd completions
-
   - e.g. `grep --` > <tab> > shows fzf of completions for all grep arguments, along with preview of man page docs
 
 - We can profile the startup time of Fish:
