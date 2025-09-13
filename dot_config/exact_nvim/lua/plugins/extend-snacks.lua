@@ -46,11 +46,27 @@ return {
         bigfile = { enabled = true },
         ---@type snacks.terminal.Config
         terminal = {
-            win = { style = "terminal" },
+            -- Open Snacks terminals as a right-side vertical split
+            ---@type snacks.win.Config
+            win = {
+                style = "terminal",
+                position = "right",
+                width = 80, -- set your preferred column width
+            },
         },
         input = { enabled = true },
         ---@type snacks.lazygit.Config: snacks.terminal.Opts
-        lazygit = { enabled = true },
+        lazygit = {
+            enabled = true,
+            configure = true,
+            win = {
+                -- 0 = max width/height
+                height = 0,
+                width = 0,
+                position = "float",
+                style = "lazygit",
+            },
+        },
         notifier = {
             style = "fancy", -- "compact" | "minimal" | "fancy"
             enabled = true, -- Disabling for now because <leader>un not working to view all notis
