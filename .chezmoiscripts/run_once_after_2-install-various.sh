@@ -69,6 +69,12 @@ if [ "${IS_SSH}" != "1" ]; then
     fi
 fi
 
+if [ "${IS_SSH}" != "1" ]; then
+    if ! command -v glues &>/dev/null; then
+        cargo install glues
+    fi
+fi
+
 # Terminal local network file sharing TUI
 if [ "${IS_SSH}" != "1" ]; then
     if ! command -v jocalsend &>/dev/null; then
