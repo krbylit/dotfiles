@@ -2,12 +2,12 @@ local colors = require("tokyonight.colors").setup({ style = "night" })
 -- local colors = require("tokyonight").load({ style = "night" })
 
 return {
-    "echasnovski/mini.tabline",
+    "nvim-mini/mini.tabline",
     enabled = vim.env.IS_SSH ~= "1",
     -- TODO: verify whether this is causing lag. It's showing up as top time spent when profiling.
     -- e.g.      110.49 ms      121   󰊕  mini.tabline.make_tabline_string
     version = false,
-    dependencies = { "echasnovski/mini.icons" },
+    dependencies = { "nvim-mini/mini.icons" },
     -- cond = function()
     -- 	return vim.bo.filetype ~= "snacks_dashboard"
     -- end,

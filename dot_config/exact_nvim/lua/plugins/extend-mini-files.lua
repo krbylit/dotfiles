@@ -1,5 +1,5 @@
 -- Mini file navigator
--- https://github.com/echasnovski/mini.files
+-- https://github.com/nvim-mini/mini.files
 
 -- mini.files map key for toggling dotfiles
 local MiniFiles = require("mini.files")
@@ -47,7 +47,7 @@ vim.api.nvim_create_autocmd("User", {
 })
 
 return {
-    "echasnovski/mini.files",
+    "nvim-mini/mini.files",
     -- No need to copy this inside `setup()`. Will be used automatically.
     -- init = function()
     -- 	vim.g.loaded_netrw = 1

@@ -4,8 +4,8 @@ return {
     lazy = false, -- Recommended
     ft = "markdown", -- If you decide to lazy-load anyway
     dependencies = {
-        -- "nvim-treesitter/nvim-treesitter",
-        "echasnovski/mini.icons",
+        "nvim-treesitter/nvim-treesitter",
+        "nvim-mini/mini.icons",
         { "MeanderingProgrammer/render-markdown.nvim", enabled = false },
         { "iamcco/markdown-preview.nvim", enabled = false },
     },

@@ -157,11 +157,11 @@ return {
     --     "nvim-lua/plenary.nvim",
     --     "MunifTanjim/nui.nvim",
     --     --- The below dependencies are optional,
-    --     -- "nvim-tree/nvim-web-devicons", -- or echasnovski/mini.icons
+    --     -- "nvim-tree/nvim-web-devicons", -- or nvim-mini/mini.icons
     --     "zbirenbaum/copilot.lua", -- for providers='copilot'
     --     "hrsh7th/nvim-cmp", -- autocompletion for avante commands and mentions
     --     "ibhagwan/fzf-lua", -- for file_selector provider fzf
-    --     "echasnovski/mini.icons",
+    --     "nvim-mini/mini.icons",
     --     "folke/snacks.nvim", -- for input provider snacks
     --     -- FIXME: giving errors on pasting text
     --     -- {

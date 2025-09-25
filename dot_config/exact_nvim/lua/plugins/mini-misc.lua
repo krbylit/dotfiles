@@ -1,8 +1,8 @@
 -- Misc functions from mini.vim
--- https://github.com/echasnovski/mini.nvim/blob/74e6b722c91113bc70d4bf67249ed8de0642b20e/readmes/mini-misc.md
+-- https://github.com/nvim-mini/mini.nvim/blob/74e6b722c91113bc70d4bf67249ed8de0642b20e/readmes/mini-misc.md
 
 return {
-    "echasnovski/mini.misc",
+    "nvim-mini/mini.misc",
     enabled = vim.env.IS_SSH ~= "1",
     -- version = false,
     config = function()

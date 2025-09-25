@@ -111,16 +111,15 @@ wk.add({
         end,
         desc = "MiniFiles Explorer (file)",
     },
-    -- NOTE: Using Yazi on this mapping instead
-    -- {
-    -- 	"<leader>E",
-    -- 	function()
-    -- 		if not MiniFiles.close() then
-    -- 			MiniFiles.open(vim.cmd.pwd())
-    -- 		end
-    -- 	end,
-    -- 	desc = "MiniFiles Explorer (cwd)",
-    -- },
+    {
+        "<leader>E",
+        function()
+            if not MiniFiles.close() then
+                MiniFiles.open(vim.cmd.pwd())
+            end
+        end,
+        desc = "MiniFiles Explorer (cwd)",
+    },
 })
 
 -- Marks maps

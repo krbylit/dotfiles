@@ -192,8 +192,9 @@ return {
                 },
                 copilot = vim.env.IS_SSH ~= "1"
                         and {
-                            name = "copilot",
-                            module = "blink-cmp-copilot",
+                            -- FIX: For some reason after update, using these fields here causes error and Copilot completions don't load (error says no Lua rocks module)
+                            -- name = "copilot",
+                            -- module = "blink-cmp-copilot",
                             kind = "Copilot",
                             score_offset = 999, -- Boost Copilot's score (adjust as needed) so it comes first
                         }

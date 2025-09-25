@@ -167,7 +167,7 @@ local function custom_section_filename(args)
 end
 
 return {
-    "echasnovski/mini.statusline",
+    "nvim-mini/mini.statusline",
     enabled = vim.env.IS_SSH ~= "1",
     version = false,
     -- cond = function()

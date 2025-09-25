@@ -5,7 +5,7 @@
 -- end
 -- local animate = require("mini.animate")
 return {
-    "echasnovski/mini.animate",
+    "nvim-mini/mini.animate",
     enabled = vim.env.IS_SSH ~= "1",
     -- enabled = false,
     version = "*",
