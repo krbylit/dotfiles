@@ -29,10 +29,10 @@ return {
     event = "LazyFile",
     dependencies = {
         "mason.nvim",
-        { "williamboman/mason-lspconfig.nvim", opts = {} },
+        { "mason-org/mason-lspconfig.nvim", opts = {} },
         {
             -- Ensure yapf is installed via Mason
-            "williamboman/mason.nvim",
+            "mason-org/mason.nvim",
             opts = {
                 ensure_installed = {
                     "bash-language-server",
