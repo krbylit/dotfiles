@@ -4,7 +4,7 @@ return {
     enabled = vim.env.IS_SSH ~= "1",
     dependencies = {
         -- NOTE: necessary here otherwise copilot shows up in LazyVim as disabled, possibly a LazyVim bug
-        { "zbirenbaum/copilot.lua", enabled = vim.env.IS_SSH ~= "1", opts = {} },
+        -- { "zbirenbaum/copilot.lua", enabled = vim.env.IS_SSH ~= "1", opts = {} },
         { "saghen/blink.compat", enabled = vim.env.IS_SSH ~= "1" },
         { "mikavilpas/blink-ripgrep.nvim" },
     },
@@ -77,7 +77,8 @@ return {
         },
         --- @type blink.cmp.SourceConfig
         sources = {
-            default = { "lsp", "path", "snippets", "buffer", "copilot", "ripgrep" },
+            -- default = { "lsp", "path", "snippets", "buffer", "copilot", "ripgrep" },
+            default = { "lsp", "path", "snippets", "buffer", "ripgrep" },
             -- default = { "lsp", "path", "snippets", "buffer", "copilot" },
             -- min_keyword_length = function(ctx)
             -- 	-- Don't show menu when typing 2 char commands in cmdline
@@ -190,15 +191,15 @@ return {
                         end,
                     },
                 },
-                copilot = vim.env.IS_SSH ~= "1"
-                        and {
-                            -- FIX: For some reason after update, using these fields here causes error and Copilot completions don't load (error says no Lua rocks module)
-                            -- name = "copilot",
-                            -- module = "blink-cmp-copilot",
-                            kind = "Copilot",
-                            score_offset = 999, -- Boost Copilot's score (adjust as needed) so it comes first
-                        }
-                    or nil,
+                -- copilot = vim.env.IS_SSH ~= "1"
+                --         and {
+                --             -- FIX: For some reason after update, using these fields here causes error and Copilot completions don't load (error says no Lua rocks module)
+                --             -- name = "copilot",
+                --             -- module = "blink-cmp-copilot",
+                --             kind = "Copilot",
+                --             score_offset = 999, -- Boost Copilot's score (adjust as needed) so it comes first
+                --         }
+                --     or nil,
                 -- avante_commands = {
                 --     name = "avante_commands",
                 --     module = "blink.compat.source",
