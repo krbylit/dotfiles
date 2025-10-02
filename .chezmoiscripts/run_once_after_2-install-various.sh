@@ -70,6 +70,12 @@ if [ "${IS_SSH}" != "1" ]; then
 fi
 
 if [ "${IS_SSH}" != "1" ]; then
+    if ! command -v gittype &>/dev/null; then
+        cargo install gittype
+    fi
+fi
+
+if [ "${IS_SSH}" != "1" ]; then
     if ! command -v glues &>/dev/null; then
         cargo install glues
     fi
