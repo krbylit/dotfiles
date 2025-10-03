@@ -5,6 +5,8 @@ local opt = vim.opt
 vim.api.nvim_set_hl(0, "WinSeparator", { fg = "#ed8796", bg = "" })
 
 -- Global options for VS Code and console use
+vim.env.PATH = "/opt/homebrew/bin:" .. (vim.env.PATH or "")
+vim.g.python3_host_prog = "/opt/homebrew/bin/python3"
 vim.g.mapleader = "," -- Set leader key to comma
 vim.api.nvim_set_keymap("", " ", "<Nop>", { noremap = true, silent = true })
 vim.g.maplocalleader = " "

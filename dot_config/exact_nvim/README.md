@@ -25,7 +25,6 @@ Based on LazyVim, with separate config options for nvim in VS Code and in the te
 >   - Iterate through LazyVim's lazy-lock and lazyextras and call `config` with empty fn
 >   - May want to also add `enabled = false` to all, then iterate through our lazy-lock/lazyextras and turn back on `enabled = true`
 > - FIXME: figure out what all is providing alt+j/k in visual to move text. I think multiple things are providing this and conflicting. moving multiple line chunks does not always work well
->
 >   - w/ multi lines, after first alt+ move our visual selection resets to just the first line, causing subsequent moves to move only that line
 >   - seems to only be effecting downward movements. when we move chunks up the selection stays the same
 >   - one is coming from abstract-autocmds (this is <J|K> though). behavior with this is the same.
@@ -42,6 +41,13 @@ Based on LazyVim, with separate config options for nvim in VS Code and in the te
 >   - REPRODUCTION: happens when we move a chunk into a multiline chunk of fn args
 >
 > - TODO: see if we can get rid of `abstract-autocmds`
+
+## Plugins
+
+### Note on Python
+
+Some plugins may call Python for setup or function, this has caused issues (specifically Mason trying to install debugpy) when they try to use a Python version installed by uv.
+In order to fix this, we explicitly set the Python interpreter with `vim.g.python3_host_prog = "/opt/homebrew/bin/python3"` and ensure PATH correctly points at non-uv Python with `vim.env.PATH = "/opt/homebrew/bin:" .. (vim.env.PATH or "")`.
 
 ## Neovim Guides
 
