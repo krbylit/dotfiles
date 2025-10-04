@@ -57,6 +57,10 @@ if [ "${IS_SSH}" != "1" ]; then
     fi
 fi
 
+if ! command -v typescript-language-server &>/dev/null; then
+    npm install -g typescript typescript-language-server
+fi
+
 if [ "${IS_SSH}" != "1" ]; then
     if ! command -v claude &>/dev/null; then
         npm install -g @anthropic-ai/claude-code

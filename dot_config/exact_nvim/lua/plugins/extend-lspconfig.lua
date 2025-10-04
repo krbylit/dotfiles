@@ -245,7 +245,7 @@ return {
             tsserver = { enabled = false },
             vtsls = { enabled = true },
             ts_ls = {
-                enabled = true,
+                enabled = false,
                 on_attach = function(client, buffer)
                     client.server_capabilities.hoverProvider = true
                     client.server_capabilities.documentFormattingProvider = false
@@ -372,6 +372,7 @@ return {
                 --     client.server_capabilities.codeLensProvider = false
                 -- end,
             },
+            -- FIX: lua_ls is causing the `Error in LspNotify Autocommands for "<buffer=12>":` error. Seems to be LazyVim's config or lua_ls itself causing it, as commenting this config out and using just LazyVim still gives error, only disabling here gets rid of the error.
             lua_ls = {
                 settings = {
                     Lua = {
