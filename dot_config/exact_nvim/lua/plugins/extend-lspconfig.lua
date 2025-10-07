@@ -190,9 +190,8 @@ return {
             eslint = {
                 enabled = true,
                 on_attach = function(client, buffer)
-                    -- Enable/disable diagnostics virt text for this server
-                    local namespace = vim.lsp.diagnostic.get_namespace(client.id)
-                    vim.diagnostic.config({ virtual_text = true }, namespace)
+                    -- Enable diagnostics virtual text for this buffer
+                    vim.diagnostic.config({ virtual_text = true }, buffer)
                     client.server_capabilities.hoverProvider = false
                     client.server_capabilities.formattingProvider = true
                     client.server_capabilities.documentRangeFormattingProvider = true
@@ -310,9 +309,8 @@ return {
                     },
                 },
                 on_attach = function(client, bufnr)
-                    -- Enable/disable diagnostics virt text for this server
-                    local namespace = vim.lsp.diagnostic.get_namespace(client.id)
-                    vim.diagnostic.config({ virtual_text = true }, namespace)
+                    -- Enable diagnostics virtual text for this buffer
+                    vim.diagnostic.config({ virtual_text = true }, bufnr)
                     -- -- Keep Pyright's core capabilities but disable hover since we get that from Jedi
                     -- client.server_capabilities.hoverProvider = false
                     -- client.server_capabilities.codeLensProvider = false
