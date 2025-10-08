@@ -132,6 +132,12 @@ if ! command -v zellij &>/dev/null; then
     fi
 fi
 
+if ! command -v ugdb &>/dev/null; then
+    if command -v cargo &>/dev/null; then
+        cargo install ugdb
+    fi
+fi
+
 if [ "${IS_SSH}" != "1" ]; then
     if ! command -v ziina &>/dev/null; then
         go install github.com/ziinaio/zmate@latest

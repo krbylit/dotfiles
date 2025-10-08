@@ -333,6 +333,24 @@ return {
                 --         },
                 --     },
             },
+            -- ["rust-analyzer"] = {
+            --     enabled = true,
+            --     on_attach = function(client, bufnr)
+            --         -- FIX: This does not solve it, we still get ~/.cargo refs
+            --         -- NOTE: This is so that we do not get results in `~/.cargo` when using goto symbol references (<gr>)
+            --         local orig = vim.lsp.handlers["textDocument/references"]
+            --         vim.lsp.handlers["textDocument/references"] = function(err, result, method, ...)
+            --             if not result then
+            --                 return orig(err, result, method, ...)
+            --             end
+            --             local cwd = vim.loop.cwd()
+            --             local filtered = vim.tbl_filter(function(item)
+            --                 return item.uri:find(cwd, 1, true)
+            --             end, result)
+            --             return orig(err, filtered, method, ...)
+            --         end
+            --     end,
+            -- },
             jedi_language_server = {
                 enabled = false,
                 -- settings = {
