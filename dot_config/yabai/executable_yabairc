@@ -154,6 +154,7 @@ COMMS_APPS=(
     zoom.us
     Slack
     "Microsoft Outlook"
+    Mail
     Thunderbird
 )
 
@@ -172,6 +173,7 @@ DEBUG_APPS=(
 )
 
 UTIL_APPS=(
+    Calendar
 	Figma
 	1Password
 	"Activity Monitor"

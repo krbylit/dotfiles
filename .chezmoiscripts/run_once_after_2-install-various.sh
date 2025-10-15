@@ -10,6 +10,12 @@ if [ "${IS_SSH}" != "1" ]; then
     fi
 fi
 
+if [ "${IS_SSH}" != "1" ]; then
+    if ! command -v cursor-agent &>/dev/null; then
+        curl https://cursor.com/install -fsS | bash
+    fi
+fi
+
 # Install Rust. brew install doesn't seem to play nice
 if ! command -v rustup &>/dev/null; then
     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
@@ -51,6 +57,10 @@ if [ "${IS_SSH}" != "1" ]; then
     fi
 fi
 
+if ! command -v typescript-language-server &>/dev/null; then
+    npm install -g typescript typescript-language-server
+fi
+
 if [ "${IS_SSH}" != "1" ]; then
     if ! command -v claude &>/dev/null; then
         npm install -g @anthropic-ai/claude-code
@@ -64,8 +74,33 @@ if [ "${IS_SSH}" != "1" ]; then
 fi
 
 if [ "${IS_SSH}" != "1" ]; then
+    if ! command -v gittype &>/dev/null; then
+        cargo install gittype
+    fi
+fi
+
+if [ "${IS_SSH}" != "1" ]; then
+    if ! command -v glues &>/dev/null; then
+        cargo install glues
+    fi
+fi
+
+# Terminal local network file sharing TUI
+if [ "${IS_SSH}" != "1" ]; then
+    if ! command -v jocalsend &>/dev/null; then
+        cargo install jocalsend
+    fi
+fi
+
+if [ "${IS_SSH}" != "1" ]; then
     if ! command -v regname &>/dev/null; then
         cargo install --locked --git https://github.com/linkdd/regname
+    fi
+fi
+
+if [ "${IS_SSH}" != "1" ]; then
+    if ! command -v hygg &>/dev/null; then
+        cargo install --locked hygg
     fi
 fi
 
@@ -75,8 +110,32 @@ if [ "${IS_SSH}" != "1" ]; then
     fi
 fi
 
+if [ "${IS_SSH}" != "1" ]; then
+    if ! command -v stormy &>/dev/null; then
+        if command -v go &>/dev/null; then
+            go install github.com/ashish0kumar/stormy@latest
+        fi
+    fi
+fi
+
+if [ "${IS_SSH}" == "1" ]; then
+    if ! command -v systemd-manager-tui &>/dev/null; then
+        if command -v cargo &>/dev/null; then
+            cargo install --locked systemd-manager-tui
+        fi
+    fi
+fi
+
 if ! command -v zellij &>/dev/null; then
-    cargo install --locked zellij
+    if command -v cargo &>/dev/null; then
+        cargo install --locked zellij
+    fi
+fi
+
+if ! command -v ugdb &>/dev/null; then
+    if command -v cargo &>/dev/null; then
+        cargo install ugdb
+    fi
 fi
 
 if [ "${IS_SSH}" != "1" ]; then
@@ -100,9 +159,10 @@ if command -v fish &>/dev/null; then
     fish -c "fisher update"
 fi
 
-if command -v bob &>/dev/null; then
-    bob install stable
-    if [ "${IS_SSH}" != "1" ]; then
-        bob use stable
-    fi
-fi
+# FIX: Something is up with `bob` (maybe just local install). Can't find/use/install "stable" release.
+# if command -v bob &>/dev/null; then
+#     bob install stable
+#     if [ "${IS_SSH}" != "1" ]; then
+#         bob use stable
+#     fi
+# fi

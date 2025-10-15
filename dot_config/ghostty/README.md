@@ -13,3 +13,8 @@ Available arguments
 (ex. --ghost-color X11Purple)
 
 --frame accepts one of the following options: aluminum, beige, plastic, chrome
+
+## Cursor animation
+
+- [Instructions](https://www.youtube.com/watch?v=enwDjM7pNNE)
+  - Requires certain version (mentioned in video)

@@ -18,7 +18,8 @@ local function update_git_info()
         return
     end
 
-    local current_dir = vim.fn.expand("%:p:h")
+    local current_dir_display = vim.fn.expand("%:p:h")
+    local current_dir = vim.loop.fs_realpath(current_dir_display) or current_dir_display
 
     -- Only update if directory has changed
     if current_dir == git_cache.last_dir then
@@ -26,13 +27,16 @@ local function update_git_info()
     end
 
     -- Get repo root (only call once)
-    local git_dir = vim.fn.system("git -C " .. vim.pesc(current_dir) .. " rev-parse --show-toplevel 2>/dev/null")
+    -- NOTE: Use shellescape for shell command, not pattern escape
+    local git_dir =
+        vim.fn.system("git -C " .. vim.fn.shellescape(current_dir) .. " rev-parse --show-toplevel 2>/dev/null")
     if vim.v.shell_error == 0 then
         git_cache.git_root = git_dir:gsub("\n", "")
         git_cache.current_repo_name = vim.fn.fnamemodify(git_cache.git_root, ":t")
 
         -- Get branch name
-        local branch = vim.fn.system("git -C " .. vim.pesc(current_dir) .. " branch --show-current 2>/dev/null")
+        local branch =
+            vim.fn.system("git -C " .. vim.fn.shellescape(current_dir) .. " branch --show-current 2>/dev/null")
         if vim.v.shell_error == 0 then
             git_cache.current_branch = branch:gsub("\n", "")
         else
@@ -50,7 +54,8 @@ end
 
 -- Function to get path relative to git root (using cached git_root)
 local function get_relative_path()
-    local full_path = vim.fn.expand("%:p")
+    local full_path_display = vim.fn.expand("%:p")
+    local full_path = vim.loop.fs_realpath(full_path_display) or full_path_display
 
     -- Use cached git root instead of calling git again
     if git_cache.git_root ~= "" then
@@ -76,6 +81,7 @@ local autocmd_id = vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
 })
 
 -- Add autocmd to handle neovim exit
+-- Intended to mitigate hanging on nvim exit
 vim.api.nvim_create_autocmd("VimLeavePre", {
     callback = function()
         git_cache.is_exiting = true
@@ -161,7 +167,8 @@ local function custom_section_filename(args)
 end
 
 return {
-    "echasnovski/mini.statusline",
+    "nvim-mini/mini.statusline",
+    enabled = vim.env.IS_SSH ~= "1",
     version = false,
     -- cond = function()
     -- 	return vim.bo.filetype ~= "snacks_dashboard"

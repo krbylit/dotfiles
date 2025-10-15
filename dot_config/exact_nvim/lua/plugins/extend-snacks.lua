@@ -6,10 +6,22 @@ local function get_terminal_size()
     return width, height
 end
 local terminal_width, terminal_height = get_terminal_size()
-local logo_file = require("misc.dash-helpers").random_logo_file()
-local measure_logo_file = require("misc.dash-helpers").measure_logo_file
+local logo_file = require("utils.dashboard.dash-helpers").random_logo_file()
+local measure_logo_file = require("utils.dashboard.dash-helpers").measure_logo_file
 local logo_width, logo_height = measure_logo_file(logo_file)
 local pane_width = math.floor(terminal_width / 4)
+
+-- Calculate speed multiplier based on logo line count
+-- Adjusted to keep animation duration similar with different heights
+local logo_speed_multiplier = 1
+if logo_height > 20 then
+    logo_speed_multiplier = 1.75
+elseif logo_height > 15 then
+    logo_speed_multiplier = 1.5
+elseif logo_height > 10 then
+    logo_speed_multiplier = 1.25
+end
+local lolcat_delay = math.max(1, math.floor(4 / logo_speed_multiplier))
 
 local picker = require("snacks.picker")
 
@@ -32,19 +44,55 @@ return {
             },
         },
         bigfile = { enabled = true },
+        ---@type snacks.terminal.Config
+        terminal = {
+            -- Open Snacks terminals as a right-side vertical split
+            ---@type snacks.win.Config
+            win = {
+                style = "terminal",
+                position = "right",
+                width = 80, -- set your preferred column width
+            },
+        },
         input = { enabled = true },
         ---@type snacks.lazygit.Config: snacks.terminal.Opts
-        lazygit = { enabled = true },
+        lazygit = {
+            enabled = true,
+            configure = true,
+            win = {
+                -- 0 = max width/height
+                height = 0,
+                width = 0,
+                position = "float",
+                style = "lazygit",
+            },
+        },
         notifier = {
             style = "fancy", -- "compact" | "minimal" | "fancy"
             enabled = true, -- Disabling for now because <leader>un not working to view all notis
             timeout = 3000,
         },
         quickfile = {},
-        -- FIXME: disabling for now as upgrading from snacks #70afc4225ac8ae3e6c8af88d205b03991a173af3 makes scroll not work well (likely due to our high scrolloff setting?)
+        -- FIX: disabling for now as upgrading from snacks #70afc4225ac8ae3e6c8af88d205b03991a173af3 makes scroll not work well (likely due to our high scrolloff setting?)
         scroll = { enabled = false },
         scope = { enabled = true },
-        statuscolumn = { enabled = true },
+        ---@type snacks.statuscolumn.Config
+        -- FIX: Doesn't appear to be working in conjunction with statuscol. We like snacks because the folds and git signs are nice.
+        statuscolumn = {
+            enabled = false,
+            -- left = { "mark", "sign" }, -- priority of signs on the left (high to low)
+            -- right = { "fold", "git" }, -- priority of signs on the right (high to low)
+            -- folds = {
+            --     open = true, -- show open fold icons
+            --     git_hl = true, -- use Git Signs hl for fold icons
+            -- },
+            -- git = {
+            --     -- patterns to match Git signs
+            --     patterns = { "GitSign", "MiniDiffSign" },
+            -- },
+            -- refresh = 100, -- refresh at most every 100ms
+        },
+        ---@type snacks.words.Config
         words = { enabled = true },
         ---@type snacks.zen.Config
         zen = {
@@ -101,7 +149,7 @@ return {
                         ["<C-i>"] = { "focus_input", mode = { "i", "n" } }, -- or any other key you prefer
                         ["<C-l>"] = { "focus_list", mode = { "i", "n" } }, -- or any other key you prefer
                         -- NOTE: This lets us close all selected buffers. We get this from default snacks keymaps as <C-x>, but put here explicitly for documentation
-                        ["<C-x>"] = { "bufdelete", mode = { "n", "i" } },
+                        -- ["<C-x>"] = { "bufdelete", mode = { "n", "i" } },
                         ["<C-o>"] = { "bufdelete_unselected", mode = { "n", "i" } },
                     },
                 },
@@ -113,7 +161,7 @@ return {
                         ["<C-p>"] = { "focus_preview", mode = { "i", "n" } }, -- or any other key you prefer
                         ["<C-i>"] = { "focus_input", mode = { "i", "n" } }, -- or any other key you prefer
                         ["<C-l>"] = { "focus_list", mode = { "i", "n" } }, -- or any other key you prefer
-                        ["<C-x>"] = { "bufdelete", mode = { "n", "i" } },
+                        -- ["<C-x>"] = { "bufdelete", mode = { "n", "i" } },
                         -- NOTE: We also get this from default snacks keymaps.
                         ["dd"] = "bufdelete",
                         ["<C-o>"] = { "bufdelete_unselected", mode = { "n", "i" } },
@@ -132,6 +180,69 @@ return {
             },
             ---@type snacks.picker.sources.Config
             sources = {
+                -- ---@type snacks.picker.explorer.Config
+                explorer = {
+                    finder = "explorer",
+                    sort = { fields = { "sort" } },
+                    supports_live = true,
+                    tree = true,
+                    watch = true,
+                    diagnostics = true,
+                    diagnostics_open = false,
+                    git_status = true,
+                    git_status_open = false,
+                    git_untracked = true,
+                    follow_file = true,
+                    focus = "list",
+                    auto_close = false,
+                    jump = { close = false },
+                    layout = { preset = "sidebar", preview = false },
+                    -- to show the explorer to the right, add the below to
+                    -- your config under `opts.picker.sources.explorer`
+                    -- layout = { layout = { position = "right" } },
+                    formatters = {
+                        file = { filename_only = true },
+                        severity = { pos = "right" },
+                    },
+                    matcher = { sort_empty = false, fuzzy = false },
+                    config = function(opts)
+                        return require("snacks.picker.source.explorer").setup(opts)
+                    end,
+                    win = {
+                        list = {
+                            keys = {
+                                ["<BS>"] = "explorer_up",
+                                ["l"] = "confirm",
+                                ["h"] = "explorer_close", -- close directory
+                                ["a"] = "explorer_add",
+                                ["d"] = "explorer_del",
+                                ["r"] = "explorer_rename",
+                                ["c"] = "explorer_copy",
+                                ["m"] = "explorer_move",
+                                ["o"] = "explorer_open", -- open with system application
+                                ["P"] = "toggle_preview",
+                                ["y"] = { "explorer_yank", mode = { "n", "x" } },
+                                ["p"] = "explorer_paste",
+                                ["u"] = "explorer_update",
+                                ["<c-c>"] = "tcd",
+                                ["<leader>/"] = "picker_grep",
+                                ["<c-t>"] = "terminal",
+                                ["."] = "explorer_focus",
+                                ["I"] = "toggle_ignored",
+                                ["H"] = "toggle_hidden",
+                                ["Z"] = "explorer_close_all",
+                                ["]g"] = "explorer_git_next",
+                                ["[g"] = "explorer_git_prev",
+                                ["]d"] = "explorer_diagnostic_next",
+                                ["[d"] = "explorer_diagnostic_prev",
+                                ["]w"] = "explorer_warn_next",
+                                ["[w"] = "explorer_warn_prev",
+                                ["]e"] = "explorer_error_next",
+                                ["[e"] = "explorer_error_prev",
+                            },
+                        },
+                    },
+                },
                 -- ---@type snacks.picker.notifications.Config: snacks.picker.Config
                 -- ---@field filter? snacks.notifier.level|fun(notif: snacks.notifier.Notif): boolean
                 -- notifications = {},
@@ -147,6 +258,7 @@ return {
                         "**/node_modules/**",
                         "**/dist/**",
                         "**/build/**",
+                        "**/target/**",
                         "**/__pycache__/**",
                     },
                 },
@@ -173,6 +285,7 @@ return {
                         "**/node_modules/**",
                         "**/dist/**",
                         "**/build/**",
+                        "**/target/**",
                         "**/__pycache__/**",
                         "package-lock.json",
                     },
@@ -202,6 +315,10 @@ return {
                 },
             },
         },
+        ---@type snacks.explorer.Config
+        explorer = {
+            replace_netrw = false,
+        },
         ---@type snacks.dashboard.Config
         dashboard = {
             enabled = true,
@@ -215,9 +332,11 @@ return {
                     pane = 1,
                     section = "terminal",
                     -- cmd = 'cat "' .. logo_file .. '" | lolcat -a -d 2 -s 15 -F 0.3 -t -p 100 -f',
-                    cmd = 'bash -c "for i in {1..10}; do clear; cat "'
+                    cmd = 'bash -c "for i in {1..10}; do clear; cat \\"'
                         .. logo_file
-                        .. '" | lolcat -a -d 4 -s 15 -F 0.3 -t -p 100 -f; sleep 4; done"',
+                        .. '\\" | lolcat -a -d '
+                        .. lolcat_delay
+                        .. ' -s 15 -F 0.3 -t -p 100 -f; sleep 4; done"',
                     height = logo_height,
                     width = logo_width,
                     -- height = math.floor(terminal_height / 3),
@@ -326,6 +445,47 @@ return {
             end,
             priority = 200,
         },
+        scratch = {
+            name = "Scratch",
+            ft = function()
+                if vim.bo.buftype == "" and vim.bo.filetype ~= "" then
+                    return vim.bo.filetype
+                end
+                return "markdown"
+            end,
+            ---@type string|string[]?
+            icon = nil, -- `icon|{icon, icon_hl}`. defaults to the filetype icon
+            root = vim.fn.stdpath("data") .. "/scratch",
+            autowrite = true, -- automatically write when the buffer is hidden
+            -- unique key for the scratch file is based on:
+            -- * name
+            -- * ft
+            -- * vim.v.count1 (useful for keymaps)
+            -- * cwd (optional)
+            -- * branch (optional)
+            filekey = {
+                cwd = true, -- use current working directory
+                branch = true, -- use current branch name
+                count = true, -- use vim.v.count1
+            },
+            win = { style = "scratch" },
+            ---@type table<string, snacks.win.Config>
+            win_by_ft = {
+                lua = {
+                    keys = {
+                        ["source"] = {
+                            "<cr>",
+                            function(self)
+                                local name = "scratch." .. vim.fn.fnamemodify(vim.api.nvim_buf_get_name(self.buf), ":e")
+                                Snacks.debug.run({ buf = self.buf, name = name })
+                            end,
+                            desc = "Source buffer",
+                            mode = { "n", "x" },
+                        },
+                    },
+                },
+            },
+        },
         profiler = {
             opts = function(_, opts)
                 ---@type snacks.profiler.Config
@@ -429,6 +589,21 @@ return {
                 Snacks.picker.zoxide()
             end,
             desc = "Zoxide",
+        },
+        -- NOTE: `reveal()` does not toggle open the explorer
+        -- {
+        --     "<leader>fE",
+        --     function()
+        --         Snacks.explorer.reveal()
+        --     end,
+        --     desc = "Open Explorer at File",
+        -- },
+        {
+            "<leader>fe",
+            function()
+                Snacks.explorer.open()
+            end,
+            desc = "Open Explorer",
         },
     },
 }

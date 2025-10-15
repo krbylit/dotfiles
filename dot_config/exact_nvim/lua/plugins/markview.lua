@@ -4,9 +4,10 @@ return {
     lazy = false, -- Recommended
     ft = "markdown", -- If you decide to lazy-load anyway
     dependencies = {
-        -- "nvim-treesitter/nvim-treesitter",
-        "echasnovski/mini.icons",
+        "nvim-treesitter/nvim-treesitter",
+        "nvim-mini/mini.icons",
         { "MeanderingProgrammer/render-markdown.nvim", enabled = false },
+        { "iamcco/markdown-preview.nvim", enabled = false },
     },
     config = function(_, opts)
         local MiniIcons = require("mini.icons")
@@ -23,8 +24,42 @@ return {
                 return vim.cmd("Markview toggle")
             end,
         }):map("<leader>um")
+        -- Setup checkboxes extra (`:Checkbox`)
+        -- FIX: Checkboxes seem to not be rendering right and command does nothing
+        require("markview.extras.checkboxes").setup({
+            --- Default checkbox state(used when adding checkboxes).
+            ---@type string
+            default = "X",
+
+            --- Changes how checkboxes are removed.
+            ---@type
+            ---| "disable" Disables the checkbox.
+            ---| "checkbox" Removes the checkbox.
+            ---| "list_item" Removes the list item markers too.
+            remove_style = "checkbox",
+
+            --- Various checkbox states.
+            ---
+            --- States are in sets to quickly change between them
+            --- when there are a lot of states.
+            ---@type string[][]
+            states = {
+                { " ", "/", "X" },
+                { "<", ">" },
+                { "?", "!", "*" },
+                { '"' },
+                { "l", "b", "i" },
+                { "S", "I" },
+                { "p", "c" },
+                { "f", "k", "w" },
+                { "u", "d" },
+            },
+        })
     end,
     opts = {
+        preview = {
+            hybrid_modes = { "n", "i" },
+        },
         experimental = {
             check_rtp = true,
             check_rtp_message = false,

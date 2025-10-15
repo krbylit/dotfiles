@@ -1,0 +1,5 @@
+{{- $mcpConfig := (joinPath .chezmoi.sourceDir .path.secrets ".cursor/mcp.json") -}}
+{{- if (stat $mcpConfig) -}}
+{{ $mcpConfig }}
+{{- end -}}
+

@@ -269,8 +269,8 @@ return {
             -- your configuration comes here
             -- or leave it empty to use the default settings
             style = "night", -- The theme comes in three styles, `storm`, `moon`, a darker variant `night` and `day`
-            light_style = "day", -- The theme is used when the background is set to light
-            transparent = false, -- Enable this to disable setting the background color
+            light_style = "storm", -- The theme is used when the background is set to light
+            transparent = true, -- Enable this to disable setting the background color
             terminal_colors = true, -- Configure the colors used when opening a `:terminal` in [Neovim](https://github.com/neovim/neovim)
             styles = {
                 -- Style to be applied to different syntax groups
@@ -298,7 +298,15 @@ return {
             --- function will be called with a Highlights and ColorScheme table
             ---@param highlights Highlights
             ---@param colors ColorScheme
-            on_highlights = function(highlights, colors) end,
+            on_highlights = function(highlights, colors)
+                ---@diagnostic disable-next-line: inject-field
+                -- Set window split border color
+                highlights.WinSeparator = {
+                    fg = "#ed8796",
+                    bg = "",
+                    bold = false,
+                }
+            end,
             cache = true, -- When set to true, the theme will be cached for better performance
             ---@type table<string, boolean|{enabled:boolean}>
             plugins = {

@@ -1,5 +1,21 @@
 # Set Editor
-set -gx EDITOR nvim
+if set -q NVIM
+    # Avoid nested neovim instances with neovim-remote
+    # https://github.com/mhinz/neovim-remote#usage https://stackoverflow.com/questions/76024656/can-i-use-nvim-remote-to-replace-nvr
+    set -gx EDITOR "nvr --remote-wait"
+    function nvim
+        command nvr $argv
+    end
+else
+    set -gx EDITOR nvim
+    # Always open files in the same single nvim process
+    # set -gx EDITOR nvr -s
+    # function nvim
+    #     command nvr -s $argv
+    # end
+end
+set -gx VISUAL $EDITOR
+
 set -gx fifc_editor nvim
 
 # Env vars

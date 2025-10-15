@@ -1,22 +1,6 @@
 -- Plugin to help editing chezmoi managed config files
 -- https://github.com/xvzc/chezmoi.nvim
 
--- The below configuration wll allow you to automatically apply changes on files under chezmoi source path.
---  e.g. ~/.local/share/chezmoi/*
-if vim.env.IS_SSH ~= "1" then
-    vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
-        pattern = { os.getenv("HOME") .. "/.local/share/chezmoi/*" },
-        callback = function(ev)
-            local bufnr = ev.buf
-            local edit_watch = function()
-                -- TODO: See if we can re-source nvim config after chezmoi apply
-                require("chezmoi.commands.__edit").watch(bufnr)
-            end
-            vim.schedule(edit_watch)
-        end,
-    })
-end
-
 return {
     "xvzc/chezmoi.nvim",
     enabled = vim.env.IS_SSH ~= "1",

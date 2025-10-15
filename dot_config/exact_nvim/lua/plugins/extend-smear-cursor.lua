@@ -1,24 +1,30 @@
+-- NOTE: smear-cursor causes ~50 hidden windows to be created. These do not seem to increase over time, however it might want to be investigated as possible performance issue
+-- `:lua for _, w in ipairs(vim.api.nvim_list_wins()) do print(w) end` shows ~3 windows during normal operation w/o smear-cursor enabled, with enabled it shows ~53
 return {
     "sphamba/smear-cursor.nvim",
     -- lazy = false,
-    enabled = vim.env.IS_SSH ~= "1",
+    -- enabled = vim.env.IS_SSH ~= "1",
+    enabled = false,
 
     opts = {
         -- default, range
         -- How fast the smear's head moves towards the target.
         -- 0: no movement, 1: instantaneous
-        stiffness = 1, -- 0.6      [0, 1]
+        -- stiffness = 1, -- 0.6      [0, 1]
+        stiffness = 0.9, -- 0.6      [0, 1]
 
         -- Initial velocity factor in the direction opposite to the target
         anticipation = 0.1, -- 0.55,
 
         -- Velocity reduction over time. O: no reduction, 1: full reduction
         -- Adjust "bounciness" of smear, higher reduces overshoot, lower more elastic smear
-        damping = 0.9, -- 0.65
+        -- damping = 0.9, -- 0.65
+        damping = 0.999999, -- 0.65
 
         -- How fast the smear's tail moves towards the target.
         -- 0: no movement, 1: instantaneous
-        trailing_stiffness = 0.1, -- 0.3      [0, 1]
+        -- trailing_stiffness = 0.1, -- 0.3      [0, 1]
+        trailing_stiffness = 0.3, -- 0.3      [0, 1]
 
         -- How much the smear slows down when getting close to the target.
         -- < 0: less slowdown, > 0: more slowdown. Keep small, e.g. [-0.2, 0.2]

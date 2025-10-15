@@ -2,12 +2,12 @@ local colors = require("tokyonight.colors").setup({ style = "night" })
 -- local colors = require("tokyonight").load({ style = "night" })
 
 return {
-    "echasnovski/mini.tabline",
+    "nvim-mini/mini.tabline",
+    enabled = vim.env.IS_SSH ~= "1",
     -- TODO: verify whether this is causing lag. It's showing up as top time spent when profiling.
     -- e.g.      110.49 ms      121   󰊕  mini.tabline.make_tabline_string
-    enabled = true,
     version = false,
-    dependencies = { "echasnovski/mini.icons" },
+    dependencies = { "nvim-mini/mini.icons" },
     -- cond = function()
     -- 	return vim.bo.filetype ~= "snacks_dashboard"
     -- end,
@@ -45,14 +45,17 @@ return {
             -- By default surrounds with space and possibly prepends with icon
             -- format = nil,
 
-            format = function(buf_id, label)
-                -- if vim.bo.filetype == "snacks_dashboard" then
-                -- 	return "" -- Hide tabline label
-                -- end
-                -- Add a `+` to the end of the tab label if the buffer is modified
-                local suffix = vim.bo[buf_id].modified and "+ " or ""
-                return MiniTabline.default_format(buf_id, label) .. suffix
-            end,
+            format = (function()
+                local default_format = MiniTabline.default_format
+                return function(buf_id, label)
+                    -- if vim.bo.filetype == "snacks_dashboard" then
+                    -- 	return "" -- Hide tabline label
+                    -- end
+                    -- Add a `+` to the end of the tab label if the buffer is modified
+                    local suffix = vim.bo[buf_id].modified and "+ " or ""
+                    return default_format(buf_id, label) .. suffix
+                end
+            end)(),
             -- Whether to set Vim's settings for tabline (make it always shown and
             -- allow hidden buffers)
             set_vim_settings = true,

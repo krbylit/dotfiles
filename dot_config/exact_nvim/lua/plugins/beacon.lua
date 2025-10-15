@@ -3,13 +3,13 @@ return {
     enabled = vim.env.IS_SSH ~= "1",
     opts = {
         enabled = true, --- (boolean | fun():boolean) check if enabled
-        speed = 1, --- integer speed at wich animation goes
-        width = 60, --- integer width of the beacon window
+        speed = 3, --- integer speed at wich animation goes
+        width = 80, --- integer width of the beacon window
         -- winblend = 70, --- integer starting transparency of beacon window :h winblend
         winblend = 20, --- integer starting transparency of beacon window :h winblend
         -- fps = 60, --- integer how smooth the animation going to be
         -- min_jump = 10, --- integer what is considered a jump. Number of lines
-        fps = 120, --- integer how smooth the animation going to be
+        fps = 60, --- integer how smooth the animation going to be
         min_jump = 5, --- integer what is considered a jump. Number of lines
         -- cursor_events = { "CursorMoved" }, -- table<string> what events trigger check for cursor moves
         cursor_events = { "FocusGained" }, -- table<string> what events trigger check for cursor moves

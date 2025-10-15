@@ -332,11 +332,16 @@ confirmOnQuit: false
 quitOnTopLevelReturn: true
 # Config relating to things outside of Lazygit like how files are opened, copying to clipboard, etc
 os:
+  # NOTE: `edit...` cmds are hacked a bit here to ensure opening a file from lazygit 1) does not create a new tab in current nvim 2) closes the lazygit window upon file open
+  # The part after `&&` guarantees lazygit window closes. We need the whole cmd here because in some cases 'q' only works to close and other cases '<C-w>o' only works to close. <Esc> is included to ensure we exit macro record if it triggered.
   # Command for editing a file. Should contain "{{filename}}".
-  edit: ""
+  # These changes do not depend on our fish config `if set -q NVIM` setting EDITOR to nvr.
+  # edit: 'nvr -s {{filename}} && nvr -s --remote-send "q<Esc><C-w>o"'
+  edit: 'nvr -s {{filename}} && nvr -s --remote-send "<C-w><C-p>q<Esc><C-w>o"'
   # Command for editing a file at a given line number. Should contain
   # "{{filename}}", and may optionally contain "{{line}}".
-  editAtLine: ""
+  # editAtLine: 'nvr -s +{{line}} {{filename}} && nvr -s --remote-send "q<Esc><C-w>o"'
+  editAtLine: 'nvr -s +{{line}} {{filename}} && nvr -s --remote-send "<C-w><C-p>q<Esc><C-w>o"'
   # Same as EditAtLine, except that the command needs to wait until the
   # window is closed.
   editAtLineAndWait: ""
@@ -347,7 +352,7 @@ os:
   editPreset: "nvim"
   # Command for opening a file, as if the file is double-clicked. Should
   # contain "{{filename}}", but doesn't support "{{line}}".
-  open: ""
+  open: 'nvr -s {{filename}} && nvr -s --remote-send "q<Esc><C-w>o"'
   # Command for opening a link. Should contain "{{link}}".
   openLink: ""
   # EditCommand is the command for editing a file.

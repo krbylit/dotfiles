@@ -1,5 +1,5 @@
 return {
-    "echasnovski/mini.map",
+    "nvim-mini/mini.map",
     lazy = true,
     enabled = vim.env.IS_SSH ~= "1",
     version = false,

@@ -2,14 +2,21 @@
 
 local opt = vim.opt
 
+vim.api.nvim_set_hl(0, "WinSeparator", { fg = "#ed8796", bg = "" })
+
 -- Global options for VS Code and console use
+vim.env.PATH = "/opt/homebrew/bin:" .. (vim.env.PATH or "")
+vim.g.python3_host_prog = "/opt/homebrew/bin/python3"
 vim.g.mapleader = "," -- Set leader key to comma
 vim.api.nvim_set_keymap("", " ", "<Nop>", { noremap = true, silent = true })
 vim.g.maplocalleader = " "
--- Set global for `$(chezmoi source-path)`
-local cm_path = vim.fn.system("chezmoi source-path")
-vim.g.chezmoi_source_path = cm_path
-vim.g.root_spec = { { ".git" }, "lua", "lsp", "cwd" }
+-- Asynchronously set global for `$(chezmoi source-path)`
+vim.schedule(function()
+    vim.g.chezmoi_source_path = vim.fn.system("chezmoi source-path")
+end)
+-- LazyVim root dir detection
+-- vim.g.root_spec = { { ".git" }, "lua", "lsp", "cwd" }
+vim.g.root_spec = { "lsp", { ".git", "lua" }, "cwd" } -- default
 
 -- Ensure the 'list' option is enabled
 vim.opt.list = true
@@ -39,19 +46,21 @@ opt.shell = "fish"
 -- opt.shell = "/opt/homebrew/bin/fish"
 opt.undofile = true -- Save undo history between sessions
 opt.tabstop = 4 -- A tab is equal to 4 spaces
-opt.shiftwidth = 0 -- Number of spaces to use for each step of (auto)indent
+opt.shiftwidth = 0 -- Number of spaces to use for each step of (auto)indent; 0=use tabstop val
 opt.expandtab = true -- Convert tabs to spaces
 opt.autoindent = true
 opt.cursorline = true -- Enable highlighting of the current line
-opt.scrolloff = 999 -- Lines of context
+-- opt.scrolloff = 999 -- Lines of context
+opt.scrolloff = 8 -- Lines of context
 opt.relativenumber = true
 opt.smartindent = true -- Insert indents automatically
 -- opt.colorcolumn = "88" -- Shows a column line at 80 characters
 opt.wrap = true -- Set text display to wrap. Doesn't change text in buffer
 opt.linebreak = true -- wrap long lines at a blank
+-- NOTE: Disabling line wrap indicators as we're getting these from statuscol.nvim
 opt.breakindent = true -- Enable break indent
 opt.breakindentopt = "shift:2,sbr,min:20"
-opt.showbreak = "↳" -- Show a symbol for a line break
+-- opt.showbreak = "↳" -- Show a symbol for a line break
 opt.wrapmargin = 0
 opt.textwidth = 0
 -- opt.showbreak = "	" -- Show a symbol for a line break
@@ -71,17 +80,26 @@ vim.g.lazyvim_prettier_needs_config = false
 
 if vim.fn.has("nvim-0.10") == 1 then
     opt.smoothscroll = true
-    opt.foldexpr = "v:lua.require'lazyvim.util'.ui.foldexpr()"
+    opt.foldexpr = "v:lua.require'lazyvim.util'.treesitter.foldexpr()"
     opt.foldmethod = "expr"
     opt.foldtext = ""
+    opt.foldcolumn = "1"
 else
     opt.foldmethod = "indent"
     opt.foldtext = "v:lua.require'lazyvim.util'.ui.foldtext()"
+    opt.foldcolumn = "1"
 end
+
+-- ================================================================
+-- LAZYVIM OPTS
+-- ================================================================
+-- Set to "basedpyright" to use basedpyright instead of pyright.
+vim.g.lazyvim_python_lsp = "pyright"
 
 -- ================================================================
 -- FILETYPES
 -- ================================================================
+-- WARN: May want to move all autocmds to autocmds.lua to decrease the chance of an autocmd being loaded more than once.
 -- Enable `csvview.nvim` for CSV files
 vim.api.nvim_create_autocmd("FileType", {
     pattern = "csv",
@@ -117,13 +135,26 @@ vim.api.nvim_create_autocmd("FileType", {
     end,
 })
 
+-- Disable by file extension
 local diagnostics_disabled_extensions = {
     "*.tfvars",
     "*.tfbackend",
 }
--- Disable diagnostics by file extension
+-- Disable by file path
+local diagnostics_disabled_dirs = {
+    vim.fn.expand("$HOME") .. "/.local/share/nvim/scratch/*",
+}
+-- Combine for autocmd
+local diagnostics_disabled_patterns = {}
+vim.list_extend(diagnostics_disabled_patterns, diagnostics_disabled_dirs)
+vim.list_extend(diagnostics_disabled_patterns, diagnostics_disabled_extensions)
+-- Strip newlines if they exist, as `patterns` disallows those.
+diagnostics_disabled_patterns = vim.tbl_map(function(p)
+    return p:gsub("\n", "")
+end, diagnostics_disabled_patterns)
+-- Disable diagnostics by other patterns
 vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
-    pattern = diagnostics_disabled_extensions,
+    pattern = diagnostics_disabled_patterns,
     callback = function()
         -- Disable diagnostics only in current buffer.
         vim.diagnostic.enable(false, { bufnr = 0 })
@@ -172,6 +203,7 @@ vim.filetype.add({
     pattern = {
         [".*dot_zshrc"] = "zsh",
         [".*dot_gitconfig"] = "gitconfig",
+        [".*gitconfig$"] = "gitconfig",
         [".*dot_bash.*"] = "bash",
         [".*ssh/.*config"] = "sshconfig",
     },

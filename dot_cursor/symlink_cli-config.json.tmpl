@@ -1,0 +1,5 @@
+{{- $cursorConfig := (joinPath .chezmoi.sourceDir .path.secrets "ctrld-configs/cursor/cli-config.json") -}}
+{{- if (stat $cursorConfig) -}}
+{{ $cursorConfig }}
+{{- end -}}
+

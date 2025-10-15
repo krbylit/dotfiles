@@ -6,15 +6,15 @@ return {
     enabled = vim.env.IS_SSH ~= "1",
     branch = "harpoon2",
     dependencies = { "nvim-lua/plenary.nvim" },
-    ---@type HarpoonSettings
     opts = {
+        ---@type HarpoonSettings
         settings = {
             save_on_toggle = true,
             sync_on_ui_close = true,
             key = function()
                 -- return vim.loop.cwd()
                 -- NOTE: This let's us get harpoon list when in child dirs under project.
-                return Snacks.git.get_root()
+                return Snacks.git.get_root() or ""
             end,
         },
     },
@@ -30,7 +30,7 @@ return {
                 desc = "Harpoon File",
             },
             {
-                "<C-e>",
+                "<C-n>",
                 function()
                     harpoon.ui:toggle_quick_menu(harpoon:list())
                 end,
