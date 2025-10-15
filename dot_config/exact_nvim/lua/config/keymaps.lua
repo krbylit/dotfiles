@@ -9,7 +9,6 @@ if vim.g.started_by_firenvim == true then
     -- NOTE: Firenvim keymaps need to be loaded here, in the normal execution order of loading keymaps
     require("firenvim-config.keymaps").setup()
 end
-
 -- ================================================================
 -- MOVEMENT
 -- ================================================================
@@ -35,6 +34,14 @@ local toggle_scrolloff = function()
     vim.wo.scrolloff = enable and 8 or 999
 end
 map({ "n", "v", "i", "x" }, "<C-g>", toggle_scrolloff, { noremap = true, expr = true, silent = true })
+-- NOTE: these are explicitly set because at some point we lost them and `<[f>` searches for file in path
+local m = require("nvim-treesitter-textobjects.move")
+vim.keymap.set("n", "]f", function()
+    m.goto_next_start("@function.outer")
+end, { silent = true, noremap = true, desc = "Next function" })
+vim.keymap.set("n", "[f", function()
+    m.goto_previous_start("@function.outer")
+end, { silent = true, noremap = true, desc = "Prev function" })
 
 -- ================================================================
 -- COMMENTS
