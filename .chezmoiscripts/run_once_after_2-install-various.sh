@@ -111,6 +111,12 @@ if [ "${IS_SSH}" != "1" ]; then
 fi
 
 if [ "${IS_SSH}" != "1" ]; then
+    if ! command -v tuios &>/dev/null; then
+        go install github.com/Gaurav-Gosain/tuios/cmd/tuios@latest
+    fi
+fi
+
+if [ "${IS_SSH}" != "1" ]; then
     if ! command -v stormy &>/dev/null; then
         if command -v go &>/dev/null; then
             go install github.com/ashish0kumar/stormy@latest
