@@ -289,6 +289,16 @@ return {
                         "**/__pycache__/**",
                         "package-lock.json",
                     },
+                    formatters = {
+                        file = {
+                            filename_first = true,
+                            filename_only = false,
+                            full_path = true,
+                            git_status_hl = true,
+                            min_width = 40,
+                            truncate = false,
+                        },
+                    },
                 },
                 ---@type snacks.picker.lsp.Config
                 lsp_declarations = {},
@@ -312,6 +322,11 @@ return {
             formatters = {
                 file = {
                     filename_first = true,
+                    filename_only = false,
+                    full_path = true,
+                    git_status_hl = true,
+                    min_width = 40,
+                    truncate = false,
                 },
             },
         },
