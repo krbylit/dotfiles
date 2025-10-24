@@ -1,38 +1,39 @@
-local filetypes = {
-    { text = "markdown" },
-    { text = "javascript" },
-    { text = "python" },
-    { text = "json" },
-    { text = "yaml" },
-    { text = "toml" },
-    { text = "lua" },
-    { text = "rust" },
-    { text = "javascriptreact" },
-    -- { text = "css" },
-    -- { text = "go" },
-    -- { text = "html" },
-    -- { text = "odin" },
-    -- { text = "typescript" },
-    -- { text = "typescriptreact" },
-    -- { text = "zig" },
-}
+-- local filetypes = {
+--     { text = "markdown" },
+--     { text = "javascript" },
+--     { text = "python" },
+--     { text = "json" },
+--     { text = "yaml" },
+--     { text = "toml" },
+--     { text = "lua" },
+--     { text = "rust" },
+--     { text = "javascriptreact" },
+--     -- { text = "css" },
+--     -- { text = "go" },
+--     -- { text = "html" },
+--     -- { text = "odin" },
+--     -- { text = "typescript" },
+--     -- { text = "typescriptreact" },
+--     -- { text = "zig" },
+-- }
 
 return {
-    "snacks.nvim",
-    keys = {
-        {
-            "-",
-            function()
-                require("utils.snacks.scratch").new_scratch(filetypes)
-            end,
-            desc = "Toggle Scratch Buffer",
-        },
-        {
-            "_",
-            function()
-                require("utils.snacks.scratch").select_scratch()
-            end,
-            desc = "Select Scratch Buffer",
-        },
-    },
+    -- NOTE: OBE; this is now provided natively by snacks.nvim. Can delete selected scratch buffers with <c-x> as well.
+    -- "snacks.nvim",
+    -- keys = {
+    --     {
+    --         "-",
+    --         function()
+    --             require("utils.snacks.scratch").new_scratch(filetypes)
+    --         end,
+    --         desc = "Toggle Scratch Buffer",
+    --     },
+    --     {
+    --         "_",
+    --         function()
+    --             require("utils.snacks.scratch").select_scratch()
+    --         end,
+    --         desc = "Select Scratch Buffer",
+    --     },
+    -- },
 }
