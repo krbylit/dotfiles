@@ -1,0 +1,5 @@
+{{- $trippyConf := (joinPath .chezmoi.sourceDir .path.secrets ".config/trippy/trippy.toml") -}}
+{{- if (stat $trippyConf) -}}
+{{ $trippyConf }}
+{{- end -}}
+

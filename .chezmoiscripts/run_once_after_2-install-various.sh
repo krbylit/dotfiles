@@ -74,6 +74,20 @@ if [ "${IS_SSH}" != "1" ]; then
 fi
 
 if [ "${IS_SSH}" != "1" ]; then
+    if ! command -v trip &>/dev/null; then
+        # TUI for network monitoring
+        cargo install trippy --locked
+    fi
+fi
+
+if [ "${IS_SSH}" != "1" ]; then
+    if ! command -v rustnet &>/dev/null; then
+        # TUI for network monitoring
+        cargo install rustnet-monitor
+    fi
+fi
+
+if [ "${IS_SSH}" != "1" ]; then
     if ! command -v gittype &>/dev/null; then
         cargo install gittype
     fi
