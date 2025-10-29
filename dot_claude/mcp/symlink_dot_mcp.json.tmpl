@@ -1,1 +1,5 @@
-{{ .chezmoi.sourceDir }}{{ .path.ctrld_configs }}/claude/mcp/dot_mcp.json
+{{- $mcpJson := (joinPath .chezmoi.sourceDir .path.secrets "ctrld-configs/claude/mcp/.mcp.json") -}}
+{{- if (stat $mcpJson) -}}
+{{ $mcpJson }}
+{{- end -}}
+
