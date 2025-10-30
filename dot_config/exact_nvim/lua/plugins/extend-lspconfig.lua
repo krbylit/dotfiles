@@ -134,15 +134,6 @@ return {
         document_highlight = {
             enabled = true,
         },
-        -- add any global capabilities here
-        capabilities = {
-            workspace = {
-                fileOperations = {
-                    didRename = true,
-                    willRename = true,
-                },
-            },
-        },
         -- options for vim.lsp.buf.format
         -- `bufnr` and `filter` is handled by the LazyVim formatter,
         -- but can be also overridden when specified
@@ -154,6 +145,17 @@ return {
         ---@type lspconfig.options
         ---@diagnostic disable: missing-fields
         servers = {
+            ["*"] = {
+                -- add any global capabilities here
+                capabilities = {
+                    workspace = {
+                        fileOperations = {
+                            didRename = true,
+                            willRename = true,
+                        },
+                    },
+                },
+            },
             yamlls = {
                 enabled = false,
                 filetypes = { "yaml", "yml" },

@@ -68,6 +68,12 @@ if [ "${IS_SSH}" != "1" ]; then
 fi
 
 if [ "${IS_SSH}" != "1" ]; then
+    if ! command -v reddix &>/dev/null; then
+        curl --proto '=https' --tlsv1.2 -LsSf https://github.com/ck-zhang/reddix/releases/latest/download/reddix-installer.sh | sh
+    fi
+fi
+
+if [ "${IS_SSH}" != "1" ]; then
     if ! command -v tclock &>/dev/null; then
         cargo install clock-tui
     fi

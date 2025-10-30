@@ -1,0 +1,5 @@
+{{- $reddixConf := (joinPath .chezmoi.sourceDir .path.secrets ".config/reddix/config.yaml") -}}
+{{- if (stat $reddixConf) -}}
+{{ $reddixConf }}
+{{- end -}}
+
