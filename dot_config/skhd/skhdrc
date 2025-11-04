@@ -104,5 +104,5 @@ shift + alt - q : yabai -m space --destroy
 ctrl + alt - q : yabai --stop-service
 ctrl + alt - s : yabai --start-service
 ctrl + alt - r : yabai --restart-service
-alt - r : skhd --restart-service && yabai --restart-service && sleep 1 && yabai -m rule --apply
+alt - r : env -u TERMINFO sudo -n /opt/homebrew/bin/yabai --load-sa && skhd --restart-service && yabai --stop-service && yabai --start-service && sleep 1 && yabai -m rule --apply
 alt - a : yabai -m rule --apply
