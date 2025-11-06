@@ -57,6 +57,12 @@ if [ "${IS_SSH}" != "1" ]; then
     fi
 fi
 
+if [ "${IS_SSH}" != "1" ]; then
+    if ! command -v specify &>/dev/null; then
+        uv tool install specify-cli --from git+https://github.com/github/spec-kit.git
+    fi
+fi
+
 if ! command -v typescript-language-server &>/dev/null; then
     npm install -g typescript typescript-language-server
 fi
