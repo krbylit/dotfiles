@@ -330,6 +330,18 @@ on = ["s"]
 run = "plugin searchjump"
 desc = "searchjump mode"
 
+# ripgrep-live plugin for interactive text search
+[[mgr.prepend_keymap]]
+on = "<C-s>"
+run = "plugin ripgrep-live"
+desc = "Search text and navigate to file"
+
+# popup-shell plugin for interactive fish shell
+[[mgr.prepend_keymap]]
+on = "<C-/>"
+run = "plugin popup-shell"
+desc = "Open fish shell in popup"
+
 # install `ya pack -a Lil-Dank/lazygit`
 [[mgr.prepend_keymap]]
 on = ["g", "l"]
@@ -431,7 +443,7 @@ keymap = [
     { on = ".", run = "hidden toggle", desc = "Toggle the visibility of hidden files" },
     { on = "s", run = "search fd", desc = "Search files by name using fd" },
     { on = "S", run = "search rg", desc = "Search files by content using ripgrep" },
-    { on = "<C-s>", run = "escape --search", desc = "Cancel the ongoing search" },
+    # { on = "<C-s>", run = "escape --search", desc = "Cancel the ongoing search" }, # NOTE: <C-s> rebound to ripgrep_live search. We can still escape search with <Esc>
     { on = "z", run = "plugin zoxide", desc = "Jump to a directory using zoxide" },
     { on = "Z", run = "plugin fzf", desc = "Jump to a directory or reveal a file using fzf" },
 
@@ -709,8 +721,8 @@ keymap = [
     { on = "l", run = "move 1", desc = "Move forward a character" },
     { on = "<Left>", run = "move -1", desc = "Move back a character" },
     { on = "<Right>", run = "move 1", desc = "Move forward a character" },
-    { on = "<C-b>", run = "move -1", desc = "Move back a character" },
-    { on = "<C-f>", run = "move 1", desc = "Move forward a character" },
+    { on = "<C-h>", run = "move -1", desc = "Move back a character" },
+    { on = "<C-l>", run = "move 1", desc = "Move forward a character" },
 
     # Word-wise movement
     { on = "b", run = "backward", desc = "Move back to the start of the current or previous word" },
@@ -730,7 +742,7 @@ keymap = [
     # Delete
     { on = "<Backspace>", run = "backspace", desc = "Delete the character before the cursor" },
     { on = "<Delete>", run = "backspace --under", desc = "Delete the character under the cursor" },
-    { on = "<C-h>", run = "backspace", desc = "Delete the character before the cursor" },
+    # { on = "<C-h>", run = "backspace", desc = "Delete the character before the cursor" },
     { on = "<C-d>", run = "backspace --under", desc = "Delete the character under the cursor" },
 
     # Kill
