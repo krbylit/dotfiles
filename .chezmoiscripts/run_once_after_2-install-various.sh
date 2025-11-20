@@ -86,6 +86,12 @@ if [ "${IS_SSH}" != "1" ]; then
 fi
 
 if [ "${IS_SSH}" != "1" ]; then
+    if ! command -v filessh &>/dev/null; then
+        cargo install --locked filessh
+    fi
+fi
+
+if [ "${IS_SSH}" != "1" ]; then
     if ! command -v trip &>/dev/null; then
         # TUI for network monitoring
         cargo install trippy --locked
