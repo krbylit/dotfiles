@@ -157,7 +157,7 @@ return {
                 },
             },
             yamlls = {
-                enabled = false,
+                enabled = true,
                 filetypes = { "yaml", "yml" },
                 settings = {
                     yaml = {
@@ -176,7 +176,7 @@ return {
                 },
             },
             taplo = {
-                enabled = false,
+                enabled = true,
                 filetypes = { "toml", "chezmoitomltmpl" },
                 settings = {
                     toml = {
