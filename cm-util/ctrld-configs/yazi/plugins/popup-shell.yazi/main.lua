@@ -7,8 +7,12 @@ return {
         local permit = ya.hide()
 
         -- Spawn fish shell with inherited stdin/stdout/stderr for full interactivity
-        local child, err =
-            Command("fish"):stdin(Command.INHERIT):stdout(Command.INHERIT):stderr(Command.INHERIT):spawn()
+        local child, err = Command("fish")
+            :env("IS_YAZI_SUBSHELL", "1")
+            :stdin(Command.INHERIT)
+            :stdout(Command.INHERIT)
+            :stderr(Command.INHERIT)
+            :spawn()
 
         if not child then
             ya.notify({
