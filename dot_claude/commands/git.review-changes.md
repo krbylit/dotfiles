@@ -402,10 +402,99 @@ This command performs a thorough code review of changes, analyzing for common is
 
 10. **Report Results**:
 
-- Output the structured review report
+- Save the structured review report to a timestamped file in the repository root directory
+- Output a summary confirmation to the user
 - Provide clear severity counts
 - Give actionable recommendations
 - Suggest review decision (approve/request changes)
+
+   **File Output**:
+   - Generate filename: `PR_REVIEW_<timestamp>.md` (e.g., `PR_REVIEW_2025-01-15_143022.md`)
+   - Timestamp format: `YYYY-MM-DD_HHMMSS`
+   - Write the complete markdown report to this file
+   - Confirm to user: `📝 Review saved to PR_REVIEW_<timestamp>.md`
+
+11. **Cross-Review Analysis (Senior Engineer Meta-Review)**:
+
+    After writing the review file, check for other `PR_REVIEW_*.md` files in the repository root:
+
+    ```bash
+    ls -1 PR_REVIEW_*.md 2>/dev/null | grep -v "<current_review_filename>"
+    ```
+
+    **If other PR review files exist**:
+
+    a. **Read all existing PR review files** (excluding the one just written)
+
+    b. **Act as a Senior Software Engineer** reviewing the work of junior engineers:
+       - Treat all other PR_REVIEW files as reviews written by junior engineers
+       - Treat the current review as your own authoritative analysis
+       - Apply critical evaluation to all claims and findings
+
+    c. **Perform comparative analysis**:
+       - Identify issues raised in other reviews that the current review missed
+       - Evaluate the validity of each claim in other reviews
+       - Note any false positives or over-reported issues in other reviews
+       - Identify consensus findings (issues flagged by multiple reviews)
+       - Note conflicting assessments between reviews
+
+    d. **Append a "Cross-Review Analysis" section** to the current PR review file:
+
+    ```markdown
+    ---
+
+    ## Cross-Review Analysis (Senior Engineer Meta-Review)
+
+    **Reviews Analyzed**: [count] additional PR review(s) found
+    **Review Files**:
+    - [list of other PR_REVIEW filenames with timestamps]
+
+    ### Missed Issues from Other Reviews
+
+    [Issues flagged by other reviews that this review did not catch, with evaluation of their validity]
+
+    | Source Review | Issue | Validity Assessment | Action Recommended |
+    |---------------|-------|---------------------|-------------------|
+    | PR_REVIEW_xxx | [issue] | Valid/Invalid/Partially Valid | Include/Dismiss/Investigate |
+
+    ### Consensus Findings
+
+    [Issues identified by multiple reviews - these have higher confidence]
+
+    - [Issue]: Flagged by [N] reviews (this review + [list others])
+
+    ### Conflicting Assessments
+
+    [Where reviews disagree on severity or validity]
+
+    | Issue | This Review | Other Review(s) | Senior Assessment |
+    |-------|-------------|-----------------|-------------------|
+    | [issue] | [this assessment] | [other assessment] | [final ruling] |
+
+    ### Questionable Claims in Other Reviews
+
+    [Issues flagged by other reviews that appear to be false positives or overblown]
+
+    - **[PR_REVIEW_xxx]**: [claim] - **Assessment**: [why this is invalid/overblown]
+
+    ### Summary of Review Quality
+
+    **Most Thorough Review**: [which review, including this one, was most comprehensive]
+    **Most Accurate Review**: [which review had the highest signal-to-noise ratio]
+    **Key Gaps Across All Reviews**: [any issues that ALL reviews may have missed]
+
+    ### Final Recommendations
+
+    Based on cross-review analysis:
+    1. [Consolidated action item accounting for all reviews]
+    2. [Additional item if other reviews raised valid points]
+
+    **Confidence Level**: [High/Medium/Low] - [explanation of confidence based on review consensus]
+    ```
+
+    e. **If no other PR review files exist**:
+       - Do not append anything
+       - Optionally note to user: "No other PR review files found for cross-analysis"
 
 ## Review Quality Guidelines
 
