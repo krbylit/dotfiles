@@ -80,6 +80,18 @@ if [ "${IS_SSH}" != "1" ]; then
 fi
 
 if [ "${IS_SSH}" != "1" ]; then
+    if ! command -v csvi &>/dev/null; then
+        go install github.com/hymkor/csvi/cmd/csvi@latest
+    fi
+fi
+
+if [ "${IS_SSH}" != "1" ]; then
+    if ! command -v e2c &>/dev/null; then
+        go install github.com/nlamirault/e2c/cmd/e2c@latest
+    fi
+fi
+
+if [ "${IS_SSH}" != "1" ]; then
     if ! command -v tclock &>/dev/null; then
         cargo install clock-tui
     fi

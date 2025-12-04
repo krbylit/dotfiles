@@ -1,6 +1,6 @@
 ---
 description: Generate comprehensive PR title, description, and checklist from branch changes
-allowed-tools: Bash, Read
+allowed-tools: Bash, Read, Write
 argument-hint: [optional: --base-branch develop]
 ---
 
@@ -488,7 +488,43 @@ This command analyzes all changes in the current branch compared to the base bra
     - Ensure it strictly follows conventional commit format
     - Do not proceed until title passes all validation checks
 
-13. **Provide GitHub CLI Command**:
+13. **Save PR Description to File**:
+
+    **File Naming**:
+    - Generate filename: `PR_DESC_<timestamp>.md`
+    - Timestamp format: `YYYY-MM-DD_HHMMSS`
+    - Example: `PR_DESC_2025-01-15_164522.md`
+
+    **File Content**:
+    ```markdown
+    # Pull Request
+
+    **Title**: <generated-title>
+
+    **Base Branch**: <base-branch>
+
+    **Current Branch**: <current-branch>
+
+    **Generated**: <timestamp>
+
+    ---
+
+    <generated-description>
+    ```
+
+    **File Location**:
+    - Save to repository root directory
+    - Confirm to user: `📝 PR description saved to PR_DESC_<timestamp>.md`
+
+    **Benefits**:
+    - Can edit description before creating PR
+    - Reference for future PRs
+    - Easy to copy/paste into GitHub UI
+    - Version control of PR descriptions
+
+14. **Provide GitHub CLI Command**:
+
+    After saving the file, provide the command to create the PR:
 
     ```bash
     # Push branch
@@ -503,7 +539,16 @@ This command analyzes all changes in the current branch compared to the base bra
     )" \
       --base <base-branch> \
       --reviewer <suggested-reviewers>
+
+    # OR: Use the saved file
+    gh pr create \
+      --title "<generated-title>" \
+      --body-file PR_DESC_<timestamp>.md \
+      --base <base-branch> \
+      --reviewer <suggested-reviewers>
     ```
+
+    **Note**: The second command variant reads from the saved file, making it easy to edit the description before creating the PR.
 
 ## PR Quality Guidelines
 
