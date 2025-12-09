@@ -76,7 +76,7 @@ jobs:
           find . -mindepth 1 ! -regex '^./.git\(/.*\)?' ! -regex '^./.github\(/.*\)?' -delete
 
           # Clone private dev and copy contents
-          git clone --branch dev git@github.com:krbylit/dotfiles-private.git temp
+          git clone --branch develop git@github.com:krbylit/dotfiles-private.git temp
           cp -r temp/* .
           rm -rf temp
 
@@ -84,7 +84,7 @@ jobs:
           git add -A
           git commit -m "Initial sync from private repository"
 
-          # Force push to dev, completely replacing history
-          git branch -D dev || true
-          git branch -m dev
-          git push origin dev --force
+          # Force push to develop, completely replacing history
+          git branch -D develop || true
+          git branch -m develop
+          git push origin develop --force

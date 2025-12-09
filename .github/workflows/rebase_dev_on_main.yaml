@@ -9,7 +9,7 @@ on:
 
 jobs:
   rebase_dev:
-    if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main' && github.event.pull_request.head.ref == 'dev'
+    if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main' && github.event.pull_request.head.ref == 'develop'
     runs-on: ubuntu-latest
 
     steps:
@@ -26,13 +26,13 @@ jobs:
       - name: Fetch All Branches
         run: |
           git fetch origin main
-          git fetch origin dev
+          git fetch origin develop
 
-      - name: Rebase `dev` onto `main`
+      - name: Rebase `develop` onto `main`
         run: |
-          git checkout dev
+          git checkout develop
           git rebase main
 
       - name: Push the Rebasing Changes (Force Push for Clean History)
         run: |
-          git push origin dev --force-with-lease
+          git push origin develop --force-with-lease
