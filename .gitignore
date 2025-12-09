@@ -4,3 +4,4 @@ commit_message.txt
 .gitmodules
 .aider*
 !.aiderignore
+vaults

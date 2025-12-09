@@ -10,3 +10,5 @@
 --bind ctrl-u:half-page-up
 --bind ctrl-p:toggle-preview
 --bind 'ctrl-o:execute($EDITOR {})'
+--bind ctrl-a:select-all
+--bind ctrl-r:deselect-all

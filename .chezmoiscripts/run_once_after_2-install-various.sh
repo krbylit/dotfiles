@@ -57,6 +57,12 @@ if [ "${IS_SSH}" != "1" ]; then
     fi
 fi
 
+if [ "${IS_SSH}" != "1" ]; then
+    if ! command -v specify &>/dev/null; then
+        uv tool install specify-cli --from git+https://github.com/github/spec-kit.git
+    fi
+fi
+
 if ! command -v typescript-language-server &>/dev/null; then
     npm install -g typescript typescript-language-server
 fi
@@ -68,8 +74,46 @@ if [ "${IS_SSH}" != "1" ]; then
 fi
 
 if [ "${IS_SSH}" != "1" ]; then
+    if ! command -v reddix &>/dev/null; then
+        curl --proto '=https' --tlsv1.2 -LsSf https://github.com/ck-zhang/reddix/releases/latest/download/reddix-installer.sh | sh
+    fi
+fi
+
+if [ "${IS_SSH}" != "1" ]; then
+    if ! command -v csvi &>/dev/null; then
+        go install github.com/hymkor/csvi/cmd/csvi@latest
+    fi
+fi
+
+if [ "${IS_SSH}" != "1" ]; then
+    if ! command -v e2c &>/dev/null; then
+        go install github.com/nlamirault/e2c/cmd/e2c@latest
+    fi
+fi
+
+if [ "${IS_SSH}" != "1" ]; then
     if ! command -v tclock &>/dev/null; then
         cargo install clock-tui
+    fi
+fi
+
+if [ "${IS_SSH}" != "1" ]; then
+    if ! command -v filessh &>/dev/null; then
+        cargo install --locked filessh
+    fi
+fi
+
+if [ "${IS_SSH}" != "1" ]; then
+    if ! command -v trip &>/dev/null; then
+        # TUI for network monitoring
+        cargo install trippy --locked
+    fi
+fi
+
+if [ "${IS_SSH}" != "1" ]; then
+    if ! command -v rustnet &>/dev/null; then
+        # TUI for network monitoring
+        cargo install rustnet-monitor
     fi
 fi
 
@@ -107,6 +151,12 @@ fi
 if [ "${IS_SSH}" != "1" ]; then
     if ! command -v nerdlog &>/dev/null; then
         go install github.com/dimonomid/nerdlog/cmd/nerdlog@master
+    fi
+fi
+
+if [ "${IS_SSH}" != "1" ]; then
+    if ! command -v tuios &>/dev/null; then
+        go install github.com/Gaurav-Gosain/tuios/cmd/tuios@latest
     fi
 fi
 

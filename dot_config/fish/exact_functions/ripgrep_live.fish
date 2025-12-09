@@ -16,11 +16,10 @@ function ripgrep_live
         --bind "start:$RELOAD" --bind "change:$RELOAD" \
         --bind "enter:become:$OPENER" \
         --bind "ctrl-o:execute:$OPENER" \
-        --bind "ctrl-a:select-all,ctrl-u:deselect-all,ctrl-p:toggle-preview" \
         --delimiter : \
         --preview 'bat --style=full --color=always --highlight-line {2} {1}' \
-        --preview-window '~4,+{2}+4/3,<80(up)' \
-        --query "$argv"
+        --preview-window '~4,+{2}+4/3,<80(up)'
+    # --query "$argv" # NOTE: This puts any text already on command line into to query, so with this enabled we cannot use this to "fill in" an argument; e.g. `nvim <ripgrep_live()>` does not work to open found file, it will search "nvim".
     # Unset custom config so `rg <pattern>` works as it normally would
     set -e RIPGREP_CONFIG_PATH
 end

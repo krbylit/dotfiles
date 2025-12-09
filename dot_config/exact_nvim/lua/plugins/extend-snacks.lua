@@ -102,6 +102,17 @@ return {
                 inlay_hints = false,
             },
         },
+        gh = {
+            --- Keymaps for GitHub buffers
+            ---@type table<string, snacks.gh.Keymap|false>?
+            keys = {
+                select = { "<cr>", "gh_actions", desc = "Select Action" },
+                edit = { "i", "gh_edit", desc = "Edit" },
+                comment = { "a", "gh_comment", desc = "Add Comment" },
+                close = { "c", "gh_close", desc = "Close" },
+                reopen = { "o", "gh_reopen", desc = "Reopen" },
+            },
+        },
         ---@type snacks.picker.Config
         picker = {
             -- ---@type snacks.picker.matcher.Config
@@ -180,6 +191,14 @@ return {
             },
             ---@type snacks.picker.sources.Config
             sources = {
+                gh_issue = {
+                    -- your gh_issue picker configuration comes here
+                    -- or leave it empty to use the default settings
+                },
+                gh_pr = {
+                    -- your gh_pr picker configuration comes here
+                    -- or leave it empty to use the default settings
+                },
                 -- ---@type snacks.picker.explorer.Config
                 explorer = {
                     finder = "explorer",
@@ -289,6 +308,16 @@ return {
                         "**/__pycache__/**",
                         "package-lock.json",
                     },
+                    formatters = {
+                        file = {
+                            filename_first = true,
+                            filename_only = false,
+                            full_path = true,
+                            git_status_hl = true,
+                            min_width = 40,
+                            truncate = false,
+                        },
+                    },
                 },
                 ---@type snacks.picker.lsp.Config
                 lsp_declarations = {},
@@ -312,6 +341,11 @@ return {
             formatters = {
                 file = {
                     filename_first = true,
+                    filename_only = false,
+                    full_path = true,
+                    git_status_hl = true,
+                    min_width = 40,
+                    truncate = false,
                 },
             },
         },
@@ -583,6 +617,35 @@ return {
         },
     },
     keys = {
+        -- TODO: Check on snacks.gh later. We need ability to comment on specific lines in a PR diff, and only Octo provides this currently.
+        -- {
+        --     "<leader>gi",
+        --     function()
+        --         Snacks.picker.gh_issue()
+        --     end,
+        --     desc = "GitHub Issues (open)",
+        -- },
+        -- {
+        --     "<leader>gI",
+        --     function()
+        --         Snacks.picker.gh_issue({ state = "all" })
+        --     end,
+        --     desc = "GitHub Issues (all)",
+        -- },
+        -- {
+        --     "<leader>gp",
+        --     function()
+        --         Snacks.picker.gh_pr()
+        --     end,
+        --     desc = "GitHub Pull Requests (open)",
+        -- },
+        -- {
+        --     "<leader>gP",
+        --     function()
+        --         Snacks.picker.gh_pr({ state = "all" })
+        --     end,
+        --     desc = "GitHub Pull Requests (all)",
+        -- },
         {
             "<leader>z",
             function()

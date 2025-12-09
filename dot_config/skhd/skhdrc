@@ -104,5 +104,5 @@ shift + alt - q : yabai -m space --destroy
 ctrl + alt - q : yabai --stop-service
 ctrl + alt - s : yabai --start-service
 ctrl + alt - r : yabai --restart-service
-alt - r : skhd --restart-service && yabai --restart-service && sleep 1 && yabai -m rule --apply
+alt - r : osascript -e 'tell application "System Events" to set visible of (every process whose visible is false and background only is false) to true'; skhd --restart-service; env -u TERMINFO sudo -n /opt/homebrew/bin/yabai --load-sa; yabai --stop-service; sleep .25; yabai --start-service; sleep 1.5; yabai -m rule --apply
 alt - a : yabai -m rule --apply

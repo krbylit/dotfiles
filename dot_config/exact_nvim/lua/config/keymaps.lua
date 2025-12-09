@@ -102,7 +102,7 @@ wk.add({
     mode = "n",
     remap = false,
     {
-        "<leader>e",
+        "<leader>m",
         function()
             if not MiniFiles.close() then
                 if is_snacks_dashboard() then
@@ -119,7 +119,7 @@ wk.add({
         desc = "MiniFiles Explorer (file)",
     },
     {
-        "<leader>E",
+        "<leader>M",
         function()
             if not MiniFiles.close() then
                 MiniFiles.open(vim.cmd.pwd())

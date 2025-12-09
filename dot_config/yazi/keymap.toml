@@ -7,104 +7,126 @@ on = "F"
 run = "plugin smart-filter"
 desc = "Smart filter"
 
-# FIXME: must-have keymaps for sort prefs by location plugin
-# [[mgr.prepend_keymap]]
-# on = ["."]
-# run = ["hidden toggle", "plugin pref-by-location -- save"]
-# desc = "Toggle the visibility of hidden files"
-# on = ["m", "s"]
-# run = ["linemode size", "plugin pref-by-location -- save"]
-# desc = "Linemode: size"
-# on = ["m", "p"]
-# run = ["linemode permissions", "plugin pref-by-location -- save"]
-# desc = "Linemode: permissions"
-# on = ["m", "b"]
-# run = ["linemode btime", "plugin pref-by-location -- save"]
-# desc = "Linemode: btime"
-# on = ["m", "m"]
-# run = ["linemode mtime", "plugin pref-by-location -- save"]
-# desc = "Linemode: mtime"
-# on = ["m", "o"]
-# run = ["linemode owner", "plugin pref-by-location -- save"]
-# desc = "Linemode: owner"
-# on = ["m", "n"]
-# run = ["linemode none", "plugin pref-by-location -- save"]
-# desc = "Linemode: none"
-# run = ["linemode size_and_mtime", "plugin pref-by-location -- save"]
-# desc = "Show Size and Modified time"
-# on = [",", "t"]
-# run = "plugin pref-by-location -- toggle"
-# desc = "Toggle auto-save preferences"
-# on = [",", "d"]
-# run = "plugin pref-by-location -- disable"
-# desc = "Disable auto-save preferences"
-# on = [",", "R"]
-# run = ["plugin pref-by-location -- reset"]
-# desc = "Reset preference of cwd"
-# on = [",", "m"]
-# run = [
-#     "sort mtime --reverse=no",
-#     "linemode mtime",
-#     "plugin pref-by-location -- save",
-# ]
-# desc = "Sort by modified time"
-# on = [",", "M"]
-# run = [
-#     "sort mtime --reverse",
-#     "linemode mtime",
-#     "plugin pref-by-location -- save",
-# ]
-# desc = "Sort by modified time (reverse)"
-# on = [",", "b"]
-# run = [
-#     "sort btime --reverse=no",
-#     "linemode btime",
-#     "plugin pref-by-location -- save",
-# ]
-# desc = "Sort by birth time"
-# on = [",", "B"]
-# run = [
-#     "sort btime --reverse",
-#     "linemode btime",
-#     "plugin pref-by-location -- save",
-# ]
-# desc = "Sort by birth time (reverse)"
-# on = [",", "e"]
-# run = ["sort extension --reverse=no", "plugin pref-by-location -- save"]
-# desc = "Sort by extension"
-# on = [",", "E"]
-# run = ["sort extension --reverse", "plugin pref-by-location -- save"]
-# desc = "Sort by extension (reverse)"
-# on = [",", "a"]
-# run = ["sort alphabetical --reverse=no", "plugin pref-by-location -- save"]
-# desc = "Sort alphabetically"
-# on = [",", "A"]
-# run = ["sort alphabetical --reverse", "plugin pref-by-location -- save"]
-# desc = "Sort alphabetically (reverse)"
-# on = [",", "n"]
-# run = ["sort natural --reverse=no", "plugin pref-by-location -- save"]
-# desc = "Sort naturally"
-# on = [",", "N"]
-# run = ["sort natural --reverse", "plugin pref-by-location -- save"]
-# desc = "Sort naturally (reverse)"
-# on = [",", "s"]
-# run = [
-#     "sort size --reverse=no",
-#     "linemode size",
-#     "plugin pref-by-location -- save",
-# ]
-# desc = "Sort by size"
-# on = [",", "S"]
-# run = [
-#     "sort size --reverse",
-#     "linemode size",
-#     "plugin pref-by-location -- save",
-# ]
-# desc = "Sort by size (reverse)"
-# on = [",", "r"]
-# run = ["sort random --reverse=no", "plugin pref-by-location -- save"]
-# desc = "Sort randomly"
+# pref-by-location.yazi keymaps
+# Toggle Hidden
+[[mgr.prepend_keymap]]
+on = "."
+run = [ "hidden toggle", "plugin pref-by-location -- save" ]
+desc = "Toggle the visibility of hidden files"
 
+# Linemode
+[[mgr.prepend_keymap]]
+on = [ "m", "s" ]
+run = [ "linemode size", "plugin pref-by-location -- save" ]
+desc = "Linemode: size"
+
+[[mgr.prepend_keymap]]
+on = [ "m", "p" ]
+run = [ "linemode permissions", "plugin pref-by-location -- save" ]
+desc = "Linemode: permissions"
+
+[[mgr.prepend_keymap]]
+on = [ "m", "b" ]
+run = [ "linemode btime", "plugin pref-by-location -- save" ]
+desc = "Linemode: btime"
+
+[[mgr.prepend_keymap]]
+on = [ "m", "m" ]
+run = [ "linemode mtime", "plugin pref-by-location -- save" ]
+desc = "Linemode: mtime"
+
+[[mgr.prepend_keymap]]
+on = [ "m", "o" ]
+run = [ "linemode owner", "plugin pref-by-location -- save" ]
+desc = "Linemode: owner"
+
+[[mgr.prepend_keymap]]
+on = [ "m", "n" ]
+run = [ "linemode none", "plugin pref-by-location -- save" ]
+desc = "Linemode: none"
+
+# Sorting
+[[mgr.prepend_keymap]]
+on = [ ",", "t" ]
+run = "plugin pref-by-location -- toggle"
+desc = "Toggle auto-save preferences"
+
+[[mgr.prepend_keymap]]
+on = [ ",", "d" ]
+run = "plugin pref-by-location -- disable"
+desc = "Disable auto-save preferences"
+
+[[mgr.prepend_keymap]]
+on = [ ",", "R" ]
+run = [ "plugin pref-by-location -- reset" ]
+desc = "Reset preference of cwd"
+
+[[mgr.prepend_keymap]]
+on = [ ",", "m" ]
+run = [ "sort mtime --reverse=no", "linemode mtime", "plugin pref-by-location -- save" ]
+desc = "Sort by modified time"
+
+[[mgr.prepend_keymap]]
+on = [ ",", "M" ]
+run = [ "sort mtime --reverse", "linemode mtime", "plugin pref-by-location -- save" ]
+desc = "Sort by modified time (reverse)"
+
+[[mgr.prepend_keymap]]
+on = [ ",", "b" ]
+run = [ "sort btime --reverse=no", "linemode btime", "plugin pref-by-location -- save" ]
+desc = "Sort by birth time"
+
+[[mgr.prepend_keymap]]
+on = [ ",", "B" ]
+run = [ "sort btime --reverse", "linemode btime", "plugin pref-by-location -- save" ]
+desc = "Sort by birth time (reverse)"
+
+[[mgr.prepend_keymap]]
+on = [ ",", "e" ]
+run = [ "sort extension --reverse=no", "plugin pref-by-location -- save" ]
+desc = "Sort by extension"
+
+[[mgr.prepend_keymap]]
+on = [ ",", "E" ]
+run = [ "sort extension --reverse", "plugin pref-by-location -- save" ]
+desc = "Sort by extension (reverse)"
+
+[[mgr.prepend_keymap]]
+on = [ ",", "a" ]
+run = [ "sort alphabetical --reverse=no", "plugin pref-by-location -- save" ]
+desc = "Sort alphabetically"
+
+[[mgr.prepend_keymap]]
+on = [ ",", "A" ]
+run = [ "sort alphabetical --reverse", "plugin pref-by-location -- save" ]
+desc = "Sort alphabetically (reverse)"
+
+[[mgr.prepend_keymap]]
+on = [ ",", "n" ]
+run = [ "sort natural --reverse=no", "plugin pref-by-location -- save" ]
+desc = "Sort naturally"
+
+[[mgr.prepend_keymap]]
+on = [ ",", "N" ]
+run = [ "sort natural --reverse", "plugin pref-by-location -- save" ]
+desc = "Sort naturally (reverse)"
+
+[[mgr.prepend_keymap]]
+on = [ ",", "s" ]
+run = [ "sort size --reverse=no", "linemode size", "plugin pref-by-location -- save" ]
+desc = "Sort by size"
+
+[[mgr.prepend_keymap]]
+on = [ ",", "S" ]
+run = [ "sort size --reverse", "linemode size", "plugin pref-by-location -- save" ]
+desc = "Sort by size (reverse)"
+
+[[mgr.prepend_keymap]]
+on = [ ",", "r" ]
+run = [ "sort random --reverse=no", "plugin pref-by-location -- save" ]
+desc = "Sort randomly"
+
+# custom-shell.yazi keymaps
 [[mgr.prepend_keymap]]
 on = ["'", ":"]
 run = 'plugin custom-shell -- auto --interactive --block'
@@ -308,6 +330,18 @@ on = ["s"]
 run = "plugin searchjump"
 desc = "searchjump mode"
 
+# ripgrep-live plugin for interactive text search
+[[mgr.prepend_keymap]]
+on = "<C-s>"
+run = "plugin ripgrep-live"
+desc = "Search text and navigate to file"
+
+# popup-shell plugin for interactive fish shell
+[[mgr.prepend_keymap]]
+on = "<C-/>"
+run = "plugin popup-shell"
+desc = "Open fish shell in popup"
+
 # install `ya pack -a Lil-Dank/lazygit`
 [[mgr.prepend_keymap]]
 on = ["g", "l"]
@@ -409,7 +443,7 @@ keymap = [
     { on = ".", run = "hidden toggle", desc = "Toggle the visibility of hidden files" },
     { on = "s", run = "search fd", desc = "Search files by name using fd" },
     { on = "S", run = "search rg", desc = "Search files by content using ripgrep" },
-    { on = "<C-s>", run = "escape --search", desc = "Cancel the ongoing search" },
+    # { on = "<C-s>", run = "escape --search", desc = "Cancel the ongoing search" }, # NOTE: <C-s> rebound to ripgrep_live search. We can still escape search with <Esc>
     { on = "z", run = "plugin zoxide", desc = "Jump to a directory using zoxide" },
     { on = "Z", run = "plugin fzf", desc = "Jump to a directory or reveal a file using fzf" },
 
@@ -687,8 +721,8 @@ keymap = [
     { on = "l", run = "move 1", desc = "Move forward a character" },
     { on = "<Left>", run = "move -1", desc = "Move back a character" },
     { on = "<Right>", run = "move 1", desc = "Move forward a character" },
-    { on = "<C-b>", run = "move -1", desc = "Move back a character" },
-    { on = "<C-f>", run = "move 1", desc = "Move forward a character" },
+    { on = "<C-h>", run = "move -1", desc = "Move back a character" },
+    { on = "<C-l>", run = "move 1", desc = "Move forward a character" },
 
     # Word-wise movement
     { on = "b", run = "backward", desc = "Move back to the start of the current or previous word" },
@@ -708,7 +742,7 @@ keymap = [
     # Delete
     { on = "<Backspace>", run = "backspace", desc = "Delete the character before the cursor" },
     { on = "<Delete>", run = "backspace --under", desc = "Delete the character under the cursor" },
-    { on = "<C-h>", run = "backspace", desc = "Delete the character before the cursor" },
+    # { on = "<C-h>", run = "backspace", desc = "Delete the character before the cursor" },
     { on = "<C-d>", run = "backspace --under", desc = "Delete the character under the cursor" },
 
     # Kill

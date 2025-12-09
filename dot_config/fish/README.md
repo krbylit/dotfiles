@@ -8,6 +8,21 @@
 
 - `serpl`: search and replace text tool
 - `cmdperf`: benchmark terminal commands
+- `oq`: OpenAPI spec viewer
+- `gobackup`: DB backup util
+- `nerdlog`: remote host log aggregator
+- `ziina`: "zmate"; terminal multiplayer sharing through Zellij
+- `lazyssh`: ssh host TUI
+- `cmdperf`: command performance benchmarking util
+- `dcv`: Docker container manager TUI
+- `dust`: pretty, Rust `du` to show disk storage usage
+- `termframe`: terminal screenshot util
+- `kdash`: Kubernetes dashboard TUI
+- `gittype`: typing test using your source code
+- `tclock`: timer, stopwatch, clock TUI
+- `jocalsend`: P2P local file sharing TUI
+- `hygg`: vim-like e-book reader
+- `regname`: regex file renamer TUI
 
 ## Tips
 

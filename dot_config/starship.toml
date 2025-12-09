@@ -11,7 +11,7 @@ command_timeout = 5000
 # ================ Prompts ================
 format = """
 [█▓▒](flamingo) $directory $fill( $status)( $username ${custom.hostname})( $cmd_duration )${custom.block_rprompt_repo_top}
-[▓▒░](flamingo)( $terraform) $character($sudo )
+[▓▒░](flamingo)( $terraform) (${custom.yazi_indicator} )$character($sudo )
 """
 right_format = '''
 (($git_branch )($nodejs )($python )[┛](bold surface1))
@@ -61,6 +61,12 @@ format = "[┓](bold surface1)"
 when = true
 require_repo = true
 format = "[┛](bold surface1)"
+
+[custom.yazi_indicator]
+when = '[ -n "$IS_YAZI_SUBSHELL" ]'
+# 󰕗  󰳁       
+format = '[]($style)' # or any icon/text you prefer
+style = 'bold yellow'
 
 # ================ Transient prompts ================
 # Angular LEFT
