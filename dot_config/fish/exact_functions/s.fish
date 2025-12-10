@@ -20,7 +20,7 @@ function s --wraps='ssh' --description 'SSH with custom config'
     set -l remote_term (_rsync_dotfiles $ssh_args | string trim)
 
     # command ssh -t $ssh_args "
-    command ssh -t $ssh_args TERM=$remote_term "
+    command ssh -A -t $ssh_args TERM=$remote_term "
         export TERM=$remote_term;
         export GIT_USER=$GIT_USER;
         export SSH_GIT_TOKEN=$SSH_GIT_TOKEN;
@@ -28,6 +28,7 @@ function s --wraps='ssh' --description 'SSH with custom config'
         export CUSTOM_HOSTNAME=$CUSTOM_HOSTNAME;
         export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY;
         export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID;
+        export SSH_AUTH_SOCK=\$SSH_AUTH_SOCK;
         bash --login -c 'zellij attach $session_name 2>/dev/null || zellij --session $session_name 2>/dev/null || tmux new-session -A -s "$session_name" || bash --login'
     "
 end

@@ -1,3 +1,8 @@
+# Set SSH agent env vars for forwarding
+if not set -q SSH_AUTH_SOCK
+    eval (ssh-agent -c) >/dev/null
+    set -Ux SSH_AGENT_PID $SSH_AGENT_PID
+end
 # Set Editor
 if set -q NVIM
     # Avoid nested neovim instances with neovim-remote
