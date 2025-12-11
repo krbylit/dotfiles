@@ -617,6 +617,20 @@ return {
         },
     },
     keys = {
+        {
+            "<leader><space>",
+            function()
+                Snacks.picker.smart()
+            end,
+            desc = "Smart Find Files",
+        },
+        {
+            "<leader>fc",
+            function()
+                Snacks.picker.files({ cwd = vim.fn.expand("~/.local/share/chezmoi") })
+            end,
+            desc = "Find Config File",
+        },
         -- TODO: Check on snacks.gh later. We need ability to comment on specific lines in a PR diff, and only Octo provides this currently.
         -- {
         --     "<leader>gi",
