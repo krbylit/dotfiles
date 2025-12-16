@@ -2,7 +2,7 @@
 
 local map = vim.keymap.set
 local wk = require("which-key")
-local MiniFiles = require("mini.files")
+local MiniFiles = vim.env.IS_SSH ~= "1" and require("mini.files") or nil
 
 -- Load plugin specific keymaps from `plugin-keymaps` module
 if vim.g.started_by_firenvim == true then

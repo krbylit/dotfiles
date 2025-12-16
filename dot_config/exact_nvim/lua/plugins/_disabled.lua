@@ -15,9 +15,37 @@ local disabled = {
 
 -- NOTE: Alternative to disable based on SSH env. Can also set in plugin Lua file with
 -- `enabled = vim.env.IS_SSH ~= "1"`
--- if vim.env.IS_SSH == "1" then
---     -- table.insert(disabled, { "nvim-treesitter/nvim-treesitter", enabled = false })
---     -- table.insert(disabled, { "folke/noice.nvim", enabled = false })
--- end
+if vim.env.IS_SSH == "1" then
+    table.insert(disabled, { "zbirenbaum/copilot.lua", enabled = false })
+    table.insert(disabled, { "danilamihailov/beacon.nvim", enabled = false })
+    table.insert(disabled, { "folke/drop.nvim", enabled = false })
+    table.insert(disabled, { "saghen/blink.cmp", enabled = false })
+    table.insert(disabled, { "saghen/blink.compat", enabled = false })
+    table.insert(disabled, { "mikavilpas/blink-ripgrep.nvim", enabled = false })
+    table.insert(disabled, { "xvzc/chezmoi.nvim", enabled = false })
+    table.insert(disabled, { "alker0/chezmoi.vim", enabled = false })
+    table.insert(disabled, { "CopilotC-Nvim/CopilotChat.nvim", enabled = false })
+    table.insert(disabled, { "theHamsta/nvim-dap-virtual-text", enabled = false })
+    table.insert(disabled, { "mfussenegger/nvim-dap", enabled = false })
+    table.insert(disabled, { "ThePrimeagen/harpoon", enabled = false })
+    table.insert(disabled, { "nvim-mini/mini.animate", enabled = false })
+    table.insert(disabled, { "nvim-mini/mini.files", enabled = false })
+    table.insert(disabled, { "folke/neoconf.nvim", enabled = false })
+    table.insert(disabled, { "pwntester/octo.nvim", enabled = false })
+    table.insert(disabled, { "folke/persistence.nvim", enabled = false })
+    table.insert(disabled, { "glacambre/firenvim", enabled = false })
+    table.insert(disabled, { "isakbm/gitgraph.nvim", enabled = false })
+    table.insert(disabled, { "OXY2DEV/helpview.nvim", enabled = false })
+    table.insert(disabled, { "OXY2DEV/markview.nvim", enabled = false })
+    table.insert(disabled, { "nvim-mini/mini.map", enabled = false })
+    table.insert(disabled, { "nvim-mini/mini.misc", enabled = false })
+    table.insert(disabled, { "nvim-mini/mini.statusline", enabled = false })
+    table.insert(disabled, { "nvim-mini/mini.tabline", enabled = false })
+    table.insert(disabled, { "epwalsh/obsidian.nvim", enabled = false })
+    table.insert(disabled, { "nvchad/showkeys", enabled = false })
+    table.insert(disabled, { "leath-dub/snipe.nvim", enabled = false })
+    table.insert(disabled, { "luukvbaal/statuscol.nvim", enabled = false })
+    -- table.insert(disabled, { "", enabled = false })
+end
 
 return disabled

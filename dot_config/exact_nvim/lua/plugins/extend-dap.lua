@@ -1,46 +1,48 @@
 -- While debugging, change `K` hover to nvim-dap widget to show var evaluation.
-local dap = require("dap")
-local api = vim.api
-local keymap_restore = {}
+if vim.env.IS_SSH ~= "1" then
+    local dap = require("dap")
+    local api = vim.api
+    local keymap_restore = {}
 
-dap.listeners.after["event_initialized"]["dapKeyOverride"] = function()
-    keymap_restore = {} -- Clear previous mappings
-    for _, buf in pairs(api.nvim_list_bufs()) do
-        local keymaps = api.nvim_buf_get_keymap(buf, "n")
-        for _, keymap in pairs(keymaps) do
-            if keymap.lhs == "K" then
-                table.insert(keymap_restore, keymap)
-                api.nvim_buf_del_keymap(buf, "n", "K")
+    dap.listeners.after["event_initialized"]["dapKeyOverride"] = function()
+        keymap_restore = {} -- Clear previous mappings
+        for _, buf in pairs(api.nvim_list_bufs()) do
+            local keymaps = api.nvim_buf_get_keymap(buf, "n")
+            for _, keymap in pairs(keymaps) do
+                if keymap.lhs == "K" then
+                    table.insert(keymap_restore, keymap)
+                    api.nvim_buf_del_keymap(buf, "n", "K")
+                end
+            end
+            api.nvim_buf_set_keymap(buf, "n", "K", '<Cmd>lua require("dap.ui.widgets").hover()<CR>', { silent = true })
+        end
+    end
+
+    dap.listeners.after["event_terminated"]["dapKeyOverride"] = function()
+        for _, keymap in pairs(keymap_restore) do
+            if keymap.rhs then
+                -- Restore normal keymap
+                api.nvim_buf_set_keymap(
+                    keymap.buffer,
+                    keymap.mode,
+                    keymap.lhs,
+                    keymap.rhs,
+                    { silent = keymap.silent == 1, noremap = keymap.noremap == 1, expr = keymap.expr == 1 }
+                )
+            elseif keymap.callback then
+                -- Restore keymap with callback
+                vim.keymap.set(keymap.mode, keymap.lhs, keymap.callback, {
+                    buffer = keymap.buffer,
+                    silent = keymap.silent == 1,
+                    noremap = keymap.noremap == 1,
+                    expr = keymap.expr == 1,
+                })
+            else
+                vim.notify("DAP Key Override: Missing rhs or callback for keymap " .. keymap.lhs, vim.log.levels.WARN)
             end
         end
-        api.nvim_buf_set_keymap(buf, "n", "K", '<Cmd>lua require("dap.ui.widgets").hover()<CR>', { silent = true })
+        keymap_restore = {} -- Reset keymap storage
     end
-end
-
-dap.listeners.after["event_terminated"]["dapKeyOverride"] = function()
-    for _, keymap in pairs(keymap_restore) do
-        if keymap.rhs then
-            -- Restore normal keymap
-            api.nvim_buf_set_keymap(
-                keymap.buffer,
-                keymap.mode,
-                keymap.lhs,
-                keymap.rhs,
-                { silent = keymap.silent == 1, noremap = keymap.noremap == 1, expr = keymap.expr == 1 }
-            )
-        elseif keymap.callback then
-            -- Restore keymap with callback
-            vim.keymap.set(keymap.mode, keymap.lhs, keymap.callback, {
-                buffer = keymap.buffer,
-                silent = keymap.silent == 1,
-                noremap = keymap.noremap == 1,
-                expr = keymap.expr == 1,
-            })
-        else
-            vim.notify("DAP Key Override: Missing rhs or callback for keymap " .. keymap.lhs, vim.log.levels.WARN)
-        end
-    end
-    keymap_restore = {} -- Reset keymap storage
 end
 return {
     "mfussenegger/nvim-dap",

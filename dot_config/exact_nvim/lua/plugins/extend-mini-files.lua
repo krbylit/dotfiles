@@ -2,7 +2,7 @@
 -- https://github.com/nvim-mini/mini.files
 
 -- mini.files map key for toggling dotfiles
-local MiniFiles = require("mini.files")
+local MiniFiles = vim.env.IS_SSH ~= "1" and require("mini.files") or nil
 local show_dotfiles = true
 local filter_show = function(fs_entry)
     return true
