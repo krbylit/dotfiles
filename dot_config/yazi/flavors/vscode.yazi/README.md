@@ -16,11 +16,11 @@
 
 _Screenshots can be found in `<theme>/img/*`_
 
-- [Themes](./themes/) 
-    - [vscode-dark-modern](https://github.com/956MB/vscode-dark-modern.yazi)
-    - [vscode-dark-plus](https://github.com/956MB/vscode-dark-plus.yazi)
-    - [vscode-light-modern](https://github.com/956MB/vscode-light-modern.yazi)
-    - [vscode-light-plus](https://github.com/956MB/vscode-light-plus.yazi)
+- [Themes](./themes/)
+  - [vscode-dark-modern](https://github.com/956MB/vscode-dark-modern.yazi)
+  - [vscode-dark-plus](https://github.com/956MB/vscode-dark-plus.yazi)
+  - [vscode-light-modern](https://github.com/956MB/vscode-light-modern.yazi)
+  - [vscode-light-plus](https://github.com/956MB/vscode-light-plus.yazi)
 
 <!-- /TOC -->
 
@@ -40,7 +40,7 @@ ya pkg add 956MB/vscode-dark-modern
 ya pack -a 956MB/vscode-dark-modern
 ```
 
-3. Update your `~/.config/yazi/theme.toml` config to use the new theme.
+1. Update your `~/.config/yazi/theme.toml` config to use the new theme.
 
 ```toml
 [flavor]
@@ -57,19 +57,19 @@ dark = "vscode-dark-modern"
 git clone --recurse-submodules https://github.com/956MB/vscode.yazi.git
 ```
 
-2. Backup your current `theme.toml`:
+1. Backup your current `theme.toml`:
 
 ```bash
 cp ~/.config/yazi/theme.toml ~/.config/yazi/theme-backup.toml
 ```
 
-3. Copy your desired flavor to the yazi `flavors` directory (create it if it doesn't exist):
+1. Copy your desired flavor to the yazi `flavors` directory (create it if it doesn't exist):
 
 ```bash
 cp -r vscode.yazi/themes/vscode-dark-modern.yazi ~/.config/yazi/flavors/
 ```
 
-4. Update your `~/.config/yazi/theme.toml` config to use the new theme.
+1. Update your `~/.config/yazi/theme.toml` config to use the new theme.
 
 ```toml
 [flavor]

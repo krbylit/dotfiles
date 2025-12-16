@@ -154,7 +154,7 @@ This command automatically fixes linting issues using language-specific tools (c
 
 5. **Language-Specific Fix Strategies**:
 
-    ### Rust
+   ### Rust
 
     **Tools**:
     - `cargo fmt` - Code formatting
@@ -182,7 +182,7 @@ This command automatically fixes linting issues using language-specific tools (c
     - If `--allow-dirty` needed, ensure user knows uncommitted changes exist
     - Some clippy fixes require manual intervention (will note in report)
 
-    ### TypeScript/JavaScript
+   ### TypeScript/JavaScript
 
     **Tools**:
     - `prettier` - Code formatting
@@ -211,7 +211,7 @@ This command automatically fixes linting issues using language-specific tools (c
     - Commit 3: `fix: resolve eslint auto-fixable issues`
     - Follow commit message guidelines from `~/.claude/commands/commit-atomic.md`
 
-    ### Python
+   ### Python
 
     **Tools**:
     - `black` or `ruff format` - Code formatting
@@ -242,7 +242,7 @@ This command automatically fixes linting issues using language-specific tools (c
     - Commit 3: `fix: resolve ruff auto-fixable issues`
     - Follow commit message guidelines from `~/.claude/commands/commit-atomic.md`
 
-    ### Go
+   ### Go
 
     **Tools**:
     - `gofmt` or `goimports` - Code formatting
@@ -314,11 +314,11 @@ This command automatically fixes linting issues using language-specific tools (c
        ```
     ````
 
-    2. **Address manual fixes**:
+    1. **Address manual fixes**:
        - Add documentation for 5 undocumented items
        - Refactor 2 complex functions
 
-    3. **Push changes**:
+    2. **Push changes**:
 
        ```bash
        git push origin <branch>

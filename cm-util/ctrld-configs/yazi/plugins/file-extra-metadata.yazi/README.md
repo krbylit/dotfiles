@@ -18,7 +18,7 @@ This is a Yazi plugin that replaces the default file previewer and spotter with 
 
 ## Preview
 
-### Before:
+### Before
 
 - Previewer
 
@@ -28,7 +28,7 @@ This is a Yazi plugin that replaces the default file previewer and spotter with 
 
   ![Before spot](statics/2024-11-21-04-19-01.png)
 
-### After:
+### After
 
 - Previewer
 
@@ -99,7 +99,7 @@ or
 
 ### Custom theme
 
-Read more: https://github.com/sxyazi/yazi/pull/2391
+Read more: <https://github.com/sxyazi/yazi/pull/2391>
 
 Edit or add `yazi/theme.toml`:
 

@@ -777,12 +777,13 @@ This command performs a comprehensive "health check" of the codebase by studying
    **IMPORTANT**: Do NOT implement anything without explicit user approval for each change.
 
    a. **Group changes by category**:
-   - Group 1: Dead code deletion (high confidence)
-   - Group 2: Outdated code removal (high confidence)
-   - Group 3: High-value simplifications
-   - Group 4: High-impact abstraction opportunities
-   - Group 5: Medium-value simplifications and abstractions
-   - Group 6: Everything else
+
+- Group 1: Dead code deletion (high confidence)
+- Group 2: Outdated code removal (high confidence)
+- Group 3: High-value simplifications
+- Group 4: High-impact abstraction opportunities
+- Group 5: Medium-value simplifications and abstractions
+- Group 6: Everything else
 
    b. **For each group**:
 
@@ -839,36 +840,39 @@ This command performs a comprehensive "health check" of the codebase by studying
 
    ````
 
-11. **Validation**:
+1. **Validation**:
 
    **For git scope flags** (branch/commit/diff):
-   - [ ] Git repository verified
-   - [ ] Base branch detected or specified (for --scope=branch)
-   - [ ] Commit SHA(s) validated (for --scope=commit or --scope=diff)
-   - [ ] Files to analyze collected successfully
-   - [ ] Related/dependent files identified and included
-   - [ ] Binary and deleted files excluded
-   - [ ] Report clearly indicates git scope and limitations
+
+- [ ] Git repository verified
+- [ ] Base branch detected or specified (for --scope=branch)
+- [ ] Commit SHA(s) validated (for --scope=commit or --scope=diff)
+- [ ] Files to analyze collected successfully
+- [ ] Related/dependent files identified and included
+- [ ] Binary and deleted files excluded
+- [ ] Report clearly indicates git scope and limitations
 
    **Before generating report**:
-   - [ ] Project context gathered (CLAUDE.md, README, TODO, git history)
-   - [ ] Dead code analysis filtered false positives (public API, entry points, trait impls)
-   - [ ] Outdated code cross-referenced with current architecture
-   - [ ] Simplification suggestions are behavior-preserving
-   - [ ] Brute-force analysis prioritized Python/JavaScript/Rust over shell scripts
-   - [ ] Abstraction suggestions include trade-off analysis
-   - [ ] "Acceptable brute-force" cases documented with justification
-   - [ ] All findings include file paths and line numbers
-   - [ ] Confidence/impact levels assigned (high/medium/low)
-   - [ ] Risk levels assigned (low/medium/high)
-   - [ ] Recommendations are actionable
+
+- [ ] Project context gathered (CLAUDE.md, README, TODO, git history)
+- [ ] Dead code analysis filtered false positives (public API, entry points, trait impls)
+- [ ] Outdated code cross-referenced with current architecture
+- [ ] Simplification suggestions are behavior-preserving
+- [ ] Brute-force analysis prioritized Python/JavaScript/Rust over shell scripts
+- [ ] Abstraction suggestions include trade-off analysis
+- [ ] "Acceptable brute-force" cases documented with justification
+- [ ] All findings include file paths and line numbers
+- [ ] Confidence/impact levels assigned (high/medium/low)
+- [ ] Risk levels assigned (low/medium/high)
+- [ ] Recommendations are actionable
 
    **Before implementing** (if --implement):
-   - [ ] User approved changes
-   - [ ] Tests pass before changes
-   - [ ] Each change implemented correctly
-   - [ ] Tests pass after each change
-   - [ ] Atomic commits created with good messages
+
+- [ ] User approved changes
+- [ ] Tests pass before changes
+- [ ] Each change implemented correctly
+- [ ] Tests pass after each change
+- [ ] Atomic commits created with good messages
 
 ## Detection Strategies by Language
 
@@ -1012,42 +1016,52 @@ This command performs a comprehensive "health check" of the codebase by studying
 **Git scope edge cases**:
 
 **Not in a git repository**:
+
 - ERROR: "Not a git repository. Git scope flags require a git repository."
 - Suggest using `--scope=full`, `--scope=module`, or `--scope=file` instead
 
 **On base branch (for `--scope=branch`)**:
+
 - If current branch is develop/main/master
 - ERROR: "Cannot analyze branch changes when on base branch. Switch to a feature branch or use `--scope=full`."
 
 **No commits ahead of base (for `--scope=branch`)**:
+
 - If `git rev-list --count <base>..HEAD` returns 0
 - ERROR: "No commits ahead of base branch. Make some changes first or use `--scope=full`."
 
 **Invalid commit SHA**:
+
 - If specified commit doesn't exist
 - ERROR: "Commit [sha] not found. Verify the commit SHA is correct."
 
 **Invalid commit range syntax**:
+
 - If diff argument doesn't match `<sha>..<sha>` pattern
 - ERROR: "Invalid commit range format. Use `--scope=diff <sha1>..<sha2>`"
 
 **Detached HEAD (for `--scope=branch`)**:
+
 - If on detached HEAD
 - ERROR: "Cannot determine branch for detached HEAD. Use `--scope=commit <sha>` or `--scope=diff <sha1>..<sha2>` instead."
 
 **No files changed in git scope**:
+
 - If git diff returns no files
 - INFO: "No files changed in specified git scope. Nothing to analyze."
 
 **Binary files in git scope**:
+
 - Skip binary files from analysis
 - Note in report: "Skipped N binary files"
 
 **Deleted files in git scope**:
+
 - Skip deleted files (they no longer exist to analyze)
 - Note in report: "Skipped N deleted files"
 
 **Renamed files in git scope**:
+
 - Analyze renamed files using their new paths
 - Note in report if rename detection affected analysis
 
@@ -1511,5 +1525,6 @@ Or check specific commit:
 ## Context
 
 Additional user context: $ARGUMENTS
+
 ```
 ````

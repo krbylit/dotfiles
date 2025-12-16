@@ -492,7 +492,7 @@ This command generates high-quality documentation by analyzing code structure, u
    - **QueryAuditor**: Logs queries to query-journal streams
    - **JWT Middleware**: Multi-tenancy enforcement
 
-   See [CLAUDE.md](./CLAUDE.md) for detailed architecture documentation.
+   See [CLAUDE.md](../CLAUDE.md) for detailed architecture documentation.
    ```
 
 6. **Generate Architecture Documentation** (--type=architecture):

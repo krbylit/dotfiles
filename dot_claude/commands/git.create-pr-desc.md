@@ -496,6 +496,7 @@ This command analyzes all changes in the current branch compared to the base bra
     - Example: `PR_DESC_2025-01-15_164522.md`
 
     **File Content**:
+
     ```markdown
     # Pull Request
 

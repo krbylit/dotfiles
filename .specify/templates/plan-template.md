@@ -31,7 +31,31 @@
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-[Gates determined based on constitution file]
+Verify compliance with `.specify/memory/constitution.md` principles:
+
+**I. Configuration as Code**
+- [ ] All changes managed through chezmoi workflow
+- [ ] Configuration reproducible on fresh machine
+- [ ] Manual changes captured back to source state
+
+**II. Security First**
+- [ ] No secrets in plaintext (use 1Password or encryption)
+- [ ] Gitleaks pre-commit hook passes
+- [ ] Public sync excludes encrypted files
+
+**III. Idempotent Operations**
+- [ ] Safe to run multiple times
+- [ ] `chezmoi diff` reviewed before apply
+- [ ] No destructive side effects
+
+**IV. Format Consistency**
+- [ ] Appropriate formatter identified (stylua/fish_indent/shfmt/prettierd/yapf)
+- [ ] Format check passes before commit
+
+**V. Self-Documentation**
+- [ ] README exists or updated for tool configuration
+- [ ] Complex settings have inline comments
+- [ ] Repository README updated if setup changes
 
 ## Project Structure
 

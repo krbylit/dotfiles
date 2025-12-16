@@ -72,9 +72,11 @@ This command reads all PR_REVIEW_*.md files in the repository, extracts and vali
    For each extracted issue:
 
    a. **Check File Exists**:
+
    ```bash
    test -f <file_path>
    ```
+
    - If file doesn't exist: Mark as INVALID (file not found)
 
    b. **Check Code Still Present**:
@@ -382,6 +384,7 @@ This command reads all PR_REVIEW_*.md files in the repository, extracts and vali
 ## Edge Cases & Error Handling
 
 **No PR Review Files**:
+
 ```
 ❌ No PR review files found
 
@@ -393,6 +396,7 @@ Create a review first using:
 ```
 
 **No Valid Issues**:
+
 ```
 ✅ No valid issues to fix
 
@@ -404,6 +408,7 @@ All issues may have already been addressed.
 ```
 
 **All Issues Already Fixed**:
+
 ```
 ✅ All issues appear to be resolved
 
@@ -415,11 +420,13 @@ Great work! Consider archiving old PR review files.
 ```
 
 **User Cancels**:
+
 ```
 Canceled by user - no changes made
 ```
 
 **Conflicting Changes**:
+
 - If working directory is dirty, warn user
 - Ask if they want to:
   - Stash changes and continue
@@ -427,12 +434,14 @@ Canceled by user - no changes made
   - Continue anyway (risky)
 
 **Fix Application Failure**:
+
 - If Edit fails: Try Write as fallback
 - If both fail: Log detailed error
 - Continue with next issue
 - Report failure in summary
 
 **Syntax Errors After Fix**:
+
 - If language has syntax checker, run it
 - If syntax error detected:
   - Revert the change
@@ -440,6 +449,7 @@ Canceled by user - no changes made
   - Include in manual review list
 
 **Large Number of Issues**:
+
 - If >20 valid issues, warn about commit volume
 - Suggest filtering by severity: `--severity critical,high`
 - Offer to batch similar fixes into fewer commits
@@ -447,23 +457,27 @@ Canceled by user - no changes made
 ## Validation
 
 **Before Implementing Fix**:
+
 - ✅ File exists and is readable
 - ✅ Current code pattern is present
 - ✅ Suggested fix is syntactically reasonable
 - ✅ Fix doesn't introduce obvious new issues
 
 **After Implementing Fix**:
+
 - ✅ Change was successfully applied
 - ✅ File is still valid (no syntax errors if checkable)
 - ✅ Original issue pattern is no longer present
 
 **Before Committing**:
+
 - ✅ At least one file was modified
 - ✅ Commit message follows conventional format
 - ✅ All modified files are related to fix
 - ✅ Working directory state is clean or expected
 
 **After All Fixes**:
+
 - ✅ All selected issues were attempted
 - ✅ Success/failure tracked for each
 - ✅ Commits created for successful fixes
@@ -549,6 +563,7 @@ Location: ([^:]+):(\d+)
 ### Code Block Extraction
 
 Identify code blocks in these sections:
+
 - "Current Code"
 - "Problem"
 - "Problematic code snippet"
@@ -557,6 +572,7 @@ Identify code blocks in these sections:
 - "Recommended"
 
 Extract language tag and content:
+
 ````markdown
 ```rust
 let query = format!("...");
@@ -566,6 +582,7 @@ let query = format!("...");
 ### Severity Extraction
 
 Map severity levels:
+
 - `🔴` or "CRITICAL" → Critical
 - `🟠` or "HIGH" → High
 - `🟡` or "MEDIUM" → Medium
@@ -574,6 +591,7 @@ Map severity levels:
 ### Category Extraction
 
 Look for category labels:
+
 - Security, Bug, Performance, Maintainability
 - Testing, Documentation, Style
 - Extract from "Category:" field or section headers

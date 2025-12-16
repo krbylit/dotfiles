@@ -2,7 +2,7 @@
 
 A [Yazi](https://github.com/sxyazi/yazi) plugin that adds the basic functionality of [vi-like marks](https://neovim.io/doc/user/motion.html#mark-motions).
 
-https://github.com/dedukun/bookmarks.yazi/assets/25795432/9a9fe345-dd06-442e-99f1-8475ab22fad5
+<https://github.com/dedukun/bookmarks.yazi/assets/25795432/9a9fe345-dd06-442e-99f1-8475ab22fad5>
 
 ## Requirements
 
@@ -62,20 +62,20 @@ The following are the default configurations:
 ```lua
 -- ~/.config/yazi/init.lua
 require("bookmarks"):setup({
-	last_directory = { enable = false, persist = false, mode="dir" },
-	persist = "none",
-	desc_format = "full",
-	file_pick_mode = "hover",
-	custom_desc_input = false,
-	notify = {
-		enable = false,
-		timeout = 1,
-		message = {
-			new = "New bookmark '<key>' -> '<folder>'",
-			delete = "Deleted bookmark in '<key>'",
-			delete_all = "Deleted all bookmarks",
-		},
-	},
+ last_directory = { enable = false, persist = false, mode="dir" },
+ persist = "none",
+ desc_format = "full",
+ file_pick_mode = "hover",
+ custom_desc_input = false,
+ notify = {
+  enable = false,
+  timeout = 1,
+  message = {
+   new = "New bookmark '<key>' -> '<folder>'",
+   delete = "Deleted bookmark in '<key>'",
+   delete_all = "Deleted all bookmarks",
+  },
+ },
 })
 ```
 

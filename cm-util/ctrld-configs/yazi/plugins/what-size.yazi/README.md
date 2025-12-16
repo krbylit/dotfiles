@@ -33,6 +33,7 @@ ya pkg add pirafrank/what-size
 or
 
 **DEPRECATED**
+
 ```sh
 ya pack -a 'pirafrank/what-size'
 ```

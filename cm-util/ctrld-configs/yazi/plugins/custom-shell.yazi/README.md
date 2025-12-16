@@ -5,7 +5,7 @@ You can choose any shell and customise keybindings to run any command like nvim,
 
 ## Previews
 
-https://github.com/AnirudhG07/custom-shell.yazi/assets/146579014/1cd6ab98-5b79-4ee8-b59a-dbee053edad5
+<https://github.com/AnirudhG07/custom-shell.yazi/assets/146579014/1cd6ab98-5b79-4ee8-b59a-dbee053edad5>
 
 ## Requirements
 

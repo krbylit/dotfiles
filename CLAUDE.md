@@ -1,6 +1,7 @@
 # Claude Assistant Guide for Dotfiles Repository
 
 ## Development Commands
+
 - Code formatting: Uses Neovim with conform.nvim (stylua, fish_indent, shfmt, prettierd, yapf)
 - Edit configuration: `chezmoi edit <file>`
 - Apply changes: `chezmoi apply`
@@ -8,6 +9,7 @@
 - Search codebase: `rg <pattern>` or use Fish function `rg_fzf_search`
 
 ## Code Style Guidelines
+
 - Fish shell: Use `fish_indent` for consistent formatting
 - Lua: Format with `stylua`, follow Neovim Lua style conventions
 - Shell scripts: Format with `shfmt`
@@ -18,6 +20,16 @@
 - Documentation: Include README.md files in directories explaining purpose
 
 ## Repository Structure
+
 - Managed using [chezmoi](https://www.chezmoi.io/) dotfile manager
 - Configuration organized by tool with README files explaining usage
 - Secrets kept in `secrets/` directory (excluded from version control)
+
+## Active Technologies
+
+- Markdown (GitHub-flavored), Mermaid for diagrams + Documentation tools (markdown linters: markdownlint-cli), diagram generation (mermaid-cli for pre-rendering diagrams), repository analysis tools (tree, ripgrep for codebase surveying) (001-comprehensive-docs)
+- Markdown files stored in repository (co-located with configurations), static documentation assets (001-comprehensive-docs)
+
+## Recent Changes
+
+- 001-comprehensive-docs: Added Markdown (GitHub-flavored), Mermaid for diagrams + Documentation tools (markdown linters: markdownlint-cli), diagram generation (mermaid-cli for pre-rendering diagrams), repository analysis tools (tree, ripgrep for codebase surveying)

@@ -24,6 +24,7 @@ Make sure you have [glow](https://github.com/charmbracelet/glow) installed, and 
 
 + You can modify line wrap in `main.lua`, the current value is 55.
 + You can press `ctrl+e` to scroll up and `ctrl+y` to scroll down the readme file in preview panel in yazi: (add this to `keymap.toml`)
+
 ```toml
 prepend_keymap = [
     # glow.yazi

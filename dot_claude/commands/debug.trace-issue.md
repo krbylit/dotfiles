@@ -363,13 +363,13 @@ This command helps trace and debug issues by analyzing code execution paths, dat
       curl http://localhost:2113/streams/person-{id}
    ````
 
-   2. Add logging before reading stream:
+   1. Add logging before reading stream:
 
       ```rust
       tracing::debug!("Reading stream person-{}", person_id);
       ```
 
-   3. Check if person was ever created (no PersonCreated event)
+   2. Check if person was ever created (no PersonCreated event)
 
    **Potential fix**:
    - If person should exist: Create the person first

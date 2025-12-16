@@ -409,12 +409,12 @@ This command performs a thorough code review of changes, analyzing for common is
 - Suggest review decision (approve/request changes)
 
    **File Output**:
-   - Generate filename: `PR_REVIEW_<timestamp>.md` (e.g., `PR_REVIEW_2025-01-15_143022.md`)
-   - Timestamp format: `YYYY-MM-DD_HHMMSS`
-   - Write the complete markdown report to this file
-   - Confirm to user: `📝 Review saved to PR_REVIEW_<timestamp>.md`
+  - Generate filename: `PR_REVIEW_<timestamp>.md` (e.g., `PR_REVIEW_2025-01-15_143022.md`)
+  - Timestamp format: `YYYY-MM-DD_HHMMSS`
+  - Write the complete markdown report to this file
+  - Confirm to user: `📝 Review saved to PR_REVIEW_<timestamp>.md`
 
-11. **Cross-Review Analysis (Senior Engineer Meta-Review)**:
+1. **Cross-Review Analysis (Senior Engineer Meta-Review)**:
 
     After writing the review file, check for other `PR_REVIEW_*.md` files in the repository root:
 

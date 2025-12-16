@@ -6,7 +6,7 @@ A project means all `tabs` and their status, including `cwd` and so on.
 > [!NOTE]
 > The latest release of Yazi is required at the moment.
 
-https://github.com/MasouShizuka/projects.yazi/assets/44764707/79c3559a-7776-48cd-8317-dd1478314eed
+<https://github.com/MasouShizuka/projects.yazi/assets/44764707/79c3559a-7776-48cd-8317-dd1478314eed>
 
 ## Features
 
@@ -145,12 +145,14 @@ require("projects"):setup({
 > Yazi's api sometimes doesn't work on Windows, which is why the `lua` method is proposed
 
 `method`: the method of saving projects:
+
 - `yazi`: using `yazi` api to save to `.dds` file
 - `lua`: using `lua` api to save
 
 `yazi_load_event`: event name when loading projects in `yazi` method
 
 `lua_save_path`: path of saved file in `lua` method, the defalut value is
+
 - `Windows`: `%APPDATA%/yazi/state/projects.json`
 - `Unix`: `~/.local/state/yazi/projects.json`
 
@@ -163,6 +165,7 @@ The last project is loaded by `load_last` command.
 `update_after_load`: the loaded project will be saved to last project.
 
 `load_after_start`: the last project will be loaded after starting.
+
 - Only work with `lua` method, please refer to [#2](https://github.com/MasouShizuka/projects.yazi/issues/2)
 
 ### `merge`

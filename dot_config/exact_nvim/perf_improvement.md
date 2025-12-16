@@ -5,6 +5,7 @@
 This comprehensive analysis of your Neovim configuration has identified **25 performance issues** across core configuration files and plugins. The most critical issues include expensive git operations on every buffer switch, heavy startup computations, and numerous plugins loading unnecessarily at startup instead of being lazy-loaded.
 
 **Key Findings:**
+
 - **Startup Time Impact**: 12 plugins loading unnecessarily at startup
 - **Runtime Performance**: Git shell calls on every buffer change (major bottleneck)
 - **Memory Usage**: Complex dashboard computations and animation systems
@@ -14,9 +15,10 @@ This comprehensive analysis of your Neovim configuration has identified **25 per
 
 ---
 
-## =¨ Critical Performance Issues (Immediate Action Required)
+## =ï¿½ Critical Performance Issues (Immediate Action Required)
 
 ### 1. **Git Operations on Every Buffer Switch** - `mini-statusline.lua`
+
 **Severity**: =4 CRITICAL  
 **Lines**: 15-45, 53-70  
 **Issue**: `update_git_info()` runs multiple git system calls (`git rev-parse`, `git symbolic-ref`, `git diff`) on every `BufEnter`/`BufWinEnter` event.  
@@ -41,6 +43,7 @@ end
 ```
 
 ### 2. **Identified Performance Lag** - `mini-tabline.lua`
+
 **Severity**: =4 CRITICAL  
 **Lines**: 1-6  
 **Issue**: Developer comment states: "TODO: verify whether this is causing lag. It's showing up as top time spent when profiling."  
@@ -48,6 +51,7 @@ end
 **Fix**: Investigate and optimize the tabline update logic or consider alternative tabline plugins.
 
 ### 3. **System Command During Startup** - `config/options.lua`
+
 **Severity**: =4 CRITICAL  
 **Line**: 10  
 **Issue**: `vim.fn.system("chezmoi source-path")` runs shell command during startup.  
@@ -66,22 +70,26 @@ end)
 
 ---
 
-## =á Startup Performance Issues
+## =ï¿½ Startup Performance Issues
 
 ### Core Configuration Problems
 
 #### **Lazy Loading Disabled** - `config/lazy.lua`
+
 **Lines**: 43  
 **Issue**: `lazy = false` - Custom plugins load during startup instead of being lazy-loaded.  
 **Fix**: Change to `lazy = true` and add appropriate loading triggers.
 
 #### **Heavy Shell Configuration** - `config/options.lua`
+
 **Lines**: 38  
 **Issue**: Using Fish shell which is noted to be "very slow in nvim".  
 **Fix**: Use `opt.shell = "bash"` for better performance.
 
 #### **Multiple Startup Autocmds** - `config/autocmds.lua`
+
 **Issues**:
+
 - Lines 20-31: Chezmoi autocmd with `vim.schedule()` on every BufRead/BufNewFile
 - Lines 58-61: Regex substitution on every file save
 - Lines 85-91: Format options modification on every BufEnter
@@ -89,6 +97,7 @@ end)
 ### Plugin Startup Issues
 
 #### **Immediate Loading Plugins** (No Lazy Loading)
+
 1. **extend-snacks.lua**: `lazy = false`, heavy startup computations (logo generation, terminal size calculation)
 2. **colorscheme plugins**: Both catppuccin and tokyonight load with `lazy = false, priority = 1000`
 3. **statuscol.lua**: Complex line-by-line calculations, no lazy loading
@@ -101,42 +110,49 @@ end)
 10. **extend-blink.lua**: Heavy completion system loads early
 
 #### **Module Loading at Top Level**
+
 - **config/keymaps.lua**: `require("which-key")`, `require("mini.files")` at top level
 - **extend-dap.lua**: `require("dap")` before plugin setup
 - **extend-mini-files.lua**: `require("mini.files")` at top level
 
 ---
 
-## =à Runtime Performance Issues
+## =ï¿½ Runtime Performance Issues
 
 ### High-Frequency Operations
+
 1. **extend-noice.lua**: UI updates at 30fps (`throttle = 1000 / 30`)
 2. **beacon.lua**: 60fps cursor animations when enabled
 3. **extend-yanky.lua**: 150ms highlight timer
 4. **statuscol.lua**: Complex calculations for every visible line
 
 ### Expensive Autocmds
+
 1. **config/options.lua**: Complex filetype detection with pattern matching (lines 159-209)
 2. **config/options.lua**: Multiple diagnostic disable patterns (lines 97-155)
 3. **extend-mini-files.lua**: Autocmd creation at file load (line 34)
 
 ### Animation & Visual Effects
+
 1. **extend-smear-cursor.lua**: Disabled (good!) but would create ~50 hidden windows
 2. **extend-mini-animate.lua**: Scroll animation enabled, adds overhead to scrolling
 3. **drop.lua**: Disabled (good!) but would run 75 animated drops at 100ms intervals
 
 ---
 
-## =Ë Detailed Plugin Analysis
+## =ï¿½ Detailed Plugin Analysis
 
 ### **High Priority Fixes**
 
 #### **extend-treesitter.lua**
-**Issues**: 
+
+**Issues**:
+
 - Large `ensure_installed` list (42 parsers) - impacts startup time
 - Auto-indent enabled for most languages adds editing overhead
 
 **Recommendations**:
+
 ```lua
 -- Reduce to essential parsers only
 ensure_installed = {
@@ -148,11 +164,14 @@ indent = { enable = false }
 ```
 
 #### **extend-lspconfig.lua**
+
 **Issues**:
+
 - Very large `ensure_installed` list (25+ tools)
 - Neoconf setup runs immediately (not lazy loaded)
 
 **Recommendations**:
+
 ```lua
 -- Reduce ensure_installed to actively used tools
 -- Lazy load neoconf
@@ -168,6 +187,7 @@ indent = { enable = false }
 ### **Medium Priority Fixes**
 
 #### **Lazy Loading Candidates**
+
 These plugins should be lazy-loaded with appropriate triggers:
 
 1. **diffview.lua**: `cmd = {"DiffviewOpen", "DiffviewFileHistory"}`
@@ -180,6 +200,7 @@ These plugins should be lazy-loaded with appropriate triggers:
 #### **Configuration Optimizations**
 
 **extend-noice.lua**:
+
 ```lua
 -- Reduce update frequency
 throttle = 1000 / 10,  -- 10fps instead of 30fps
@@ -192,7 +213,7 @@ lsp = {
 
 ---
 
-## <¯ Action Plan by Priority
+## <ï¿½ Action Plan by Priority
 
 ### **Phase 1: Critical Fixes (Immediate - High Impact)**
 
@@ -216,6 +237,7 @@ lsp = {
 ### **Phase 2: Startup Optimizations (Week 1 - Medium Impact)**
 
 1. **Add lazy loading to immediate-load plugins**:
+
    ```lua
    -- beacon.lua
    event = "VeryLazy"
@@ -241,8 +263,8 @@ lsp = {
 ### **Phase 3: Runtime Optimizations (Week 2 - Performance Polish)**
 
 1. **Reduce animation frequencies**:
-   - Noice: 30fps ’ 10fps
-   - Beacon: 60fps ’ 30fps (if keeping enabled)
+   - Noice: 30fps ï¿½ 10fps
+   - Beacon: 60fps ï¿½ 30fps (if keeping enabled)
 
 2. **Optimize autocmds**:
    - Reduce BufEnter/BufWinEnter event handlers
@@ -270,7 +292,7 @@ lsp = {
 
 ---
 
-## =Ê Expected Performance Gains
+## =ï¿½ Expected Performance Gains
 
 Implementing these recommendations should result in:
 

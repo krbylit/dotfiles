@@ -25,19 +25,19 @@ fields or anything in 1Password, as it can't read those fields!
 * [Quick Installation](#quick-installation)
 * [Usage](#usage)
 * [Current Support](#current-support)
-  - [Flavors of VimMode](#flavors-of-vimmode)
-  - [Motions](#motions)
-  - [Operators](#operators)
-  - [Other](#other)
+  * [Flavors of VimMode](#flavors-of-vimmode)
+  * [Motions](#motions)
+  * [Operators](#operators)
+  * [Other](#other)
 * [Configuration](#configuration)
-  - [Binding jk to enter normal mode](#binding-jk-to-enter-normal-mode)
-  - [Binding a single keystroke to enter normal mode](#binding-a-single-keystroke-to-enter-normal-mode)
-  - [Disabling vim mode for certain apps](#disabling-vim-mode-for-certain-apps)
-  - [Disabling the floating alert when you enter Vim mode(s)](#disabling-the-floating-alert-when-you-enter-vim-modes)
-  - [Enabling screen dim when you enter normal mode](#enabling-screen-dim-when-you-enter-normal-mode)
+  * [Binding jk to enter normal mode](#binding-jk-to-enter-normal-mode)
+  * [Binding a single keystroke to enter normal mode](#binding-a-single-keystroke-to-enter-normal-mode)
+  * [Disabling vim mode for certain apps](#disabling-vim-mode-for-certain-apps)
+  * [Disabling the floating alert when you enter Vim mode(s)](#disabling-the-floating-alert-when-you-enter-vim-modes)
+  * [Enabling screen dim when you enter normal mode](#enabling-screen-dim-when-you-enter-normal-mode)
 * [Beta Features](#beta-features)
-  - [Block cursor mode](#block-cursor-mode)
-  - [Enforce fallback mode with URL patterns](#enforce-fallback-mode-with-url-patterns)
+  * [Block cursor mode](#block-cursor-mode)
+  * [Enforce fallback mode with URL patterns](#enforce-fallback-mode-with-url-patterns)
 * [Manual Installation](#manual-installation)
 * [Testing](#testing)
 
@@ -74,7 +74,7 @@ cd ~/.hammerspoon/Spoons/VimMode.spoon && git pull
 
 ## Current Support
 
-### Flavors of VimMode.
+### Flavors of VimMode
 
 There are two flavors of Vim mode that we try to enable using feature detection.
 
@@ -105,59 +105,59 @@ Advanced Mode gives.
 
 ### Motions
 
-- [x] <kbd>A</kbd> - jump to end of line
-- [x] <kbd>G</kbd> - jump to last line of input
-- [x] <kbd>I</kbd> - jump to beginning of line
-- [x] `0` - beginning of line
-- [x] `$` - end of line
-- [x] `f<char>`
-- [x] `F<char>`
-- [x] `t<char>`
-- [x] `T<char>`
-- [x] <kbd>a</kbd> - move right and enter insert
-- [x] <kbd>b</kbd> - back by word
-- [x] <kbd>B</kbd> - back by big word (`:h WORD`)
-- [x] <kbd>e</kbd> - fwd to end of word
-- [ ] <kbd>E</kbd> - fwd to end of big word (`:h WORD`)
-- [x] `gg` - top of buffer
-- [x] `hjkl` - arrow keys
-- [x] <kbd>w</kbd> fwd by word
-- [x] <kbd>W</kbd> fwd by big word (`:h WORD`)
-- [x] `iw` - in word
-- [x] `i'` - in single quotes
-- [x] `i(` - in parens
-- [x] `i{` - in braces
-- [x] `i<` - in angle brackets
-- [x] <code>i\`</code> - in backticks
-- [x] `i"` - in double quotes
+* [x] <kbd>A</kbd> - jump to end of line
+* [x] <kbd>G</kbd> - jump to last line of input
+* [x] <kbd>I</kbd> - jump to beginning of line
+* [x] `0` - beginning of line
+* [x] `$` - end of line
+* [x] `f<char>`
+* [x] `F<char>`
+* [x] `t<char>`
+* [x] `T<char>`
+* [x] <kbd>a</kbd> - move right and enter insert
+* [x] <kbd>b</kbd> - back by word
+* [x] <kbd>B</kbd> - back by big word (`:h WORD`)
+* [x] <kbd>e</kbd> - fwd to end of word
+* [ ] <kbd>E</kbd> - fwd to end of big word (`:h WORD`)
+* [x] `gg` - top of buffer
+* [x] `hjkl` - arrow keys
+* [x] <kbd>w</kbd> fwd by word
+* [x] <kbd>W</kbd> fwd by big word (`:h WORD`)
+* [x] `iw` - in word
+* [x] `i'` - in single quotes
+* [x] `i(` - in parens
+* [x] `i{` - in braces
+* [x] `i<` - in angle brackets
+* [x] <code>i\`</code> - in backticks
+* [x] `i"` - in double quotes
 
 ### Operators
 
-- [x] <kbd>shift</kbd> + <kbd>c</kbd> - delete to end of line, exit normal mode
-- [x] <kbd>shift</kbd> + <kbd>d</kbd> delete to end of line
-- [x] <kbd>c</kbd> - delete and exit normal mode
-- [x] <kbd>d</kbd> - delete
-- [x] `cc` - delete line and enter insert mode
-- [x] `dd` - delete line
-- [x] `r<char>` to replace - currently broken
-- [x] <kbd>x</kbd> to delete char under cursor
+* [x] <kbd>shift</kbd> + <kbd>c</kbd> - delete to end of line, exit normal mode
+* [x] <kbd>shift</kbd> + <kbd>d</kbd> delete to end of line
+* [x] <kbd>c</kbd> - delete and exit normal mode
+* [x] <kbd>d</kbd> - delete
+* [x] `cc` - delete line and enter insert mode
+* [x] `dd` - delete line
+* [x] `r<char>` to replace - currently broken
+* [x] <kbd>x</kbd> to delete char under cursor
 
 ### Other
 
-- [x] <kbd>i</kbd> to go back to insert mode
-- [x] <kbd>o</kbd> - add new line below, exit normal mode
-- [x] <kbd>shift</kbd> + <kbd>o</kbd> - add new line above, exit normal mode
-- [x] <kbd>p</kbd> to paste
-- [x] <kbd>s</kbd> to delete under cursor, exit normal mode
-- [x] `^r` to redo
-- [x] <kbd>u</kbd> to undo
-- [x] <kbd>y</kbd> to yank to clipboard
-- [x] <kbd>/</kbd> to trigger `cmd+f` search (when `cmd+f` is supported in app)
-- [x] visual mode with <kbd>v</kbd>
-- [x] UTF-8 support
-- [x] `^d` - page down
-- [x] `^u` - page down
-- [ ] support prefixing commands with numbers to repeat them (e.g. `2dw`)
+* [x] <kbd>i</kbd> to go back to insert mode
+* [x] <kbd>o</kbd> - add new line below, exit normal mode
+* [x] <kbd>shift</kbd> + <kbd>o</kbd> - add new line above, exit normal mode
+* [x] <kbd>p</kbd> to paste
+* [x] <kbd>s</kbd> to delete under cursor, exit normal mode
+* [x] `^r` to redo
+* [x] <kbd>u</kbd> to undo
+* [x] <kbd>y</kbd> to yank to clipboard
+* [x] <kbd>/</kbd> to trigger `cmd+f` search (when `cmd+f` is supported in app)
+* [x] visual mode with <kbd>v</kbd>
+* [x] UTF-8 support
+* [x] `^d` - page down
+* [x] `^u` - page down
+* [ ] support prefixing commands with numbers to repeat them (e.g. `2dw`)
 
 ## Configuration
 
