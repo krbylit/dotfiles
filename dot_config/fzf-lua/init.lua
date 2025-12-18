@@ -16,7 +16,7 @@ require("fzf-lua").setup({
         -- ["--tmux"] = false,
         ["--border"] = "horizontal",
         ["--height"] = "80%",
-        ["--border-label-pos"] = "4:bottom",
+        -- ["--border-label-pos"] = "4:bottom",
         -- ["--border"] = os.getenv("TMUX") and "rounded" or "horizontal",
     },
 

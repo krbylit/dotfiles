@@ -10,7 +10,7 @@ set -gx FZF_DEAFULT_OPTS (command cat $FZF_DEFAULT_OPTS_FILE)
 function load_fzf_bindings --on-event fish_prompt
     # Now using fzf-lua (`~/.config/fzf-lua/init.lua`) for file, git, and grep search
     # fzf_configure_bindings --history=\cE --directory=\cF --processes=\cP --git_log=\a
-    fzf_configure_bindings --history=\cE --processes=\cP
+    fzf_configure_bindings --history=\cE --processes=\cP --git_log=\a
 end
 
 # `fzf_directory_opts` is appended onto default opts passed to `fd`
