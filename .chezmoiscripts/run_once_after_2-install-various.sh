@@ -63,6 +63,12 @@ if [ "${IS_SSH}" != "1" ]; then
     fi
 fi
 
+if [ "${IS_SSH}" != "1" ]; then
+    if ! command -v claude-code-acp &>/dev/null; then
+        npm install -g @zed-industries/claude-code-acp
+    fi
+fi
+
 if ! command -v typescript-language-server &>/dev/null; then
     npm install -g typescript typescript-language-server
 fi

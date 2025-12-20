@@ -1,3 +1,17 @@
+vim.api.nvim_create_autocmd("FileType", {
+    pattern = "octo",
+    callback = function(ev)
+        vim.schedule(function()
+            -- Go back to default maps for these
+            -- pcall(vim.keymap.del, "n", "<C-e>", { buffer = ev.buf })
+            -- pcall(vim.keymap.del, "n", "<C-y>", { buffer = ev.buf })
+            -- *How to enable autocompletion for issues/prs (`#`) and users (`@`)?~
+            -- Add the following mappings for `octo` file type:
+            pcall(vim.keymap.set, "i", "@", "@<C-x><C-o>", { silent = true, buffer = true })
+            pcall(vim.keymap.set, "i", "#", "#<C-x><C-o>", { silent = true, buffer = true })
+        end)
+    end,
+})
 return {
     "pwntester/octo.nvim",
     enabled = vim.env.IS_SSH ~= "1",

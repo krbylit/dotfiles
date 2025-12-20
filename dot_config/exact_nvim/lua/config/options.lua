@@ -42,7 +42,11 @@ vim.opt.sessionoptions:remove("skiprtp")
 vim.opt.iskeyword:append("-")
 -- use bash for shell, fish is very slow in nvim
 -- opt.shell = "bash"
-opt.shell = "fish"
+if vim.env.IS_SSH ~= "1" then
+    opt.shell = "fish"
+else
+    opt.shell = "bash"
+end
 -- opt.shell = "/opt/homebrew/bin/fish"
 opt.undofile = true -- Save undo history between sessions
 opt.tabstop = 4 -- A tab is equal to 4 spaces
