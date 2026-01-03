@@ -19,6 +19,7 @@ return {
         -- see below for full list of optional dependencies 👇
     },
     opts = {
+        ui = { enable = false },
         workspaces = {
             -- {
             --     name = "personal",
@@ -26,7 +27,8 @@ return {
             -- },
             {
                 name = "work",
-                path = "~/.local/share/chezmoi/vaults/work",
+                -- path = "~/.local/share/chezmoi/vaults/work",
+                path = "~/obsidian-vault",
             },
         },
 

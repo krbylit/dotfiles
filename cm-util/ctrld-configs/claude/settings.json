@@ -23,8 +23,12 @@
     ],
     "deny": []
   },
+  "enabledPlugins": {
+    "beads@beads-marketplace": true
+  },
   "enableAllProjectMcpServers": true,
   "enabledMcpjsonServers": [
+    "beads",
     "time",
     "websearch",
     "fetch",
