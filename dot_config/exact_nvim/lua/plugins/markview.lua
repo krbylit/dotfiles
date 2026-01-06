@@ -17,7 +17,7 @@ return {
             name = "Markview",
             get = function()
                 local bufnr = vim.api.nvim_get_current_buf()
-                local state = require("markview").state.buffer_states[bufnr]
+                local state = require("markview.state").get_buffer_state(bufnr, false)
                 return state and state.enable or false
             end,
             set = function()

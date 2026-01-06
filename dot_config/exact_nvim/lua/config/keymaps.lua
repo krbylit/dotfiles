@@ -76,6 +76,10 @@ end
 map("n", "dd", dd, { noremap = true, expr = true })
 -- Unbind ctrl-z so it doesn't suspend terminal
 map({ "n", "v", "i" }, "<c-z>", "<Nop>", { noremap = true, expr = true })
+-- Clear all virtual text / ext marks in buffer (useful for octo.nvim comment virt text)
+map("n", "<leader>uv", function()
+    vim.api.nvim_buf_clear_namespace(0, -1, 0, -1)
+end, { desc = "Clear all virtual text/extmarks in buffer" })
 
 -- ================================================================
 -- FILES

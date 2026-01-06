@@ -92,6 +92,12 @@ if [ "${IS_SSH}" != "1" ]; then
 fi
 
 if [ "${IS_SSH}" != "1" ]; then
+    if ! command -v pomo &>/dev/null; then
+        go install github.com/Bahaaio/pomo@latest
+    fi
+fi
+
+if [ "${IS_SSH}" != "1" ]; then
     if ! command -v trex &>/dev/null; then
         go install github.com/samyakbardiya/trex@latest
     fi
