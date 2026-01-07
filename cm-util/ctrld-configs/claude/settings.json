@@ -23,9 +23,6 @@
     ],
     "deny": []
   },
-  "enabledPlugins": {
-    "beads@beads-marketplace": true
-  },
   "enableAllProjectMcpServers": true,
   "enabledMcpjsonServers": [
     "beads",
@@ -39,6 +36,10 @@
     "github",
     "software-planning-tool"
   ],
+  "enabledPlugins": {
+    "beads@beads-marketplace": true,
+    "typescript-lsp@claude-plugins-official": true
+  },
   "alwaysThinkingEnabled": true,
   "feedbackSurveyState": {
     "lastShownTime": 1754065732137

@@ -258,7 +258,12 @@ load_plugins {
 // Choose the theme that is specified in the themes section.
 // Default: default
 //
-// theme "dracula"
+// theme "tokyo-night-storm"
+theme "nightfox"
+// theme "kanagawa"
+// theme "everforest-dark"
+// theme "catppuccin-macchiato"
+// theme "catppuccin-frappe"
 
 // Choose the base input mode of zellij.
 // Default: normal
