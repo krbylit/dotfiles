@@ -42,7 +42,122 @@ This command performs a thorough code review of changes, analyzing for common is
    /review-code a1b2c3d..d4e5f6g
    ```
 
-2. **Intelligent Base Branch Detection** (for --pr without --base-branch):
+2. **Auto-Detect Associated Pull Request**:
+
+   **ALWAYS attempt PR detection**, regardless of review scope. This enables comment analysis for all review modes.
+
+   a. **Check if `gh` CLI is available**:
+
+   ```bash
+   # Verify gh is installed
+   if ! command -v gh &> /dev/null; then
+       echo "⚠️  gh CLI not found - skipping PR comment analysis"
+       # Continue without PR detection
+   fi
+   ```
+
+   b. **Check if repository has GitHub remote**:
+
+   ```bash
+   # Check for GitHub remote
+   git remote -v | grep -q "github.com"
+   if [ $? -ne 0 ]; then
+       echo "⚠️  No GitHub remote found - skipping PR comment analysis"
+       # Continue without PR detection
+   fi
+   ```
+
+   c. **Attempt to detect PR for current branch**:
+
+   ```bash
+   # Try to get PR number for current branch
+   PR_NUMBER=$(gh pr view --json number --jq '.number' 2>/dev/null)
+
+   if [ -z "$PR_NUMBER" ]; then
+       echo "ℹ️  No PR found for current branch"
+       # Continue review without PR comment analysis
+   else
+       echo "✅ Found PR #$PR_NUMBER for current branch"
+       PR_DETECTED=true
+   fi
+   ```
+
+   d. **Get PR metadata** (if PR detected):
+
+   ```bash
+   # Fetch PR details
+   gh pr view $PR_NUMBER --json title,state,author,url,baseRefName
+   ```
+
+   e. **Store PR info for later use**:
+   - PR number
+   - PR state (open/closed/merged)
+   - Base branch
+   - PR URL
+
+3. **Fetch Existing PR Comments and Reviews**:
+
+   **Only execute if PR was detected in step 2.**
+
+   a. **Fetch unresolved review comments** (line-specific comments):
+
+   ```bash
+   # Get review comments (only unresolved conversations)
+   # Using GitHub API to access 'resolved' field
+   gh api "/repos/{owner}/{repo}/pulls/$PR_NUMBER/comments" \
+       --jq '.[] | select(.in_reply_to_id == null or .in_reply_to_id == 0) |
+             select(.pull_request_review_id != null) |
+             {
+               id: .id,
+               path: .path,
+               line: .line,
+               body: .body,
+               user: .user.login,
+               created_at: .created_at,
+               commit_id: .commit_id
+             }'
+   ```
+
+   **Note**: GitHub's API doesn't directly expose "resolved" status on individual comments. Instead:
+   - Fetch all review comments
+   - Group them by thread (using `in_reply_to_id`)
+   - If available via API, filter by resolved status
+   - Otherwise, fetch all comments and note that filtering may be incomplete
+
+   b. **Fetch general PR comments** (conversation tab):
+
+   ```bash
+   # Get issue comments (general PR discussion)
+   gh api "/repos/{owner}/{repo}/issues/$PR_NUMBER/comments" \
+       --jq '.[] | {
+         id: .id,
+         body: .body,
+         user: .user.login,
+         created_at: .created_at
+       }'
+   ```
+
+   c. **Fetch PR reviews** (approve/request changes/comment):
+
+   ```bash
+   # Get PR reviews
+   gh pr view $PR_NUMBER --json reviews \
+       --jq '.reviews[] | {
+         id: .id,
+         state: .state,
+         body: .body,
+         author: .author.login,
+         submitted_at: .submittedAt
+       }'
+   ```
+
+   d. **Organize comment data**:
+   - Categorize by type: review comments (line-specific) vs general comments
+   - Extract file paths and line numbers for review comments
+   - Note comment authors and timestamps
+   - Store for later analysis
+
+4. **Intelligent Base Branch Detection** (for --pr without --base-branch):
 
    If `--pr` specified but `--base-branch` was NOT provided, auto-detect base branch:
 
@@ -89,7 +204,7 @@ This command performs a thorough code review of changes, analyzing for common is
    📍 Merge-base: [short-sha] ([relative-date])
    ```
 
-3. **Gather Changes**:
+5. **Gather Changes**:
 
    Based on scope:
 
@@ -118,14 +233,14 @@ This command performs a thorough code review of changes, analyzing for common is
    - For review purposes, use `..` (two dots) for simple range
    - Parse syntax: If argument contains `..`, split on `..` to get two commit SHAs
 
-4. **Analyze Project Context**:
+6. **Analyze Project Context**:
    - Read CLAUDE.md for project standards
    - Read README.md for architecture overview
    - Identify language/framework from file extensions
    - Note project patterns from existing code
    - Check for .editorconfig, .prettierrc, etc.
 
-5. **Perform Multi-Dimensional Review**:
+7. **Perform Multi-Dimensional Review**:
 
    For each changed file, analyze across these dimensions:
 
@@ -206,7 +321,7 @@ This command performs a thorough code review of changes, analyzing for common is
    - Examples provided?
    - Documentation up to date?
 
-6. **Categorize Findings by Severity**:
+8. **Categorize Findings by Severity**:
 
    **🔴 CRITICAL**: Must fix before merging
    - Security vulnerabilities
@@ -232,7 +347,39 @@ This command performs a thorough code review of changes, analyzing for common is
    - Documentation enhancements
    - Optimization opportunities
 
-7. **Generate Review Report**:
+9. **Evaluate Existing PR Comments** (if PR detected in step 2):
+
+   For each comment/review fetched in step 3, perform analysis:
+
+   a. **Read the current code at the flagged location**:
+   - For line-specific review comments: Read the file at the specified path and line
+   - Check if the code still exists at that location
+   - Check if the code has changed since the comment was made (compare commit_id)
+
+   b. **Assess comment validity**:
+   - **Valid & Still Applicable**: Issue raised is legitimate and still present in current code
+   - **Valid & Addressed**: Issue was legitimate but has been fixed
+   - **Invalid/Outdated**: Comment no longer applies (code changed, was incorrect, or based on misunderstanding)
+   - **Partially Valid**: Some aspects addressed, others remain
+
+   c. **Verify fixes for addressed issues**:
+   - If comment suggests a fix, check if that exact fix or equivalent was applied
+   - Note if fix was applied but differently than suggested
+   - Check if fix introduced new issues
+
+   d. **Cross-reference with current review findings**:
+   - Do current review findings overlap with PR comments?
+   - Are there issues flagged in comments that current review missed?
+   - Are there issues current review found that comments didn't mention?
+
+   e. **Categorize comment evaluation results**:
+   - **Consensus Issues**: Flagged in both PR comments AND current review
+   - **New Issues in Current Review**: Not mentioned in PR comments
+   - **Addressed Issues**: Flagged in comments but fixed in current code
+   - **Still Outstanding**: Flagged in comments and still present
+   - **Questionable Comments**: Comments that appear invalid or incorrect
+
+10. **Generate Review Report**:
 
    Use this structured format:
 
@@ -243,6 +390,7 @@ This command performs a thorough code review of changes, analyzing for common is
    **Files Changed**: [count]
    **Lines Changed**: [+additions / -deletions]
    **Review Date**: [timestamp]
+   **PR**: [#number (if detected) or "N/A"]
 
    ---
 
@@ -384,14 +532,14 @@ This command performs a thorough code review of changes, analyzing for common is
 
    ```
 
-8. **Provide Context-Aware Analysis**:
+11. **Provide Context-Aware Analysis**:
    - **For Rust**: Focus on ownership/borrowing issues, unsafe code, error handling with Result/Option
    - **For JavaScript/TypeScript**: Focus on type safety, async/await patterns, null/undefined
    - **For Python**: Focus on type hints, exception handling, PEP 8
    - **For SQL**: Focus on injection, indexes, N+1 queries
    - **For API code**: Focus on validation, auth, rate limiting, error responses
 
-9. **Check Against Project Standards**:
+12. **Check Against Project Standards**:
 
    From CLAUDE.md, verify:
    - Naming conventions followed?
@@ -400,7 +548,7 @@ This command performs a thorough code review of changes, analyzing for common is
    - Testing standards met?
    - Documentation requirements satisfied?
 
-10. **Report Results**:
+13. **Report Results**:
 
 - Save the structured review report to a timestamped file in the repository root directory
 - Output a summary confirmation to the user
@@ -414,7 +562,146 @@ This command performs a thorough code review of changes, analyzing for common is
   - Write the complete markdown report to this file
   - Confirm to user: `📝 Review saved to PR_REVIEW_<timestamp>.md`
 
-1. **Cross-Review Analysis (Senior Engineer Meta-Review)**:
+14. **Append PR Comments Analysis** (if PR detected):
+
+    After writing the main review sections, append analysis of existing PR comments/reviews.
+
+    **Add the following section to the report** (before Cross-Review Analysis):
+
+    ```markdown
+    ---
+
+    ## Existing PR Comments Analysis 💬
+
+    **PR Information**:
+    - **PR Number**: #[number]
+    - **PR Title**: [title]
+    - **PR State**: [open/closed/merged]
+    - **PR URL**: [url]
+    - **Base Branch**: [branch]
+
+    **Comments Analyzed**:
+    - **Review Comments** (line-specific): [count]
+    - **General Comments**: [count]
+    - **PR Reviews**: [count]
+
+    ---
+
+    ### Addressed Issues ✅
+
+    [Issues that were flagged in PR comments but have been fixed in current code]
+
+    | Location | Commenter | Issue Raised | Status | Verification |
+    |----------|-----------|--------------|--------|--------------|
+    | [file:line] | @[user] | [summary of comment] | Fixed ✅ | [How it was fixed] |
+
+    **Example**:
+    | Location | Commenter | Issue Raised | Status | Verification |
+    |----------|-----------|--------------|--------|--------------|
+    | src/api.rs:45 | @reviewer1 | SQL injection vulnerability | Fixed ✅ | Now using parameterized query with $1 placeholder |
+
+    ---
+
+    ### Outstanding Issues ⚠️
+
+    [Issues flagged in PR comments that are still present in current code]
+
+    | Location | Commenter | Issue Raised | Current Review Severity | Still Valid? |
+    |----------|-----------|--------------|------------------------|--------------|
+    | [file:line] | @[user] | [summary] | 🔴/🟠/🟡/🟢 | Yes/Partially/No |
+
+    **Details for each**:
+    - **[file:line]** - @[user] ([timestamp])
+      - **Comment**: [full comment text]
+      - **Current Code**:
+        ```language
+        [relevant code snippet]
+        ```
+      - **Assessment**: [Is this still valid? Why/why not?]
+      - **Action Required**: [What needs to be done?]
+
+    ---
+
+    ### Consensus Issues 🎯
+
+    [Issues identified by BOTH PR comments AND current review - high confidence]
+
+    | Issue | Flagged By | Severity | Agreement Level |
+    |-------|------------|----------|-----------------|
+    | [issue summary] | @[user1], @[user2], this review | 🔴/🟠/🟡/🟢 | Full/Partial |
+
+    **Details**:
+    - **[Issue]**:
+      - **PR Comment** (@[user]): [summary of their concern]
+      - **Current Review**: [our finding]
+      - **Agreement**: [Full agreement / Both found issue but different severity / Similar concerns]
+      - **Recommendation**: [Since multiple reviewers agree, this should be high priority]
+
+    ---
+
+    ### Issues Only in Current Review 🆕
+
+    [Issues found by current review but NOT mentioned in any PR comments]
+
+    | Location | Issue | Severity | Why Might This Be Missed? |
+    |----------|-------|----------|---------------------------|
+    | [file:line] | [issue] | 🔴/🟠/🟡/🟢 | [Possible reason previous reviewers didn't catch it] |
+
+    ---
+
+    ### Questionable/Outdated Comments ❓
+
+    [PR comments that appear invalid, outdated, or incorrect]
+
+    | Location | Commenter | Comment | Assessment |
+    |----------|-----------|---------|------------|
+    | [file:line] | @[user] | [summary] | Invalid/Outdated/Incorrect - [reason] |
+
+    **Details**:
+    - **[file:line]** - @[user] comment:
+      - **Comment**: [full text]
+      - **Why Invalid**: [Code has changed / Comment was incorrect / Misunderstanding / etc.]
+      - **Current State**: [What the code actually does now]
+
+    ---
+
+    ### Reviewer Agreement Summary
+
+    **Total PR Comments Evaluated**: [count]
+
+    | Category | Count | Percentage |
+    |----------|-------|------------|
+    | Addressed ✅ | [N] | [%] |
+    | Still Outstanding ⚠️ | [N] | [%] |
+    | Consensus with Current Review 🎯 | [N] | [%] |
+    | Outdated/Invalid ❓ | [N] | [%] |
+
+    **Key Takeaways**:
+    - [Summary of how well issues have been addressed]
+    - [Note any patterns in what's been fixed vs outstanding]
+    - [Comment on review quality/usefulness]
+
+    ---
+
+    ### Recommended Actions Based on PR Comments
+
+    **Must Address**:
+    1. [Outstanding critical/high issues from PR comments]
+    2. [Consensus issues flagged by multiple reviewers]
+
+    **Should Consider**:
+    1. [Valid medium-priority comments not yet addressed]
+
+    **Can Dismiss**:
+    1. [Invalid/outdated comments with justification]
+
+    **Response Suggestions**:
+    - Reply to addressed comments: "✅ Fixed in [commit sha] - [brief description]"
+    - Reply to outstanding issues: "[Status update / plan to address / reason not addressing]"
+    - Reply to invalid comments: "This appears outdated - [explanation]"
+    ```
+
+15. **Cross-Review Analysis (Senior Engineer Meta-Review)**:
 
     After writing the review file, check for other `PR_REVIEW_*.md` files in the repository root:
 
@@ -605,6 +892,40 @@ The working directory is clean. Specify a different scope:
 
 - Apply appropriate criteria (test-specific patterns)
 - Check for test quality, not production standards
+
+**PR Comment Analysis Failures**:
+
+```
+⚠️  PR Comments Analysis Failed
+
+Unable to fetch PR comments due to:
+- [gh CLI not installed / not authenticated / API error]
+
+Continuing with standard code review...
+```
+
+**No GitHub Remote**:
+
+```
+ℹ️  No GitHub remote detected
+
+PR comment analysis requires a GitHub repository.
+Continuing with standard code review...
+```
+
+**PR Detected but No Comments**:
+
+```
+✅ Found PR #[number] but no existing comments/reviews
+
+This is the first review of this PR.
+```
+
+**Outdated Review Comments**:
+
+- If comment references old commit_id, note that code may have changed
+- Check current code state vs when comment was made
+- Mark comments as "potentially outdated" if significant changes occurred
 
 ## Example Output
 
