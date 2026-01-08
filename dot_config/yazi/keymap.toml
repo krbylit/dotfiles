@@ -349,6 +349,11 @@ run = "plugin lazygit"
 desc = "run lazygit"
 
 [[mgr.prepend_keymap]]
+on = ["g", "a"]
+run = "plugin lazydocker"
+desc = "run lazydocker"
+
+[[mgr.prepend_keymap]]
 # On macOS, open preview with Quick Look
 on = "<C-p>"
 run = '''

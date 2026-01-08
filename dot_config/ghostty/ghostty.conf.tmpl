@@ -69,8 +69,10 @@ keybind = super+j=next_tab
 keybind = super+r=new_split:right
 keybind = super+d=new_split:down
 
-keybind = super+alt+j=move_tab:1
-keybind = super+alt+k=move_tab:-1
+# keybind = super+alt+j=move_tab:1
+# keybind = super+alt+k=move_tab:-1
+keybind = super+o=move_tab:1
+keybind = super+i=move_tab:-1
 
 keybind = super+shift+l=goto_split:right
 keybind = super+shift+h=goto_split:left
@@ -87,8 +89,10 @@ keybind = super+ctrl+equal=equalize_splits
 # To browse/search scrollback use these. `open` uses TextEdit, so we can use `nvim <super+shift+s>` with `paste` instead to open scrollback buffer in nvim.
 # keybind = super+shift+s=write_scrollback_file:open
 keybind = super+shift+s=write_scrollback_file:paste
-keybind = super+shift+right_bracket=scroll_page_down
-keybind = super+shift+left_bracket=scroll_page_up
+# keybind = super+shift+right_bracket=scroll_page_down
+# keybind = super+shift+left_bracket=scroll_page_up
+keybind = super+shift+f=scroll_page_down
+keybind = super+shift+b=scroll_page_up
 keybind = super+shift+p=jump_to_prompt:-1
 keybind = super+shift+n=jump_to_prompt:1
 keybind = super+shift+u=scroll_page_fractional:-0.33

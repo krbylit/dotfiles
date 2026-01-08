@@ -4,4 +4,6 @@ commit_message.txt
 .gitmodules
 .aider*
 !.aiderignore
+.beads
 vaults
+specs

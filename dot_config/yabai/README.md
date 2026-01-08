@@ -552,7 +552,7 @@ If a new yabai version causes issues:
 
 ---
 
-**For additional troubleshooting help**, see the [Troubleshooting Guide](/TROUBLESHOOTING.md#system-permissions) for comprehensive coverage of:
+**For additional troubleshooting help**, see the [Troubleshooting Guide](/docs/TROUBLESHOOTING.md#system-permissions) for comprehensive coverage of:
 
 - macOS accessibility permissions (symptoms, step-by-step resolution, verification commands)
 - System-wide diagnostic procedures

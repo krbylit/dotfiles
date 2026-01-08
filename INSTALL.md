@@ -689,7 +689,7 @@ rm -rf ~/.local/share/chezmoi
 
 For more detailed troubleshooting:
 
-- See [TROUBLESHOOTING.md](./TROUBLESHOOTING.md) for comprehensive troubleshooting guide (to be created)
+- See [TROUBLESHOOTING.md](./docs/TROUBLESHOOTING.md) for comprehensive troubleshooting guide (to be created)
 - Check tool-specific READMEs in `~/.local/share/chezmoi/dot_config/<tool>/README.md`
 - Review chezmoi documentation: [chezmoi.io](https://www.chezmoi.io)
 - Check GitHub issues in the dotfiles repository
@@ -790,7 +790,7 @@ Congratulations! Your development environment is now set up. Here's what to do n
 ## Related Documentation
 
 - [CHEZMOI.md](./CHEZMOI.md) - Chezmoi workflow guide for making configuration changes
-- [TROUBLESHOOTING.md](./TROUBLESHOOTING.md) - Comprehensive troubleshooting reference
+- [TROUBLESHOOTING.md](./docs/TROUBLESHOOTING.md) - Comprehensive troubleshooting reference
 - [README.md](./README.md) - Repository overview and quick reference
 - [docs/KEYMAPS.md](./docs/KEYMAPS.md) - Unified keyboard shortcuts reference
 - [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md) - System architecture and design

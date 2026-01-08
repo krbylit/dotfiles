@@ -1083,7 +1083,7 @@ If files appear decrypted in public, one of these occurred:
 - [Secrets Management](./secrets-management.md) - Managing sensitive data, encryption, and the secrets submodule
 - [Multi-Machine Synchronization](./multi-machine-sync.md) - Syncing dotfiles across multiple machines
 - [Configuration Changes](./configuration-changes.md) - Making changes to dotfiles using chezmoi workflow
-- [Troubleshooting Guide](../../TROUBLESHOOTING.md) - General troubleshooting for dotfiles
+- [Troubleshooting Guide](../TROUBLESHOOTING.md) - General troubleshooting for dotfiles
 - [GitHub Actions Documentation](https://docs.github.com/en/actions) - Official GitHub Actions reference
 - [Git SSH Authentication](https://docs.github.com/en/authentication/connecting-to-github-with-ssh) - Setting up SSH keys for GitHub
 

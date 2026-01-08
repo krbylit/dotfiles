@@ -421,7 +421,7 @@ Should show karabiner-elements as "started"
 
 ---
 
-**For additional troubleshooting help**, see the [Troubleshooting Guide](/TROUBLESHOOTING.md#system-permissions) for comprehensive coverage of:
+**For additional troubleshooting help**, see the [Troubleshooting Guide](/docs/TROUBLESHOOTING.md#system-permissions) for comprehensive coverage of:
 
 - macOS Input Monitoring permissions (symptoms, step-by-step resolution, verification)
 - Permission issues after macOS updates

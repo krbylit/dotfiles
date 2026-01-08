@@ -29,6 +29,8 @@ bind --mode insert ctrl-g 'commandline -f repaint; set -l result (nvim -l "$XDG_
 bind --mode default ctrl-g 'commandline -f repaint; set -l result (nvim -l "$XDG_DATA_HOME/nvim/lazy/fzf-lua/scripts/cli.lua" git_commits);'
 bind --mode insert ctrl-z 'commandline -f repaint; zellij_picker (commandline -b)'
 bind --mode default ctrl-z 'commandline -f repaint; zellij_picker (commandline -b)'
+bind --mode insert ctrl-a 'commandline -f repaint; zi (commandline -b)'
+bind --mode default ctrl-a 'commandline -f repaint; zi (commandline -b)'
 # bind --mode insert ctrl-z 'commandline -f repaint; zi (commandline -b)'
 # bind --mode default ctrl-z 'commandline -f repaint; zi (commandline -b)'
 # bind --mode insert ctrl-a search_and_replace

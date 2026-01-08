@@ -24,6 +24,17 @@ return {
                 return vim.cmd("Markview toggle")
             end,
         }):map("<leader>um")
+        Snacks.toggle({
+            name = "Markview Hybrid",
+            get = function()
+                local bufnr = vim.api.nvim_get_current_buf()
+                local state = require("markview.state").get_buffer_state(bufnr, false)
+                return state and state.hybrid_mode or false
+            end,
+            set = function()
+                return vim.cmd("Markview hybridToggle")
+            end,
+        }):map("<leader>uy")
         -- Setup checkboxes extra (`:Checkbox`)
         -- FIX: Checkboxes seem to not be rendering right and command does nothing
         require("markview.extras.checkboxes").setup({
@@ -57,8 +68,12 @@ return {
         })
     end,
     opts = {
+        -- TODO: now that we have hybrid mode toggle, make it default to hybrid mode turned off
         preview = {
             hybrid_modes = { "n", "i" },
+            raw_previews = {
+                markdown = { "!tables" },
+            },
         },
         experimental = {
             check_rtp = true,

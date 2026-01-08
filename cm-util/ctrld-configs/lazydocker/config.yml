@@ -82,6 +82,10 @@ customCommands:
     #   command: "{{ .DockerCompose }} build {{ .Service.Name }} --label preserve=true"
     #   serviceNames: []
   images:
+    - name: "Delete image:"
+      attach: true
+      command: "docker rmi -f {{ .Image.ID }}"
+      serviceNames: []
     - name: "Tag as prod-debug:"
       attach: true
       command: "docker image tag {{ .Image.Name }} {{ .Image.Name }}:prod-debug"

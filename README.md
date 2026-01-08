@@ -49,7 +49,7 @@ Personal macOS development environment managed with [chezmoi](https://www.chezmo
 1. **[Installation Guide](./INSTALL.md)** - Complete setup instructions for fresh macOS installation (~60 minutes)
 2. **[Chezmoi Workflow](./CHEZMOI.md)** - How to make configuration changes safely *(coming soon)*
 3. **[Keymaps Reference](./docs/KEYMAPS.md)** - Find any keyboard shortcut across all tools *(coming soon)*
-4. **[Troubleshooting](./TROUBLESHOOTING.md)** - Common issues and solutions *(coming soon)*
+4. **[Troubleshooting](./docs/TROUBLESHOOTING.md)** - Common issues and solutions *(coming soon)*
 
 ## What's Included
 
@@ -209,7 +209,7 @@ See [docs/KEYMAPS.md](./docs/KEYMAPS.md) for searchable keymap reference across 
 
 ### Troubleshooting Common Issues
 
-See [TROUBLESHOOTING.md](./TROUBLESHOOTING.md) for solutions to common problems *(coming soon)*.
+See [TROUBLESHOOTING.md](./docs/TROUBLESHOOTING.md) for solutions to common problems *(coming soon)*.
 
 ## Manual Dependencies
 
@@ -336,7 +336,7 @@ chezmoi edit ~/.config/nvim/lua/config/keymaps.lua
 
 ### Getting Help
 
-1. **Check [TROUBLESHOOTING.md](./TROUBLESHOOTING.md)** for comprehensive troubleshooting coverage:
+1. **Check [TROUBLESHOOTING.md](./docs/TROUBLESHOOTING.md)** for comprehensive troubleshooting coverage:
    - macOS accessibility and Input Monitoring permissions
    - Pre-commit hooks and gitleaks errors
    - Neovim LSP issues and Mason setup

@@ -890,7 +890,7 @@ pre-commit run gitleaks --all-files
 
 - [Installation Guide](../../INSTALL.md) - Initial dotfiles setup including secrets configuration
 - [Chezmoi Workflow Guide](../../CHEZMOI.md) - Managing configuration changes with chezmoi
-- [Troubleshooting Guide](../../TROUBLESHOOTING.md) - General troubleshooting for dotfiles
+- [Troubleshooting Guide](../TROUBLESHOOTING.md) - General troubleshooting for dotfiles
 - [Chezmoi Official Docs](https://www.chezmoi.io/) - Comprehensive chezmoi documentation
 - [1Password Service Accounts](https://developer.1password.com/docs/service-accounts/) - 1Password integration setup
 - [Gitleaks Documentation](https://github.com/gitleaks/gitleaks) - Secret scanning configuration

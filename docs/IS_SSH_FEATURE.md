@@ -819,8 +819,8 @@ chezmoi apply --verbose --dry-run
 
 ### Supporting Documentation
 
-- **[CHEZMOI_SCRIPTS.md](../CHEZMOI_SCRIPTS.md)**: Detailed script documentation
-- **[ARCHITECTURE.md](ARCHITECTURE.md)**: System architecture and layer interactions
+- **[CHEZMOI_SCRIPTS.md](./CHEZMOI_SCRIPTS.md)**: Detailed script documentation
+- **[ARCHITECTURE.md](./ARCHITECTURE.md)**: System architecture and layer interactions
 - **[README.md](../README.md)**: Repository overview and quickstart
 
 ### External Resources

@@ -1,5 +1,7 @@
 # Chezmoi Workflow Guide
 
+> **Note**: This guide covers day-to-day chezmoi usage (edit, diff, apply, commit workflow). For technical details about how chezmoi is configured in this repository (ignore patterns, external files, scripts, etc.), see the [Chezmoi System Documentation](./docs/CHEZMOI_SYSTEM.md).
+
 ## Table of Contents
 
 1. [Overview](#1-overview)
@@ -2346,7 +2348,7 @@ gitleaks protect --verbose --staged
 2. **False positive**: Add to `.gitleaksignore`
 3. **Gitleaks configuration error**: Check `.pre-commit-config.yaml` syntax
 
-**Solution**: See [TROUBLESHOOTING.md](./TROUBLESHOOTING.md#pre-commit-hooks-and-gitleaks) for detailed steps.
+**Solution**: See [TROUBLESHOOTING.md](./docs/TROUBLESHOOTING.md#pre-commit-hooks-and-gitleaks) for detailed steps.
 
 #### Slow Pre-commit Hooks
 
@@ -2463,7 +2465,7 @@ exit
 
 For more information on pre-commit hooks and secret management:
 
-- **[TROUBLESHOOTING.md](./TROUBLESHOOTING.md#pre-commit-hooks-and-gitleaks)** - Detailed troubleshooting for hook failures
+- **[TROUBLESHOOTING.md](./docs/TROUBLESHOOTING.md#pre-commit-hooks-and-gitleaks)** - Detailed troubleshooting for hook failures
 - **[INSTALL.md](./INSTALL.md#verification-checklist)** - Pre-commit setup verification steps
 - **[docs/workflows/secrets-management.md](./docs/workflows/secrets-management.md)** - Comprehensive secrets workflow guide
 - **[Gitleaks Documentation](https://github.com/gitleaks/gitleaks)** - Official gitleaks usage and configuration

@@ -1,5 +1,7 @@
 # Chezmoi System Documentation
 
+> **Note**: This document covers the technical architecture and configuration of chezmoi in this repository. For day-to-day workflow (how to edit, diff, apply, and commit changes), see the [Chezmoi Workflow Guide](../CHEZMOI.md).
+
 ## Table of Contents
 
 1. [Overview](#overview)
@@ -48,7 +50,7 @@ This dotfiles repository uses [chezmoi](https://www.chezmoi.io/) as a sophistica
 - **Target State**: Computed files after template rendering (machine-specific)
 - **Destination State**: Actual dotfiles in `$HOME` (what applications read)
 
-For basic chezmoi workflow (edit, diff, apply, commit), see [CHEZMOI.md](../CHEZMOI.md) in the repository root.
+For basic chezmoi workflow (edit, diff, apply, commit), see the [Chezmoi Workflow Guide](../CHEZMOI.md) in the repository root.
 
 ---
 
@@ -914,7 +916,7 @@ git commit -m "various updates"
 
 ### Workflow Guides
 
-- [CHEZMOI.md](../CHEZMOI.md) - Complete chezmoi workflow (edit, diff, apply, commit)
+- [Chezmoi Workflow Guide](../CHEZMOI.md) - Complete chezmoi workflow (edit, diff, apply, commit)
 - [workflows/configuration-changes.md](workflows/configuration-changes.md) - Step-by-step modification procedures
 - [workflows/secrets-management.md](workflows/secrets-management.md) - Handling secrets and sensitive data
 - [workflows/multi-machine-sync.md](workflows/multi-machine-sync.md) - Syncing configurations across machines
@@ -922,7 +924,7 @@ git commit -m "various updates"
 ### Setup and Troubleshooting
 
 - [INSTALL.md](../INSTALL.md) - Initial installation and setup
-- [TROUBLESHOOTING.md](../TROUBLESHOOTING.md) - Common issues and solutions
+- [TROUBLESHOOTING.md](./TROUBLESHOOTING.md) - Common issues and solutions
 - [.chezmoiscripts/README.md](../.chezmoiscripts/README.md) - Automated setup scripts documentation
 
 ### Architecture and Reference

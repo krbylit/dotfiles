@@ -1719,7 +1719,7 @@ vim ~/.config/chezmoi/chezmoi.toml
 
 **Reference:**
 
-- [CHEZMOI.md secrets section](./docs/CHEZMOI.md#secrets-and-encryption)
+- [CHEZMOI_SYSTEM.md secrets section](./CHEZMOI_SYSTEM.md#secrets-and-encryption)
 
 ---
 

@@ -529,7 +529,7 @@ Modify the `opts` table in `extend-lspconfig.lua`:
 
 ---
 
-**For additional troubleshooting help**, see the [Troubleshooting Guide](/TROUBLESHOOTING.md#neovim-lsp-issues) for comprehensive coverage of:
+**For additional troubleshooting help**, see the [Troubleshooting Guide](/docs/TROUBLESHOOTING.md#neovim-lsp-issues) for comprehensive coverage of:
 
 - LSP server installation and configuration via Mason
 - Python LSP issues after Python upgrades
