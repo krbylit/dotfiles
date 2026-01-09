@@ -1,13 +1,11 @@
 return {
-    "carlos-algms/agentic.nvim",
-
+    "krbylit/agentic.nvim",
+    commit = "c1e0db8251dc2b57f5fb4f6d1097476be5bbe413",
     event = "VeryLazy",
-
     opts = {
         -- Available by default: "claude-acp" | "gemini-acp" | "codex-acp" | "opencode-acp"
         provider = "claude-acp", -- setting the name here is all you need to get started
     },
-
     -- these are just suggested keymaps; customize as desired
     keys = {
         {

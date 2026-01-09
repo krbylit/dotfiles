@@ -455,15 +455,7 @@ This command analyzes all changes in the current branch compared to the base bra
     - Justification for breaking change
     - Deprecation warnings if applicable
 
-11. **Generate Output**:
-
-    Provide:
-    - PR title (ready to copy)
-    - PR description (complete markdown)
-    - Suggested reviewers (from git history or CODEOWNERS)
-    - Git commands to push and create PR
-
-12. **Validate PR Title Format**:
+11. **Validate PR Title Format**:
 
     Before providing the final output, validate the generated PR title:
 
@@ -488,7 +480,9 @@ This command analyzes all changes in the current branch compared to the base bra
     - Ensure it strictly follows conventional commit format
     - Do not proceed until title passes all validation checks
 
-13. **Save PR Description to File**:
+12. **REQUIRED: Save PR Description to File**:
+
+    **THIS STEP IS MANDATORY - YOU MUST USE THE Write TOOL TO SAVE THE FILE**
 
     **File Naming**:
     - Generate filename: `PR_DESC_<timestamp>.md`
@@ -514,8 +508,23 @@ This command analyzes all changes in the current branch compared to the base bra
     ```
 
     **File Location**:
-    - Save to repository root directory
-    - Confirm to user: `📝 PR description saved to PR_DESC_<timestamp>.md`
+    - **MUST** save to repository root directory (absolute path)
+    - **MUST** use the Write tool to create the file
+    - After writing, confirm to user: `📝 PR description saved to PR_DESC_<timestamp>.md`
+
+    **Implementation**:
+    
+    ```
+    Write tool call with:
+    - file_path: /absolute/path/to/repo/PR_DESC_<timestamp>.md
+    - content: Full PR description with header
+    ```
+
+    **DO NOT**:
+    - Skip this step
+    - Only mention the file without creating it
+    - Use bash redirection instead of Write tool
+    - Assume the file was created without calling Write
 
     **Benefits**:
     - Can edit description before creating PR
@@ -523,7 +532,7 @@ This command analyzes all changes in the current branch compared to the base bra
     - Easy to copy/paste into GitHub UI
     - Version control of PR descriptions
 
-14. **Provide GitHub CLI Command**:
+13. **Provide GitHub CLI Command**:
 
     After saving the file, provide the command to create the PR:
 
@@ -983,6 +992,17 @@ Closes #312
 - If specified base branch doesn't exist
 - List available branches
 - Suggest correct base branch
+
+## CRITICAL REQUIREMENTS
+
+**YOU MUST:**
+
+1. **Generate** the complete PR title and description
+2. **Call the Write tool** to save `PR_DESC_<timestamp>.md` to the repository root
+3. **Confirm** the file was saved by showing the filename to the user
+4. **Provide** the gh CLI commands for creating the PR
+
+**DO NOT** skip step 2. The Write tool call is **mandatory and non-negotiable**.
 
 ## Context
 

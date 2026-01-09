@@ -38,7 +38,7 @@ if vim.env.IS_SSH == "1" then
     table.insert(disabled, { "OXY2DEV/helpview.nvim", enabled = false })
     table.insert(disabled, { "OXY2DEV/markview.nvim", enabled = false })
     table.insert(disabled, { "nvim-mini/mini.map", enabled = false })
-    table.insert(disabled, { "nvim-mini/mini.misc", enabled = false })
+    -- table.insert(disabled, { "nvim-mini/mini.misc", enabled = false })
     table.insert(disabled, { "nvim-mini/mini.statusline", enabled = false })
     table.insert(disabled, { "nvim-mini/mini.tabline", enabled = false })
     table.insert(disabled, { "epwalsh/obsidian.nvim", enabled = false })

@@ -3,7 +3,7 @@
 
 return {
     "nvim-mini/mini.misc",
-    enabled = vim.env.IS_SSH ~= "1",
+    -- enabled = vim.env.IS_SSH ~= "1",
     -- version = false,
     config = function()
         require("mini.misc").setup()
