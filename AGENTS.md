@@ -36,8 +36,4 @@ bd sync               # Sync with git
 
 **CRITICAL RULES:**
 
-- Work is NOT complete until `git push` succeeds
-- NEVER stop before pushing - that leaves work stranded locally
-- NEVER say "ready to push when you are" - YOU must push
-- NEVER use `git push --force` or `git push --force-with-lease` - you MUST stop and ask the user if force push looks like the only viable route
-- If push fails, resolve and retry until it succeeds
+- NEVER use `git push`, `git push --force`, or `git push --force-with-lease` - you MUST stop and ask the user if force push looks like the only viable route

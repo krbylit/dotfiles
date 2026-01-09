@@ -72,8 +72,25 @@ opt.textwidth = 0
 opt.mousehide = true -- Hide mouse cursor while typing
 opt.winheight = 1 -- Minimum window height
 opt.winminheight = 1 -- Minimum window height
--- NOTE: after disabling/reenabling this, it seems to have the opposite affect. Perhaps yanky.nvim interaction?
--- opt.clipboard = vim.env.IS_SSH and "" or "unnamedplus" -- Sync with system clipboard
+
+-- OSC 52 clipboard support for SSH (Ghostty terminal supports this)
+if vim.env.IS_SSH == "1" then
+    vim.g.clipboard = {
+        name = "OSC 52",
+        copy = {
+            ["+"] = require("vim.ui.clipboard.osc52").copy("+"),
+            ["*"] = require("vim.ui.clipboard.osc52").copy("*"),
+        },
+        paste = {
+            ["+"] = require("vim.ui.clipboard.osc52").paste("+"),
+            ["*"] = require("vim.ui.clipboard.osc52").paste("*"),
+        },
+    }
+end
+
+-- Sync with system clipboard (uses OSC 52 on SSH, system clipboard locally)
+opt.clipboard = "unnamedplus"
+
 -- Enable diagnostics by default
 vim.diagnostic.enable(true)
 -- FORMATTING
