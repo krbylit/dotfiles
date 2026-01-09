@@ -32,7 +32,7 @@ if vim.env.IS_SSH == "1" then
     table.insert(disabled, { "nvim-mini/mini.files", enabled = false })
     table.insert(disabled, { "folke/neoconf.nvim", enabled = false })
     table.insert(disabled, { "pwntester/octo.nvim", enabled = false })
-    table.insert(disabled, { "folke/persistence.nvim", enabled = false })
+    -- table.insert(disabled, { "folke/persistence.nvim", enabled = false })
     table.insert(disabled, { "glacambre/firenvim", enabled = false })
     table.insert(disabled, { "isakbm/gitgraph.nvim", enabled = false })
     table.insert(disabled, { "OXY2DEV/helpview.nvim", enabled = false })
@@ -47,6 +47,7 @@ if vim.env.IS_SSH == "1" then
     table.insert(disabled, { "luukvbaal/statuscol.nvim", enabled = false })
     table.insert(disabled, { "krbylit/agentic.nvim", enabled = false })
     table.insert(disabled, { "carlos-algms/agentic.nvim", enabled = false })
+    table.insert(disabled, { "stevearc/overseer.nvim", enabled = false })
     -- table.insert(disabled, { "", enabled = false })
 end
 
