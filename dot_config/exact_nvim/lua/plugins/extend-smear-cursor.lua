@@ -3,7 +3,7 @@
 return {
     "sphamba/smear-cursor.nvim",
     -- lazy = false,
-    -- enabled = vim.env.IS_SSH ~= "1",
+    
     enabled = false,
 
     opts = {

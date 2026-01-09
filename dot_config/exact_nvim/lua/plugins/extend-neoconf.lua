@@ -3,7 +3,7 @@
 
 return {
     "folke/neoconf.nvim",
-    enabled = vim.env.IS_SSH ~= "1",
+    
     opts = {
 
         -- name of the local settings files

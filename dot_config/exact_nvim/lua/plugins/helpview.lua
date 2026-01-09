@@ -4,7 +4,7 @@
 -- disabling for now b/c there's odd behavior with conceals and often have to toggle `conceallevel` to read full docs
 return {
     "OXY2DEV/helpview.nvim",
-    enabled = vim.env.IS_SSH ~= "1",
+    
     lazy = false, -- Recommended
 
     -- In case you still want to lazy load

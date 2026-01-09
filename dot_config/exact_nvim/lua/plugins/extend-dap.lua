@@ -46,7 +46,7 @@ if vim.env.IS_SSH ~= "1" then
 end
 return {
     "mfussenegger/nvim-dap",
-    enabled = vim.env.IS_SSH ~= "1",
+    
     dependencies = {
         -- {
         -- NOTE: Minimal dap UI, but seems to currently have a config bug. Can try enabling this later.

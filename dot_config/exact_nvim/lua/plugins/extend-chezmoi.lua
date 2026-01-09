@@ -3,12 +3,12 @@
 
 return {
     "xvzc/chezmoi.nvim",
-    enabled = vim.env.IS_SSH ~= "1",
+    
     dependencies = {
         "nvim-lua/plenary.nvim",
         {
             "alker0/chezmoi.vim",
-            enabled = vim.env.IS_SSH ~= "1",
+            
         },
     },
     opts = {

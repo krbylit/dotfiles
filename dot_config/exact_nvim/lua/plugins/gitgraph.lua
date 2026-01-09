@@ -3,7 +3,7 @@
 return {
     "isakbm/gitgraph.nvim",
     lazy = true,
-    enabled = vim.env.IS_SSH ~= "1",
+    
     -- dependencies = { "sindrets/diffview.nvim" },
     opts = {
         symbols = {

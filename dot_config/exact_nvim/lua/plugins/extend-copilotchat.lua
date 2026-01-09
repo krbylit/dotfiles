@@ -22,14 +22,14 @@
 -- })
 return {
     "CopilotC-Nvim/CopilotChat.nvim",
-    enabled = vim.env.IS_SSH ~= "1",
+    
     dependencies = {
         "zbirenbaum/copilot.lua",
         opts = {
             suggestion = { enabled = false },
             panel = { enabled = false },
         },
-        enabled = vim.env.IS_SSH ~= "1",
+        
     },
     opts = {
         model = "claude-sonnet-4",

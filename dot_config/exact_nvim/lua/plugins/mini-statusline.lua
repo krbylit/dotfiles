@@ -168,7 +168,7 @@ end
 
 return {
     "nvim-mini/mini.statusline",
-    -- enabled = vim.env.IS_SSH ~= "1",
+    
     version = false,
     -- cond = function()
     -- 	return vim.bo.filetype ~= "snacks_dashboard"

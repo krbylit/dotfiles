@@ -1,6 +1,6 @@
 return {
     "OXY2DEV/markview.nvim",
-    -- enabled = vim.env.IS_SSH ~= "1",
+    
     lazy = false, -- Recommended
     ft = "markdown", -- If you decide to lazy-load anyway
     dependencies = {

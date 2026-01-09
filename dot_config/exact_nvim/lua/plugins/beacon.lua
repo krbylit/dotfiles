@@ -1,6 +1,6 @@
 return {
     "danilamihailov/beacon.nvim",
-    enabled = vim.env.IS_SSH ~= "1",
+    
     opts = {
         enabled = true, --- (boolean | fun():boolean) check if enabled
         speed = 3, --- integer speed at wich animation goes

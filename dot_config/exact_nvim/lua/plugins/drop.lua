@@ -120,7 +120,7 @@ return {
     "folke/drop.nvim",
     -- enabled = is_enabled_for_today(all_themes),
     enabled = false,
-    -- enabled = vim.env.IS_SSH ~= "1",
+    
     opts = {
         -- defaults
         ---@type DropTheme|string
