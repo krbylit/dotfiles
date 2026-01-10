@@ -168,7 +168,6 @@ end
 
 return {
     "nvim-mini/mini.statusline",
-    
     version = false,
     -- cond = function()
     -- 	return vim.bo.filetype ~= "snacks_dashboard"
@@ -215,9 +214,35 @@ return {
         -- Nvim statusline hl groups
         vim.api.nvim_set_hl(0, "StatusLine", { bg = colors.bg })
         vim.api.nvim_set_hl(0, "StatusLineNC", { bg = colors.bg }) -- For inactive windows
+        local statusline_content = nil
 
-        require("mini.statusline").setup({
-            content = {
+        if vim.env.IS_SSH == "1" then
+            statusline_content = {
+                active = function()
+                    local mode, mode_hl = MiniStatusline.section_mode({ trunc_width = 120 })
+                    local filename = MiniStatusline.section_filename({ trunc_width = 75 })
+                    local fileinfo = MiniStatusline.section_fileinfo({ trunc_width = 120 })
+                    local location = MiniStatusline.section_location({ trunc_width = 75 })
+                    local search = MiniStatusline.section_searchcount({
+                        trunc_width = 75,
+                        options = { maxcount = 9999, timeout = 500 },
+                    })
+                    local mode_status = require("noice").api.status.mode.get()
+
+                    return MiniStatusline.combine_groups({
+                        { hl = mode_hl, strings = { mode } },
+                        "%<", -- Mark general truncate point
+                        { hl = "MiniStatuslinePathName", strings = { filename } },
+                        "%=", -- End left alignment
+                        { hl = "MiniStatuslineRecording", strings = { mode_status } },
+                        { hl = "MiniStatuslineFileinfo", strings = { fileinfo } },
+                        { hl = mode_hl, strings = { search, location } },
+                    })
+                end,
+                inactive = nil,
+            }
+        else
+            statusline_content = {
                 active = function()
                     -- if vim.bo.filetype == "snacks_dashboard" then
                     -- 	return MiniStatusline.combine_groups({
@@ -250,7 +275,10 @@ return {
                     })
                 end,
                 inactive = nil,
-            },
+            }
+        end
+        require("mini.statusline").setup({
+            content = statusline_content,
             use_icons = true,
             set_vim_settings = true,
         })

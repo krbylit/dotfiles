@@ -18,6 +18,7 @@
 - Configuration files: Use YAML or TOML with proper schema validation
 - Naming: Use snake_case for Fish functions, follow language conventions elsewhere
 - Documentation: Include README.md files in directories explaining purpose
+- Markdown callouts: Use GitHub-flavored markdown callouts (`NOTE`, `TIP`, `IMPORTANT`, `WARNING`, `CAUTION`) sparingly and only when they provide genuine value to the content. Do not overuse or create artificial reasons to include them. Format: `> [!WARNING]` followed by `> callout text` on subsequent lines (no optional title after `[!CALLOUT]`)
 
 ## Repository Structure
 

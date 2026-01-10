@@ -48,17 +48,17 @@ This Neovim configuration is built on [LazyVim](https://www.lazyvim.org/), provi
 
 The configuration follows LazyVim's modular structure:
 
-| Directory/File | Purpose |
-|----------------|---------|
-| `init.lua` | Entry point that loads all configurations |
-| `lua/config/` | Core Neovim configuration (options, keymaps, autocmds) |
-| `lua/config/lazy.lua` | Lazy.nvim plugin manager setup |
-| `lua/config/options.lua` | Global Vim options and settings |
-| `lua/config/keymaps.lua` | Core keybindings not tied to specific plugins |
-| `lua/config/autocmds.lua` | Autocommands for file type detection and behaviors |
-| `lua/plugins/` | Plugin specifications and configurations |
-| `lua/firenvim-config/` | Firenvim-specific configuration |
-| `lua/utils/` | Helper functions and utilities |
+| Directory/File            | Purpose                                                |
+| ------------------------- | ------------------------------------------------------ |
+| `init.lua`                | Entry point that loads all configurations              |
+| `lua/config/`             | Core Neovim configuration (options, keymaps, autocmds) |
+| `lua/config/lazy.lua`     | Lazy.nvim plugin manager setup                         |
+| `lua/config/options.lua`  | Global Vim options and settings                        |
+| `lua/config/keymaps.lua`  | Core keybindings not tied to specific plugins          |
+| `lua/config/autocmds.lua` | Autocommands for file type detection and behaviors     |
+| `lua/plugins/`            | Plugin specifications and configurations               |
+| `lua/firenvim-config/`    | Firenvim-specific configuration                        |
+| `lua/utils/`              | Helper functions and utilities                         |
 
 ## Plugin Architecture
 
@@ -696,6 +696,115 @@ e.g. from `harpooon-maps.lua`, this creates the 'h' group in the main `<leader>`
 - [LazyVim Book for Ambitious Devs](https://lazyvim-ambitious-devs.phillips.codes/course/chapter-1/)
 - [Basic Neovim Config Tutorial](https://martinlwx.github.io/en/config-neovim-from-scratch/)
 - [Lua Quick Primer](https://learnxinyminutes.com/docs/lua/)
+
+---
+
+## Markdown callouts
+
+Special rendering exists for the following callouts formatted with `> [!CALLOUTNAME] Optional title`
+
+Callout rendering is provided by [markview.nvim](lua/plugins/markview.lua:2), which implements the same callout system as render-markdown.nvim. The complete callout configuration can be seen in the commented section of [extend-render-markdown.lua](lua/plugins/extend-render-markdown.lua:321-350).
+
+> [!TIP] GitHub supported callouts
+> GitHub supports rendering `NOTE`, `TIP`, `IMPORTANT`, `WARNING`, `CAUTION` callouts, but _cannot_ use optional title following `[!CALLOUT]`.
+
+Titles can be supplied as such:
+
+> [!NOTE] Title of note
+> Note content
+
+> [!NOTE] Callout aliases
+> Some callouts are aliases that render identically:
+>
+> - `ABSTRACT` = `SUMMARY` = `TLDR`
+> - `SUCCESS` = `CHECK` = `DONE`
+> - `QUESTION` = `HELP` = `FAQ`
+> - `FAILURE` = `FAIL` = `MISSING`
+> - `DANGER` = `ERROR`
+> - `QUOTE` = `CITE`
+
+### List of callouts with rendering
+
+> [!WARNING]
+> Content text
+
+> [!ATTENTION]
+> Content text
+
+> [!CAUTION]
+> Content text
+
+> [!NOTE]
+> Content text
+
+> [!INFO]
+> Content text
+
+> [!TIP]
+> Content text
+
+> [!HINT]
+> Content text
+
+> [!IMPORTANT]
+> Content text
+
+> [!ERROR]
+> Content text
+
+> [!DANGER]
+> Content text
+
+> [!SUCCESS]
+> Content text
+
+> [!CHECK]
+> Content text
+
+> [!DONE]
+> Content text
+
+> [!QUESTION]
+> Content text
+
+> [!HELP]
+> Content text
+
+> [!FAQ]
+> Content text
+
+> [!FAILURE]
+> Content text
+
+> [!FAIL]
+> Content text
+
+> [!MISSING]
+> Content text
+
+> [!BUG]
+> Content text
+
+> [!EXAMPLE]
+> Content text
+
+> [!QUOTE]
+> Content text
+
+> [!CITE]
+> Content text
+
+> [!ABSTRACT]
+> Content text
+
+> [!SUMMARY]
+> Content text
+
+> [!TLDR]
+> Content text
+
+> [!TODO]
+> Content text
 
 ---
 

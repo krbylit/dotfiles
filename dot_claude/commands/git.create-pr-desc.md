@@ -224,6 +224,21 @@ This command analyzes all changes in the current branch compared to the base bra
 
 9. **Generate PR Description**:
 
+   **GitHub Markdown Callouts**:
+   
+   When generating PR descriptions, you MAY use GitHub markdown callouts if they genuinely enhance the content:
+   - Available types: `NOTE`, `TIP`, `IMPORTANT`, `WARNING`, `CAUTION`
+   - Format: `> [!WARNING]` followed by `> callout text` on subsequent lines
+   - **IMPORTANT**: Do NOT overuse callouts or create artificial reasons to include them
+   - Only use when they provide genuine value (e.g., highlighting breaking changes, critical security considerations, deployment warnings)
+   - Examples of appropriate use:
+     - `> [!WARNING]` for breaking changes or critical deployment steps
+     - `> [!CAUTION]` for security considerations that must be reviewed
+     - `> [!IMPORTANT]` for migration requirements or configuration changes
+     - `> [!NOTE]` for helpful context that reviewers should be aware of
+     - `> [!TIP]` for testing shortcuts or optimization notes
+   - Do NOT use optional titles after `[!CALLOUT]` (GitHub doesn't support them)
+
    **If PR template exists**, fill it in with generated content:
    - Parse template sections (e.g., ## Summary, ## Changes Made, etc.)
    - For each section:
@@ -235,6 +250,7 @@ This command analyzes all changes in the current branch compared to the base bra
    - Preserve template structure, comments, and formatting
    - Replace HTML comments with actual content
    - Keep any checkboxes or custom formatting from template
+   - Use GitHub callouts sparingly if they add genuine value
 
    **Example with your template**:
 
