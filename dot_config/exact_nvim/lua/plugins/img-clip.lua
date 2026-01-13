@@ -148,7 +148,7 @@ process_cmd:
 --]]
 
 return {
-    "HakonHarnes/img-clip.nvim",
+    "hakonharnes/img-clip.nvim",
     event = "VeryLazy",
     -- NOTE: This workaround is required to be able to paste base64 into `AgenticInput` filetypes (img-clip only allows pasting into Markdown)
     -- config = function(_, opts)
@@ -167,7 +167,8 @@ return {
     opts = {
         -- Default settings for file-based buffers (markdown, etc.)
         default = {
-            dir_path = "img-clip-assets", -- Default directory for saved images
+            -- dir_path = vim.fn.expand("~/.img-clip-assets"), -- Default directory for saved images
+            dir_path = "/tmp", -- Default directory for saved images
             -- embed_image_as_base64 = false,
             embed_image_as_base64 = true,
             max_base64_size = 10000, ---@type number | fun(): number
