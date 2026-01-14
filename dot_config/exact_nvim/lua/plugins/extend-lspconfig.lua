@@ -95,6 +95,7 @@ return {
         diagnostics = {
             underline = true,
             update_in_insert = false,
+            ---@type vim.diagnostic.Opts.VirtualText
             virtual_text = {
                 virt_text_hide = true,
                 spacing = 4,
@@ -193,7 +194,8 @@ return {
                 enabled = true,
                 on_attach = function(client, buffer)
                     -- Enable diagnostics virtual text for this buffer
-                    vim.diagnostic.config({ virtual_text = true }, buffer)
+                    -- FIX: setting this here throws error on nvim 0.12, perhaps because diagnostics config not initialized yet?
+                    -- vim.diagnostic.config({ virtual_text = true }, buffer)
                     client.server_capabilities.hoverProvider = false
                     client.server_capabilities.formattingProvider = true
                     client.server_capabilities.documentRangeFormattingProvider = true
@@ -312,7 +314,8 @@ return {
                 },
                 on_attach = function(client, bufnr)
                     -- Enable diagnostics virtual text for this buffer
-                    vim.diagnostic.config({ virtual_text = true }, bufnr)
+                    -- FIX: setting this here throws error on nvim 0.12, perhaps because diagnostics config not initialized yet?
+                    -- vim.diagnostic.config({ virtual_text = true }, bufnr)
                     -- -- Keep Pyright's core capabilities but disable hover since we get that from Jedi
                     -- client.server_capabilities.hoverProvider = false
                     -- client.server_capabilities.codeLensProvider = false

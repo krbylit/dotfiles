@@ -190,7 +190,7 @@ return {
     },
     keys = {
         {
-            "<leader>pi",
+            "<leader>i",
             function()
                 vim.cmd("PasteImage")
             end,

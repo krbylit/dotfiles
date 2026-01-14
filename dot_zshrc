@@ -29,7 +29,7 @@ export EDITOR="nvim"
 export NVM_DIR="$HOME/.nvm"
 export VIRTUALENVWRAPPER_PYTHON=$(which python3)
 export PROJECT_HOME=$HOME/Devel
-export CM_PATH="$HOME/.local/share/chezmoi"
+export CHEZMOI_SOURCE_PATH="$HOME/.local/share/chezmoi"
 # lazygit config dir (lazygit looks here for config)
 CONFIG_DIR="$HOME/.config/lazygit"
 # change app config dir to .config
@@ -153,10 +153,10 @@ znap function _npm npm '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" && npm 
 alias zconf="chezmoi edit ~/.zshrc --watch"
 alias kconf="chezmoi edit ~/.config/kitty/kitty.conf --watch"
 alias sconf="chezmoi edit ~/.config/starship.toml --watch"
-# alias nconf="nvim -c 'Dashboard' $CM_PATH/private_dot_config/nvim"
-alias nconf="nvim --cmd 'cd $CM_PATH/private_dot_config/exact_nvim' -c 'lua Snacks.dashboard({win=0})'"
-alias conf="nvim --cmd 'cd $CM_PATH' -c 'lua Snacks.dashboard({win=0})'"
-# alias conf="nvim $CM_PATH"
+# alias nconf="nvim -c 'Dashboard' $CHEZMOI_SOURCE_PATH/private_dot_config/nvim"
+alias nconf="nvim --cmd 'cd $CHEZMOI_SOURCE_PATH/private_dot_config/exact_nvim' -c 'lua Snacks.dashboard({win=0})'"
+alias conf="nvim --cmd 'cd $CHEZMOI_SOURCE_PATH' -c 'lua Snacks.dashboard({win=0})'"
+# alias conf="nvim $CHEZMOI_SOURCE_PATH"
 # cli aliases
 alias n="nvim"
 # lazygit for chezmoi dir

@@ -16,15 +16,21 @@ require("fzf-lua").setup({
         -- ["--tmux"] = false,
         ["--border"] = "horizontal",
         ["--height"] = "80%",
+        ["--ansi"] = true, -- Enable ANSI color codes from fd/rg
         -- ["--border-label-pos"] = "4:bottom",
         -- ["--border"] = os.getenv("TMUX") and "rounded" or "horizontal",
     },
 
     -- Highlight groups for path coloring
-    -- hls = {
-    --     dir_part = "Comment", -- Directory path (dimmed)
-    --     file_part = "Normal", -- Filename (bright)
-    -- },
+    hls = {
+        dir_part = "Comment", -- Directory path (dimmed)
+        file_part = "Normal", -- Filename (bright)
+        -- Required fzf field for CLI mode
+        fzf = {
+            -- placeholder setting
+            -- ["gutter"] = "-1",
+        },
+    },
 
     winopts = {
         -- split = "belowright new",
@@ -71,10 +77,10 @@ require("fzf-lua").setup({
     },
     -- Files picker configuration
     files = {
-        rg_opts = [[--color=never --files --hidden --follow --pcre2 -g "!**/.git/**" -g "!**/node_modules/**" -g "!**/target/**" -g "!**/dist/**" -g "!**/build/**"]],
-        fd_opts = [[--color=never --type f --hidden --follow --exclude .git --exclude node_modules --exclude target --exclude dist --exclude build]],
-        formatter = "path.filename_first", -- VS Code style: filename first, then path
-        cmd = "rg --files",
+        rg_opts = [[--color=always --files --hidden --follow --pcre2 -g "!**/.git/**" -g "!**/node_modules/**" -g "!**/target/**" -g "!**/dist/**" -g "!**/build/**"]],
+        fd_opts = [[--color=always --type f --hidden --follow --exclude .git --exclude node_modules --exclude target --exclude dist --exclude build]],
+        -- NOTE: using this removes colors from output list
+        -- formatter = "path.filename_first", -- VS Code style: filename first, then path
         cwd_prompt = false,
         cwd_header = true,
         cwd_prompt_shorten_len = 32,
@@ -82,7 +88,7 @@ require("fzf-lua").setup({
         -- Disable icons for CLI usage (nvim-web-devicons not available)
         file_icons = false,
         git_icons = false,
-        -- color_icons = true,
+        color_icons = false,
         hidden = true,
         no_ignore = true,
         follow = true, -- follow symlinks
@@ -91,14 +97,17 @@ require("fzf-lua").setup({
                 if not selected[1] then
                     return
                 end
-                -- Copy selected file path(s) to clipboard
+                -- Print selected file path(s) to stdout for shell insertion
                 local paths = {}
                 for _, item in ipairs(selected) do
                     local file = require("fzf-lua").path.entry_to_file(item, opts)
                     table.insert(paths, file.path)
                 end
                 local paths_str = table.concat(paths, " ")
-                os.execute(string.format("printf '%%s' %s | pbcopy", vim.fn.shellescape(paths_str)))
+                -- Print to stdout (will be captured by Fish keybinding)
+                io.write(paths_str)
+                io.flush()
+                os.exit(0)
             end,
             ["ctrl-o"] = function(selected, opts)
                 if not selected[1] then
@@ -130,6 +139,22 @@ require("fzf-lua").setup({
         file_icons = false,
         git_icons = false,
         actions = {
+            ["enter"] = function(selected, opts)
+                if not selected[1] then
+                    return
+                end
+                -- Print selected file path(s) to stdout for shell insertion
+                local paths = {}
+                for _, item in ipairs(selected) do
+                    local file = require("fzf-lua").path.entry_to_file(item, opts)
+                    table.insert(paths, file.path)
+                end
+                local paths_str = table.concat(paths, " ")
+                -- Print to stdout (will be captured by Fish keybinding)
+                io.write(paths_str)
+                io.flush()
+                os.exit(0)
+            end,
             ["ctrl-o"] = function(selected, opts)
                 if not selected[1] then
                     return
@@ -153,6 +178,19 @@ require("fzf-lua").setup({
             file_icons = false,
             git_icons = false,
             actions = {
+                ["enter"] = function(selected)
+                    if not selected[1] then
+                        return
+                    end
+                    -- Extract commit hash (first field before space/colon)
+                    local commit_hash = selected[1]:match("^(%S+)")
+                    if commit_hash then
+                        -- Print to stdout (will be captured by Fish keybinding)
+                        io.write(commit_hash)
+                        io.flush()
+                        os.exit(0)
+                    end
+                end,
                 -- Default doesn't work because we exit nvim after yank
                 -- ["ctrl-y"] = { fn = require("fzf-lua").actions.git_yank_commit, exec_silent = false },
                 ["ctrl-y"] = function(selected)

@@ -101,7 +101,7 @@ end
 
 -- Enable debugging - comment this line to disable
 -- TODO: Disable once we can confirm indentation is not being set back to incorrect value while buffers are open
-track_indent_changes()
+-- track_indent_changes()
 
 -- ================================================================
 -- CUSTOM AUTO COMMANDS
