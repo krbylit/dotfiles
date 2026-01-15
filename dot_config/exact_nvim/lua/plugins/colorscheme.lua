@@ -382,7 +382,7 @@ return {
         lazy = false,
         priority = 1000,
         opts = {
-            style = "dark", -- The theme comes in four styles, `darker`, `dark`, `dimmed`, and `light`
+            style = "dimmed", -- The theme comes in four styles, `darker`, `dark`, `dimmed`, and `light`
             light_style = "light", -- The theme is used when the background is set to light
             transparent = true, -- Enable this to disable setting the background color
             terminal_colors = true, -- Configure the colors used when opening a `:terminal` in Neovim

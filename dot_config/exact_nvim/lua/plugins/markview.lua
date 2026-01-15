@@ -20,6 +20,7 @@ return {
             pattern = "markdown",
             callback = function()
                 vim.opt_local.cursorline = false
+                vim.cmd("IlluminatePauseBuf")
             end,
         })
         Snacks.toggle({

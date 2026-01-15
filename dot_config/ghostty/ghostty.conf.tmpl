@@ -39,18 +39,41 @@ custom-shader = shaders/cursor/cursor_smear.glsl
 # adjust-font-baseline = 1
 # adjust-cell-height = 3
 
-font-family = "Departure Mono Phosphor Fill"
-font-family-bold = "Departure Mono Phosphor Fill"
-font-family-italic = "Departure Mono Phosphor Fill"
-font-family-bold-italic = "Departure Mono Phosphor Fill"
+# font-family = "Departure Mono Phosphor Fill"
+# font-family-bold = "Departure Mono Phosphor Fill"
+# font-family-italic = "Departure Mono Phosphor Fill"
+# font-family-bold-italic = "Departure Mono Phosphor Fill"
+# window-title-font-family = "Departure Mono Phosphor Fill"
+# # 16.5 = 33px on retina display = multiple of 11 recommended by Departure docs for pixel-perfect rendering
+# font-size = 16.5
+# font-style = "Regular"
+# font-style-bold = "Regular"
+# font-style-italic = "Regular"
+# font-style-bold-italic = "Regular"
+# adjust-font-baseline = 0
+# adjust-cell-height = 0
+
+# Our custom 'Departure Mono Phosphor Fill' patched with Departure v1.500
+# Newly added glyphs:
+# ❰ ❮ ❱ ❯ ❬ ❭
+# ▁ ▂ ▃ ▅ ▆ ▇ ▔ ▏ ▎ ▍ ▌ ▋ ▊ ▉ ▐ ▕ ▖ ▗ ▘ ▙ ▚ ▛ ▜ ▝ ▞ ▟ ■ □ ▪ ▫ ╦ ╖ ╓ ┰ ┒ ┧ ┎ ┟ ╁ ┯ ┑ ┩ ┍ ┡ ╇ ╤ ╕ ╒ ╍ ╏ ╻ ┳ ┓ ┏ ━ ╸ ╾ ┉ ┋ ╺ ┅ ┇ ╹ ┻ ┛ ╿ ┗ ┃ ╋ ┫ ┣ ╅ ┭ ┵ ┽ ┲ ┺ ╊ ╃ ╮ ╭ ╯ ╰ ╳ ╲ ╱ ╌ ╎ ╷ ╴ ╼ ┈ ┊ ╶ ┄ ┆ ╵ ╽ ╆ ┮ ┶ ┾ ┱ ┹ ╉ ╄ ╨ ╜ ╙ ╀ ┸ ┦ ┚ ┞ ┖ ╈ ┷ ┪ ┙ ┢ ┕ ╧ ╛ ╘ ╫ ╢ ╟ ╂ ┨ ┠ ┿ ┥ ┝ ╪ ╡ ╞ 🮂 🮃 🮄 🮅 🮆 🮇 🮈 🮉 🮊 🮋
+font-family = "Departure Mono Phosphor Fill Updated"
+font-family-bold = "Departure Mono Phosphor Fill Updated"
+font-family-italic = "Departure Mono Phosphor Fill Updated"
+font-family-bold-italic = "Departure Mono Phosphor Fill Updated"
+# New updated font makes the title bar text very small, so we use the old one
 window-title-font-family = "Departure Mono Phosphor Fill"
-font-size = 14
+# 16.5pt = 33px on retina display = multiple of 11 recommended by Departure docs for pixel-perfect rendering
+# Other pixel-perfect option is 11pt
+font-size = 16.5
 font-style = "Regular"
 font-style-bold = "Regular"
 font-style-italic = "Regular"
 font-style-bold-italic = "Regular"
 adjust-font-baseline = 0
 adjust-cell-height = 0
+# adjust-font-baseline = 6
+# adjust-cell-height = -25
 
 font-feature = "-calt"
 font-feature = "-liga"
