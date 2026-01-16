@@ -35,6 +35,7 @@ function _rsync_dotfiles
         ~/.bashrc \
         ~/private.bashrc \
         ~/.vimrc \
+        ~/.tmux.conf \
         $host:~/ 1>/dev/null 2>/dev/null
 
     # Verify if terminfo is now available (use bash for compatibility)

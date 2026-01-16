@@ -1,4 +1,9 @@
 # Source .bashrc.private from `secrets/`
+if [[ -n "$SSH_CONNECTION" || -n "$SSH_CLIENT" || -n "$SSH_TTY" ]]; then
+    export IS_SSH=1
+else
+    export IS_SSH=0
+fi
 PRIVATE_BASHRC="$HOME/private.bashrc"
 if [ -f "$PRIVATE_BASHRC" ]; then
     source "$PRIVATE_BASHRC"
@@ -70,6 +75,9 @@ case $- in
 *i*) ;;
 *) return ;;
 esac
+
+# Disable terminal flow control (prevents Ctrl-S from freezing terminal)
+stty -ixon
 
 # don't put duplicate lines or lines starting with space in the history.
 # See bash(1) for more options
