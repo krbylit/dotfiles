@@ -39,18 +39,41 @@ custom-shader = shaders/cursor/cursor_smear.glsl
 # adjust-font-baseline = 1
 # adjust-cell-height = 3
 
-font-family = "Departure Mono Phosphor Fill"
-font-family-bold = "Departure Mono Phosphor Fill"
-font-family-italic = "Departure Mono Phosphor Fill"
-font-family-bold-italic = "Departure Mono Phosphor Fill"
+# font-family = "Departure Mono Phosphor Fill"
+# font-family-bold = "Departure Mono Phosphor Fill"
+# font-family-italic = "Departure Mono Phosphor Fill"
+# font-family-bold-italic = "Departure Mono Phosphor Fill"
+# window-title-font-family = "Departure Mono Phosphor Fill"
+# # 16.5 = 33px on retina display = multiple of 11 recommended by Departure docs for pixel-perfect rendering
+# font-size = 16.5
+# font-style = "Regular"
+# font-style-bold = "Regular"
+# font-style-italic = "Regular"
+# font-style-bold-italic = "Regular"
+# adjust-font-baseline = 0
+# adjust-cell-height = 0
+
+# Our custom 'Departure Mono Phosphor Fill' patched with Departure v1.500
+# Newly added glyphs:
+# ❰ ❮ ❱ ❯ ❬ ❭
+# ▁ ▂ ▃ ▅ ▆ ▇ ▔ ▏ ▎ ▍ ▌ ▋ ▊ ▉ ▐ ▕ ▖ ▗ ▘ ▙ ▚ ▛ ▜ ▝ ▞ ▟ ■ □ ▪ ▫ ╦ ╖ ╓ ┰ ┒ ┧ ┎ ┟ ╁ ┯ ┑ ┩ ┍ ┡ ╇ ╤ ╕ ╒ ╍ ╏ ╻ ┳ ┓ ┏ ━ ╸ ╾ ┉ ┋ ╺ ┅ ┇ ╹ ┻ ┛ ╿ ┗ ┃ ╋ ┫ ┣ ╅ ┭ ┵ ┽ ┲ ┺ ╊ ╃ ╮ ╭ ╯ ╰ ╳ ╲ ╱ ╌ ╎ ╷ ╴ ╼ ┈ ┊ ╶ ┄ ┆ ╵ ╽ ╆ ┮ ┶ ┾ ┱ ┹ ╉ ╄ ╨ ╜ ╙ ╀ ┸ ┦ ┚ ┞ ┖ ╈ ┷ ┪ ┙ ┢ ┕ ╧ ╛ ╘ ╫ ╢ ╟ ╂ ┨ ┠ ┿ ┥ ┝ ╪ ╡ ╞ 🮂 🮃 🮄 🮅 🮆 🮇 🮈 🮉 🮊 🮋
+font-family = "Departure Mono Phosphor Fill Updated"
+font-family-bold = "Departure Mono Phosphor Fill Updated"
+font-family-italic = "Departure Mono Phosphor Fill Updated"
+font-family-bold-italic = "Departure Mono Phosphor Fill Updated"
+# New updated font makes the title bar text very small, so we use the old one
 window-title-font-family = "Departure Mono Phosphor Fill"
-font-size = 14
+# 16.5pt = 33px on retina display = multiple of 11 recommended by Departure docs for pixel-perfect rendering
+# Other pixel-perfect option is 11pt
+font-size = 16.5
 font-style = "Regular"
 font-style-bold = "Regular"
 font-style-italic = "Regular"
 font-style-bold-italic = "Regular"
 adjust-font-baseline = 0
 adjust-cell-height = 0
+# adjust-font-baseline = 6
+# adjust-cell-height = -25
 
 font-feature = "-calt"
 font-feature = "-liga"
@@ -69,8 +92,10 @@ keybind = super+j=next_tab
 keybind = super+r=new_split:right
 keybind = super+d=new_split:down
 
-keybind = super+alt+j=move_tab:1
-keybind = super+alt+k=move_tab:-1
+# keybind = super+alt+j=move_tab:1
+# keybind = super+alt+k=move_tab:-1
+keybind = super+o=move_tab:1
+keybind = super+i=move_tab:-1
 
 keybind = super+shift+l=goto_split:right
 keybind = super+shift+h=goto_split:left
@@ -87,8 +112,10 @@ keybind = super+ctrl+equal=equalize_splits
 # To browse/search scrollback use these. `open` uses TextEdit, so we can use `nvim <super+shift+s>` with `paste` instead to open scrollback buffer in nvim.
 # keybind = super+shift+s=write_scrollback_file:open
 keybind = super+shift+s=write_scrollback_file:paste
-keybind = super+shift+right_bracket=scroll_page_down
-keybind = super+shift+left_bracket=scroll_page_up
+# keybind = super+shift+right_bracket=scroll_page_down
+# keybind = super+shift+left_bracket=scroll_page_up
+keybind = super+shift+f=scroll_page_down
+keybind = super+shift+b=scroll_page_up
 keybind = super+shift+p=jump_to_prompt:-1
 keybind = super+shift+n=jump_to_prompt:1
 keybind = super+shift+u=scroll_page_fractional:-0.33
@@ -102,6 +129,7 @@ macos-auto-secure-input = false
 macos-secure-input-indication = true
 working-directory = home
 clipboard-read = allow
+clipboard-write = allow
 # shell-integration-features = true
 shell-integration = detect
 shell-integration-features = cursor,sudo,title,ssh-terminfo
@@ -144,17 +172,27 @@ quick-terminal-animation-duration = 0.1
 quick-terminal-autohide = false
 quick-terminal-space-behavior = move
 
+# official, blueprint, chalkboard, microchip, glass, holographic, paper, retro, xray, custom-style
+# macos-icon = "microchip"
+# macos-icon = "xray"
+# macos-icon = "glass"
 macos-icon = "custom-style"
+# Default `~/.config/ghostty/Ghostty.icns`
+# macos-custom-icon =
 # macos-icon-ghost-color = "#f4dbd6"
 # macos-icon-screen-color = "#181926"
 macos-icon-ghost-color = "#a6da95"
 macos-icon-screen-color = "#179299"
+# aluminum, beige, plastic, chrome
 macos-icon-frame = "beige"
 
 macos-window-shadow = true
 macos-option-as-alt = true
-macos-titlebar-proxy-icon = hidden
+# hidden|visible
+macos-titlebar-proxy-icon = visible
 macos-titlebar-style = tabs
+# new-tab|new-window
+macos-dock-drop-behavior = new-tab
 
 # # The font families to use.
 # #

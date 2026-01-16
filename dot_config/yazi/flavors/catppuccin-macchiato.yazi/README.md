@@ -3,7 +3,7 @@
 </div>
 
 <h3 align="center">
-	Catppuccin Macchiato Flavor for <a href="https://github.com/sxyazi/yazi">Yazi</a>
+ Catppuccin Macchiato Flavor for <a href="https://github.com/sxyazi/yazi">Yazi</a>
 </h3>
 
 ## 👀 Preview

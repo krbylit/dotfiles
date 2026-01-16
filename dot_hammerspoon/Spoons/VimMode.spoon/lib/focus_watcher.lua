@@ -3,22 +3,25 @@ local ax = dofile(vimModeScriptPath .. "lib/axuielement.lua")
 local registeredPids = {}
 
 local function createApplicationWatcher(application, vim)
-  if not application then return nil end
+  if not application then
+    return nil
+  end
 
   local pid = application:pid()
   local observer
 
-  local creator = function ()
-    if registeredPids[pid] then return end
+  local creator = function()
+    if registeredPids[pid] then
+      return
+    end
 
     observer = ax.observer.new(application:pid())
 
     observer
-      :callback(function() vim:exit() end)
-      :addWatcher(
-        ax.applicationElement(application),
-        "AXFocusedUIElementChanged"
-      )
+      :callback(function()
+        vim:exit()
+      end)
+      :addWatcher(ax.applicationElement(application), "AXFocusedUIElementChanged")
       :start()
 
     registeredPids[pid] = observer
@@ -29,10 +32,7 @@ local function createApplicationWatcher(application, vim)
   if not status then
     registeredPids[pid] = nil
 
-    vimLogger.d(
-      "Could not start watcher for PID: " .. pid ..
-        " and name: " .. application:name()
-    )
+    vimLogger.d("Could not start watcher for PID: " .. pid .. " and name: " .. application:name())
 
     vimLogger.d("Error: " .. hs.inspect.inspect(error))
   end

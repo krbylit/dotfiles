@@ -18,10 +18,7 @@ describe("Delete", function()
       local newBuffer = delete:getModifiedBuffer(buffer, 0, 4)
 
       assert.are.equals("one two", newBuffer:getValue())
-      assert.are.same(
-        Selection:new(0, 0),
-        newBuffer:getSelectionRange()
-      )
+      assert.are.same(Selection:new(0, 0), newBuffer:getSelectionRange())
     end)
 
     it("deletes the range of text in the middle", function()
@@ -34,10 +31,7 @@ describe("Delete", function()
       local newBuffer = delete:getModifiedBuffer(buffer, 5, 8)
 
       assert.are.equals("word two", newBuffer:getValue())
-      assert.are.same(
-        Selection:new(5, 0),
-        newBuffer:getSelectionRange()
-      )
+      assert.are.same(Selection:new(5, 0), newBuffer:getSelectionRange())
     end)
   end)
 end)

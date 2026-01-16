@@ -18,7 +18,7 @@ This command automatically fixes linting issues using language-specific tools (c
 
 ### Execution Steps
 
-1. **Parse Arguments**:
+1.  **Parse Arguments**:
 
     **Scope flags**:
     - `--scope=all` (entire codebase, default)
@@ -38,7 +38,7 @@ This command automatically fixes linting issues using language-specific tools (c
     - `--no-commit` (apply fixes but don't commit)
     - `--interactive` (ask before each fix category)
 
-2. **Detect Project Type and Available Tools**:
+2.  **Detect Project Type and Available Tools**:
 
     a. **Check for language-specific files**:
     - Rust: `Cargo.toml`
@@ -73,7 +73,7 @@ This command automatically fixes linting issues using language-specific tools (c
     2. cargo clippy --fix --allow-dirty --allow-staged
     ```
 
-3. **Run Linters in Dry-Run Mode First**:
+3.  **Run Linters in Dry-Run Mode First**:
 
     **Why**: Preview what will be fixed before applying changes
 
@@ -110,7 +110,7 @@ This command automatically fixes linting issues using language-specific tools (c
     - Show preview report
     - Exit without applying
 
-4. **Apply Fixes by Category**:
+4.  **Apply Fixes by Category**:
 
         **Fix categories** (in order):
         1. **Formatting** (lowest risk)
@@ -152,7 +152,7 @@ This command automatically fixes linting issues using language-specific tools (c
                - **Body**: Follow commit-atomic.md rules (include only when WHY isn't obvious)
                - **Validation**: Use the same validation checklist from commit-atomic.md
 
-5. **Language-Specific Fix Strategies**:
+5.  **Language-Specific Fix Strategies**:
 
     ### Rust
 
@@ -266,7 +266,7 @@ This command automatically fixes linting issues using language-specific tools (c
     - Commit 2: `fix: resolve golangci-lint auto-fixable issues`
     - Follow commit message guidelines from `~/.claude/commands/commit-atomic.md`
 
-6. **Generate Summary Report**:
+6.  **Generate Summary Report**:
 
     ````markdown
     # Lint Fixes Applied
@@ -314,11 +314,11 @@ This command automatically fixes linting issues using language-specific tools (c
        ```
     ````
 
-    2. **Address manual fixes**:
+    1. **Address manual fixes**:
        - Add documentation for 5 undocumented items
        - Refactor 2 complex functions
 
-    3. **Push changes**:
+    2. **Push changes**:
 
        ```bash
        git push origin <branch>
@@ -328,7 +328,7 @@ This command automatically fixes linting issues using language-specific tools (c
 
     ```
 
-7. **Handle Errors and Edge Cases**:
+7.  **Handle Errors and Edge Cases**:
 
     **Tool not installed**:
     - Detect early in step 2
@@ -366,7 +366,7 @@ This command automatically fixes linting issues using language-specific tools (c
     - Report failed tools with errors
     - Don't block successful fixes due to one failure
 
-8. **Validation**:
+8.  **Validation**:
 
     **Before applying fixes**:
     - [ ] Project type detected correctly

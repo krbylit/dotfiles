@@ -15,15 +15,12 @@ describe("LineEnd", function()
 
       local lineEnd = LineEnd:new()
 
-      assert.are.same(
-        {
-          start = 0,
-          finish = 2,
-          mode = "exclusive",
-          direction = "characterwise"
-        },
-        lineEnd:getRange(buffer)
-      )
+      assert.are.same({
+        start = 0,
+        finish = 2,
+        mode = "exclusive",
+        direction = "characterwise",
+      }, lineEnd:getRange(buffer))
     end)
 
     it("handles first lines", function()
@@ -33,15 +30,12 @@ describe("LineEnd", function()
 
       local lineEnd = LineEnd:new()
 
-      assert.are.same(
-        {
-          start = 4,
-          finish = 13,
-          mode = "exclusive",
-          direction = "characterwise"
-        },
-        lineEnd:getRange(buffer)
-      )
+      assert.are.same({
+        start = 4,
+        finish = 13,
+        mode = "exclusive",
+        direction = "characterwise",
+      }, lineEnd:getRange(buffer))
     end)
 
     it("handles 2 lines", function()
@@ -51,15 +45,12 @@ describe("LineEnd", function()
 
       local lineEnd = LineEnd:new()
 
-      assert.are.same(
-        {
-          start = 6,
-          finish = 13,
-          mode = "exclusive",
-          direction = "characterwise"
-        },
-        lineEnd:getRange(buffer)
-      )
+      assert.are.same({
+        start = 6,
+        finish = 13,
+        mode = "exclusive",
+        direction = "characterwise",
+      }, lineEnd:getRange(buffer))
     end)
 
     it("handles 3 lines", function()
@@ -69,15 +60,12 @@ describe("LineEnd", function()
 
       local lineEnd = LineEnd:new()
 
-      assert.are.same(
-        {
-          start = 10,
-          finish = 13,
-          mode = "exclusive",
-          direction = "characterwise"
-        },
-        lineEnd:getRange(buffer)
-      )
+      assert.are.same({
+        start = 10,
+        finish = 13,
+        mode = "exclusive",
+        direction = "characterwise",
+      }, lineEnd:getRange(buffer))
     end)
   end)
 end)

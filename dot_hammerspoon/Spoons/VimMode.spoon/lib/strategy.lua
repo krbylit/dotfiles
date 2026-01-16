@@ -19,5 +19,4 @@ function Strategy.isValid(_)
   return true
 end
 
-
 return Strategy

@@ -1,41 +1,41 @@
 -- https://github.com/edluffy/specs.nvim
 return {
-    -- NOTE: doesn't seem to work with newer nvim? specs seems to expect older version of `col` value perhaps.
-    -- "edluffy/specs.nvim",
-    -- config = function()
-    --     local specs = require("specs")
-    --     specs.setup({
-    --         show_jumps = true,
-    --         min_jump = 30,
-    --         popup = {
-    --             delay_ms = 0,
-    --             inc_ms = 10,
-    --             blend = 10,
-    --             width = 10,
-    --             winhl = "PMenu",
-    --             fader = specs.linear_fader,
-    --             resizer = specs.shrink_resizer,
-    --             -- Faders:
-    --             --     sinus_fader ⌣/⌢\⌣/⌢\⌣/⌢\⌣/⌢
-    --             --
-    --             --     linear_fader ▁▂▂▃▃▄▄▅▅▆▆▇▇██
-    --             --
-    --             --     exp_fader ▁▁▁▁▂▂▂▃▃▃▄▄▅▆▇
-    --             --
-    --             --     pulse_fader ▁▂▃▄▅▆▇█▇▆▅▄▃▂▁
-    --             --
-    --             --     empty_fader ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
-    --             -- Resizers:
-    --             --     shrink_resizer ░░▒▒▓█████▓▒▒░░
-    --             --
-    --             --     slide_resizer ████▓▓▓▒▒▒▒░░░░
-    --             --
-    --             --     empty_resizer ███████████████
-    --         },
-    --         ignore_filetypes = {},
-    --         ignore_buftypes = {
-    --             nofile = true,
-    --         },
-    --     })
-    -- end,
+  -- NOTE: doesn't seem to work with newer nvim? specs seems to expect older version of `col` value perhaps.
+  -- "edluffy/specs.nvim",
+  -- config = function()
+  --     local specs = require("specs")
+  --     specs.setup({
+  --         show_jumps = true,
+  --         min_jump = 30,
+  --         popup = {
+  --             delay_ms = 0,
+  --             inc_ms = 10,
+  --             blend = 10,
+  --             width = 10,
+  --             winhl = "PMenu",
+  --             fader = specs.linear_fader,
+  --             resizer = specs.shrink_resizer,
+  --             -- Faders:
+  --             --     sinus_fader ⌣/⌢\⌣/⌢\⌣/⌢\⌣/⌢
+  --             --
+  --             --     linear_fader ▁▂▂▃▃▄▄▅▅▆▆▇▇██
+  --             --
+  --             --     exp_fader ▁▁▁▁▂▂▂▃▃▃▄▄▅▆▇
+  --             --
+  --             --     pulse_fader ▁▂▃▄▅▆▇█▇▆▅▄▃▂▁
+  --             --
+  --             --     empty_fader ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+  --             -- Resizers:
+  --             --     shrink_resizer ░░▒▒▓█████▓▒▒░░
+  --             --
+  --             --     slide_resizer ████▓▓▓▒▒▒▒░░░░
+  --             --
+  --             --     empty_resizer ███████████████
+  --         },
+  --         ignore_filetypes = {},
+  --         ignore_buftypes = {
+  --             nofile = true,
+  --         },
+  --     })
+  -- end,
 }

@@ -4,7 +4,7 @@ local KeyboardStrategy = Strategy:new()
 
 function KeyboardStrategy:new(vim)
   local strategy = {
-    vim = vim
+    vim = vim,
   }
 
   setmetatable(strategy, self)
@@ -18,19 +18,25 @@ function KeyboardStrategy:fire()
 
   -- If the movement is canceled or impossible with the KB strategy, don't do
   -- the operator.
-  if result then self:fireOperator() end
+  if result then
+    self:fireOperator()
+  end
 end
 
 function KeyboardStrategy:fireMovement()
   -- select the movement
   local motion = self.vim.commandState.motion
   local operator = self.vim.commandState.operator
-  local visualMode = self.vim:isMode('visual')
+  local visualMode = self.vim:isMode("visual")
 
-  if not motion then return true end
+  if not motion then
+    return true
+  end
 
   local movements = motion.getMovements()
-  if not movements then return false end
+  if not movements then
+    return false
+  end
 
   for _, movement in ipairs(movements) do
     local modifiers = movement.modifiers

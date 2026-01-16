@@ -14,15 +14,12 @@ describe("BackWord", function()
 
       local backWord = BackWord:new()
 
-      assert.are.same(
-        {
-          start = 0,
-          finish = 3,
-          mode = "exclusive",
-          direction = "characterwise"
-        },
-        backWord:getRange(buffer)
-      )
+      assert.are.same({
+        start = 0,
+        finish = 3,
+        mode = "exclusive",
+        direction = "characterwise",
+      }, backWord:getRange(buffer))
     end)
 
     it("handles starting on the next word", function()
@@ -33,15 +30,12 @@ describe("BackWord", function()
       local backWord = BackWord:new()
       local result = backWord:getRange(buffer)
 
-      assert.are.same(
-        {
-          start = 4, -- cat (d)og mouse
-          finish = 8,
-          mode = "exclusive",
-          direction = "characterwise"
-        },
-        result
-      )
+      assert.are.same({
+        start = 4, -- cat (d)og mouse
+        finish = 8,
+        mode = "exclusive",
+        direction = "characterwise",
+      }, result)
     end)
 
     it("crosses the new line boundary", function()
@@ -51,15 +45,12 @@ describe("BackWord", function()
 
       local backWord = BackWord:new()
 
-      assert.are.same(
-        {
-          start = 3,
-          finish = 8,
-          mode = "exclusive",
-          direction = "characterwise"
-        },
-        backWord:getRange(buffer)
-      )
+      assert.are.same({
+        start = 3,
+        finish = 8,
+        mode = "exclusive",
+        direction = "characterwise",
+      }, backWord:getRange(buffer))
     end)
 
     it("handles punctuation stops", function()
@@ -69,15 +60,12 @@ describe("BackWord", function()
 
       local backWord = BackWord:new()
 
-      assert.are.same(
-        {
-          start = 9,
-          finish = 11,
-          mode = "exclusive",
-          direction = "characterwise"
-        },
-        backWord:getRange(buffer)
-      )
+      assert.are.same({
+        start = 9,
+        finish = 11,
+        mode = "exclusive",
+        direction = "characterwise",
+      }, backWord:getRange(buffer))
     end)
 
     it("handles jumping across punctuation sequences", function()
@@ -87,15 +75,12 @@ describe("BackWord", function()
 
       local backWord = BackWord:new()
 
-      assert.are.same(
-        {
-          start = 8,
-          finish = 10,
-          mode = "exclusive",
-          direction = "characterwise"
-        },
-        backWord:getRange(buffer)
-      )
+      assert.are.same({
+        start = 8,
+        finish = 10,
+        mode = "exclusive",
+        direction = "characterwise",
+      }, backWord:getRange(buffer))
     end)
 
     it("handles jumping from punctuation thru words", function()
@@ -105,15 +90,12 @@ describe("BackWord", function()
 
       local backWord = BackWord:new()
 
-      assert.are.same(
-        {
-          start = 4,
-          finish = 8,
-          mode = "exclusive",
-          direction = "characterwise"
-        },
-        backWord:getRange(buffer)
-      )
+      assert.are.same({
+        start = 4,
+        finish = 8,
+        mode = "exclusive",
+        direction = "characterwise",
+      }, backWord:getRange(buffer))
     end)
   end)
 end)

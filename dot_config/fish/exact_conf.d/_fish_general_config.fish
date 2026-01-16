@@ -1,3 +1,8 @@
+# Set SSH agent env vars for forwarding
+if not set -q SSH_AUTH_SOCK
+    eval (ssh-agent -c) >/dev/null
+    set -Ux SSH_AGENT_PID $SSH_AGENT_PID
+end
 # Set Editor
 if set -q NVIM
     # Avoid nested neovim instances with neovim-remote
@@ -19,7 +24,7 @@ set -gx VISUAL $EDITOR
 set -gx fifc_editor nvim
 
 # Env vars
-set -gx CM_PATH "$HOME/.local/share/chezmoi"
+set -gx CHEZMOI_SOURCE_PATH (chezmoi source-path)
 set -gx XDG_CONFIG_HOME "$HOME/.config"
 set -gx XDG_DATA_HOME "$HOME/.local/share"
 set -gx XDG_STATE_HOME "$HOME/.local/state"

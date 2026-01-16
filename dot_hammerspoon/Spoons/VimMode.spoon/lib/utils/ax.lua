@@ -3,7 +3,9 @@ local ax = dofile(vimModeScriptPath .. "lib/axuielement.lua")
 local axUtils = {}
 
 axUtils.isTextField = function(element)
-  if not element then return false end
+  if not element then
+    return false
+  end
 
   local role = element:attributeValue("AXRole")
 
@@ -17,11 +19,15 @@ axUtils.isRichTextField = function(element)
   --
   -- from observation, plain text inputs/textareas do not seem to have
   -- children.
-  if not element then return false end
+  if not element then
+    return false
+  end
 
   local children = element:attributeValue("AXChildren")
 
-  if not children then return false end
+  if not children then
+    return false
+  end
 
   return #children > 0
 end
@@ -31,13 +37,13 @@ end
 -------------------------------------------------
 local function patchChromiumWithAccessibilityFlag(axApp)
   -- Google Chrome needs this flag to turn on accessibility in the browser
-  axApp:setAttributeValue('AXEnhancedUserInterface', true)
+  axApp:setAttributeValue("AXEnhancedUserInterface", true)
 end
 
 local function patchElectronAppsWithAccessibilityFlag(axApp)
   -- Electron apps require this attribute to be set or else you cannot
   -- read the accessibility tree
-  axApp:setAttributeValue('AXManualAccessibility', true)
+  axApp:setAttributeValue("AXManualAccessibility", true)
 end
 
 local alreadyPatchedApps = {}
@@ -48,7 +54,9 @@ axUtils.patchCurrentApplication = function()
   -- cache whether we patched it already by app name and pid
   -- pray for no collisions hahahahahhahaha
   local patchKey = currentApp:name() .. currentApp:pid()
-  if alreadyPatchedApps[patchKey] then return end
+  if alreadyPatchedApps[patchKey] then
+    return
+  end
 
   alreadyPatchedApps[patchKey] = true
   local axApp = ax.applicationElement(currentApp)

@@ -363,13 +363,13 @@ This command helps trace and debug issues by analyzing code execution paths, dat
       curl http://localhost:2113/streams/person-{id}
    ````
 
-   2. Add logging before reading stream:
+   1. Add logging before reading stream:
 
       ```rust
       tracing::debug!("Reading stream person-{}", person_id);
       ```
 
-   3. Check if person was ever created (no PersonCreated event)
+   2. Check if person was ever created (no PersonCreated event)
 
    **Potential fix**:
    - If person should exist: Create the person first
@@ -470,7 +470,6 @@ This command helps trace and debug issues by analyzing code execution paths, dat
    ## Investigation Plan
 
    ### Immediate Checks (5 minutes)
-
    1. **Check logs** for this request:
 
       ```bash
@@ -600,7 +599,6 @@ This command helps trace and debug issues by analyzing code execution paths, dat
    ***
 
    ## Recommended Next Steps
-
    1. **Start with Hypothesis 1** (most likely):
       - Add logging for agency_id comparison
       - Reproduce issue

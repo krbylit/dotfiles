@@ -26,7 +26,7 @@ local bannedApps = {
   -- This might be hackable in a future PR by getting clever with the AX APIs
   -- that let us get the current line's range, and selecting text to the end of
   -- the line to see where we are in the line.
-  Slack = true
+  Slack = true,
 }
 
 function AccessibilityBuffer:new(vim)
@@ -62,12 +62,18 @@ function AccessibilityBuffer:resetToBeginningOfLineForIndex()
 end
 
 function AccessibilityBuffer:getSelectionRange()
-  if self.selection then return self.selection end
+  if self.selection then
+    return self.selection
+  end
 
-  if not self:getCurrentElement() then return nil end
+  if not self:getCurrentElement() then
+    return nil
+  end
 
   local range = self:getCurrentElement():attributeValue("AXSelectedTextRange")
-  if not range then return nil end
+  if not range then
+    return nil
+  end
 
   self.selection = Selection.fromRange(range)
 
@@ -84,21 +90,13 @@ end
 function AccessibilityBuffer:getCurrentLineNumber()
   local number = self
     :getCurrentElement()
-    :parameterizedAttributeValue(
-      'AXLineForIndex',
-      self:getCurrentLineRange().location
-    ) or 0
+    :parameterizedAttributeValue("AXLineForIndex", self:getCurrentLineRange().location) or 0
 
   return number + 1
 end
 
 function AccessibilityBuffer:getLineCount()
-  local lineNumber = self
-    :getCurrentElement()
-    :parameterizedAttributeValue(
-      'AXLineForIndex',
-      self:lastValueIndex()
-    ) or 0
+  local lineNumber = self:getCurrentElement():parameterizedAttributeValue("AXLineForIndex", self:lastValueIndex()) or 0
 
   return lineNumber + 1
 end
@@ -108,21 +106,25 @@ function AccessibilityBuffer:setSelectionRange(location, length)
 
   self:getCurrentElement():setAttributeValue("AXSelectedTextRange", {
     location = location,
-    length = length
+    length = length,
   })
 
   return self
 end
 
 function AccessibilityBuffer:getValue()
-  if not self:getCurrentElement() then return nil end
+  if not self:getCurrentElement() then
+    return nil
+  end
   self.value = self.value or self:getCurrentElement():attributeValue("AXValue")
 
   return self.value
 end
 
 function AccessibilityBuffer:setValue(value)
-  if not self:getCurrentElement() then return end
+  if not self:getCurrentElement() then
+    return
+  end
 
   self.value = value
   self:getCurrentElement():setAttributeValue("AXValue", value)
@@ -144,12 +146,24 @@ function AccessibilityBuffer:isBannedApp()
 end
 
 function AccessibilityBuffer:isValid()
-  if self:isBannedApp() then return false end
-  if not self:getCurrentElement() then return false end
-  if not self:getSelectionRange() then return false end
-  if not self:isInTextField() then return false end
-  if self:isRichTextField() then return false end
-  if self:onFallbackOnlyUrl() then return false end
+  if self:isBannedApp() then
+    return false
+  end
+  if not self:getCurrentElement() then
+    return false
+  end
+  if not self:getSelectionRange() then
+    return false
+  end
+  if not self:isInTextField() then
+    return false
+  end
+  if self:isRichTextField() then
+    return false
+  end
+  if self:onFallbackOnlyUrl() then
+    return false
+  end
 
   return true
 end
@@ -157,7 +171,7 @@ end
 function AccessibilityBuffer:onFallbackOnlyUrl()
   config = self.vim.config
 
-  if not config:isBetaFeatureEnabled('fallback_only_urls') then
+  if not config:isBetaFeatureEnabled("fallback_only_urls") then
     return false
   end
 
@@ -168,10 +182,12 @@ function AccessibilityBuffer:onFallbackOnlyUrl()
   end
 
   local currentElement = self:getCurrentElement()
-  if not currentElement then return false end
+  if not currentElement then
+    return false
+  end
 
   -- Don't disable in the Chrome location bar.
-  local description = currentElement:attributeValue('AXDescription')
+  local description = currentElement:attributeValue("AXDescription")
 
   -- Matches Chrome or Safari navbar
   if description == "Address and search bar" or description == "Address and Search" then
@@ -192,64 +208,64 @@ function AccessibilityBuffer:onFallbackOnlyUrl()
 end
 
 function AccessibilityBuffer:getCurrentLineNumber()
-  local axLineNumber = self:getCurrentElement():parameterizedAttributeValue(
-    'AXLineForIndex',
-    self:getCaretPosition()
-  )
+  local axLineNumber = self:getCurrentElement():parameterizedAttributeValue("AXLineForIndex", self:getCaretPosition())
 
-  if not axLineNumber then return 1 end
+  if not axLineNumber then
+    return 1
+  end
 
   return axLineNumber + 1
- end
+end
 
 function AccessibilityBuffer:getCurrentLineRange()
   return self:getRangeForLineNumber(self:getCurrentLineNumber())
 end
 
 function AccessibilityBuffer:getRangeForLineNumber(lineNumber)
-  local range = self
-    :getCurrentElement()
-    :parameterizedAttributeValue('AXRangeForLine', lineNumber - 1)
+  local range = self:getCurrentElement():parameterizedAttributeValue("AXRangeForLine", lineNumber - 1)
 
-  if not range then return Selection:new(0, 0) end
+  if not range then
+    return Selection:new(0, 0)
+  end
 
   return Selection.fromRange(range)
 end
 
 function AccessibilityBuffer:visibleLineRange()
-  local visibleRange = self
-    :getCurrentElement()
-    :attributeValue("AXVisibleCharacterRange")
+  local visibleRange = self:getCurrentElement():attributeValue("AXVisibleCharacterRange")
 
-  if not visibleRange then return nil end
+  if not visibleRange then
+    return nil
+  end
 
-  local startLineNumber = self:getCurrentElement():parameterizedAttributeValue(
-    'AXLineForIndex',
-    visibleRange.location
-  )
+  local startLineNumber = self:getCurrentElement():parameterizedAttributeValue("AXLineForIndex", visibleRange.location)
 
   local finishLineNumber = self:getCurrentElement():parameterizedAttributeValue(
-    'AXLineForIndex',
+    "AXLineForIndex",
     visibleRange.location + visibleRange.length - 1
   )
 
-  if not startLineNumber or not finishLineNumber then return nil end
+  if not startLineNumber or not finishLineNumber then
+    return nil
+  end
 
   return {
     start = startLineNumber + 1,
-    finish = finishLineNumber + 1
+    finish = finishLineNumber + 1,
   }
 end
 
 function AccessibilityBuffer:isAtLastVisibleCharacter()
-  local visibleRange = self
-    :getCurrentElement()
-    :attributeValue("AXVisibleCharacterRange")
+  local visibleRange = self:getCurrentElement():attributeValue("AXVisibleCharacterRange")
 
-  if not visibleRange then return false end
+  if not visibleRange then
+    return false
+  end
 
   local selection = self:getSelectionRange()
-  if not selection then return false end
+  if not selection then
+    return false
+  end
 
   local lastVisibleIndex = visibleRange.length + visibleRange.location
 
@@ -274,10 +290,10 @@ function AccessibilityBuffer:enableLiveApplicationPatches()
   if axApp then
     -- Electron apps require this attribute to be set or else you cannot
     -- read the accessibility tree
-    axApp:setAttributeValue('AXManualAccessibility', true)
+    axApp:setAttributeValue("AXManualAccessibility", true)
 
     -- Chromium needs this flag to turn on accessibility in the browser
-    axApp:setAttributeValue('AXEnhancedUserInterface', true)
+    axApp:setAttributeValue("AXEnhancedUserInterface", true)
   end
 end
 

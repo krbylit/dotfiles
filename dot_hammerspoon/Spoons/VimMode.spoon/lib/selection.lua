@@ -3,7 +3,7 @@ local Selection = {}
 function Selection:new(location, length)
   local selection = {
     location = location,
-    length = length
+    length = length,
   }
 
   setmetatable(selection, self)
@@ -31,7 +31,7 @@ end
 function Selection:getCharRange()
   return {
     start = self.location,
-    finish = self:positionEnd()
+    finish = self:positionEnd(),
   }
 end
 

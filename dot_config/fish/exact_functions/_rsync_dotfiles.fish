@@ -5,10 +5,8 @@ function _rsync_dotfiles
 
     set -l ssh_cmd ssh $ssh_opts
 
-    # Check if terminfo exists on remote
-    set -l remote_terminfo (command $ssh_cmd -T $host "infocmp -T $local_term >/dev/null 2>&1; echo \$?")
-
-    if test "$remote_terminfo" -ne 0
+    # Check if terminfo exists on remote (use bash for compatibility)
+    if not command $ssh_cmd -T $host "bash -c 'infocmp -T $local_term >/dev/null 2>&1'"
         infocmp -x | command $ssh_cmd $host -- tic -x -
     end
 
@@ -37,12 +35,11 @@ function _rsync_dotfiles
         ~/.bashrc \
         ~/private.bashrc \
         ~/.vimrc \
+        ~/.tmux.conf \
         $host:~/ 1>/dev/null 2>/dev/null
 
-    # Verify if terminfo is now available
-    set -l term_check (command $ssh_cmd -T $host "infocmp -T $local_term >/dev/null 2>&1; echo \$?")
-
-    if test "$term_check" -eq 0
+    # Verify if terminfo is now available (use bash for compatibility)
+    if command $ssh_cmd -T $host "bash -c 'infocmp -T $local_term >/dev/null 2>&1'"
         echo $local_term
     else
         echo xterm-256color

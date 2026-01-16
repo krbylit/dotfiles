@@ -3,17 +3,17 @@
 
 -- disabling for now b/c there's odd behavior with conceals and often have to toggle `conceallevel` to read full docs
 return {
-    "OXY2DEV/helpview.nvim",
-    enabled = vim.env.IS_SSH ~= "1",
-    lazy = false, -- Recommended
+  "OXY2DEV/helpview.nvim",
 
-    -- In case you still want to lazy load
-    -- ft = "help",
+  lazy = false, -- Recommended
 
-    dependencies = {
-        -- "neovim/tree-sitter-vimdoc",
-        {
-            "nvim-treesitter/nvim-treesitter",
-        },
+  -- In case you still want to lazy load
+  -- ft = "help",
+
+  dependencies = {
+    -- "neovim/tree-sitter-vimdoc",
+    {
+      "nvim-treesitter/nvim-treesitter",
     },
+  },
 }

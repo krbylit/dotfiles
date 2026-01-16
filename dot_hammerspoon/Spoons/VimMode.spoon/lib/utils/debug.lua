@@ -1,10 +1,10 @@
 local ax = dofile(vimModeScriptPath .. "lib/axuielement.lua")
-local debug = require('debug')
+local debug = require("debug")
 
 local debugUtil = {}
 
 local function createTestSuite()
-  local testLogger = hs.logger.new('axtest', 'debug')
+  local testLogger = hs.logger.new("axtest", "debug")
 
   local suite = {
     passed = 0,
@@ -39,7 +39,7 @@ local function createTestSuite()
     return status
   end
 
-  suite.printResults = function ()
+  suite.printResults = function()
     local app = hs.application.frontmostApplication()
 
     testLogger.i("-----------------------------------")
@@ -70,15 +70,15 @@ debugUtil.testAccessibilityField = function()
 
   -- for now force manual accessibility on
   local axApp = ax.applicationElement(hs.application.frontmostApplication())
-  axApp:setAttributeValue('AXManualAccessibility', true)
-  axApp:setAttributeValue('AXEnhancedUserInterface', true)
+  axApp:setAttributeValue("AXManualAccessibility", true)
+  axApp:setAttributeValue("AXEnhancedUserInterface", true)
 
   local systemElement = ax.systemWideElement()
   local currentElement = systemElement:attributeValue("AXFocusedUIElement")
 
   suite.afterTest(function()
     -- Clear the field
-    currentElement:setAttributeValue('AXValue', '')
+    currentElement:setAttributeValue("AXValue", "")
   end)
 
   suite.runTest("AXFocusedUIElement is selectable", function()
@@ -86,24 +86,24 @@ debugUtil.testAccessibilityField = function()
   end)
 
   suite.runTest("Can set/get AXValue", function()
-    currentElement:setAttributeValue('AXValue', 'Test value')
-    local value = currentElement:attributeValue('AXValue')
+    currentElement:setAttributeValue("AXValue", "Test value")
+    local value = currentElement:attributeValue("AXValue")
 
     assert(value == "Test value", "Expected to be able to set the AXValue to 'Test value'")
   end)
 
   suite.runTest("Can get the default (0, 0) AXSelectedTextRange", function()
-    local range = currentElement:attributeValue('AXSelectedTextRange')
+    local range = currentElement:attributeValue("AXSelectedTextRange")
 
     assert(range.location == 0, "Expected AXSelectedTextRange's location to be 0")
     assert(range.length == 0, "Expected AXSelectedTextRange's length to be 0")
   end)
 
   suite.runTest("Can set/get a cursor selection", function()
-    currentElement:setAttributeValue('AXValue', 'Test value')
-    currentElement:setAttributeValue('AXSelectedTextRange', { location = 1, length = 5 })
+    currentElement:setAttributeValue("AXValue", "Test value")
+    currentElement:setAttributeValue("AXSelectedTextRange", { location = 1, length = 5 })
 
-    local range = currentElement:attributeValue('AXSelectedTextRange')
+    local range = currentElement:attributeValue("AXSelectedTextRange")
     assert(range.location == 1, "Expected AXSelectedTextRange's location to be 1")
     assert(range.length == 5, "Expected AXSelectedTextRange's length to be 5")
   end)

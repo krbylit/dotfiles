@@ -1,7 +1,7 @@
 ---
 description: Read PR review files, validate suggested fixes, and implement user-selected fixes with atomic commits
 allowed-tools: Bash, Read, Edit, Write
-argument-hint: [optional: --auto-commit | --dry-run | --severity critical,high]
+argument-hint: [optional: --auto-commit | --dry-run | --severity critical, high]
 ---
 
 ## User Input
@@ -14,7 +14,7 @@ You **MUST** consider the user input before proceeding (if not empty).
 
 ## Outline
 
-This command reads all PR_REVIEW_*.md files in the repository, extracts and validates suggested fixes, presents them to the user for selection, implements the chosen fixes, and commits changes following conventional commit patterns.
+This command reads all PR*REVIEW*\*.md files in the repository, extracts and validates suggested fixes, presents them to the user for selection, implements the chosen fixes, and commits changes following conventional commit patterns.
 
 ### Execution Steps
 
@@ -30,7 +30,6 @@ This command reads all PR_REVIEW_*.md files in the repository, extracts and vali
    - Report count of review files found
 
 2. **Parse Arguments**:
-
    - `--auto-commit`: Automatically commit each fix (default behavior)
    - `--no-commit`: Implement fixes but don't commit (leave staged)
    - `--dry-run`: Show what would be fixed without making changes
@@ -42,7 +41,7 @@ This command reads all PR_REVIEW_*.md files in the repository, extracts and vali
 
 3. **Read and Parse All Review Files**:
 
-   For each PR_REVIEW_*.md file:
+   For each PR*REVIEW*\*.md file:
 
    a. **Extract Issues**:
    - Parse markdown structure to find all issues
@@ -72,9 +71,11 @@ This command reads all PR_REVIEW_*.md files in the repository, extracts and vali
    For each extracted issue:
 
    a. **Check File Exists**:
+
    ```bash
    test -f <file_path>
    ```
+
    - If file doesn't exist: Mark as INVALID (file not found)
 
    b. **Check Code Still Present**:
@@ -106,7 +107,7 @@ This command reads all PR_REVIEW_*.md files in the repository, extracts and vali
 
    Generate numbered list with format:
 
-   ```
+   ````
    Found X valid issues across Y PR review files
 
    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -164,7 +165,7 @@ This command reads all PR_REVIEW_*.md files in the repository, extracts and vali
    Total: 8 valid issues
 
    Skipped (outdated/invalid): 3 issues
-   ```
+   ````
 
 7. **Get User Selection**:
 
@@ -356,7 +357,7 @@ This command reads all PR_REVIEW_*.md files in the repository, extracts and vali
     ## Next Steps
 
     ✅ All critical and high-priority issues fixed
-    ⚠️  1 issue requires manual attention
+    ⚠️ 1 issue requires manual attention
     📝 Review commits: git log -3 --oneline
     🧪 Run tests to verify fixes
     🚀 Push changes when ready
@@ -373,7 +374,6 @@ This command reads all PR_REVIEW_*.md files in the repository, extracts and vali
     ```
 
 12. **Save Report**:
-
     - Generate filename: `PR_FIXES_<timestamp>.md`
     - Timestamp format: `YYYY-MM-DD_HHMMSS`
     - Write report to repository root
@@ -382,6 +382,7 @@ This command reads all PR_REVIEW_*.md files in the repository, extracts and vali
 ## Edge Cases & Error Handling
 
 **No PR Review Files**:
+
 ```
 ❌ No PR review files found
 
@@ -393,6 +394,7 @@ Create a review first using:
 ```
 
 **No Valid Issues**:
+
 ```
 ✅ No valid issues to fix
 
@@ -404,6 +406,7 @@ All issues may have already been addressed.
 ```
 
 **All Issues Already Fixed**:
+
 ```
 ✅ All issues appear to be resolved
 
@@ -415,11 +418,13 @@ Great work! Consider archiving old PR review files.
 ```
 
 **User Cancels**:
+
 ```
 Canceled by user - no changes made
 ```
 
 **Conflicting Changes**:
+
 - If working directory is dirty, warn user
 - Ask if they want to:
   - Stash changes and continue
@@ -427,12 +432,14 @@ Canceled by user - no changes made
   - Continue anyway (risky)
 
 **Fix Application Failure**:
+
 - If Edit fails: Try Write as fallback
 - If both fail: Log detailed error
 - Continue with next issue
 - Report failure in summary
 
 **Syntax Errors After Fix**:
+
 - If language has syntax checker, run it
 - If syntax error detected:
   - Revert the change
@@ -440,6 +447,7 @@ Canceled by user - no changes made
   - Include in manual review list
 
 **Large Number of Issues**:
+
 - If >20 valid issues, warn about commit volume
 - Suggest filtering by severity: `--severity critical,high`
 - Offer to batch similar fixes into fewer commits
@@ -447,23 +455,27 @@ Canceled by user - no changes made
 ## Validation
 
 **Before Implementing Fix**:
+
 - ✅ File exists and is readable
 - ✅ Current code pattern is present
 - ✅ Suggested fix is syntactically reasonable
 - ✅ Fix doesn't introduce obvious new issues
 
 **After Implementing Fix**:
+
 - ✅ Change was successfully applied
 - ✅ File is still valid (no syntax errors if checkable)
 - ✅ Original issue pattern is no longer present
 
 **Before Committing**:
+
 - ✅ At least one file was modified
 - ✅ Commit message follows conventional format
 - ✅ All modified files are related to fix
 - ✅ Working directory state is clean or expected
 
 **After All Fixes**:
+
 - ✅ All selected issues were attempted
 - ✅ Success/failure tracked for each
 - ✅ Commits created for successful fixes
@@ -549,6 +561,7 @@ Location: ([^:]+):(\d+)
 ### Code Block Extraction
 
 Identify code blocks in these sections:
+
 - "Current Code"
 - "Problem"
 - "Problematic code snippet"
@@ -557,6 +570,7 @@ Identify code blocks in these sections:
 - "Recommended"
 
 Extract language tag and content:
+
 ````markdown
 ```rust
 let query = format!("...");
@@ -566,6 +580,7 @@ let query = format!("...");
 ### Severity Extraction
 
 Map severity levels:
+
 - `🔴` or "CRITICAL" → Critical
 - `🟠` or "HIGH" → High
 - `🟡` or "MEDIUM" → Medium
@@ -574,6 +589,7 @@ Map severity levels:
 ### Category Extraction
 
 Look for category labels:
+
 - Security, Bug, Performance, Maintainability
 - Testing, Documentation, Style
 - Extract from "Category:" field or section headers

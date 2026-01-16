@@ -14,15 +14,12 @@ describe("EndOfWord", function()
 
       local endOfWord = EndOfWord:new()
 
-      assert.are.same(
-        {
-          start = 0,
-          finish = 2,
-          mode = "inclusive",
-          direction = "characterwise"
-        },
-        endOfWord:getRange(buffer)
-      )
+      assert.are.same({
+        start = 0,
+        finish = 2,
+        mode = "inclusive",
+        direction = "characterwise",
+      }, endOfWord:getRange(buffer))
     end)
 
     it("goes to the next word end", function()
@@ -32,15 +29,12 @@ describe("EndOfWord", function()
 
       local endOfWord = EndOfWord:new()
 
-      assert.are.same(
-        {
-          start = 2,
-          finish = 6,
-          mode = "inclusive",
-          direction = "characterwise"
-        },
-        endOfWord:getRange(buffer)
-      )
+      assert.are.same({
+        start = 2,
+        finish = 6,
+        mode = "inclusive",
+        direction = "characterwise",
+      }, endOfWord:getRange(buffer))
     end)
 
     it("stops on new lines", function()
@@ -50,15 +44,12 @@ describe("EndOfWord", function()
 
       local endOfWord = EndOfWord:new()
 
-      assert.are.same(
-        {
-          start = 0,
-          finish = 2,
-          mode = "inclusive",
-          direction = "characterwise"
-        },
-        endOfWord:getRange(buffer)
-      )
+      assert.are.same({
+        start = 0,
+        finish = 2,
+        mode = "inclusive",
+        direction = "characterwise",
+      }, endOfWord:getRange(buffer))
     end)
   end)
 
@@ -66,16 +57,13 @@ describe("EndOfWord", function()
     it("returns the key sequence to move by word", function()
       local endOfWord = EndOfWord:new()
 
-      assert.are.same(
+      assert.are.same({
         {
-          {
-            modifiers = { 'alt' },
-            key = 'right',
-            selection = true
-          }
+          modifiers = { "alt" },
+          key = "right",
+          selection = true,
         },
-        endOfWord:getMovements()
-      )
+      }, endOfWord:getMovements())
     end)
   end)
 end)

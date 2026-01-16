@@ -15,15 +15,12 @@ describe("BigWord", function()
 
       local bigWord = BigWord:new()
 
-      assert.are.same(
-        {
-          start = 0,
-          finish = 4,
-          mode = "exclusive",
-          direction = "characterwise"
-        },
-        bigWord:getRange(buffer)
-      )
+      assert.are.same({
+        start = 0,
+        finish = 4,
+        mode = "exclusive",
+        direction = "characterwise",
+      }, bigWord:getRange(buffer))
     end)
 
     it("handles punctuation boundaries", function()
@@ -33,15 +30,12 @@ describe("BigWord", function()
 
       local bigWord = BigWord:new()
 
-      assert.are.same(
-        {
-          start = 0,
-          finish = 13,
-          mode = "exclusive",
-          direction = "characterwise"
-        },
-        bigWord:getRange(buffer)
-      )
+      assert.are.same({
+        start = 0,
+        finish = 13,
+        mode = "exclusive",
+        direction = "characterwise",
+      }, bigWord:getRange(buffer))
     end)
   end)
 
@@ -49,16 +43,13 @@ describe("BigWord", function()
     it("returns the key sequence to move by word", function()
       local bigWord = BigWord:new()
 
-      assert.are.same(
+      assert.are.same({
         {
-          {
-            modifiers = { 'alt' },
-            key = 'right',
-            selection = true
-          }
+          modifiers = { "alt" },
+          key = "right",
+          selection = true,
         },
-        bigWord:getMovements()
-      )
+      }, bigWord:getMovements())
     end)
   end)
 end)

@@ -1,5 +1,5 @@
-local Buffer = require('lib/buffer')
-local Selection = require('lib/selection')
+local Buffer = require("lib/buffer")
+local Selection = require("lib/selection")
 
 describe("Buffer", function()
   local text = "fdsafdsa"
@@ -11,10 +11,7 @@ describe("Buffer", function()
       buffer:setValue(text)
       buffer:setSelectionRange(1, 0)
 
-      assert.are.equals(
-        "f",
-        buffer:getContentsBeforeSelection()
-      )
+      assert.are.equals("f", buffer:getContentsBeforeSelection())
     end)
 
     it("returns nil if we're at the start", function()
@@ -23,10 +20,7 @@ describe("Buffer", function()
       buffer:setValue(text)
       buffer:setSelectionRange(0, 0)
 
-      assert.are.equals(
-        nil,
-        buffer:getContentsBeforeSelection()
-      )
+      assert.are.equals(nil, buffer:getContentsBeforeSelection())
     end)
   end)
 
@@ -36,10 +30,7 @@ describe("Buffer", function()
       buffer:setValue("haha\nwhat yeah\nwhatever")
       buffer:setSelectionRange(0, 0)
 
-      assert.are.same(
-        Selection:new(0, 5),
-        buffer:getCurrentLineRange()
-      )
+      assert.are.same(Selection:new(0, 5), buffer:getCurrentLineRange())
     end)
 
     it("gets the range for line 2", function()
@@ -47,10 +38,7 @@ describe("Buffer", function()
       buffer:setValue("haha\nwhat yeah\nwhatever")
       buffer:setSelectionRange(6, 0)
 
-      assert.are.same(
-        Selection:new(5, 10),
-        buffer:getCurrentLineRange()
-      )
+      assert.are.same(Selection:new(5, 10), buffer:getCurrentLineRange())
     end)
 
     it("gets the range for line 3", function()
@@ -58,10 +46,7 @@ describe("Buffer", function()
       buffer:setValue("haha\nwhat yeah\nwhatever")
       buffer:setSelectionRange(15, 0)
 
-      assert.are.same(
-        Selection:new(15, 8),
-        buffer:getCurrentLineRange()
-      )
+      assert.are.same(Selection:new(15, 8), buffer:getCurrentLineRange())
     end)
   end)
 
@@ -98,10 +83,7 @@ describe("Buffer", function()
       buffer:setValue(text)
       buffer:setSelectionRange(1, 0)
 
-      assert.are.equals(
-        "dsafdsa",
-        buffer:getContentsAfterSelection()
-      )
+      assert.are.equals("dsafdsa", buffer:getContentsAfterSelection())
     end)
 
     it("returns nil if we're at the end", function()
@@ -110,10 +92,7 @@ describe("Buffer", function()
       buffer:setValue(text)
       buffer:setSelectionRange(8, 0)
 
-      assert.are.equals(
-        nil,
-        buffer:getContentsAfterSelection()
-      )
+      assert.are.equals(nil, buffer:getContentsAfterSelection())
     end)
   end)
 end)

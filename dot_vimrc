@@ -1,17 +1,31 @@
-" Adds minimal plugins that are copied to SSH session to the Vim runtimepath
-if exists('$SSHVIMRUNTIME')
-	" This env var is set by `kitten ssh` (in `kitty/ssh.conf`). Points to path where minimal plugins are copied to on remote.
-    let s:sshruntime = $SSHVIMRUNTIME
+" Use different vim runtime based on whether we're on remote (SSH) or local
+if $IS_SSH == '1'
+    " Remote: use minimal SSH-friendly vim config
+    let s:vimruntime = expand('~/.ssh-dotfiles/.vim')
 else
-	" This dir holds the minimal plugins. This is fallback for `vim` on local machine.
-    let s:sshruntime = expand('~/.ssh-dotfiles/.vim')
+    " Local: use full vim config
+    let s:vimruntime = expand('~/.vim')
 endif
-if isdirectory(s:sshruntime)
-    execute 'set runtimepath+=' . s:sshruntime
+
+if isdirectory(s:vimruntime)
+    " Clear default vim paths to avoid duplicates
+    set runtimepath-=~/.vim
+    set runtimepath-=~/.vim/after
+    set packpath-=~/.vim
+    set packpath-=~/.vim/after
+    " Add our chosen runtime path
+    execute 'set runtimepath^=' . s:vimruntime
+    execute 'set packpath^=' . s:vimruntime
+    " Load plugins
+    execute 'packloadall'
 endif
 
 " autocmd to add commentstring for filetypes not already supported by `vim-commentary`
 " autocmd FileType python setlocal commentstring=#\ %s
+
+" Disable terminal flow control in Vim (prevents Ctrl-S from freezing)
+silent! execute "!stty -ixon"
+autocmd VimLeave * silent! execute "!stty ixon"
 
 " Fix term bg color in Vim bug: https://www.reddit.com/r/vim/comments/o9irr1/terminal_background_overrides_nontext_vim/
 let &t_ut=''
@@ -64,7 +78,7 @@ set autoindent             " Use current indent for new lines.
 set smartindent
 " set ruler                  " Show the ruler in the statusline.
 set hidden   " stops vim asking to save the file when switching buffer.
-set scrolloff=1000   " scroll page when cursor is 8 lines from top/bottom
+set scrolloff=8   " scroll page when cursor is 8 lines from top/bottom
 set splitbelow   " split go below
 set splitright   " vertical split to the right
 set expandtab       " expand tab to spaces so that tabs are spaces
@@ -122,8 +136,28 @@ set expandtab       " expand tab to spaces so that tabs are spaces
 	set shiftwidth=4
 	set tabstop=4
 
+" Better whitespace visualization (only show trailing spaces and nbsp, not tabs)
+	set nolist
+	set listchars=trail:-,nbsp:·
+
+" Better wrapping behavior
+	set linebreak
+	set breakindent
+	set breakindentopt=shift:2,min:20
+
+" Minimal window heights (better splits)
+	set winheight=1
+	set winminheight=1
+
+" Hide mouse while typing
+	set mousehide
+
+" Include hyphen in keywords (useful for CSS, HTML)
+	set iskeyword+=-
+
 " If the current file type is HTML, set indentation to 2 spaces.
 	autocmd Filetype html setlocal tabstop=2 shiftwidth=2 expandtab
+	autocmd Filetype markdown setlocal tabstop=2 shiftwidth=2 expandtab
 
 " Do not save backup files.
 	set nobackup
@@ -170,11 +204,17 @@ set expandtab       " expand tab to spaces so that tabs are spaces
 	endif
 
 
-" File Browsing settings
-	let g:netrw_banner=0
-	let g:netrw_liststyle=3
-	let g:netrw_showhide=1
-	let g:netrw_winsize=20
+" File Browsing settings (netrw - no plugins needed!)
+	let g:netrw_banner=0          " Hide banner
+	let g:netrw_liststyle=3       " Tree view
+	let g:netrw_showhide=1        " Show hidden files
+	let g:netrw_winsize=30        " Width when opened in vsplit
+	let g:netrw_browse_split=4    " Open files in previous window (not in netrw window)
+	let g:netrw_altv=1            " Open vsplit to the right
+	let g:netrw_keepdir=0         " Keep current directory in sync with browsing
+
+	" Simple - keybinding to open netrw (like vinegar's '-' but better)
+	nnoremap - :Lex<CR>
 
 
 " Auto Completion - Enable Omni complete features
@@ -327,19 +367,21 @@ set expandtab       " expand tab to spaces so that tabs are spaces
 	" map Q gq<CR>
 
 
-" Set the space  as the leader key.
+" Set the comma as the leader key and space as local leader
 	let mapleader = ","
+	let maplocalleader = ' '
+	noremap <space> <Nop>
 
 
 " Select all the text
-	nnoremap <leader>yc ggVGy
+	nnoremap <leader>ya ggVGy
 
 
-" Opening a file explore
-	map <leader>e :Lex<CR>
-
-" Opening a file from explorer
-	map <leader>o :Explore<CR>
+" File explorer (netrw)
+	" Toggle netrw sidebar on left (Lex = Lexplore)
+	nnoremap <leader>e :Lex<CR>
+	" Open in current window
+	nnoremap <leader>E :Explore<CR>
 
 " " Opening a terminal window
 " map <c-/> :ter<CR>
@@ -365,6 +407,18 @@ nnoremap L :bnext<CR>
 	nnoremap <c-k> <c-w>k
 	nnoremap <c-h> <c-w>h
 	nnoremap <c-l> <c-w>l
+	" Alternative leader-based window navigation (always works)
+	nnoremap <leader>wj <c-w>j
+	nnoremap <leader>wk <c-w>k
+	nnoremap <leader>wh <c-w>h
+	nnoremap <leader>wl <c-w>l
+
+	" Ensure Ctrl-h/l work in netrw buffers
+	augroup netrw_mapping
+		autocmd!
+		autocmd FileType netrw nnoremap <buffer> <c-h> <c-w>h
+		autocmd FileType netrw nnoremap <buffer> <c-l> <c-w>l
+	augroup END
 
 " Delete window buffer
   map <leader>wd :q<CR>
@@ -421,12 +475,158 @@ nnoremap L :bnext<CR>
 
 
 " Seeing the registers
-	" nnoremap <leader>r <cmd>registers<CR>
-	nnoremap " <cmd>registers<CR>
+	nnoremap <leader>" <cmd>registers<CR>
 
 " Moving lines in visual mode
 vnoremap J :m '>+1<CR>gv=gv
 	vnoremap K :m '>-2<CR>gv=gv
 
+" Wrap-aware movement (move on display lines)
+	nnoremap ^ g^
+	nnoremap $ g$
+	xnoremap ^ g^
+	xnoremap $ g$
+
+" " Smart dd - don't yank empty lines to register
+" 	nnoremap <expr> dd (getline('.')=~'^\s*$')?'"_dd':'dd'
+"
+" " Toggle center-cursor mode (scrolloff 999 vs 8)
+" 	nnoremap <C-g> :set scrolloff=<C-r>=&scrolloff==999?8:999<CR><CR>
+
+" Tab navigation
+	nnoremap ]<tab> :tabnext<CR>
+	nnoremap [<tab> :tabprevious<CR>
+
+" " Clear quickfix list
+" 	nnoremap <leader>xc :call setqflist([])<CR>
+
+" Unbind Ctrl-Z (suspend) - annoying in SSH
+	noremap! <C-z> <Nop>
+
+"------------------PLUGIN_CONFIG------------------
+
+" vim-which-key configuration
+" Enable which-key for leader and localleader
+nnoremap <silent> <leader> :<c-u>WhichKey ','<CR>
+nnoremap <silent> <localleader> :<c-u>WhichKey '<Space>'<CR>
+vnoremap <silent> <leader> :<c-u>WhichKeyVisual ','<CR>
+vnoremap <silent> <localleader> :<c-u>WhichKeyVisual '<Space>'<CR>
+set timeoutlen=250
+
+" CtrlP configuration (fuzzy finder - no external binary needed)
+let g:ctrlp_map = '<c-p>'
+let g:ctrlp_cmd = 'CtrlP'
+let g:ctrlp_working_path_mode = 'ra'  " Start from repo root
+let g:ctrlp_show_hidden = 1
+let g:ctrlp_custom_ignore = {
+  \ 'dir':  '\v[\/](\.(git|hg|svn)|node_modules|target|dist|build)$',
+  \ 'file': '\v\.(exe|so|dll|pyc|swp)$',
+  \ }
+" Use ripgrep if available (faster)
+if executable('rg')
+  set grepprg=rg\ --color=never
+  let g:ctrlp_user_command = 'rg --files --hidden --glob "!.git/*" %s'
+  let g:ctrlp_use_caching = 0
+endif
+
+" vim-commentary configuration
+" Cmd-/ for commenting (works in terminals that support <D-/>)
+" This requires terminal support - works in Ghostty, Kitty, WezTerm
+" For terminals without Cmd support, use gcc in normal mode or gc in visual
+autocmd FileType python setlocal commentstring=#\ %s
+autocmd FileType bash,sh setlocal commentstring=#\ %s
+autocmd FileType fish setlocal commentstring=#\ %s
+autocmd FileType lua setlocal commentstring=--\ %s
+autocmd FileType javascript,typescript setlocal commentstring=//\ %s
+
+"------------------PLUGIN_KEYBINDINGS------------------
+
+" CtrlP (fuzzy finder - pure vimscript, no dependencies!)
+	" Leader-space for find files (matches nvim)
+	nnoremap <leader><space> :CtrlP<CR>
+	nnoremap <leader>ff :CtrlP<CR>
+	nnoremap <leader>fb :CtrlPBuffer<CR>
+	nnoremap <leader>fm :CtrlPMRU<CR>
+	nnoremap <leader>fl :CtrlPLine<CR>
+	" Ctrl-P also works
+	nnoremap <C-p> :CtrlP<CR>
+
+" Grep functionality (leader-/ matches nvim)
+	" Configure grep to use ripgrep if available
+	" if executable('rg')
+	" 	set grepprg=rg\ --vimgrep\ --smart-case\ --hidden\ --glob\ '!.git'
+	" 	set grepformat=%f:%l:%c:%m
+	" 	" Leader-/ to grep across all files
+	" 	nnoremap <leader>/ :grep<Space>
+	" 	" Search for word under cursor across all files
+	" 	nnoremap <leader>* :grep "\b<C-R><C-W>\b"<CR>:copen<CR>
+	" else
+	" 	set grepprg=grep\ -rn\ $*\ .
+	" 	nnoremap <leader>/ :grep<Space>
+	" 	nnoremap <leader>* :grep -r "\b<C-R><C-W>\b" .<CR>:copen<CR>
+	" endif
+	" Open/close quickfix (grep results)
+	nnoremap <leader>qo :copen<CR>
+	nnoremap <leader>qc :cclose<CR>
+
+" vim-commentary (commenting)
+	" gcc - Toggle comment on current line
+	" gc{motion} - Comment motion (e.g. gcap for paragraph)
+	" gc in visual mode - Comment selection
+	" Cmd-/ for terminal emulators that support it (Ghostty, Kitty)
+	" nnoremap <D-/> gcc
+	" xnoremap <D-/> gc
+	" inoremap <D-/> <Esc>gcc
+
+" vim-fugitive (git integration)
+	nnoremap <leader>gg :Git<CR>
+	nnoremap <leader>gd :Gdiffsplit<CR>
+	nnoremap <leader>gc :Git commit<CR>
+	nnoremap <leader>gb :Git blame<CR>
+	nnoremap <leader>gl :Git log<CR>
+	nnoremap <leader>gp :Git push<CR>
+	nnoremap <leader>gP :Git pull<CR>
+
+"------------------CUSTOM_FUNCTIONS------------------
+
+" Delete mark on current line
+function! DeleteCurrentLineMark()
+    let line = line('.')
+    let marks = 'abcdefghijklmnopqrstuvwyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
+    for mark in split(marks, '\zs')
+        let pos = getpos("'" . mark)
+        if pos[1] == line
+            execute 'delmarks ' . mark
+            echom 'Deleted mark ' . mark
+            return
+        endif
+    endfor
+    echom 'No mark found on current line.'
+endfunction
+
+nnoremap <leader>'d :call DeleteCurrentLineMark()<CR>
+nnoremap <leader>'f :delmarks a-z<CR>
+nnoremap <leader>'g :delmarks A-Z<CR>
+
+" Remove item from quickfix list with dd
+function! RemoveQFItem()
+    let idx = line('.') - 1
+    let qf = getqflist()
+    if idx < len(qf)
+        call remove(qf, idx)
+        call setqflist(qf, 'r')
+        if len(qf) == 0 | cclose | endif
+    endif
+endfunction
+
+autocmd FileType qf nnoremap <buffer> dd :call RemoveQFItem()<CR>
+
+"------------------AUTOCOMMANDS------------------
+
+" Trim trailing whitespace on save
+autocmd BufWritePre * %s/\s\+$//e
+
+" Help windows open in vertical split
+autocmd BufWinEnter * if &buftype == 'help' | wincmd L | endif
 
 "------------------END_KEY------------------

@@ -3,10 +3,35 @@ local utf8 = dofile(vimModeScriptPath .. "vendor/luautf8.lua")
 
 local stringUtils = {}
 
-local punctuation = Set{
-  "!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "-", "=", "+", "[", "{",
-  "}", "]", "|", " '", "\"", ":", ";", ",", ".", "/", "?", "`"
-}
+local punctuation = Set({
+  "!",
+  "@",
+  "#",
+  "$",
+  "%",
+  "^",
+  "&",
+  "*",
+  "(",
+  ")",
+  "-",
+  "=",
+  "+",
+  "[",
+  "{",
+  "}",
+  "]",
+  "|",
+  " '",
+  '"',
+  ":",
+  ";",
+  ",",
+  ".",
+  "/",
+  "?",
+  "`",
+})
 
 function stringUtils.isPunctuation(char)
   return not not punctuation[char]
@@ -21,12 +46,13 @@ function stringUtils.isNonAlphanumeric(str)
 end
 
 function stringUtils.isPrintableChar(char)
-  return not stringUtils.isPunctuation(char) and
-    not stringUtils.isWhitespace(char)
+  return not stringUtils.isPunctuation(char) and not stringUtils.isWhitespace(char)
 end
 
 function stringUtils.isWordBoundary(char)
-  if char == nil then return true end
+  if char == nil then
+    return true
+  end
 
   return stringUtils.isNonAlphanumeric(char)
 end
@@ -87,7 +113,9 @@ function stringUtils.split(delimiter, text, includeDelimiter)
 
     if first then -- found?
       local part = utf8.sub(text, pos, first - 1)
-      if includeDelimiter then part = part .. delimiter end
+      if includeDelimiter then
+        part = part .. delimiter
+      end
 
       table.insert(list, part)
       pos = last + 1

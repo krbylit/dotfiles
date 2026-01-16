@@ -19,6 +19,7 @@
 - NEVER create files unless absolutely necessary.
 - ALWAYS prefer editing existing files.
 - NEVER create documentation files (\*.md) unless requested.
+- NEVER use `git push`, `git push --force`, or `git push --force-with-lease` - you MUST stop and ask the user if force push looks like the only viable route
 
 ## Code Quality
 

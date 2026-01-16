@@ -229,6 +229,32 @@
             ]
           },
           {
+            "description": "Use ctrl + w to delete previous word (not in Ghostty)",
+            "manipulators": [
+              {
+                "conditions": [
+                  {
+                    "bundle_identifiers": ["^com\\.mitchellh\\.ghostty$"],
+                    "type": "frontmost_application_unless"
+                  }
+                ],
+                "type": "basic",
+                "from": {
+                  "key_code": "w",
+                  "modifiers": {
+                    "mandatory": ["left_control"]
+                  }
+                },
+                "to": [
+                  {
+                    "key_code": "delete_or_backspace",
+                    "modifiers": ["left_option"]
+                  }
+                ]
+              }
+            ]
+          },
+          {
             "description": "Use Alt + c to move right in Application Switcher",
             "manipulators": [
               {

@@ -9,7 +9,7 @@ function CommandState:new()
     motionTimes = nil,
     operator = nil,
     operatorTimes = nil,
-    pendingInput = nil
+    pendingInput = nil,
   }
 
   setmetatable(state, self)
@@ -36,8 +36,8 @@ function CommandState:pushChar(char)
 end
 
 function CommandState:getRepeatTimes()
-  local operatorTimes = self:getCount('operator') or 1
-  local motionTimes = self:getCount('motion') or 1
+  local operatorTimes = self:getCount("operator") or 1
+  local motionTimes = self:getCount("motion") or 1
 
   return operatorTimes * motionTimes
 end

@@ -3,7 +3,7 @@ local Motion = dofile(vimModeScriptPath .. "lib/motion.lua")
 local BackwardSearch = dofile(vimModeScriptPath .. "lib/motions/backward_search.lua")
 local ForwardSearch = dofile(vimModeScriptPath .. "lib/motions/forward_search.lua")
 
-local BetweenChars = Motion:new{ name = 'between_chars' }
+local BetweenChars = Motion:new({ name = "between_chars" })
 
 function BetweenChars:setSearchChars(beginningChar, endingChar)
   self.beginningChar = beginningChar
@@ -24,15 +24,14 @@ function BetweenChars:getRange(buffer)
   end
 
   if not start then
-    local backwardResult = BackwardSearch
-      :new()
-      :setExtraChar(self.beginningChar)
-      :getRange(buffer)
+    local backwardResult = BackwardSearch:new():setExtraChar(self.beginningChar):getRange(buffer)
 
     start = backwardResult and backwardResult.start
   end
 
-  if not start then return nil end
+  if not start then
+    return nil
+  end
 
   -- Find the finish position.
   local finish = nil
@@ -42,15 +41,14 @@ function BetweenChars:getRange(buffer)
   end
 
   if not finish then
-    local forwardResult = ForwardSearch
-      :new()
-      :setExtraChar(self.endingChar)
-      :getRange(buffer)
+    local forwardResult = ForwardSearch:new():setExtraChar(self.endingChar):getRange(buffer)
 
     finish = forwardResult and forwardResult.finish
   end
 
-  if not finish then return nil end
+  if not finish then
+    return nil
+  end
 
   return {
     start = start + 1,

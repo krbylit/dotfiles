@@ -25,6 +25,7 @@
   },
   "enableAllProjectMcpServers": true,
   "enabledMcpjsonServers": [
+    "beads",
     "time",
     "websearch",
     "fetch",
@@ -35,6 +36,10 @@
     "github",
     "software-planning-tool"
   ],
+  "enabledPlugins": {
+    "beads@beads-marketplace": true,
+    "typescript-lsp@claude-plugins-official": true
+  },
   "alwaysThinkingEnabled": true,
   "feedbackSurveyState": {
     "lastShownTime": 1754065732137

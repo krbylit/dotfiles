@@ -11,7 +11,7 @@ local AccessibilityStrategy = Strategy:new()
 function AccessibilityStrategy:new(vim)
   local strategy = {
     currentElement = nil,
-    vim = vim
+    vim = vim,
   }
 
   setmetatable(strategy, self)
@@ -26,7 +26,7 @@ function AccessibilityStrategy:fire()
   local buffer = AccessibilityBuffer:new(self.vim)
 
   -- set the caret position if we are in visual mode
-  if self.vim:isMode('visual') then
+  if self.vim:isMode("visual") then
     buffer:setCaretPosition(self.vim.visualCaretPosition)
   end
 
@@ -34,13 +34,17 @@ function AccessibilityStrategy:fire()
 
   -- just cancel if the motion decides there isn't anything
   -- to operate on (end of buffer, etc)
-  if not range then return nil end
+  if not range then
+    return nil
+  end
 
   local start = range.start
   local finish = range.finish
 
   if operator then
-    if range.mode == 'exclusive' then finish = finish - 1 end
+    if range.mode == "exclusive" then
+      finish = finish - 1
+    end
 
     if finish + 1 >= buffer:getLength() then
       finish = buffer:getLength() - 1
@@ -52,10 +56,8 @@ function AccessibilityStrategy:fire()
     operator:modifySelection(buffer, start, finish)
 
     hs.timer.doAfter(100 / 1000, function()
-      if range.direction == 'linewise' then
-        local newBuffer = AccessibilityBuffer
-          :new()
-          :setSelectionRange(start, 0)
+      if range.direction == "linewise" then
+        local newBuffer = AccessibilityBuffer:new():setSelectionRange(start, 0)
 
         -- reset the cursor to the beginning of the line
         newBuffer:resetToBeginningOfLineForIndex()
@@ -67,20 +69,18 @@ function AccessibilityStrategy:fire()
     local location
     local length = 0
 
-    if self.vim:isMode('visual') then
+    if self.vim:isMode("visual") then
       local currentCharRange = currentRange:getCharRange()
       local caretPosition = buffer:getCaretPosition()
 
-      local result = visualUtils.getNewRange(
-        currentCharRange,
-        range,
-        caretPosition
-      )
+      local result = visualUtils.getNewRange(currentCharRange, range, caretPosition)
 
       local newRange = result.range
 
       local finish = newRange.finish
-      if range.mode == 'exclusive' then finish = finish - 1 end
+      if range.mode == "exclusive" then
+        finish = finish - 1
+      end
 
       location = newRange.start
       length = newRange.finish - newRange.start + 1
@@ -88,13 +88,13 @@ function AccessibilityStrategy:fire()
       -- update the caret position
       self.vim.visualCaretPosition = result.caretPosition
     else
-      local direction = 'right'
+      local direction = "right"
 
       if start < currentRange:positionEnd() then
-        direction = 'left'
+        direction = "left"
       end
 
-      location = (direction == 'left' and start) or finish
+      location = (direction == "left" and start) or finish
     end
 
     AccessibilityBuffer:new(self.vim):setSelectionRange(location, length)
@@ -111,11 +111,15 @@ function AccessibilityStrategy:getCurrentElement()
 end
 
 function AccessibilityStrategy:getSelection()
-  if not self:getCurrentElement() then return nil end
+  if not self:getCurrentElement() then
+    return nil
+  end
 
   local range = self:getCurrentElement():attributeValue("AXSelectedTextRange")
 
-  if not range then return nil end
+  if not range then
+    return nil
+  end
 
   return Selection.fromRange(range)
 end
@@ -129,12 +133,16 @@ function AccessibilityStrategy:setSelectionRange(selection)
 end
 
 function AccessibilityStrategy:getValue()
-  if not self:getCurrentElement() then return nil end
+  if not self:getCurrentElement() then
+    return nil
+  end
   return self:getCurrentElement():attributeValue("AXValue")
 end
 
 function AccessibilityStrategy:setValue(value)
-  if not self:getCurrentElement() then return end
+  if not self:getCurrentElement() then
+    return
+  end
   self:getCurrentElement().setValue(value)
 end
 

@@ -8,13 +8,11 @@ wrap: auto # Enable automatic text wrapping
 wrap_code: false
 
 # ---- apperence ----
-highlight: true                  # Controls syntax highlighting
-light_theme: false               # Activates a light color theme when true. env: AICHAT_LIGHT_THEME
+highlight: true # Controls syntax highlighting
+light_theme: false # Activates a light color theme when true. env: AICHAT_LIGHT_THEME
 # Custom REPL left/right prompts, see https://github.com/sigoden/aichat/wiki/Custom-REPL-Prompt for more details
-left_prompt:
-  '{color.green}{?session {?agent {agent}>}{session}{?role /}}{!session {?agent {agent}>}}{role}{?rag @{rag}}{color.cyan}{?session )}{!session >}{color.reset} '
-right_prompt:
-  '{color.purple}{?session {?consume_tokens {consume_tokens}({consume_percent}%)}{!consume_tokens {consume_tokens}}}{color.reset}'
+left_prompt: "{color.green}{?session {?agent {agent}>}{session}{?role /}}{!session {?agent {agent}>}}{role}{?rag @{rag}}{color.cyan}{?session )}{!session >}{color.reset} "
+right_prompt: "{color.purple}{?session {?consume_tokens {consume_tokens}({consume_percent}%)}{!consume_tokens {consume_tokens}}}{color.reset}"
 
 # ---- session ----
 # Controls the persistence of the session. if true, auto save; if false, not save; if null, asking the user
@@ -22,9 +20,9 @@ save_session: true
 # Compress session when token count reaches or exceeds this threshold
 compress_threshold: 4000
 # Text prompt used for creating a concise summary of session message
-summarize_prompt: 'Summarize the discussion briefly in 200 words or less to use as a prompt for future context.'
+summarize_prompt: "Summarize the discussion briefly in 200 words or less to use as a prompt for future context."
 # Text prompt used for including the summary of the entire session
-summary_prompt: 'This is a summary of the chat history as a recap: '
+summary_prompt: "This is a summary of the chat history as a recap: "
 
 # ---- RAG Configuration ----
 # rag_embedding_model: ollama:nomic-embed-text # Embedding model for Ollama
@@ -74,10 +72,10 @@ clients:
   - type: openai-compatible
     name: lm-studio
     api_base: http://localhost:1234/v1
-    patch:                                          # Patch api
-      rerank:                             # Api type, possible values: chat_completions, embeddings, and rerank
-        '.*':                                    # The regex to match model names, e.g. '.*' 'gpt-4o' 'gpt-4o|gpt-4-.*'
-          url: 'http://localhost:1234/v1/embeddings'                                   # Patch request url
+    patch: # Patch api
+      rerank: # Api type, possible values: chat_completions, embeddings, and rerank
+        ".*": # The regex to match model names, e.g. '.*' 'gpt-4o' 'gpt-4o|gpt-4-.*'
+          url: "http://localhost:1234/v1/embeddings" # Patch request url
           # body:                                     # Patch request body
           #   <json>
           # headers:                                  # Patch request headers

@@ -46,7 +46,6 @@ ya pack -a boydaihungst/restore
 > To deal with this issue, you have to run "plugin restore" multiple times until every files just you needs are stored. (worst case, you have to press 10 times to restore 10k files)
 
 1. Key binding
-
    - Add this to your `keymap.toml`, using `prepend_keymap` if you don't want to replace all other keys. Read more about [keymap](https://yazi-rs.github.io/docs/configuration/keymap).
 
      ```toml
@@ -60,7 +59,6 @@ ya pack -a boydaihungst/restore
      ```
 
 2. Configuration (Optional)
-
    - Default:
 
      ```lua

@@ -1,56 +1,37 @@
 {
   "mcpServers": {
     "time": {
-      "args": [
-        "mcp-server-time"
-      ],
+      "args": ["mcp-server-time"],
       "command": "uvx"
     },
     "awslabs.terraform-mcp-server": {
-      "autoApprove": [
-        
-      ],
+      "autoApprove": [],
       "env": {
         "FASTMCP_LOG_LEVEL": "ERROR"
       },
       "command": "uvx",
-      "args": [
-        "awslabs.terraform-mcp-server@latest"
-      ],
+      "args": ["awslabs.terraform-mcp-server@latest"],
       "disabled": false
     },
     "awslabs.aws-diagram-mcp-server": {
-      "autoApprove": [
-        
-      ],
+      "autoApprove": [],
       "env": {
         "FASTMCP_LOG_LEVEL": "ERROR"
       },
       "command": "uvx",
-      "args": [
-        "awslabs.aws-diagram-mcp-server"
-      ],
+      "args": ["awslabs.aws-diagram-mcp-server"],
       "disabled": false
     },
     "fetch": {
-      "args": [
-        "{ABSOLUTE PATH TO FILE HERE}/dist/index.js"
-      ],
+      "args": ["{ABSOLUTE PATH TO FILE HERE}/dist/index.js"],
       "command": "node"
     },
     "sequential-thinking": {
-      "args": [
-        "-y",
-        "@modelcontextprotocol/server-sequential-thinking"
-      ],
+      "args": ["-y", "@modelcontextprotocol/server-sequential-thinking"],
       "command": "npx"
     },
     "neo4j-aura": {
-      "args": [
-        "mcp-neo4j-cypher@0.2.3",
-        "--transport",
-        "stdio"
-      ],
+      "args": ["mcp-neo4j-cypher@0.2.3", "--transport", "stdio"],
       "env": {
         "NEO4J_USERNAME": "neo4j",
         "NEO4J_PASSWORD": "<your-password>",
@@ -60,16 +41,12 @@
       "command": "uvx"
     },
     "awslabs.code-doc-gen-mcp-server": {
-      "autoApprove": [
-        
-      ],
+      "autoApprove": [],
       "env": {
         "FASTMCP_LOG_LEVEL": "ERROR"
       },
       "command": "uvx",
-      "args": [
-        "awslabs.code-doc-gen-mcp-server@latest"
-      ],
+      "args": ["awslabs.code-doc-gen-mcp-server@latest"],
       "disabled": false
     },
     "memory": {
@@ -84,30 +61,21 @@
       "command": "docker"
     },
     "git": {
-      "args": [
-        "mcp-server-git"
-      ],
+      "args": ["mcp-server-git"],
       "command": "uvx"
     },
     "awslabs.aws-documentation-mcp-server": {
-      "autoApprove": [
-        
-      ],
+      "autoApprove": [],
       "env": {
         "AWS_DOCUMENTATION_PARTITION": "aws",
         "FASTMCP_LOG_LEVEL": "ERROR"
       },
       "command": "uvx",
-      "args": [
-        "awslabs.aws-documentation-mcp-server@latest"
-      ],
+      "args": ["awslabs.aws-documentation-mcp-server@latest"],
       "disabled": false
     },
     "playwright": {
-      "args": [
-        "-y",
-        "@executeautomation/playwright-mcp-server"
-      ],
+      "args": ["-y", "@executeautomation/playwright-mcp-server"],
       "command": "npx"
     },
     "filesystem": {
@@ -120,10 +88,7 @@
       "command": "npx"
     },
     "notionApi": {
-      "args": [
-        "-y",
-        "@notionhq/notion-mcp-server"
-      ],
+      "args": ["-y", "@notionhq/notion-mcp-server"],
       "env": {
         "OPENAPI_MCP_HEADERS": "{\"Authorization\": \"Bearer ntn_****\", \"Notion-Version\": \"2022-06-28\" }"
       },
@@ -144,27 +109,19 @@
       "command": "docker"
     },
     "awslabs.frontend-mcp-server": {
-      "autoApprove": [
-        
-      ],
+      "autoApprove": [],
       "env": {
         "FASTMCP_LOG_LEVEL": "ERROR"
       },
       "command": "uvx",
-      "args": [
-        "awslabs.frontend-mcp-server@latest"
-      ],
+      "args": ["awslabs.frontend-mcp-server@latest"],
       "disabled": false
     },
     "software-planning-tool": {
-      "args": [
-        "/path/to/software-planning-tool/build/index.js"
-      ],
+      "args": ["/path/to/software-planning-tool/build/index.js"],
       "disabled": false,
       "command": "node",
-      "autoApprove": [
-        
-      ]
+      "autoApprove": []
     }
   },
   "nativeMCPServers": {

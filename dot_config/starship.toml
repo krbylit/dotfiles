@@ -9,13 +9,22 @@
 command_timeout = 5000
 
 # ================ Prompts ================
+# Constant right-side design
 format = """
-[█▓▒](flamingo) $directory $fill( $status)( $username ${custom.hostname})( $cmd_duration )${custom.block_rprompt_repo_top}
+[█▓▒](flamingo) $directory $fill( $status)( $username ${custom.hostname})( $cmd_duration )[┓](bold surface1)
 [▓▒░](flamingo)( $terraform) (${custom.yazi_indicator} )$character($sudo )
 """
 right_format = '''
-(($git_branch )($nodejs )($python )[┛](bold surface1))
+($git_branch )($nodejs )($python )[┛](bold surface1)
 '''
+# # Repo-dependent right-side design
+# format = """
+# [█▓▒](flamingo) $directory $fill( $status)( $username ${custom.hostname})( $cmd_duration )${custom.block_rprompt_repo_top}
+# [▓▒░](flamingo)( $terraform) (${custom.yazi_indicator} )$character($sudo )
+# """
+# right_format = '''
+# (($git_branch )($nodejs )($python )[┛](bold surface1))
+# '''
 continuation_prompt = ' '
 
 add_newline = true

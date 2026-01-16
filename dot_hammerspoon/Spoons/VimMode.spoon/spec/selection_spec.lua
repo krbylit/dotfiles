@@ -1,4 +1,4 @@
-local Selection = require('lib/selection')
+local Selection = require("lib/selection")
 
 describe("Selection", function()
   describe("data accessors", function()

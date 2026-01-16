@@ -9,13 +9,14 @@ local vim = VimMode:new()
 -- Configure apps you do *not* want Vim mode enabled in
 -- For example, you don't want this plugin overriding your control of Terminal
 -- vim
-vim:disableForApp("Code")
-    :disableForApp("zoom.us")
-    :disableForApp("iTerm")
-    :disableForApp("iTerm2")
-    :disableForApp("Terminal")
-    :disableForApp("kitty")
-    :disableForApp("Ghostty")
+vim
+  :disableForApp("Code")
+  :disableForApp("zoom.us")
+  :disableForApp("iTerm")
+  :disableForApp("iTerm2")
+  :disableForApp("Terminal")
+  :disableForApp("kitty")
+  :disableForApp("Ghostty")
 
 -- If you want the screen to dim (a la Flux) when you enter normal mode
 -- flip this to true.

@@ -33,6 +33,7 @@ ya pkg add pirafrank/what-size
 or
 
 **DEPRECATED**
+
 ```sh
 ya pack -a 'pirafrank/what-size'
 ```
@@ -45,7 +46,7 @@ Add this to your `~/.config/yazi/keymap.toml`:
 [[mgr.prepend_keymap]]
 on = [ ".", "s" ]
 run  = "plugin what-size"
-desc = "Calc size of selection or cwd" 
+desc = "Calc size of selection or cwd"
 ```
 
 If you want to copy the result to clipboard, you can add `--clipboard` or `-c` as 2nd positional argument:

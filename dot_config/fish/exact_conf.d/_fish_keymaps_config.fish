@@ -15,10 +15,25 @@ bind --mode default ctrl-k up-or-search
 bind ctrl-u backward-kill-line
 bind ctrl-w backward-kill-word
 bind --mode default yy vi_copy_to_clipboard
-bind --mode insert ctrl-s 'commandline -f repaint; ripgrep_live (commandline -b)'
-bind --mode default ctrl-s 'commandline -f repaint; ripgrep_live (commandline -b)'
+# Now using fzf-lua instead of our own pieced-together live grep function
+# bind --mode insert ctrl-s 'commandline -f repaint; ripgrep_live (commandline -b)'
+# bind --mode default ctrl-s 'commandline -f repaint; ripgrep_live (commandline -b)'
+# fzf-lua live grep
+bind --mode insert ctrl-s 'commandline -f repaint; set -l result (nvim -l "$XDG_DATA_HOME/nvim/lazy/fzf-lua/scripts/cli.lua" live_grep_native search=(commandline -b)); and commandline --current-token --replace -- (string escape -- $result)'
+bind --mode default ctrl-s 'commandline -f repaint; set -l result (nvim -l "$XDG_DATA_HOME/nvim/lazy/fzf-lua/scripts/cli.lua" live_grep_native search=(commandline -b)); and commandline --current-token --replace -- (string escape -- $result)'
+# fzf-lua files search
+bind --mode insert ctrl-f 'commandline -f repaint; set -l result (nvim -l "$XDG_DATA_HOME/nvim/lazy/fzf-lua/scripts/cli.lua" files); and commandline --current-token --replace -- (string escape -- $result)'
+bind --mode default ctrl-f 'commandline -f repaint; set -l result (nvim -l "$XDG_DATA_HOME/nvim/lazy/fzf-lua/scripts/cli.lua" files); and commandline --current-token --replace -- (string escape -- $result)'
+# fzf-lua files search (chezmoi source path only)
+bind --mode insert ctrl-m 'commandline -f repaint; set -l result (nvim -l "$XDG_DATA_HOME/nvim/lazy/fzf-lua/scripts/cli.lua" files "cwd=$CHEZMOI_SOURCE_PATH"); and commandline --current-token --replace -- (string escape -- $result)'
+bind --mode default ctrl-m 'commandline -f repaint; set -l result (nvim -l "$XDG_DATA_HOME/nvim/lazy/fzf-lua/scripts/cli.lua" files "cwd=$CHEZMOI_SOURCE_PATH"); and commandline --current-token --replace -- (string escape -- $result)'
+# fzf-lua git commits
+bind --mode insert ctrl-g 'commandline -f repaint; set -l result (nvim -l "$XDG_DATA_HOME/nvim/lazy/fzf-lua/scripts/cli.lua" git_commits); and commandline --current-token --replace -- (string escape -- $result)'
+bind --mode default ctrl-g 'commandline -f repaint; set -l result (nvim -l "$XDG_DATA_HOME/nvim/lazy/fzf-lua/scripts/cli.lua" git_commits); and commandline --current-token --replace -- (string escape -- $result)'
 bind --mode insert ctrl-z 'commandline -f repaint; zellij_picker (commandline -b)'
 bind --mode default ctrl-z 'commandline -f repaint; zellij_picker (commandline -b)'
+bind --mode insert ctrl-a 'commandline -f repaint; zi (commandline -b)'
+bind --mode default ctrl-a 'commandline -f repaint; zi (commandline -b)'
 # bind --mode insert ctrl-z 'commandline -f repaint; zi (commandline -b)'
 # bind --mode default ctrl-z 'commandline -f repaint; zi (commandline -b)'
 # bind --mode insert ctrl-a search_and_replace

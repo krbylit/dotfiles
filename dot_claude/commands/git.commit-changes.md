@@ -22,13 +22,20 @@ This command analyzes all uncommitted changes in the repository, groups them int
    - Check for uncommitted changes
    - If no changes exist, report and exit
 
-2. **Analyze Changes**:
+2. **Check for Staged Changes**:
+   - Run `git diff --cached --name-only` to check for staged files
+   - If staged changes exist:
+     - **Skip to step 4** (commit staged changes only)
+     - Do NOT group changes - user has already grouped them
+   - If no staged changes:
+     - Continue to step 3 (analyze and group all changes)
+
+3. **Analyze Changes** (only if no staged changes):
    - Run `git status --porcelain` to get all modified/new files
-   - Run `git diff --cached` for staged changes
    - Run `git diff` for unstaged changes
    - Read the actual changes to understand their nature
 
-3. **Group Changes Logically**:
+4. **Group Changes Logically** (only if no staged changes):
    - Analyze file paths and change contents
    - Group related changes that should be committed together:
      - Same feature/functionality
@@ -38,7 +45,7 @@ This command analyzes all uncommitted changes in the repository, groups them int
    - Each group should be independently meaningful
    - Separate distinct features/fixes/refactors into different groups
 
-4. **For Each Logical Group**:
+5. **For Each Logical Group** (or for staged changes if they exist):
 
    a. **Generate Commit Message**:
    - Analyze what changed and why (from code context)
@@ -100,8 +107,9 @@ This command analyzes all uncommitted changes in the repository, groups them int
      - `BREAKING CHANGE:` for breaking changes
      - `Reviewed-by:` if applicable
 
-   b. **Stage Files**:
-   - `git add <files in this group>`
+   b. **Stage Files** (skip if changes already staged):
+   - If processing unstaged changes: `git add <files in this group>`
+   - If changes already staged: Skip (files already staged by user)
 
    c. **Create Commit**:
    - Use heredoc for proper formatting:
@@ -119,7 +127,7 @@ This command analyzes all uncommitted changes in the repository, groups them int
 
    - Verify commit succeeded
 
-5. **Report Results**:
+6. **Report Results**:
    - Number of commits created
    - List each commit with:
      - Commit hash (short)
@@ -391,12 +399,13 @@ Commit 1: feat: add caching and fix auth bug and update docs
 - Ask user to confirm grouping strategy
 - Suggest reviewing groups before committing
 
-**Staged vs Unstaged**:
+**Staged Changes Present**:
 
-- If both exist, ask user preference:
-  - Option A: Commit staged only
-  - Option B: Reset staging, regroup all changes
-  - Option C: Commit staged as-is, then group unstaged
+- If staged changes exist, commit them as a single group
+- Do NOT analyze or regroup - user has already chosen the grouping
+- Generate appropriate commit message for all staged changes together
+- After committing staged changes, check for remaining unstaged changes
+- If unstaged changes remain, ask user if they want to commit those too
 
 **Empty Commit Messages**:
 

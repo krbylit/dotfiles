@@ -19,21 +19,21 @@ branches:
 
 before_install:
   - pip install --user hererocks urllib3[secure] cpp-coveralls
-  - hererocks env --$LUA -rlatest    # Use latest LuaRocks, install into 'env' directory.
-  - source env/bin/activate          # Add directory with all installed binaries to PATH.
+  - hererocks env --$LUA -rlatest # Use latest LuaRocks, install into 'env' directory.
+  - source env/bin/activate # Add directory with all installed binaries to PATH.
 
 install:
   # - sudo luarocks make $ROCKSPEC CFLAGS="-O2 -fPIC -ftest-coverage -fprofile-arcs" LIBFLAG="-shared --coverage"
   - luarocks make $ROCKSPEC CFLAGS="-O3 -fPIC -Wall -Wextra --coverage" LIBFLAG="-shared --coverage"
 
-script: 
+script:
   - lua test.lua
   - lua test_pm.lua
   - lua test_compat.lua
   # - lunit.sh test.lua
 
 after_success:
-    - coveralls
+  - coveralls
 #  - coveralls -b .. -r .. --dump c.report.json
 #  - luacov-coveralls -j c.report.json -v
 
@@ -41,5 +41,4 @@ notifications:
   email:
     on_success: change
     on_failure: always
-
 # vim: ft=yaml nu et sw=2 fdc=2 fdm=syntax

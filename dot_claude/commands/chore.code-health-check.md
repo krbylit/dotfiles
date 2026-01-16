@@ -715,7 +715,6 @@ This command performs a comprehensive "health check" of the codebase by studying
    ## 5. Summary of Recommendations
 
    ### Immediate Actions (High Confidence, Low Risk)
-
    1. **Delete dead code** (15 items):
       - `src/old_parser.rs` (unused since refactor)
       - `PersonService::legacy_format()` (zero references)
@@ -735,7 +734,6 @@ This command performs a comprehensive "health check" of the codebase by studying
       - [etc.]
 
    ### Review Required (Medium Confidence)
-
    1. **Verify test-only code** (10 items):
       - Confirm these are intentional test fixtures
 
@@ -743,7 +741,6 @@ This command performs a comprehensive "health check" of the codebase by studying
       - Double-check these aren't alternative implementations
 
    ### Future Consideration (Lower Priority)
-
    1. **Medium/low-value simplifications** (20 items)
 
    ***
@@ -774,101 +771,105 @@ This command performs a comprehensive "health check" of the codebase by studying
 
 10. **Interactive Implementation** (if --implement flag provided):
 
-   **IMPORTANT**: Do NOT implement anything without explicit user approval for each change.
+    **IMPORTANT**: Do NOT implement anything without explicit user approval for each change.
 
-   a. **Group changes by category**:
-   - Group 1: Dead code deletion (high confidence)
-   - Group 2: Outdated code removal (high confidence)
-   - Group 3: High-value simplifications
-   - Group 4: High-impact abstraction opportunities
-   - Group 5: Medium-value simplifications and abstractions
-   - Group 6: Everything else
+a. **Group changes by category**:
 
-   b. **For each group**:
+- Group 1: Dead code deletion (high confidence)
+- Group 2: Outdated code removal (high confidence)
+- Group 3: High-value simplifications
+- Group 4: High-impact abstraction opportunities
+- Group 5: Medium-value simplifications and abstractions
+- Group 6: Everything else
 
-   i. **Present summary**:
+  b. **For each group**:
 
-   ````
-   Group: Dead Code Deletion (High Confidence)
-   Items: 15
-   Files affected: 8
-   Lines removed: ~500
+  i. **Present summary**:
 
-         Items:
-         1. src/old_parser.rs (entire file, 120 lines)
-         2. src/domain/person_service.rs:legacy_format() (35 lines)
-         ...
+  ````
+  Group: Dead Code Deletion (High Confidence)
+  Items: 15
+  Files affected: 8
+  Lines removed: ~500
 
-         Approve deletion of these 15 items? [y/N/show]
-         ```
+        Items:
+        1. src/old_parser.rs (entire file, 120 lines)
+        2. src/domain/person_service.rs:legacy_format() (35 lines)
+        ...
 
-   ii. **Handle user response**: - `y` or `yes`: Proceed with deletion - `n` or `no`: Skip this group - `show`: Show detailed diff for each item, allow individual approval - `show N`: Show detailed diff for item N only
+        Approve deletion of these 15 items? [y/N/show]
+        ```
 
-   iii. **Implement approved changes**:
-       - Delete dead code files/functions
-       - Remove outdated modules
-       - Refactor complex code
-       - Run tests after each change to verify no breakage
-       - If tests fail, STOP and report error, don't continue
+  ii. **Handle user response**: - `y` or `yes`: Proceed with deletion - `n` or `no`: Skip this group - `show`: Show detailed diff for each item, allow individual approval - `show N`: Show detailed diff for item N only
 
-   iv. **Create atomic commit**:
+  iii. **Implement approved changes**:
+      - Delete dead code files/functions
+      - Remove outdated modules
+      - Refactor complex code
+      - Run tests after each change to verify no breakage
+      - If tests fail, STOP and report error, don't continue
 
-       **IMPORTANT**: Read `~/.claude/commands/commit-atomic.md` to understand the
-       commit message quality guidelines.
+  iv. **Create atomic commit**:
 
-       Apply those same standards here, with these specifics:
-       - **Type determination**:
-         - Dead code deletion → `refactor:` or `chore:`
-         - Outdated code removal → `refactor:`
-         - Simplification → `refactor:`
-         - Abstraction/pattern implementation → `refactor:`
-       - **Scope**: The area affected (e.g., `domain`, `api`, or specific module)
-       - **Subject examples**:
-         - `refactor: remove dead code from person service`
-         - `refactor: remove outdated cache implementation`
-         - `refactor: extract duplicate error handling`
-         - `refactor: replace conditionals with lookup table`
-         - `refactor: implement builder pattern for Config`
-       - **Body**: IMPORTANT - include list of deleted/changed items with brief context
-       - **Validation**: Use the same validation checklist from commit-atomic.md
+      **IMPORTANT**: Read `~/.claude/commands/commit-atomic.md` to understand the
+      commit message quality guidelines.
 
-   c. **After all groups processed**:
-   - Run full test suite
-   - Generate summary report of what was changed
-   - Suggest next steps (e.g., "run linter", "update documentation")
+      Apply those same standards here, with these specifics:
+      - **Type determination**:
+        - Dead code deletion → `refactor:` or `chore:`
+        - Outdated code removal → `refactor:`
+        - Simplification → `refactor:`
+        - Abstraction/pattern implementation → `refactor:`
+      - **Scope**: The area affected (e.g., `domain`, `api`, or specific module)
+      - **Subject examples**:
+        - `refactor: remove dead code from person service`
+        - `refactor: remove outdated cache implementation`
+        - `refactor: extract duplicate error handling`
+        - `refactor: replace conditionals with lookup table`
+        - `refactor: implement builder pattern for Config`
+      - **Body**: IMPORTANT - include list of deleted/changed items with brief context
+      - **Validation**: Use the same validation checklist from commit-atomic.md
 
-   ````
+  c. **After all groups processed**:
+  - Run full test suite
+  - Generate summary report of what was changed
+  - Suggest next steps (e.g., "run linter", "update documentation")
 
-11. **Validation**:
+  ````
+
+1. **Validation**:
 
    **For git scope flags** (branch/commit/diff):
-   - [ ] Git repository verified
-   - [ ] Base branch detected or specified (for --scope=branch)
-   - [ ] Commit SHA(s) validated (for --scope=commit or --scope=diff)
-   - [ ] Files to analyze collected successfully
-   - [ ] Related/dependent files identified and included
-   - [ ] Binary and deleted files excluded
-   - [ ] Report clearly indicates git scope and limitations
 
-   **Before generating report**:
-   - [ ] Project context gathered (CLAUDE.md, README, TODO, git history)
-   - [ ] Dead code analysis filtered false positives (public API, entry points, trait impls)
-   - [ ] Outdated code cross-referenced with current architecture
-   - [ ] Simplification suggestions are behavior-preserving
-   - [ ] Brute-force analysis prioritized Python/JavaScript/Rust over shell scripts
-   - [ ] Abstraction suggestions include trade-off analysis
-   - [ ] "Acceptable brute-force" cases documented with justification
-   - [ ] All findings include file paths and line numbers
-   - [ ] Confidence/impact levels assigned (high/medium/low)
-   - [ ] Risk levels assigned (low/medium/high)
-   - [ ] Recommendations are actionable
+- [ ] Git repository verified
+- [ ] Base branch detected or specified (for --scope=branch)
+- [ ] Commit SHA(s) validated (for --scope=commit or --scope=diff)
+- [ ] Files to analyze collected successfully
+- [ ] Related/dependent files identified and included
+- [ ] Binary and deleted files excluded
+- [ ] Report clearly indicates git scope and limitations
 
-   **Before implementing** (if --implement):
-   - [ ] User approved changes
-   - [ ] Tests pass before changes
-   - [ ] Each change implemented correctly
-   - [ ] Tests pass after each change
-   - [ ] Atomic commits created with good messages
+  **Before generating report**:
+
+- [ ] Project context gathered (CLAUDE.md, README, TODO, git history)
+- [ ] Dead code analysis filtered false positives (public API, entry points, trait impls)
+- [ ] Outdated code cross-referenced with current architecture
+- [ ] Simplification suggestions are behavior-preserving
+- [ ] Brute-force analysis prioritized Python/JavaScript/Rust over shell scripts
+- [ ] Abstraction suggestions include trade-off analysis
+- [ ] "Acceptable brute-force" cases documented with justification
+- [ ] All findings include file paths and line numbers
+- [ ] Confidence/impact levels assigned (high/medium/low)
+- [ ] Risk levels assigned (low/medium/high)
+- [ ] Recommendations are actionable
+
+  **Before implementing** (if --implement):
+
+- [ ] User approved changes
+- [ ] Tests pass before changes
+- [ ] Each change implemented correctly
+- [ ] Tests pass after each change
+- [ ] Atomic commits created with good messages
 
 ## Detection Strategies by Language
 
@@ -1012,42 +1013,52 @@ This command performs a comprehensive "health check" of the codebase by studying
 **Git scope edge cases**:
 
 **Not in a git repository**:
+
 - ERROR: "Not a git repository. Git scope flags require a git repository."
 - Suggest using `--scope=full`, `--scope=module`, or `--scope=file` instead
 
 **On base branch (for `--scope=branch`)**:
+
 - If current branch is develop/main/master
 - ERROR: "Cannot analyze branch changes when on base branch. Switch to a feature branch or use `--scope=full`."
 
 **No commits ahead of base (for `--scope=branch`)**:
+
 - If `git rev-list --count <base>..HEAD` returns 0
 - ERROR: "No commits ahead of base branch. Make some changes first or use `--scope=full`."
 
 **Invalid commit SHA**:
+
 - If specified commit doesn't exist
 - ERROR: "Commit [sha] not found. Verify the commit SHA is correct."
 
 **Invalid commit range syntax**:
+
 - If diff argument doesn't match `<sha>..<sha>` pattern
 - ERROR: "Invalid commit range format. Use `--scope=diff <sha1>..<sha2>`"
 
 **Detached HEAD (for `--scope=branch`)**:
+
 - If on detached HEAD
 - ERROR: "Cannot determine branch for detached HEAD. Use `--scope=commit <sha>` or `--scope=diff <sha1>..<sha2>` instead."
 
 **No files changed in git scope**:
+
 - If git diff returns no files
 - INFO: "No files changed in specified git scope. Nothing to analyze."
 
 **Binary files in git scope**:
+
 - Skip binary files from analysis
 - Note in report: "Skipped N binary files"
 
 **Deleted files in git scope**:
+
 - Skip deleted files (they no longer exist to analyze)
 - Note in report: "Skipped N deleted files"
 
 **Renamed files in git scope**:
+
 - Analyze renamed files using their new paths
 - Note in report if rename detection affected analysis
 
@@ -1369,7 +1380,7 @@ To implement these changes, run:
 /codebase-health --focus=brute-force --implement
 ```
 
-````
+`````
 
 ### Example 5: Branch health check (git scope)
 
@@ -1489,7 +1500,7 @@ Or check specific commit:
 ```bash
 /codebase-health --scope=commit abc123f
 ```
-````
+`````
 
 ### Example 6: Commit range health check
 
@@ -1511,5 +1522,7 @@ Or check specific commit:
 ## Context
 
 Additional user context: $ARGUMENTS
+
 ```
-````
+
+```

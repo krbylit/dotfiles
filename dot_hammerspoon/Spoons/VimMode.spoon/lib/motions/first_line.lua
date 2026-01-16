@@ -1,6 +1,6 @@
 local Motion = dofile(vimModeScriptPath .. "lib/motion.lua")
 
-local FirstLine = Motion:new{ name = 'first_line' }
+local FirstLine = Motion:new({ name = "first_line" })
 
 function FirstLine.getRange(_, buffer)
   local finish = buffer:getCurrentLineRange():positionEnd()
@@ -8,23 +8,23 @@ function FirstLine.getRange(_, buffer)
   return {
     start = 0,
     finish = finish,
-    mode = 'exclusive',
-    direction = 'linewise'
+    mode = "exclusive",
+    direction = "linewise",
   }
 end
 
 function FirstLine.getMovements()
   return {
     {
-      modifiers = {'cmd'},
-      key = 'up',
-      selection = true
+      modifiers = { "cmd" },
+      key = "up",
+      selection = true,
     },
     {
-      modifiers = {'ctrl'},
-      key = 'a',
-      selection = true
-    }
+      modifiers = { "ctrl" },
+      key = "a",
+      selection = true,
+    },
   }
 end
 

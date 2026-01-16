@@ -195,9 +195,11 @@ This command creates an Architecture Decision Record (ADR) following the standar
 9. **Update ADR Index** (if exists):
    - Check for `docs/adr/README.md` or `docs/adr/index.md`
    - If exists, add entry for new ADR:
+
      ```markdown
      - [ADR-NNNN: Title](NNNN-title.md) - [Status] - [Date]
      ```
+
    - Keep chronological order
    - If index doesn't exist, offer to create one
 

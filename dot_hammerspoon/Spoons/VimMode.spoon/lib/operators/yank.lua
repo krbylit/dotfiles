@@ -1,5 +1,5 @@
 local Operator = dofile(vimModeScriptPath .. "lib/operator.lua")
-local Yank = Operator:new{name = 'yank'}
+local Yank = Operator:new({ name = "yank" })
 local utf8 = dofile(vimModeScriptPath .. "vendor/luautf8.lua")
 
 function Yank:modifySelection(buffer, rangeStart, rangeFinish)
@@ -27,9 +27,9 @@ end
 function Yank.getKeys()
   return {
     {
-      modifiers = {'cmd'},
-      key = 'c'
-    }
+      modifiers = { "cmd" },
+      key = "c",
+    },
   }
 end
 

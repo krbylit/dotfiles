@@ -3,13 +3,14 @@
 Plugin for [`yazi`](https://github.com/sxyazi/yazi) terminal file manager to preview compressed text files using `zless`.
 
 To install, run:
-``` bash
+
+```bash
 ya pack -a vmikk/zless-preview
 ```
 
 and add to your `yazi.toml`:
 
-``` toml
+```toml
 [plugin]
 prepend_previewers = [
     { name = "*.txt.gz", run = "zless-preview"},
@@ -17,4 +18,3 @@ prepend_previewers = [
 ```
 
 To scroll rows in the preview, use `J` and `K` keys (note the capital letters).
-

@@ -224,6 +224,21 @@ This command analyzes all changes in the current branch compared to the base bra
 
 9. **Generate PR Description**:
 
+   **GitHub Markdown Callouts**:
+
+   When generating PR descriptions, you MAY use GitHub markdown callouts if they genuinely enhance the content:
+   - Available types: `NOTE`, `TIP`, `IMPORTANT`, `WARNING`, `CAUTION`
+   - Format: `> [!WARNING]` followed by `> callout text` on subsequent lines
+   - **IMPORTANT**: Do NOT overuse callouts or create artificial reasons to include them
+   - Only use when they provide genuine value (e.g., highlighting breaking changes, critical security considerations, deployment warnings)
+   - Examples of appropriate use:
+     - `> [!WARNING]` for breaking changes or critical deployment steps
+     - `> [!CAUTION]` for security considerations that must be reviewed
+     - `> [!IMPORTANT]` for migration requirements or configuration changes
+     - `> [!NOTE]` for helpful context that reviewers should be aware of
+     - `> [!TIP]` for testing shortcuts or optimization notes
+   - Do NOT use optional titles after `[!CALLOUT]` (GitHub doesn't support them)
+
    **If PR template exists**, fill it in with generated content:
    - Parse template sections (e.g., ## Summary, ## Changes Made, etc.)
    - For each section:
@@ -235,6 +250,7 @@ This command analyzes all changes in the current branch compared to the base bra
    - Preserve template structure, comments, and formatting
    - Replace HTML comments with actual content
    - Keep any checkboxes or custom formatting from template
+   - Use GitHub callouts sparingly if they add genuine value
 
    **Example with your template**:
 
@@ -392,7 +408,6 @@ This command analyzes all changes in the current branch compared to the base bra
    ## Checklist
 
    ### Before Review
-
    - [ ] Code follows project conventions
    - [ ] All tests pass locally
    - [ ] No linting errors
@@ -401,7 +416,6 @@ This command analyzes all changes in the current branch compared to the base bra
    - [ ] Self-review completed
 
    ### Reviewer Focus Areas
-
    - [ ] Logic correctness
    - [ ] Error handling
    - [ ] Performance implications
@@ -455,15 +469,7 @@ This command analyzes all changes in the current branch compared to the base bra
     - Justification for breaking change
     - Deprecation warnings if applicable
 
-11. **Generate Output**:
-
-    Provide:
-    - PR title (ready to copy)
-    - PR description (complete markdown)
-    - Suggested reviewers (from git history or CODEOWNERS)
-    - Git commands to push and create PR
-
-12. **Validate PR Title Format**:
+11. **Validate PR Title Format**:
 
     Before providing the final output, validate the generated PR title:
 
@@ -488,7 +494,9 @@ This command analyzes all changes in the current branch compared to the base bra
     - Ensure it strictly follows conventional commit format
     - Do not proceed until title passes all validation checks
 
-13. **Save PR Description to File**:
+12. **REQUIRED: Save PR Description to File**:
+
+    **THIS STEP IS MANDATORY - YOU MUST USE THE Write TOOL TO SAVE THE FILE**
 
     **File Naming**:
     - Generate filename: `PR_DESC_<timestamp>.md`
@@ -496,6 +504,7 @@ This command analyzes all changes in the current branch compared to the base bra
     - Example: `PR_DESC_2025-01-15_164522.md`
 
     **File Content**:
+
     ```markdown
     # Pull Request
 
@@ -513,8 +522,23 @@ This command analyzes all changes in the current branch compared to the base bra
     ```
 
     **File Location**:
-    - Save to repository root directory
-    - Confirm to user: `📝 PR description saved to PR_DESC_<timestamp>.md`
+    - **MUST** save to repository root directory (absolute path)
+    - **MUST** use the Write tool to create the file
+    - After writing, confirm to user: `📝 PR description saved to PR_DESC_<timestamp>.md`
+
+    **Implementation**:
+
+    ```
+    Write tool call with:
+    - file_path: /absolute/path/to/repo/PR_DESC_<timestamp>.md
+    - content: Full PR description with header
+    ```
+
+    **DO NOT**:
+    - Skip this step
+    - Only mention the file without creating it
+    - Use bash redirection instead of Write tool
+    - Assume the file was created without calling Write
 
     **Benefits**:
     - Can edit description before creating PR
@@ -522,7 +546,7 @@ This command analyzes all changes in the current branch compared to the base bra
     - Easy to copy/paste into GitHub UI
     - Version control of PR descriptions
 
-14. **Provide GitHub CLI Command**:
+13. **Provide GitHub CLI Command**:
 
     After saving the file, provide the command to create the PR:
 
@@ -982,6 +1006,17 @@ Closes #312
 - If specified base branch doesn't exist
 - List available branches
 - Suggest correct base branch
+
+## CRITICAL REQUIREMENTS
+
+**YOU MUST:**
+
+1. **Generate** the complete PR title and description
+2. **Call the Write tool** to save `PR_DESC_<timestamp>.md` to the repository root
+3. **Confirm** the file was saved by showing the filename to the user
+4. **Provide** the gh CLI commands for creating the PR
+
+**DO NOT** skip step 2. The Write tool call is **mandatory and non-negotiable**.
 
 ## Context
 

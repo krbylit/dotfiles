@@ -8,188 +8,195 @@
 --
 --  files can be downloaded at: http://unicode.org/Public/UCD/latest/UCD/
 
-
 local function parse_UnicodeData()
-    -- UnicodeData.txt structions:
-    -- 0. codepoint
-    -- 1. name
-    -- 2. general category
-    -- 3. canonical combining class
-    -- 4. bidi class
-    -- 5. decomposition type/mapping
-    -- 6. numberic type/value
-    -- 7. numberic type/value
-    -- 8. numberic type/value
-    -- 9. bidi mirrored [YN]
-    -- 10. old unicode name
-    -- 11. iso comment
-    -- 12. uppercase mapping
-    -- 13. lowercase mapping
-    -- 14. titlecase mapping
-    local ucd = {}
+  -- UnicodeData.txt structions:
+  -- 0. codepoint
+  -- 1. name
+  -- 2. general category
+  -- 3. canonical combining class
+  -- 4. bidi class
+  -- 5. decomposition type/mapping
+  -- 6. numberic type/value
+  -- 7. numberic type/value
+  -- 8. numberic type/value
+  -- 9. bidi mirrored [YN]
+  -- 10. old unicode name
+  -- 11. iso comment
+  -- 12. uppercase mapping
+  -- 13. lowercase mapping
+  -- 14. titlecase mapping
+  local ucd = {}
 
-    local patt = "^(%x+)"..(";([^;]-)"):rep(14).."$"
+  local patt = "^(%x+)" .. (";([^;]-)"):rep(14) .. "$"
 
-    local last_data
+  local last_data
 
-    for line in io.lines() do
-        local cp, name, gc, _, bidi_class, _, _,_,_, _, _,_, um, lm, tm = line:match(patt)
-        assert(cp, line)
-        cp = tonumber(cp, 16)
-        lm = lm ~= "" and tonumber(lm, 16)
-        um = um ~= "" and tonumber(um, 16)
-        tm = tm ~= "" and tonumber(tm, 16)
-        if last_data and last_data.name:match"First%>$" then
-            assert(name:match"Last%>$", line)
-            for i = last_data.cp, cp-1 do
-                ucd[#ucd+1] = {
-                    cp = i,
-                    name = name,
-                    gc = gc,
-                    bidi_class = bidi_class,
-                    lm = lm, um = um, tm = tm,
-                }
-            end
-        end
-        local data = {
-            cp = cp,
-            name = name,
-            gc = gc,
-            bidi_class = bidi_class,
-            lm = lm, um = um, tm = tm,
+  for line in io.lines() do
+    local cp, name, gc, _, bidi_class, _, _, _, _, _, _, _, um, lm, tm = line:match(patt)
+    assert(cp, line)
+    cp = tonumber(cp, 16)
+    lm = lm ~= "" and tonumber(lm, 16)
+    um = um ~= "" and tonumber(um, 16)
+    tm = tm ~= "" and tonumber(tm, 16)
+    if last_data and last_data.name:match("First%>$") then
+      assert(name:match("Last%>$"), line)
+      for i = last_data.cp, cp - 1 do
+        ucd[#ucd + 1] = {
+          cp = i,
+          name = name,
+          gc = gc,
+          bidi_class = bidi_class,
+          lm = lm,
+          um = um,
+          tm = tm,
         }
-        ucd[#ucd+1] = data
-        last_data = data
+      end
     end
-    table.sort(ucd, function(a, b) return a.cp < b.cp end)
+    local data = {
+      cp = cp,
+      name = name,
+      gc = gc,
+      bidi_class = bidi_class,
+      lm = lm,
+      um = um,
+      tm = tm,
+    }
+    ucd[#ucd + 1] = data
+    last_data = data
+  end
+  table.sort(ucd, function(a, b)
+    return a.cp < b.cp
+  end)
 
-    return ucd
+  return ucd
 end
 
 local function parse_EastAsianWidth()
-    local wide, ambi = {}, {}
+  local wide, ambi = {}, {}
 
-    for line in io.lines() do
-        line = line:gsub("%s*%#.*$", "")
-        if line ~= "" then
-            local first, last, mark
-            first, mark = line:match "^(%x+)%;(%w+)$"
-            if first then
-                last = first
-            else
-                first, last, mark = line:match "^(%x+)%.%.(%x+)%;(%w+)$"
-                assert(first, line)
-            end
+  for line in io.lines() do
+    line = line:gsub("%s*%#.*$", "")
+    if line ~= "" then
+      local first, last, mark
+      first, mark = line:match("^(%x+)%;(%w+)$")
+      if first then
+        last = first
+      else
+        first, last, mark = line:match("^(%x+)%.%.(%x+)%;(%w+)$")
+        assert(first, line)
+      end
 
-            first = tonumber(first, 16)
-            last = tonumber(last, 16)
+      first = tonumber(first, 16)
+      last = tonumber(last, 16)
 
-            if mark == 'W' or mark == 'F' then
-                for i = first, last do
-                    wide[#wide+1] = i
-                end
-            elseif mark == 'A' then
-                for i = first, last do
-                    ambi[#ambi+1] = i
-                end
-            end
+      if mark == "W" or mark == "F" then
+        for i = first, last do
+          wide[#wide + 1] = i
         end
+      elseif mark == "A" then
+        for i = first, last do
+          ambi[#ambi + 1] = i
+        end
+      end
     end
+  end
 
-    return wide, ambi
+  return wide, ambi
 end
 
 local function parse_CaseFolding()
-    local mapping = {}
-    for line in io.lines() do
-        line = line:gsub("%s*%#.*$", "")
-        if line ~= "" then
-            local cp, class, mcp = line:match "^%s*(%x+)%s*;%s*(%w+)%s*;%s*(%x+)"
-            assert(cp, line)
-            if class == 'C' or class == 'S' then
-                cp = tonumber(cp, 16)
-                mcp = tonumber(mcp, 16)
-                mapping[#mapping+1] = { cp = cp, mapping = mcp }
-            end
-        end
+  local mapping = {}
+  for line in io.lines() do
+    line = line:gsub("%s*%#.*$", "")
+    if line ~= "" then
+      local cp, class, mcp = line:match("^%s*(%x+)%s*;%s*(%w+)%s*;%s*(%x+)")
+      assert(cp, line)
+      if class == "C" or class == "S" then
+        cp = tonumber(cp, 16)
+        mcp = tonumber(mcp, 16)
+        mapping[#mapping + 1] = { cp = cp, mapping = mcp }
+      end
     end
-    return mapping
+  end
+  return mapping
 end
 
 local function parse_PropList(f)
-    local ranges = {}
-    local lookup = {}
+  local ranges = {}
+  local lookup = {}
 
-    local arg = f
-    if type(f) == 'table' then
-        f = function(cp) return arg[cp] end
-    elseif type(f) == 'string' then
-        f = function(cp) return arg == cp end
+  local arg = f
+  if type(f) == "table" then
+    f = function(cp)
+      return arg[cp]
     end
+  elseif type(f) == "string" then
+    f = function(cp)
+      return arg == cp
+    end
+  end
 
-    for line in io.lines() do
-        line = line:gsub("%s*%#.*$", "")
-        if line ~= "" then
-            local first, last, mark
-            first, mark = line:match "^(%x+)%s*%;%s*([%w_]+)%s*$"
-            if first then
-                last = first
-            else
-                first, last, mark = line:match "^(%x+)%.%.(%x+)%s*%;%s*([%w_]+)%s*$"
-                assert(first, line)
-            end
+  for line in io.lines() do
+    line = line:gsub("%s*%#.*$", "")
+    if line ~= "" then
+      local first, last, mark
+      first, mark = line:match("^(%x+)%s*%;%s*([%w_]+)%s*$")
+      if first then
+        last = first
+      else
+        first, last, mark = line:match("^(%x+)%.%.(%x+)%s*%;%s*([%w_]+)%s*$")
+        assert(first, line)
+      end
 
-            first = tonumber(first, 16)
-            last = tonumber(last, 16)
+      first = tonumber(first, 16)
+      last = tonumber(last, 16)
 
-            if f(mark) then
-                for i = first, last do
-                    if not lookup[i] then
-                        lookup[i] = true
-                        ranges[#ranges+1] = i
-                    end
-                end
-            end
+      if f(mark) then
+        for i = first, last do
+          if not lookup[i] then
+            lookup[i] = true
+            ranges[#ranges + 1] = i
+          end
         end
+      end
     end
+  end
 
-    table.sort(ranges)
-    return ranges, lookup
+  table.sort(ranges)
+  return ranges, lookup
 end
 
 local function get_ranges(list, func)
-    local first, last, step, offset
-    local ranges = {}
-    for i = 1, #list do
-        local v_cp, v_offset
-        local v = list[i]
-        local res = not func or func(v)
-        if type(v) == 'number' then
-            v_cp, v_offset = v, nil
-        elseif v.cp then
-            v_cp, v_offset = v.cp, v.offset
-        end
-        if res then
-            if first and
-                    (not offset or offset == v_offset) and
-                    (not step or step == v_cp - last) then
-                step = v_cp - last
-                last = v_cp
-            else
-                if first then
-                    local r = { first = first, last = last, step = step, offset = offset }
-                    ranges[#ranges+1] = r
-                end
-                first, last, step = v_cp, v_cp, nil
-                offset = v_offset
-            end
-        end
+  local first, last, step, offset
+  local ranges = {}
+  for i = 1, #list do
+    local v_cp, v_offset
+    local v = list[i]
+    local res = not func or func(v)
+    if type(v) == "number" then
+      v_cp, v_offset = v, nil
+    elseif v.cp then
+      v_cp, v_offset = v.cp, v.offset
     end
-    if first then
-        local r = { first = first, last = last, step = step, offset = offset }
-        ranges[#ranges+1] = r
+    if res then
+      if first and (not offset or offset == v_offset) and (not step or step == v_cp - last) then
+        step = v_cp - last
+        last = v_cp
+      else
+        if first then
+          local r = { first = first, last = last, step = step, offset = offset }
+          ranges[#ranges + 1] = r
+        end
+        first, last, step = v_cp, v_cp, nil
+        offset = v_offset
+      end
     end
-    return ranges
+  end
+  if first then
+    local r = { first = first, last = last, step = step, offset = offset }
+    ranges[#ranges + 1] = r
+  end
+  return ranges
 end
 
 --[[
@@ -242,25 +249,24 @@ end
 --]]
 
 local function write_ranges(name, ranges)
-    io.write("static struct range_table "..name.."_table[] = {\n")
-    for _, r in ipairs(ranges) do
-        io.write(("    { 0x%X, 0x%X, %d },\n"):format(r.first, r.last, r.step or 1))
-    end
-    io.write "};\n\n"
+  io.write("static struct range_table " .. name .. "_table[] = {\n")
+  for _, r in ipairs(ranges) do
+    io.write(("    { 0x%X, 0x%X, %d },\n"):format(r.first, r.last, r.step or 1))
+  end
+  io.write("};\n\n")
 end
 
 local function write_convtable(name, conv)
-    io.write("static struct conv_table "..name.."_table[] = {\n")
-    for _, c in ipairs(conv) do
-        io.write(("    { 0x%X, 0x%X, %d, %d },\n"):format(
-            c.first, c.last, c.step or 1, c.offset))
-    end
-    io.write "};\n\n"
+  io.write("static struct conv_table " .. name .. "_table[] = {\n")
+  for _, c in ipairs(conv) do
+    io.write(("    { 0x%X, 0x%X, %d, %d },\n"):format(c.first, c.last, c.step or 1, c.offset))
+  end
+  io.write("};\n\n")
 end
 
-io.output "unidata.h"
+io.output("unidata.h")
 
-io.write [[
+io.write([[
 /*
  * unidata.h - generated by parseucd.lua
  */
@@ -285,87 +291,90 @@ typedef struct conv_table {
     int offset;
 } conv_table;
 
-]]
+]])
 
 do
-    local function ranges(name, f)
-        local r = get_ranges((parse_PropList(f)))
-        write_ranges(name, r)
-    end
+  local function ranges(name, f)
+    local r = get_ranges((parse_PropList(f)))
+    write_ranges(name, r)
+  end
 
-    io.input "UCD/DerivedCoreProperties.txt"
-    ranges("alpha", "Alphabetic")
+  io.input("UCD/DerivedCoreProperties.txt")
+  ranges("alpha", "Alphabetic")
 
-    io.input "UCD/DerivedCoreProperties.txt"
-    ranges("lower", "Lowercase")
+  io.input("UCD/DerivedCoreProperties.txt")
+  ranges("lower", "Lowercase")
 
-    io.input "UCD/DerivedCoreProperties.txt"
-    ranges("upper", "Uppercase")
+  io.input("UCD/DerivedCoreProperties.txt")
+  ranges("upper", "Uppercase")
 
-    io.input "UCD/PropList.txt"
-    ranges("xdigit", "Hex_Digit")
+  io.input("UCD/PropList.txt")
+  ranges("xdigit", "Hex_Digit")
 
-    io.input "UCD/PropList.txt"
-    ranges("space", "White_Space")
+  io.input("UCD/PropList.txt")
+  ranges("space", "White_Space")
 
-    io.input "UCD/DerivedCoreProperties.txt"
-    ranges("unprintable", "Default_Ignorable_Code_Point")
+  io.input("UCD/DerivedCoreProperties.txt")
+  ranges("unprintable", "Default_Ignorable_Code_Point")
 
-    io.input "UCD/DerivedCoreProperties.txt"
-    ranges("graph", "Grapheme_Base")
+  io.input("UCD/DerivedCoreProperties.txt")
+  ranges("graph", "Grapheme_Base")
 
-    io.input "UCD/DerivedCoreProperties.txt"
-    ranges("compose", "Grapheme_Extend")
+  io.input("UCD/DerivedCoreProperties.txt")
+  ranges("compose", "Grapheme_Extend")
 end
 
 do
-    io.input  "UCD/UnicodeData.txt"
-    local ucd = parse_UnicodeData()
-    local function set(s)
-        local hasht = {}
-        for word in s:gmatch "%w%w" do
-            hasht[word] = true
-        end
-        return function(data)
-            return hasht[data.gc]
-        end
+  io.input("UCD/UnicodeData.txt")
+  local ucd = parse_UnicodeData()
+  local function set(s)
+    local hasht = {}
+    for word in s:gmatch("%w%w") do
+      hasht[word] = true
     end
-    local function mapping(field)
-        return function(data)
-            data.offset = nil
-            if data[field] then
-                data.offset = data[field] - data.cp
-                return true
-            end
-        end
+    return function(data)
+      return hasht[data.gc]
     end
-    local cntrl = "Cc Cf Co"
-    local digit = "Nd"
-    local alnum_extend = "Nd Nl No"
-    local punct = "Sk Sc Sm Pc Pd Ps Pe Pi Pf Po"
-    write_ranges("cntrl", get_ranges(ucd, set(cntrl)))
-    write_ranges("digit", get_ranges(ucd, set(digit)))
-    write_ranges("alnum_extend", get_ranges(ucd, set(alnum_extend)))
-    write_ranges("punct", get_ranges(ucd, set(punct)))
-    write_convtable("tolower", get_ranges(ucd, mapping "lm"))
-    write_convtable("toupper", get_ranges(ucd, mapping "um"))
-    write_convtable("totitle", get_ranges(ucd, mapping "tm"))
-end
-
-do
-    io.input "UCD/CaseFolding.txt"
-    local mapping = parse_CaseFolding()
-    write_convtable("tofold", get_ranges(mapping, function(data)
-        data.offset = data.mapping - data.cp
+  end
+  local function mapping(field)
+    return function(data)
+      data.offset = nil
+      if data[field] then
+        data.offset = data[field] - data.cp
         return true
-    end))
+      end
+    end
+  end
+  local cntrl = "Cc Cf Co"
+  local digit = "Nd"
+  local alnum_extend = "Nd Nl No"
+  local punct = "Sk Sc Sm Pc Pd Ps Pe Pi Pf Po"
+  write_ranges("cntrl", get_ranges(ucd, set(cntrl)))
+  write_ranges("digit", get_ranges(ucd, set(digit)))
+  write_ranges("alnum_extend", get_ranges(ucd, set(alnum_extend)))
+  write_ranges("punct", get_ranges(ucd, set(punct)))
+  write_convtable("tolower", get_ranges(ucd, mapping("lm")))
+  write_convtable("toupper", get_ranges(ucd, mapping("um")))
+  write_convtable("totitle", get_ranges(ucd, mapping("tm")))
 end
 
 do
-    io.input  "UCD/EastAsianWidth.txt"
-    local wide, ambi = parse_EastAsianWidth()
-    write_ranges("doublewidth", get_ranges(wide))
-    write_ranges("ambiwidth", get_ranges(ambi))
+  io.input("UCD/CaseFolding.txt")
+  local mapping = parse_CaseFolding()
+  write_convtable(
+    "tofold",
+    get_ranges(mapping, function(data)
+      data.offset = data.mapping - data.cp
+      return true
+    end)
+  )
 end
 
-io.write "#endif /* unidata_h */\n"
+do
+  io.input("UCD/EastAsianWidth.txt")
+  local wide, ambi = parse_EastAsianWidth()
+  write_ranges("doublewidth", get_ranges(wide))
+  write_ranges("ambiwidth", get_ranges(ambi))
+end
+
+io.write("#endif /* unidata_h */\n")

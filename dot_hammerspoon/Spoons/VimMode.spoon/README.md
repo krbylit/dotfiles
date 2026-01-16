@@ -22,24 +22,24 @@ fields or anything in 1Password, as it can't read those fields!
 
 ## Table of Contents
 
-* [Quick Installation](#quick-installation)
-* [Usage](#usage)
-* [Current Support](#current-support)
+- [Quick Installation](#quick-installation)
+- [Usage](#usage)
+- [Current Support](#current-support)
   - [Flavors of VimMode](#flavors-of-vimmode)
   - [Motions](#motions)
   - [Operators](#operators)
   - [Other](#other)
-* [Configuration](#configuration)
+- [Configuration](#configuration)
   - [Binding jk to enter normal mode](#binding-jk-to-enter-normal-mode)
   - [Binding a single keystroke to enter normal mode](#binding-a-single-keystroke-to-enter-normal-mode)
   - [Disabling vim mode for certain apps](#disabling-vim-mode-for-certain-apps)
   - [Disabling the floating alert when you enter Vim mode(s)](#disabling-the-floating-alert-when-you-enter-vim-modes)
   - [Enabling screen dim when you enter normal mode](#enabling-screen-dim-when-you-enter-normal-mode)
-* [Beta Features](#beta-features)
+- [Beta Features](#beta-features)
   - [Block cursor mode](#block-cursor-mode)
   - [Enforce fallback mode with URL patterns](#enforce-fallback-mode-with-url-patterns)
-* [Manual Installation](#manual-installation)
-* [Testing](#testing)
+- [Manual Installation](#manual-installation)
+- [Testing](#testing)
 
 ## Quick Installation
 
@@ -49,20 +49,20 @@ Run this command in Terminal:
 bash <(curl -s https://raw.githubusercontent.com/dbalatero/VimMode.spoon/master/bin/installer)
 ```
 
-then *read the post-install info* printed at the end and follow the instructions.
+then _read the post-install info_ printed at the end and follow the instructions.
 
-* If you prefer, follow the [Manual Instructions](#manual-instructions) instead.
-* If you don't trust the script, please [audit it](https://github.com/dbalatero/VimMode.spoon/blob/master/bin/installer). It should be pretty straight-forward to read, and doesn't require root/sudo.
-* It is safe to run this script multiple times.
-* It will not break your existing Hammerspoon setup if you have one.
-* It is progressive - it only sets up what is missing.
+- If you prefer, follow the [Manual Instructions](#manual-instructions) instead.
+- If you don't trust the script, please [audit it](https://github.com/dbalatero/VimMode.spoon/blob/master/bin/installer). It should be pretty straight-forward to read, and doesn't require root/sudo.
+- It is safe to run this script multiple times.
+- It will not break your existing Hammerspoon setup if you have one.
+- It is progressive - it only sets up what is missing.
 
 ## Usage
 
 Once installed:
 
-* To enter normal mode, hit whichever key you bind to it (see below for key bind instructions)
-* To exit normal mode, press <kbd>i</kbd> and you're back to a normal OS X input.
+- To enter normal mode, hit whichever key you bind to it (see below for key bind instructions)
+- To exit normal mode, press <kbd>i</kbd> and you're back to a normal OS X input.
 
 ## Staying up to date
 
@@ -74,21 +74,21 @@ cd ~/.hammerspoon/Spoons/VimMode.spoon && git pull
 
 ## Current Support
 
-### Flavors of VimMode.
+### Flavors of VimMode
 
 There are two flavors of Vim mode that we try to enable using feature detection.
 
 #### Advanced Mode
 
 Advanced mode gets turned on when we detect the accessibility features we need
-to make it work.  If the field you are focused in:
+to make it work. If the field you are focused in:
 
-* Supports the OS X accessibility API
-* Is not a rich field with images, embeds, etc
-* Is not a `contentEditable` rich field in the web browser, I'm not touching that with a 10-foot pole
-* Is not one of these applications that don't completely implement the Accessibility API:
-  * Slack.app (Electron)
-  * See [this file](https://github.com/dbalatero/VimMode.spoon/blob/ddce96de8f0edd0f9285e66fc76b4bdcc74916b4/lib/accessibility_buffer.lua#L9-L11) for reasons why these apps are broken and disabled out of the box.
+- Supports the OS X accessibility API
+- Is not a rich field with images, embeds, etc
+- Is not a `contentEditable` rich field in the web browser, I'm not touching that with a 10-foot pole
+- Is not one of these applications that don't completely implement the Accessibility API:
+  - Slack.app (Electron)
+  - See [this file](https://github.com/dbalatero/VimMode.spoon/blob/ddce96de8f0edd0f9285e66fc76b4bdcc74916b4/lib/accessibility_buffer.lua#L9-L11) for reasons why these apps are broken and disabled out of the box.
 
 In advanced mode, we actually can read in the value of the focused field and
 modify cursor position/selection with theoretical perfect accuracy. In this
@@ -278,7 +278,7 @@ vim:enableBetaFeature('block_cursor_overlay')
 ### Enforce fallback mode with URL patterns
 
 Some websites just really need to be forced into fallback mode at all times,
-and the detection we have isn't good enough to do so. This *may* be deprecated
+and the detection we have isn't good enough to do so. This _may_ be deprecated
 going forward in favor of getting better field detection or handling rich
 fields better.
 

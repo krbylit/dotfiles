@@ -19,8 +19,8 @@ function s --wraps='ssh' --description 'SSH with custom config'
 
     set -l remote_term (_rsync_dotfiles $ssh_args | string trim)
 
-    # command ssh -t $ssh_args "
-    command ssh -t $ssh_args TERM=$remote_term "
+    # Wrap remote commands in bash for compatibility with both fish and bash servers
+    command ssh -A -t $ssh_args "
         export TERM=$remote_term;
         export GIT_USER=$GIT_USER;
         export SSH_GIT_TOKEN=$SSH_GIT_TOKEN;
@@ -28,6 +28,10 @@ function s --wraps='ssh' --description 'SSH with custom config'
         export CUSTOM_HOSTNAME=$CUSTOM_HOSTNAME;
         export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY;
         export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID;
-        bash --login -c 'zellij attach $session_name 2>/dev/null || zellij --session $session_name 2>/dev/null || tmux new-session -A -s "$session_name" || bash --login'
+        mkdir -p ~/.ssh;
+        ln -sf \"\$SSH_AUTH_SOCK\" ~/.ssh/agent.sock;
+        export SSH_AUTH_SOCK=~/.ssh/agent.sock;
+        tmux set -g update-environment \"SSH_AUTH_SOCK SSH_CONNECTION SSH_CLIENT\" 2>/dev/null || true;
+        bash --login -c 'zellij attach $session_name 2>/dev/null || zellij --session $session_name 2>/dev/null || tmux new-session -A -s \"$session_name\" || bash --login'
     "
 end

@@ -6,6 +6,9 @@ keybinds clear-defaults=true {
     locked {
         bind "Ctrl g" { SwitchToMode "normal"; }
     }
+    normal {
+        bind "Ctrl g" "Ctrl g" { Write 7; SwitchToMode "locked"; } // Send Ctrl-g (ASCII 7) to terminal
+    }
     pane {
         bind "left" { MoveFocus "left"; }
         bind "down" { MoveFocus "down"; }
@@ -163,7 +166,7 @@ keybinds clear-defaults=true {
         bind "Alt o" { MoveTab "right"; }
     }
     shared_except "locked" "renametab" "renamepane" {
-        bind "Ctrl g" { SwitchToMode "locked"; }
+        bind "Ctrl b" { SwitchToMode "locked"; }
         bind "Ctrl q" { Quit; }
     }
     shared_except "locked" "entersearch" {
@@ -258,7 +261,12 @@ load_plugins {
 // Choose the theme that is specified in the themes section.
 // Default: default
 //
-// theme "dracula"
+// theme "tokyo-night-storm"
+theme "nightfox"
+// theme "kanagawa"
+// theme "everforest-dark"
+// theme "catppuccin-macchiato"
+// theme "catppuccin-frappe"
 
 // Choose the base input mode of zellij.
 // Default: normal

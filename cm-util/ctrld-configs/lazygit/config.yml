@@ -22,12 +22,13 @@ gui:
   skipRewordInEditorWarning: false
   # Fraction of the total screen width to use for the left side section. You may want to pick a small number (e.g. 0.2) if you're using a narrow screen, so that you can see more of the main section.
   # Number from 0 to 1.0.
-  sidePanelWidth: 0.3333
+  # sidePanelWidth: 0.3333 # default
+  sidePanelWidth: 0.25
   # If true, increase the height of the focused side window; creating an accordion effect.
-  expandFocusedSidePanel: false
+  expandFocusedSidePanel: true
   # The weight of the expanded side panel, relative to the other panels. 2 means
   # twice as tall as the other panels. Only relevant if `expandFocusedSidePanel` is true.
-  expandedSidePanelWeight: 2
+  expandedSidePanelWeight: 2 # default
   # Sometimes the main window is split in two (e.g. when the selected file has both staged and unstaged changes). This setting controls how the two sections are split.
   # Options are:
   # - 'horizontal': split the window horizontally
@@ -38,7 +39,7 @@ gui:
   # Possible values:
   # - 'left': split the window horizontally (side panel on the left, main view on the right)
   # - 'top': split the window vertically (side panel on top, main view below)
-  enlargedSideViewLocation: left
+  enlargedSideViewLocation: top
   # One of 'auto' (default) | 'en' | 'zh-CN' | 'zh-TW' | 'pl' | 'nl' | 'ja' | 'ko' | 'ru'
   language: auto
   # Format used when displaying time e.g. commit time.
@@ -167,7 +168,7 @@ gui:
   # If true, show jump-to-window keybindings in window titles.
   showPanelJumps: true
   # Deprecated: use nerdFontsVersion instead
-  showIcons: false
+  # showIcons: false
   # Nerd fonts version to use.
   # One of: '2' | '3' | empty string (default)
   # If empty, do not show icons.
@@ -204,7 +205,8 @@ gui:
   portraitMode: auto
   # How things are filtered when typing '/'.
   # One of 'substring' (default) | 'fuzzy'
-  filterMode: substring
+  # filterMode: substring # default
+  filterMode: fuzzy
   # Config relating to the spinner.
   spinner:
     # The frames of the spinner animation.
@@ -337,13 +339,17 @@ os:
   # Command for editing a file. Should contain "{{filename}}".
   # These changes do not depend on our fish config `if set -q NVIM` setting EDITOR to nvr.
   # edit: 'nvr -s {{filename}} && nvr -s --remote-send "q<Esc><C-w>o"'
-  edit: 'nvr -s {{filename}} && nvr -s --remote-send "<C-w><C-p>q<Esc><C-w>o"'
+  # edit: 'nvr -s {{filename}} && nvr -s --remote-send "<C-w><C-p>q<Esc><C-w>o"'
   # Command for editing a file at a given line number. Should contain
   # "{{filename}}", and may optionally contain "{{line}}".
   # editAtLine: 'nvr -s +{{line}} {{filename}} && nvr -s --remote-send "q<Esc><C-w>o"'
-  editAtLine: 'nvr -s +{{line}} {{filename}} && nvr -s --remote-send "<C-w><C-p>q<Esc><C-w>o"'
+  # editAtLine: 'nvr -s +{{line}} {{filename}} && nvr -s --remote-send "<C-w><C-p>q<Esc><C-w>o"'
   # Same as EditAtLine, except that the command needs to wait until the
   # window is closed.
+  # Use `Snacks.lazygit()` for more reliable close
+  edit: 'nvr -s {{filename}} && nvr -s --remote-send "<Esc>:lua Snacks.lazygit()<CR>"'
+  # Final `+{{line}}G` ensures we end up at desired line. Using `editAtLine` on a file that is not already open in a buffer does not successfully end up at desired line otherwise.
+  editAtLine: 'nvr -s +{{line}} {{filename}} && nvr -s --remote-send "<Esc>:lua Snacks.lazygit()<CR>" && nvr -s --remote-send "+{{line}}G"'
   editAtLineAndWait: ""
   # For opening a directory in an editor
   openDirInEditor: ""
@@ -352,7 +358,8 @@ os:
   editPreset: "nvim"
   # Command for opening a file, as if the file is double-clicked. Should
   # contain "{{filename}}", but doesn't support "{{line}}".
-  open: 'nvr -s {{filename}} && nvr -s --remote-send "q<Esc><C-w>o"'
+  open: "open -R {{filename}}"
+  # open: 'nvr -s {{filename}} && nvr -s --remote-send "q<Esc><C-w>o"'
   # Command for opening a link. Should contain "{{link}}".
   openLink: ""
   # EditCommand is the command for editing a file.
@@ -431,9 +438,9 @@ keybinding:
     confirmInEditor: <a-enter>
     remove: d
     new: "n"
-    edit: o
+    edit: e
     # This attempts to open the file in system's default app for the filetype, often not what we want (to open it in nvim)
-    openFile: e
+    openFile: o
     scrollUpMain: <pgup>
     scrollDownMain: <pgdown>
     scrollUpMain-alt1: <c-b>

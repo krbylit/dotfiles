@@ -6,7 +6,7 @@ function WaitForChar:new(options)
   local waiter = {
     onCancel = options.onCancel or function() end,
     onChar = options.onChar or function() end,
-    tap = nil
+    tap = nil,
   }
 
   setmetatable(waiter, self)
@@ -16,24 +16,21 @@ function WaitForChar:new(options)
 end
 
 function WaitForChar:start()
-  self.tap = hs.eventtap.new(
-    { hs.eventtap.event.types.keyDown },
-    function(event)
-      local character = event:getCharacters()
-      local escChar = ""
+  self.tap = hs.eventtap.new({ hs.eventtap.event.types.keyDown }, function(event)
+    local character = event:getCharacters()
+    local escChar = ""
 
-      if character == "" or character == escChar then
-        self.onCancel()
-      else
-        self.onChar(character)
-      end
-
-      self.tap:stop()
-
-      -- prevent any char passthru
-      return true
+    if character == "" or character == escChar then
+      self.onCancel()
+    else
+      self.onChar(character)
     end
-  )
+
+    self.tap:stop()
+
+    -- prevent any char passthru
+    return true
+  end)
 
   self.tap:start()
 end

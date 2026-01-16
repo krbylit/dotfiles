@@ -1,6 +1,6 @@
 local Motion = dofile(vimModeScriptPath .. "lib/motion.lua")
 
-local EntireLine = Motion:new{ name = 'entire_line' }
+local EntireLine = Motion:new({ name = "entire_line" })
 
 function EntireLine.getRange(_, buffer)
   local lineRange = buffer:getCurrentLineRange()
@@ -14,22 +14,22 @@ function EntireLine.getRange(_, buffer)
   return {
     start = math.max(start, 0),
     finish = lineRange:positionEnd(),
-    mode = 'exclusive',
-    direction = 'linewise'
+    mode = "exclusive",
+    direction = "linewise",
   }
 end
 
 function EntireLine.getMovements()
   return {
     {
-      modifiers = { 'cmd' },
-      key = 'left'
+      modifiers = { "cmd" },
+      key = "left",
     },
     {
-      modifiers = { 'cmd' },
-      key = 'right',
-      selection = true
-    }
+      modifiers = { "cmd" },
+      key = "right",
+      selection = true,
+    },
   }
 end
 

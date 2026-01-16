@@ -1,203 +1,203 @@
 return {
-    -- "yetone/avante.nvim",
-    -- enabled = vim.env.IS_SSH ~= "1",
-    -- event = "VeryLazy",
-    -- lazy = false,
-    -- version = false, -- set this if you want to always pull the latest change
-    -- opts = {
-    --     -- system_prompt as function ensures LLM always has latest MCP server state
-    --     -- This is evaluated for every message, even in existing chats
-    --     system_prompt = function()
-    --         local hub = require("mcphub").get_hub_instance()
-    --         return hub and hub:get_active_servers_prompt() or ""
-    --     end,
-    --     -- Using function prevents requiring mcphub before it's loaded
-    --     custom_tools = function()
-    --         return {
-    --             require("mcphub.extensions.avante").mcp_tool(),
-    --         }
-    --     end,
-    --     -- You need to disable either the MCP Hub's built-in tools or Avante's tools to avoid conflicts.
-    --     disabled_tools = {
-    --         "list_files", -- Built-in file operations
-    --         "search_files",
-    --         "read_file",
-    --         "create_file",
-    --         "rename_file",
-    --         "delete_file",
-    --         "create_dir",
-    --         "rename_dir",
-    --         "delete_dir",
-    --         "bash", -- Built-in terminal access
-    --     },
-    --     -- provider = "openai",
-    --     provider = "copilot",
-    --     mode = "agentic", -- The default mode for interaction. "agentic" uses tools to automatically generate code, "legacy" uses the old planning method to generate code.
-    --     -- auto_suggestions_provider = "copilot", -- Since auto-suggestions are a high-frequency operation and therefore expensive, it is recommended to specify an inexpensive provider or even a free provider: copilot
-    --     auto_suggestions_provider = "openai", -- Since auto-suggestions are a high-frequency operation and therefore expensive, it is recommended to specify an inexpensive provider or even a free provider: copilot
-    --     suggestion = {
-    --         debounce = 600,
-    --         throttle = 600,
-    --     },
-    --     providers = {
-    --         copilot = {
-    --             endpoint = "https://api.githubcopilot.com",
-    --             proxy = nil,
-    --             allow_insecure = false,
-    --             timeout = 10 * 60 * 1000,
-    --             max_completion_tokens = 1000000,
-    --             reasoning_effort = "high",
-    --             -- model = "gpt-4.1-2025-04-14",
-    --             model = "claude-sonnet-4",
-    --             extra_request_body = {
-    --                 temperature = 0,
-    --             },
-    --         },
-    --         openai = {
-    --             -- Use local model run by LM Studio instead of OpenAI
-    --             endpoint = "http://127.0.0.1:1234/v1",
-    --             model = "mistralai/devstral-small-2505",
-    --             timeout = 30000, -- Timeout in milliseconds
-    --             extra_request_body = {
-    --                 temperature = 0,
-    --             },
-    --             max_tokens = 4096,
-    --         },
-    --     },
-    --     dual_boost = {
-    --         enabled = false,
-    --         first_provider = "copilot",
-    --         second_provider = "copilot",
-    --         prompt = "Based on the two reference outputs below, generate a response that incorporates elements from both but reflects your own judgment and unique perspective. Do not provide any explanation, just give the response directly. Reference Output 1: [{{provider1_output}}], Reference Output 2: [{{provider2_output}}]",
-    --         timeout = 60000, -- Timeout in milliseconds
-    --     },
-    --
-    --     behaviour = {
-    --         auto_suggestions = false, -- Experimental stage
-    --         auto_set_highlight_group = true,
-    --         auto_set_keymaps = true,
-    --         auto_apply_diff_after_generation = false,
-    --         support_paste_from_clipboard = false,
-    --         minimize_diff = true, -- Whether to remove unchanged lines when applying a code block
-    --         enable_token_counting = true, -- Whether to enable token counting. Default to true.
-    --         auto_approve_tool_permissions = false, -- Default: show permission prompts for all tools
-    --         -- Examples:
-    --         -- auto_approve_tool_permissions = true,                -- Auto-approve all tools (no prompts)
-    --         -- auto_approve_tool_permissions = {"bash", "replace_in_file"}, -- Auto-approve specific tools only
-    --         -- NOTE: Deprecated?
-    --         enable_cursor_planning_mode = true, -- Whether to enable Cursor Planning Mode. Default to false.
-    --         enable_claude_text_editor_tool_mode = true, -- Whether to enable Claude Text Editor Tool Mode.
-    --     },
-    --     selector = {
-    --         --- @alias FileSelectorProvider "native" | "fzf" | "mini.pick" | "telescope" | string
-    --         provider = "snacks",
-    --         -- Options override for custom providers
-    --         provider_opts = {},
-    --     },
-    --     prompt_logger = { -- logs prompts to disk (timestamped, for replay/debugging)
-    --         enabled = true, -- toggle logging entirely
-    --         log_dir = vim.fn.stdpath("cache") .. "/avante_prompts", -- directory where logs are saved
-    --         fortune_cookie_on_success = false, -- shows a random fortune after each logged prompt (requires `fortune` installed)
-    --         next_prompt = {
-    --             normal = "<C-n>", -- load the next (newer) prompt log in normal mode
-    --             insert = "<C-n>",
-    --         },
-    --         prev_prompt = {
-    --             normal = "<C-p>", -- load the previous (older) prompt log in normal mode
-    --             insert = "<C-p>",
-    --         },
-    --     },
-    --
-    --     -- Default keymaps
-    --     mappings = {
-    --         --- @class AvanteConflictMappings
-    --         diff = {
-    --             ours = "co",
-    --             theirs = "ct",
-    --             all_theirs = "ca",
-    --             both = "cb",
-    --             cursor = "cc",
-    --             next = "]x",
-    --             prev = "[x",
-    --         },
-    --         suggestion = {
-    --             accept = "<M-l>",
-    --             next = "<M-]>",
-    --             prev = "<M-[>",
-    --             dismiss = "<C-]>",
-    --         },
-    --         jump = {
-    --             next = "]]",
-    --             prev = "[[",
-    --         },
-    --         submit = {
-    --             normal = "<CR>",
-    --             insert = "<C-s>",
-    --         },
-    --         sidebar = {
-    --             apply_all = "A",
-    --             apply_cursor = "a",
-    --             retry_user_request = "r",
-    --             edit_user_request = "e",
-    --             switch_windows = "<Tab>",
-    --             reverse_switch_windows = "<S-Tab>",
-    --             remove_file = "d",
-    --             add_file = "@",
-    --             close = { "<Esc>", "q" },
-    --             close_from_input = nil, -- e.g., { normal = "<Esc>", insert = "<C-d>" }
-    --         },
-    --     },
-    -- },
-    -- -- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
-    -- build = "make",
-    -- -- build = "powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false" -- for windows
-    -- dependencies = {
-    --     "nvim-treesitter/nvim-treesitter",
-    --     "stevearc/dressing.nvim",
-    --     "nvim-lua/plenary.nvim",
-    --     "MunifTanjim/nui.nvim",
-    --     --- The below dependencies are optional,
-    --     -- "nvim-tree/nvim-web-devicons", -- or nvim-mini/mini.icons
-    --     "zbirenbaum/copilot.lua", -- for providers='copilot'
-    --     "hrsh7th/nvim-cmp", -- autocompletion for avante commands and mentions
-    --     "ibhagwan/fzf-lua", -- for file_selector provider fzf
-    --     "nvim-mini/mini.icons",
-    --     "folke/snacks.nvim", -- for input provider snacks
-    --     -- FIXME: giving errors on pasting text
-    --     -- {
-    --     --     -- support for image pasting
-    --     --     "HakonHarnes/img-clip.nvim",
-    --     --     -- dependencies = {
-    --     --     --     "koga1020/pngpaste.nvim",
-    --     --     --     config = function()
-    --     --     --         require("pngpaste").setup()
-    --     --     --     end,
-    --     --     -- },
-    --     --     event = "VeryLazy",
-    --     --     opts = {
-    --     --         -- recommended settings
-    --     --         -- default = {
-    --     --         --     embed_image_as_base64 = false,
-    --     --         --     prompt_for_file_name = false,
-    --     --         -- drag_and_drop = {
-    --     --         --     insert_mode = true,
-    --     --         -- },
-    --     --         -- -- required for Windows users
-    --     --         -- use_absolute_path = true,
-    --     --         -- },
-    --     --     },
-    --     --     keys = {
-    --     --         -- suggested keymap
-    --     --         { "<leader>p", "<cmd>PasteImage<cr>", desc = "Paste image from system clipboard" },
-    --     --     },
-    --     -- },
-    --     {
-    --         -- Make sure to set this up properly if you have lazy=true
-    --         "MeanderingProgrammer/render-markdown.nvim",
-    --         opts = {
-    --             file_types = { "markdown", "Avante" },
-    --         },
-    --         ft = { "markdown", "Avante" },
-    --     },
-    -- },
+  -- "yetone/avante.nvim",
+
+  -- event = "VeryLazy",
+  -- lazy = false,
+  -- version = false, -- set this if you want to always pull the latest change
+  -- opts = {
+  --     -- system_prompt as function ensures LLM always has latest MCP server state
+  --     -- This is evaluated for every message, even in existing chats
+  --     system_prompt = function()
+  --         local hub = require("mcphub").get_hub_instance()
+  --         return hub and hub:get_active_servers_prompt() or ""
+  --     end,
+  --     -- Using function prevents requiring mcphub before it's loaded
+  --     custom_tools = function()
+  --         return {
+  --             require("mcphub.extensions.avante").mcp_tool(),
+  --         }
+  --     end,
+  --     -- You need to disable either the MCP Hub's built-in tools or Avante's tools to avoid conflicts.
+  --     disabled_tools = {
+  --         "list_files", -- Built-in file operations
+  --         "search_files",
+  --         "read_file",
+  --         "create_file",
+  --         "rename_file",
+  --         "delete_file",
+  --         "create_dir",
+  --         "rename_dir",
+  --         "delete_dir",
+  --         "bash", -- Built-in terminal access
+  --     },
+  --     -- provider = "openai",
+  --     provider = "copilot",
+  --     mode = "agentic", -- The default mode for interaction. "agentic" uses tools to automatically generate code, "legacy" uses the old planning method to generate code.
+  --     -- auto_suggestions_provider = "copilot", -- Since auto-suggestions are a high-frequency operation and therefore expensive, it is recommended to specify an inexpensive provider or even a free provider: copilot
+  --     auto_suggestions_provider = "openai", -- Since auto-suggestions are a high-frequency operation and therefore expensive, it is recommended to specify an inexpensive provider or even a free provider: copilot
+  --     suggestion = {
+  --         debounce = 600,
+  --         throttle = 600,
+  --     },
+  --     providers = {
+  --         copilot = {
+  --             endpoint = "https://api.githubcopilot.com",
+  --             proxy = nil,
+  --             allow_insecure = false,
+  --             timeout = 10 * 60 * 1000,
+  --             max_completion_tokens = 1000000,
+  --             reasoning_effort = "high",
+  --             -- model = "gpt-4.1-2025-04-14",
+  --             model = "claude-sonnet-4",
+  --             extra_request_body = {
+  --                 temperature = 0,
+  --             },
+  --         },
+  --         openai = {
+  --             -- Use local model run by LM Studio instead of OpenAI
+  --             endpoint = "http://127.0.0.1:1234/v1",
+  --             model = "mistralai/devstral-small-2505",
+  --             timeout = 30000, -- Timeout in milliseconds
+  --             extra_request_body = {
+  --                 temperature = 0,
+  --             },
+  --             max_tokens = 4096,
+  --         },
+  --     },
+  --     dual_boost = {
+  --         enabled = false,
+  --         first_provider = "copilot",
+  --         second_provider = "copilot",
+  --         prompt = "Based on the two reference outputs below, generate a response that incorporates elements from both but reflects your own judgment and unique perspective. Do not provide any explanation, just give the response directly. Reference Output 1: [{{provider1_output}}], Reference Output 2: [{{provider2_output}}]",
+  --         timeout = 60000, -- Timeout in milliseconds
+  --     },
+  --
+  --     behaviour = {
+  --         auto_suggestions = false, -- Experimental stage
+  --         auto_set_highlight_group = true,
+  --         auto_set_keymaps = true,
+  --         auto_apply_diff_after_generation = false,
+  --         support_paste_from_clipboard = false,
+  --         minimize_diff = true, -- Whether to remove unchanged lines when applying a code block
+  --         enable_token_counting = true, -- Whether to enable token counting. Default to true.
+  --         auto_approve_tool_permissions = false, -- Default: show permission prompts for all tools
+  --         -- Examples:
+  --         -- auto_approve_tool_permissions = true,                -- Auto-approve all tools (no prompts)
+  --         -- auto_approve_tool_permissions = {"bash", "replace_in_file"}, -- Auto-approve specific tools only
+  --         -- NOTE: Deprecated?
+  --         enable_cursor_planning_mode = true, -- Whether to enable Cursor Planning Mode. Default to false.
+  --         enable_claude_text_editor_tool_mode = true, -- Whether to enable Claude Text Editor Tool Mode.
+  --     },
+  --     selector = {
+  --         --- @alias FileSelectorProvider "native" | "fzf" | "mini.pick" | "telescope" | string
+  --         provider = "snacks",
+  --         -- Options override for custom providers
+  --         provider_opts = {},
+  --     },
+  --     prompt_logger = { -- logs prompts to disk (timestamped, for replay/debugging)
+  --         enabled = true, -- toggle logging entirely
+  --         log_dir = vim.fn.stdpath("cache") .. "/avante_prompts", -- directory where logs are saved
+  --         fortune_cookie_on_success = false, -- shows a random fortune after each logged prompt (requires `fortune` installed)
+  --         next_prompt = {
+  --             normal = "<C-n>", -- load the next (newer) prompt log in normal mode
+  --             insert = "<C-n>",
+  --         },
+  --         prev_prompt = {
+  --             normal = "<C-p>", -- load the previous (older) prompt log in normal mode
+  --             insert = "<C-p>",
+  --         },
+  --     },
+  --
+  --     -- Default keymaps
+  --     mappings = {
+  --         --- @class AvanteConflictMappings
+  --         diff = {
+  --             ours = "co",
+  --             theirs = "ct",
+  --             all_theirs = "ca",
+  --             both = "cb",
+  --             cursor = "cc",
+  --             next = "]x",
+  --             prev = "[x",
+  --         },
+  --         suggestion = {
+  --             accept = "<M-l>",
+  --             next = "<M-]>",
+  --             prev = "<M-[>",
+  --             dismiss = "<C-]>",
+  --         },
+  --         jump = {
+  --             next = "]]",
+  --             prev = "[[",
+  --         },
+  --         submit = {
+  --             normal = "<CR>",
+  --             insert = "<C-s>",
+  --         },
+  --         sidebar = {
+  --             apply_all = "A",
+  --             apply_cursor = "a",
+  --             retry_user_request = "r",
+  --             edit_user_request = "e",
+  --             switch_windows = "<Tab>",
+  --             reverse_switch_windows = "<S-Tab>",
+  --             remove_file = "d",
+  --             add_file = "@",
+  --             close = { "<Esc>", "q" },
+  --             close_from_input = nil, -- e.g., { normal = "<Esc>", insert = "<C-d>" }
+  --         },
+  --     },
+  -- },
+  -- -- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
+  -- build = "make",
+  -- -- build = "powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false" -- for windows
+  -- dependencies = {
+  --     "nvim-treesitter/nvim-treesitter",
+  --     "stevearc/dressing.nvim",
+  --     "nvim-lua/plenary.nvim",
+  --     "MunifTanjim/nui.nvim",
+  --     --- The below dependencies are optional,
+  --     -- "nvim-tree/nvim-web-devicons", -- or nvim-mini/mini.icons
+  --     "zbirenbaum/copilot.lua", -- for providers='copilot'
+  --     "hrsh7th/nvim-cmp", -- autocompletion for avante commands and mentions
+  --     "ibhagwan/fzf-lua", -- for file_selector provider fzf
+  --     "nvim-mini/mini.icons",
+  --     "folke/snacks.nvim", -- for input provider snacks
+  --     -- FIXME: giving errors on pasting text
+  --     -- {
+  --     --     -- support for image pasting
+  --     --     "HakonHarnes/img-clip.nvim",
+  --     --     -- dependencies = {
+  --     --     --     "koga1020/pngpaste.nvim",
+  --     --     --     config = function()
+  --     --     --         require("pngpaste").setup()
+  --     --     --     end,
+  --     --     -- },
+  --     --     event = "VeryLazy",
+  --     --     opts = {
+  --     --         -- recommended settings
+  --     --         -- default = {
+  --     --         --     embed_image_as_base64 = false,
+  --     --         --     prompt_for_file_name = false,
+  --     --         -- drag_and_drop = {
+  --     --         --     insert_mode = true,
+  --     --         -- },
+  --     --         -- -- required for Windows users
+  --     --         -- use_absolute_path = true,
+  --     --         -- },
+  --     --     },
+  --     --     keys = {
+  --     --         -- suggested keymap
+  --     --         { "<leader>p", "<cmd>PasteImage<cr>", desc = "Paste image from system clipboard" },
+  --     --     },
+  --     -- },
+  --     {
+  --         -- Make sure to set this up properly if you have lazy=true
+  --         "MeanderingProgrammer/render-markdown.nvim",
+  --         opts = {
+  --             file_types = { "markdown", "Avante" },
+  --         },
+  --         ft = { "markdown", "Avante" },
+  --     },
+  -- },
 }

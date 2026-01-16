@@ -20,7 +20,7 @@ This is a Yazi plugin that save these preferences by location:
 > Minimum version: yazi v25.5.31.
 >
 > This plugin will conflict with folder-rules. You should remove it.
-> https://yazi-rs.github.io/docs/tips#folder-rules
+> <https://yazi-rs.github.io/docs/tips#folder-rules>
 
 ## Requirements
 
@@ -45,7 +45,7 @@ ya pkg add boydaihungst/pref-by-location
 ya pack -a boydaihungst/pref-by-location
 ```
 
-### Add setup function in `yazi/init.lua`.
+### Add setup function in `yazi/init.lua`
 
 Prefs is optional but the setup function is required.
 
@@ -96,16 +96,16 @@ pref_by_location:setup({
 
     -- show_hidden for any folder with name "secret"
     {
-	    location = ".*/secret",
-	    sort = { "natural", reverse = false, dir_first = true },
-	    linemode = "size",
-	    show_hidden = true,
+     location = ".*/secret",
+     sort = { "natural", reverse = false, dir_first = true },
+     linemode = "size",
+     show_hidden = true,
     },
 
     -- Custom linemode also work
     {
-	    location = ".*/abc",
-	    linemode = "size_and_mtime",
+     location = ".*/abc",
+     linemode = "size_and_mtime",
     },
     -- DO NOT ADD location = ".*". Which currently use your yazi.toml config as fallback.
     -- That mean if none of the saved perferences is matched, then it will use your config from yazi.toml.
@@ -196,9 +196,9 @@ Trigger this plugin programmatically:
 local pref_by_location = require("pref-by-location")
 -- Available actions: save, reset, toggle, disable
   local action = "save"
-	local args = ya.quote(action)
-	ya.emit("plugin", {
-		pref_by_location._id,
-		args,
-	})
+ local args = ya.quote(action)
+ ya.emit("plugin", {
+  pref_by_location._id,
+  args,
+ })
 ```

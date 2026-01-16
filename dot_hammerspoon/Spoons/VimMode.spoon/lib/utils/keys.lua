@@ -62,7 +62,7 @@ local normalMaps = {
 --   getRealChar({'shift'}, 'h') => "H"
 --   getRealChar({}, 'h') => "h"
 keyUtils.getRealChar = function(mods, key)
-  local hasShift = fnutils.contains(mods, 'shift')
+  local hasShift = fnutils.contains(mods, "shift")
 
   if hasShift then
     return shiftMaps[key] or key
