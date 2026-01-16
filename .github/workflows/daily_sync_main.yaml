@@ -92,6 +92,10 @@ jobs:
           #   echo "Too many commits to log." >> commit_message.txt
           # fi
 
+          # Add co-author trailer
+          echo "" >> commit_message.txt
+          echo "Co-authored-by: Kirby Little <krbylit@gmail.com>" >> commit_message.txt
+
           # Create a squashed commit using the commit message file
           git commit -F commit_message.txt
           rm -f commit_message.txt
