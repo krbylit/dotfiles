@@ -21,7 +21,9 @@ function KeySequence:new(keys, maxDelayBetweenKeysMilliseconds, onSequencePresse
 end
 
 function KeySequence:enable()
-  if self.enabled then return end
+  if self.enabled then
+    return
+  end
 
   self.enabled = true
   self:reset()
@@ -31,7 +33,9 @@ function KeySequence:enable()
 end
 
 function KeySequence:disable()
-  if not self.enabled then return end
+  if not self.enabled then
+    return
+  end
 
   self.enabled = false
   self:reset()
@@ -41,10 +45,7 @@ function KeySequence:disable()
 end
 
 function KeySequence:resetTap()
-  self.tap = hs.eventtap.new(
-    { hs.eventtap.event.types.keyDown },
-    self:buildEventHandler()
-  )
+  self.tap = hs.eventtap.new({ hs.eventtap.event.types.keyDown }, self:buildEventHandler())
 end
 
 function KeySequence:reset()
@@ -60,7 +61,9 @@ function KeySequence:resetEvents()
 end
 
 function KeySequence:cancelTimer()
-  if self.timer then self.timer:stop() end
+  if self.timer then
+    self.timer:stop()
+  end
 end
 
 function KeySequence:startTimer(fn)
@@ -71,15 +74,9 @@ function KeySequence:recordEvent(event)
   local currentModifiers = event:getFlags()
   local currentKey = event:getKeyCode()
 
-  table.insert(
-    self.typedEvents,
-    hs.eventtap.event.newKeyEvent(currentModifiers, currentKey, true)
-  )
+  table.insert(self.typedEvents, hs.eventtap.event.newKeyEvent(currentModifiers, currentKey, true))
 
-  table.insert(
-    self.typedEvents,
-    hs.eventtap.event.newKeyEvent(currentModifiers, currentKey, false)
-  )
+  table.insert(self.typedEvents, hs.eventtap.event.newKeyEvent(currentModifiers, currentKey, false))
 end
 
 function KeySequence:recordKey(key)
@@ -88,14 +85,18 @@ end
 
 local function getTableSize(t)
   local count = 0
-  for _, __ in pairs(t) do count = count + 1 end
+  for _, __ in pairs(t) do
+    count = count + 1
+  end
 
   return count
 end
 
 function KeySequence:buildEventHandler()
   return function(event)
-    if not self.enabled then return end
+    if not self.enabled then
+      return
+    end
 
     -- got another key, kill the abort timer
     self:cancelTimer()

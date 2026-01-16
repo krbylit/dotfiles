@@ -4,7 +4,7 @@ local VimMode = {
   license = "ISC",
   name = "VimMode",
   version = "1.0.0",
-  spoonPath = vimModeScriptPath
+  spoonPath = vimModeScriptPath,
 }
 
 ---------------------------------------------
@@ -12,7 +12,7 @@ local VimMode = {
 package.path = vimModeScriptPath .. "vendor/?/init.lua;" .. package.path
 package.cpath = vimModeScriptPath .. "vendor/?.so;" .. package.cpath
 
-vimLogger = hs.logger.new('vim', 'debug')
+vimLogger = hs.logger.new("vim", "debug")
 
 local ax = dofile(vimModeScriptPath .. "lib/axuielement.lua")
 dofile(vimModeScriptPath .. "lib/utils/benchmark.lua")
@@ -42,12 +42,7 @@ VimMode.utils = {
 }
 
 local function alertDeprecation(msg)
-  hs.alert.show(
-    "Deprecated: " .. msg,
-    {},
-    hs.screen.mainScreen(),
-    15
-  )
+  hs.alert.show("Deprecated: " .. msg, {}, hs.screen.mainScreen(), 15)
 end
 
 function VimMode:new()
@@ -61,7 +56,7 @@ function VimMode:new()
   vim.blockCursor = BlockCursor:new(vim)
   vim.config = Config:new()
   vim.enabled = true
-  vim.mode = 'insert'
+  vim.mode = "insert"
 
   vim.modal = createVimModal(vim):setOnBeforePress(function(mods, key)
     local realKey = keyUtils.getRealChar(mods, key)
@@ -196,9 +191,16 @@ end
 -- Deprecated in favor of :enterWithSequence('jk'), etc
 function VimMode:enableKeySequence(key1, key2)
   alertDeprecation(
-    "vim:enableKeySequence('" .. key1 .. "', '" .. key2 .. "')\n" ..
-      "Please use: vim:enterWithSequence('" .. key1 .. key2 .. "') to bind now.\n" ..
-      "In: ~/.hammerspoon/init.lua"
+    "vim:enableKeySequence('"
+      .. key1
+      .. "', '"
+      .. key2
+      .. "')\n"
+      .. "Please use: vim:enterWithSequence('"
+      .. key1
+      .. key2
+      .. "') to bind now.\n"
+      .. "In: ~/.hammerspoon/init.lua"
   )
 
   self:enterWithSequence(key1 .. key2)
@@ -207,25 +209,33 @@ function VimMode:enableKeySequence(key1, key2)
 end
 
 function VimMode:disableEnterBind()
-  if not self.enterKeyBind then return end
+  if not self.enterKeyBind then
+    return
+  end
 
   self.enterKeyBind:disable()
 end
 
 function VimMode:enableEnterBind()
-  if not self.enterKeyBind then return end
+  if not self.enterKeyBind then
+    return
+  end
 
   self.enterKeyBind:enable()
 end
 
 function VimMode:disableSequence()
-  if not self.sequence then return end
+  if not self.sequence then
+    return
+  end
 
   self.sequence:disable()
 end
 
 function VimMode:enableSequence()
-  if not self.sequence then return end
+  if not self.sequence then
+    return
+  end
 
   self.sequence:enable()
 end
@@ -239,13 +249,17 @@ function VimMode:setFallbackOnlyUrlPatterns(patterns)
 end
 
 function VimMode:enableBlockCursor()
-  if not self.config:isBetaFeatureEnabled('block_cursor_overlay') then return end
+  if not self.config:isBetaFeatureEnabled("block_cursor_overlay") then
+    return
+  end
 
   self.blockCursor:show()
 end
 
 function VimMode:disableBlockCursor()
-  if not self.config:isBetaFeatureEnabled('block_cursor_overlay') then return end
+  if not self.config:isBetaFeatureEnabled("block_cursor_overlay") then
+    return
+  end
 
   self.blockCursor:hide()
 end
@@ -253,7 +267,9 @@ end
 function VimMode:setInsertMode()
   self.mode = "insert"
 
-  if self:shouldDimScreen() then ScreenDimmer.restoreScreen() end
+  if self:shouldDimScreen() then
+    ScreenDimmer.restoreScreen()
+  end
 
   return self
 end
@@ -261,14 +277,16 @@ end
 function VimMode:setNormalMode()
   self.mode = "normal"
 
-  if self:shouldDimScreen() then ScreenDimmer.dimScreen() end
+  if self:shouldDimScreen() then
+    ScreenDimmer.dimScreen()
+  end
 
   return self
 end
 
 function VimMode:setVisualMode()
-  if not self:isMode('visual') then
-    self.mode = 'visual'
+  if not self:isMode("visual") then
+    self.mode = "visual"
     self.visualCaretPosition = nil
   end
 
@@ -302,7 +320,9 @@ end
 -- Ugh.
 function VimMode:exitAsync()
   local seconds = 5 / 1000 -- converting ms -> secs
-  return hs.timer.doAfter(seconds, function() self:exit() end)
+  return hs.timer.doAfter(seconds, function()
+    self:exit()
+  end)
 end
 
 -- Returns the context that we just exited
@@ -310,7 +330,9 @@ function VimMode:exitModalAsync()
   local seconds = 5 / 1000 -- converting ms -> secs
   local context = self.modal.activeContext
 
-  hs.timer.doAfter(seconds, function() self:exitAllModals() end)
+  hs.timer.doAfter(seconds, function()
+    self:exitAllModals()
+  end)
 
   return context
 end
@@ -331,7 +353,9 @@ end
 
 function VimMode:collapseSelection()
   local strategy = AccessibilityStrategy:new(self)
-  if not strategy:isValid() then return end
+  if not strategy:isValid() then
+    return
+  end
 
   if self.visualCaretPosition then
     strategy:setSelection(self.visualCaretPosition, 0)
@@ -357,7 +381,7 @@ function VimMode:fireCommandState()
 
   local strategies = {
     AccessibilityStrategy:new(self),
-    KeyboardStrategy:new(self)
+    KeyboardStrategy:new(self),
   }
 
   local strategy = findFirst(strategies, function(strategy)
@@ -379,7 +403,7 @@ function VimMode:fireCommandState()
     mode = self.mode,
     transition = transition,
     hadMotion = not not motion,
-    hadOperator = not not operator
+    hadOperator = not not operator,
   }
 end
 

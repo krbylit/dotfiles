@@ -1,6 +1,6 @@
 local Motion = dofile(vimModeScriptPath .. "lib/motion.lua")
 
-local CurrentSelection = Motion:new{ name = 'current_selection' }
+local CurrentSelection = Motion:new({ name = "current_selection" })
 
 function CurrentSelection.getRange(_, buffer)
   local selection = buffer:getSelectionRange()
@@ -8,8 +8,8 @@ function CurrentSelection.getRange(_, buffer)
   return {
     start = selection.location,
     finish = selection:positionEnd(),
-    mode = 'inclusive',
-    direction = 'characterwise'
+    mode = "inclusive",
+    direction = "characterwise",
   }
 end
 

@@ -14,15 +14,12 @@ describe("InWord", function()
 
       local inWord = InWord:new()
 
-      assert.are.same(
-        {
-          start = 4,
-          finish = 6,
-          mode = "inclusive",
-          direction = "characterwise"
-        },
-        inWord:getRange(buffer)
-      )
+      assert.are.same({
+        start = 4,
+        finish = 6,
+        mode = "inclusive",
+        direction = "characterwise",
+      }, inWord:getRange(buffer))
     end)
 
     it("handles the beginning of the buffer", function()
@@ -32,15 +29,12 @@ describe("InWord", function()
 
       local inWord = InWord:new()
 
-      assert.are.same(
-        {
-          start = 0,
-          finish = 2,
-          mode = "inclusive",
-          direction = "characterwise"
-        },
-        inWord:getRange(buffer)
-      )
+      assert.are.same({
+        start = 0,
+        finish = 2,
+        mode = "inclusive",
+        direction = "characterwise",
+      }, inWord:getRange(buffer))
     end)
 
     it("handles the beginning of the word", function()
@@ -50,15 +44,12 @@ describe("InWord", function()
 
       local inWord = InWord:new()
 
-      assert.are.same(
-        {
-          start = 4,
-          finish = 6,
-          mode = "inclusive",
-          direction = "characterwise"
-        },
-        inWord:getRange(buffer)
-      )
+      assert.are.same({
+        start = 4,
+        finish = 6,
+        mode = "inclusive",
+        direction = "characterwise",
+      }, inWord:getRange(buffer))
     end)
 
     it("handles the end of the word", function()
@@ -68,15 +59,12 @@ describe("InWord", function()
 
       local inWord = InWord:new()
 
-      assert.are.same(
-        {
-          start = 4,
-          finish = 6,
-          mode = "inclusive",
-          direction = "characterwise"
-        },
-        inWord:getRange(buffer)
-      )
+      assert.are.same({
+        start = 4,
+        finish = 6,
+        mode = "inclusive",
+        direction = "characterwise",
+      }, inWord:getRange(buffer))
     end)
 
     it("handles the end of the buffer", function()
@@ -86,15 +74,12 @@ describe("InWord", function()
 
       local inWord = InWord:new()
 
-      assert.are.same(
-        {
-          start = 8,
-          finish = 13,
-          mode = "inclusive",
-          direction = "characterwise"
-        },
-        inWord:getRange(buffer)
-      )
+      assert.are.same({
+        start = 8,
+        finish = 13,
+        mode = "inclusive",
+        direction = "characterwise",
+      }, inWord:getRange(buffer))
     end)
   end)
 end)

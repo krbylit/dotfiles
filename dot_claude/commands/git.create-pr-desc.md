@@ -225,7 +225,7 @@ This command analyzes all changes in the current branch compared to the base bra
 9. **Generate PR Description**:
 
    **GitHub Markdown Callouts**:
-   
+
    When generating PR descriptions, you MAY use GitHub markdown callouts if they genuinely enhance the content:
    - Available types: `NOTE`, `TIP`, `IMPORTANT`, `WARNING`, `CAUTION`
    - Format: `> [!WARNING]` followed by `> callout text` on subsequent lines
@@ -408,7 +408,6 @@ This command analyzes all changes in the current branch compared to the base bra
    ## Checklist
 
    ### Before Review
-
    - [ ] Code follows project conventions
    - [ ] All tests pass locally
    - [ ] No linting errors
@@ -417,7 +416,6 @@ This command analyzes all changes in the current branch compared to the base bra
    - [ ] Self-review completed
 
    ### Reviewer Focus Areas
-
    - [ ] Logic correctness
    - [ ] Error handling
    - [ ] Performance implications
@@ -529,7 +527,7 @@ This command analyzes all changes in the current branch compared to the base bra
     - After writing, confirm to user: `📝 PR description saved to PR_DESC_<timestamp>.md`
 
     **Implementation**:
-    
+
     ```
     Write tool call with:
     - file_path: /absolute/path/to/repo/PR_DESC_<timestamp>.md

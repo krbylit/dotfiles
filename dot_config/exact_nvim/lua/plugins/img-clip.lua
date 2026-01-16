@@ -148,69 +148,69 @@ process_cmd:
 --]]
 
 return {
-    "hakonharnes/img-clip.nvim",
-    event = "VeryLazy",
-    -- NOTE: This workaround is required to be able to paste base64 into `AgenticInput` filetypes (img-clip only allows pasting into Markdown)
-    -- config = function(_, opts)
-    --     require("img-clip").setup(opts)
-    --
-    --     -- Override img-clip's lang_supports_base64 to include AgenticInput
-    --     local paste = require("img-clip.paste")
-    --     local original_lang_supports_base64 = paste.lang_supports_base64
-    --     paste.lang_supports_base64 = function(ft)
-    --         if ft == "AgenticInput" or ft == "AgenticChat" then
-    --             return true
+  "hakonharnes/img-clip.nvim",
+  event = "VeryLazy",
+  -- NOTE: This workaround is required to be able to paste base64 into `AgenticInput` filetypes (img-clip only allows pasting into Markdown)
+  -- config = function(_, opts)
+  --     require("img-clip").setup(opts)
+  --
+  --     -- Override img-clip's lang_supports_base64 to include AgenticInput
+  --     local paste = require("img-clip.paste")
+  --     local original_lang_supports_base64 = paste.lang_supports_base64
+  --     paste.lang_supports_base64 = function(ft)
+  --         if ft == "AgenticInput" or ft == "AgenticChat" then
+  --             return true
+  --         end
+  --         return original_lang_supports_base64(ft)
+  --     end
+  -- end,
+  opts = {
+    -- Default settings for file-based buffers (markdown, etc.)
+    default = {
+      -- dir_path = vim.fn.expand("~/.img-clip-assets"), -- Default directory for saved images
+      dir_path = "/tmp", -- Default directory for saved images
+      -- embed_image_as_base64 = false,
+      embed_image_as_base64 = true,
+      max_base64_size = 10000, ---@type number | fun(): number
+      -- Reduce image size for AI prompts (requires ImageMagick)
+      -- Resizes to max 1024px width while maintaining aspect ratio
+      -- Compresses with 80% quality for smaller file sizes
+      -- process_cmd = "magick - -resize '1024>' -quality 80 -",
+    },
+    -- -- Filetype-specific overrides
+    -- filetypes = {
+    --     -- For agentic buffers, use aggressive compression since
+    --     -- large images can exceed Claude's token limits
+    --     AgenticInput = {
+    --         dir_path = "img-clip-assets",
+    --         -- Smaller size for chat: 800px max width, 75% quality
+    --         -- process_cmd = "magick - -resize '1024>' -quality 100 -",
+    --     },
+    -- },
+  },
+  keys = {
+    {
+      "<leader>i",
+      function()
+        vim.cmd("PasteImage")
+      end,
+      mode = { "n", "i" },
+      desc = "Paste image from clipboard",
+    },
+    -- {
+    --     "<C-p>",
+    --     function()
+    --         -- Only paste images in agentic buffers
+    --         local bufname = vim.bo.filetype(0)
+    --         if bufname:match("Agentic") then
+    --             vim.cmd("PasteImage")
+    --         else
+    --             -- Fall back to default <C-p> behavior in other buffers
+    --             vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<C-p>", true, false, true), "n", false)
     --         end
-    --         return original_lang_supports_base64(ft)
-    --     end
-    -- end,
-    opts = {
-        -- Default settings for file-based buffers (markdown, etc.)
-        default = {
-            -- dir_path = vim.fn.expand("~/.img-clip-assets"), -- Default directory for saved images
-            dir_path = "/tmp", -- Default directory for saved images
-            -- embed_image_as_base64 = false,
-            embed_image_as_base64 = true,
-            max_base64_size = 10000, ---@type number | fun(): number
-            -- Reduce image size for AI prompts (requires ImageMagick)
-            -- Resizes to max 1024px width while maintaining aspect ratio
-            -- Compresses with 80% quality for smaller file sizes
-            -- process_cmd = "magick - -resize '1024>' -quality 80 -",
-        },
-        -- -- Filetype-specific overrides
-        -- filetypes = {
-        --     -- For agentic buffers, use aggressive compression since
-        --     -- large images can exceed Claude's token limits
-        --     AgenticInput = {
-        --         dir_path = "img-clip-assets",
-        --         -- Smaller size for chat: 800px max width, 75% quality
-        --         -- process_cmd = "magick - -resize '1024>' -quality 100 -",
-        --     },
-        -- },
-    },
-    keys = {
-        {
-            "<leader>i",
-            function()
-                vim.cmd("PasteImage")
-            end,
-            mode = { "n", "i" },
-            desc = "Paste image from clipboard",
-        },
-        -- {
-        --     "<C-p>",
-        --     function()
-        --         -- Only paste images in agentic buffers
-        --         local bufname = vim.bo.filetype(0)
-        --         if bufname:match("Agentic") then
-        --             vim.cmd("PasteImage")
-        --         else
-        --             -- Fall back to default <C-p> behavior in other buffers
-        --             vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<C-p>", true, false, true), "n", false)
-        --         end
-        --     end,
-        --     mode = { "n", "i" },
-        --     desc = "Paste image from clipboard (Agentic buffers)",
-        -- },
-    },
+    --     end,
+    --     mode = { "n", "i" },
+    --     desc = "Paste image from clipboard (Agentic buffers)",
+    -- },
+  },
 }

@@ -59,12 +59,7 @@ end
 
 function ContextualModal:handlePress(mods, key, eventType)
   return function()
-    local handler = self.registry:getHandler(
-      self.activeContext,
-      mods,
-      key,
-      eventType
-    )
+    local handler = self.registry:getHandler(self.activeContext, mods, key, eventType)
 
     if handler then
       self.onBeforePress(mods, key)
@@ -82,7 +77,7 @@ function ContextualModal:bindDefaults()
     local char = keyChars:sub(i, i)
 
     self.modal:bind(nil, char, noop, noop, noop)
-    self.modal:bind({'shift'}, char, noop, noop, noop)
+    self.modal:bind({ "shift" }, char, noop, noop, noop)
   end
 end
 
@@ -92,7 +87,9 @@ function ContextualModal:setOnBeforePress(fn)
 end
 
 function ContextualModal:hasBinding(mods, key)
-  if not self.bindings[key] then return false end
+  if not self.bindings[key] then
+    return false
+  end
 
   for _, boundMods in pairs(self.bindings[key]) do
     if tableUtils.matches(boundMods, mods) then
@@ -104,7 +101,9 @@ function ContextualModal:hasBinding(mods, key)
 end
 
 function ContextualModal:registerBinding(mods, key)
-  if not self.bindings[key] then self.bindings[key] = {} end
+  if not self.bindings[key] then
+    self.bindings[key] = {}
+  end
 
   table.insert(self.bindings[key], mods)
 
@@ -112,14 +111,7 @@ function ContextualModal:registerBinding(mods, key)
 end
 
 function ContextualModal:bind(mods, key, pressedfn, releasedfn, repeatfn)
-  self.registry:registerHandler(
-    self.bindingContext,
-    mods,
-    key,
-    pressedfn,
-    releasedfn,
-    repeatfn
-  )
+  self.registry:registerHandler(self.bindingContext, mods, key, pressedfn, releasedfn, repeatfn)
 
   -- only bind once for this modal
   if not self:hasBinding(mods, key) then
@@ -128,9 +120,9 @@ function ContextualModal:bind(mods, key, pressedfn, releasedfn, repeatfn)
     self.modal:bind(
       mods,
       key,
-      self:handlePress(mods, key, 'onPressed'),
-      self:handlePress(mods, key, 'onReleased'),
-      self:handlePress(mods, key, 'onRepeat')
+      self:handlePress(mods, key, "onPressed"),
+      self:handlePress(mods, key, "onReleased"),
+      self:handlePress(mods, key, "onRepeat")
     )
   end
 

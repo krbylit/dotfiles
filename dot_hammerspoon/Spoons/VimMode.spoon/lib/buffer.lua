@@ -72,7 +72,9 @@ end
 
 function Buffer:getCurrentLineNumber()
   local cursorPosition = self:getCaretPosition()
-  if cursorPosition == 0 then return 1 end
+  if cursorPosition == 0 then
+    return 1
+  end
 
   local lines = self:getLines()
 
@@ -80,7 +82,9 @@ function Buffer:getCurrentLineNumber()
   local currentPosition = 0
 
   while currentPosition <= cursorPosition do
-    if currentLine > #lines then break end
+    if currentLine > #lines then
+      break
+    end
 
     currentLine = currentLine + 1
 
@@ -102,7 +106,9 @@ end
 function Buffer:lastValueIndex()
   local length = self:getLength()
 
-  if length == 0 then return 0 end
+  if length == 0 then
+    return 0
+  end
 
   return length - 1
 end
@@ -110,7 +116,9 @@ end
 function Buffer:getContentsBeforeSelection()
   local contents = utf8.sub(self:getValue(), 0, self.selection:positionEnd())
 
-  if contents == "" then return nil end
+  if contents == "" then
+    return nil
+  end
 
   return contents
 end
@@ -118,7 +126,9 @@ end
 function Buffer:getContentsAfterSelection()
   local contents = utf8.sub(self:getValue(), self.selection:positionEnd() + 1)
 
-  if contents == "" then return nil end
+  if contents == "" then
+    return nil
+  end
 
   return contents
 end
@@ -146,7 +156,9 @@ end
 
 function Buffer:prevChar()
   local location = self:getCaretPosition()
-  if location == 0 then return nil end
+  if location == 0 then
+    return nil
+  end
 
   return self:charAt(location - 1)
 end
@@ -190,7 +202,9 @@ function Buffer:getRangeForLineNumber(lineNumber)
   local start = 0
 
   for i, line in ipairs(lines) do
-    if i == lineNumber then break end
+    if i == lineNumber then
+      break
+    end
     start = start + utf8.len(line)
   end
 

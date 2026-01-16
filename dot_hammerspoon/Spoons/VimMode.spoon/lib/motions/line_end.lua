@@ -1,7 +1,7 @@
 local Motion = dofile(vimModeScriptPath .. "lib/motion.lua")
 local stringUtils = dofile(vimModeScriptPath .. "lib/utils/string_utils.lua")
 
-local LineEnd = Motion:new{ name = 'line_end' }
+local LineEnd = Motion:new({ name = "line_end" })
 
 function LineEnd.getRange(_, buffer)
   local lineRange = buffer:getCurrentLineRange()
@@ -19,8 +19,8 @@ function LineEnd.getRange(_, buffer)
     -- it *behaves* like an exclusive motion, so I'm keeping it this way
     -- for now as it feels more correct. I might be missing some key things
     -- here though.
-    mode = 'exclusive',
-    direction = 'characterwise'
+    mode = "exclusive",
+    direction = "characterwise",
   }
 
   return range
@@ -29,10 +29,10 @@ end
 function LineEnd.getMovements()
   return {
     {
-      modifiers = { 'ctrl' },
-      key = 'e',
-      selection = true
-    }
+      modifiers = { "ctrl" },
+      key = "e",
+      selection = true,
+    },
   }
 end
 

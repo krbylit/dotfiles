@@ -191,10 +191,10 @@ indent = { enable = false }
 These plugins should be lazy-loaded with appropriate triggers:
 
 1. **diffview.lua**: `cmd = {"DiffviewOpen", "DiffviewFileHistory"}`
-2. **beacon.lua**: `event = "VeryLazy"`  
-3. **mini-operators.lua**: `keys = {"g="}`  
-4. **mini-splitjoin.lua**: `keys = {"gS"}`  
-5. **sort.lua**: `cmd = {"Sort"}`  
+2. **beacon.lua**: `event = "VeryLazy"`
+3. **mini-operators.lua**: `keys = {"g="}`
+4. **mini-splitjoin.lua**: `keys = {"gS"}`
+5. **sort.lua**: `cmd = {"Sort"}`
 6. **guess-indent.lua**: `event = "BufReadPre"`
 
 #### **Configuration Optimizations**
@@ -223,7 +223,7 @@ lsp = {
    - Use git-related autocmds instead of buffer events
 
 2. **Investigate mini-tabline.lua performance**
-   - Profile the identified performance issue  
+   - Profile the identified performance issue
    - Consider switching to alternative tabline
 
 3. **Fix startup system commands**
@@ -241,13 +241,13 @@ lsp = {
    ```lua
    -- beacon.lua
    event = "VeryLazy"
-   
-   -- helpview.lua  
+
+   -- helpview.lua
    ft = "help"
-   
+
    -- markview.lua
    ft = "markdown"
-   
+
    -- mini-misc.lua
    event = "VeryLazy"
    ```
@@ -323,21 +323,21 @@ local function get_git_info_cached()
     local bufnr = vim.api.nvim_get_current_buf()
     local cache_key = vim.api.nvim_buf_get_name(bufnr)
     local now = os.time()
-    
+
     if git_cache[cache_key] and (now - git_cache[cache_key].timestamp) < git_cache_timeout then
         return git_cache[cache_key].info
     end
-    
+
     -- Only do expensive git calls when cache is stale
     local git_info = expensive_git_operation()
     git_cache[cache_key] = { info = git_info, timestamp = now }
     return git_info
 end
 
--- Use git-specific events instead of buffer events  
+-- Use git-specific events instead of buffer events
 vim.api.nvim_create_autocmd({"User"}, {
-    pattern = {"GitSignsUpdate", "ChanteGitUpdate"}, 
-    callback = function() 
+    pattern = {"GitSignsUpdate", "ChanteGitUpdate"},
+    callback = function()
         git_cache = {}  -- Invalidate cache on git changes
     end
 })

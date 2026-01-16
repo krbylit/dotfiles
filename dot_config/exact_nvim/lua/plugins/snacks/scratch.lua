@@ -18,22 +18,22 @@
 -- }
 
 return {
-    -- NOTE: OBE; this is now provided natively by snacks.nvim. Can delete selected scratch buffers with <c-x> as well.
-    -- "snacks.nvim",
-    -- keys = {
-    --     {
-    --         "-",
-    --         function()
-    --             require("utils.snacks.scratch").new_scratch(filetypes)
-    --         end,
-    --         desc = "Toggle Scratch Buffer",
-    --     },
-    --     {
-    --         "_",
-    --         function()
-    --             require("utils.snacks.scratch").select_scratch()
-    --         end,
-    --         desc = "Select Scratch Buffer",
-    --     },
-    -- },
+  -- NOTE: OBE; this is now provided natively by snacks.nvim. Can delete selected scratch buffers with <c-x> as well.
+  -- "snacks.nvim",
+  -- keys = {
+  --     {
+  --         "-",
+  --         function()
+  --             require("utils.snacks.scratch").new_scratch(filetypes)
+  --         end,
+  --         desc = "Toggle Scratch Buffer",
+  --     },
+  --     {
+  --         "_",
+  --         function()
+  --             require("utils.snacks.scratch").select_scratch()
+  --         end,
+  --         desc = "Select Scratch Buffer",
+  --     },
+  -- },
 }

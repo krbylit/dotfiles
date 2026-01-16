@@ -1,6 +1,6 @@
 local Operator = dofile(vimModeScriptPath .. "lib/operator.lua")
 local times = dofile(vimModeScriptPath .. "lib/utils/times.lua")
-local Replace = Operator:new{name = 'replace'}
+local Replace = Operator:new({ name = "replace" })
 local utf8 = dofile(vimModeScriptPath .. "vendor/luautf8.lua")
 
 function Replace:modifySelection(_, rangeStart, rangeFinish)
@@ -12,11 +12,11 @@ function Replace:modifySelection(_, rangeStart, rangeFinish)
     replacement = replacement .. replaceChar
   end)
 
-  hs.eventtap.keyStroke({}, 'delete', 50)
+  hs.eventtap.keyStroke({}, "delete", 50)
   hs.eventtap.keyStrokes(replacement)
 
   times(numChars, function()
-    hs.eventtap.keyStroke({}, 'left', 0)
+    hs.eventtap.keyStroke({}, "left", 0)
   end)
 end
 

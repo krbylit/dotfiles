@@ -360,12 +360,12 @@ This configuration uses **four complementary layers** for secrets management, ea
 
 Each layer addresses different threat models and use cases:
 
-| Layer | Storage Location | Version Controlled | Shared | Best For |
-|-------|-----------------|-------------------|--------|----------|
-| Submodule | Private Git repo | ✅ Yes | ❌ No | Project-specific secrets |
-| GPG Encryption | Main repo (encrypted) | ✅ Yes | ⚠️ With passphrase | Cross-machine secrets |
-| 1Password | Vault (external) | ❌ No | ✅ Yes | Team credentials, rotating keys |
-| Gitleaks | N/A (validation) | N/A | N/A | Mistake prevention |
+| Layer          | Storage Location      | Version Controlled | Shared             | Best For                        |
+| -------------- | --------------------- | ------------------ | ------------------ | ------------------------------- |
+| Submodule      | Private Git repo      | ✅ Yes             | ❌ No              | Project-specific secrets        |
+| GPG Encryption | Main repo (encrypted) | ✅ Yes             | ⚠️ With passphrase | Cross-machine secrets           |
+| 1Password      | Vault (external)      | ❌ No              | ✅ Yes             | Team credentials, rotating keys |
+| Gitleaks       | N/A (validation)      | N/A                | N/A                | Mistake prevention              |
 
 **Defense in depth**: If you forget to encrypt a file, pre-commit hooks catch it. If a template accidentally exposes a secret, gitleaks blocks the commit. If a machine doesn't have 1Password access, GPG-encrypted files provide fallback credentials.
 
@@ -433,12 +433,12 @@ After `chezmoi apply`:
 
 #### When to Use Symlinks vs Copies
 
-| Use Symlinks When | Use Copies When |
-|-------------------|-----------------|
-| Configuration is shared between tools | Configuration is tool-specific |
-| File is large (reduces duplication) | File is small and simple |
-| You want a single source of truth | Configuration needs per-machine customization |
-| Content doesn't change per-machine | Template variables are needed |
+| Use Symlinks When                     | Use Copies When                               |
+| ------------------------------------- | --------------------------------------------- |
+| Configuration is shared between tools | Configuration is tool-specific                |
+| File is large (reduces duplication)   | File is small and simple                      |
+| You want a single source of truth     | Configuration needs per-machine customization |
+| Content doesn't change per-machine    | Template variables are needed                 |
 
 **Examples from this config**:
 

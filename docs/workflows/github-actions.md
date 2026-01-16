@@ -469,7 +469,7 @@ This means:
 
 If your public repository contains encrypted files, add a note to `README.md`:
 
-```markdown
+````markdown
 ## Encrypted Files
 
 Some configuration files are encrypted using GPG symmetric encryption. To use these dotfiles:
@@ -478,11 +478,13 @@ Some configuration files are encrypted using GPG symmetric encryption. To use th
    ```bash
    chezmoi init --apply <your-fork>
    ```
+````
+
 1. Or remove the encrypted files and replace with your own configurations
 
 Encrypted files are marked with the `encrypted_*` prefix.
 
-```
+````
 
 #### Step 5: Exclude truly sensitive files
 
@@ -497,7 +499,7 @@ cd ~/.local/share/chezmoi
 git add .gitignore
 git commit -m "chore: exclude highly sensitive file from git"
 git push origin main
-```
+````
 
 **Expected result**: File will not be synced to public repository (not tracked by Git).
 
@@ -681,7 +683,7 @@ cat README.md      # Should fail (if excluded via .gitignore in private repo)
 
    ```yaml
    schedule:
-     - cron: "0 1 * * *"  # Correct: Daily at 1 AM UTC
+     - cron: "0 1 * * *" # Correct: Daily at 1 AM UTC
    ```
 
    **Note**: GitHub Actions schedules are in UTC. Convert to your timezone:
@@ -958,7 +960,7 @@ check_repo:
 Encrypted files should **never** be decrypted during the sync. The workflow does:
 
 ```yaml
-git checkout private/main -- .  # Copies files as-is
+git checkout private/main -- . # Copies files as-is
 ```
 
 If files appear decrypted in public, one of these occurred:

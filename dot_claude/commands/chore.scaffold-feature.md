@@ -558,19 +558,16 @@ This command scaffolds a new feature by analyzing existing project patterns and 
    ````
 
    ### Service: CompanyQueryService
-
    - `get_company(company_id, agency_id)` - Query with caching
    - `invalidate_cache(company_id, agency_id)` - Manual invalidation
 
    ### Handler: get_company
-
    - Extracts company_id from path
    - Uses AuthContext for multi-tenancy
    - Logs query via QueryAuditor
    - Returns JSON or 404
 
    ## Next Steps After Scaffolding
-
    1. **Customize model fields**:
       - Edit `CompanyData` struct to match domain requirements
       - Add/remove fields as needed

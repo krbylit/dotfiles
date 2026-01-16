@@ -14,15 +14,12 @@ describe("Word", function()
 
       local word = Word:new()
 
-      assert.are.same(
-        {
-          start = 0,
-          finish = 4,
-          mode = "exclusive",
-          direction = "characterwise"
-        },
-        word:getRange(buffer)
-      )
+      assert.are.same({
+        start = 0,
+        finish = 4,
+        mode = "exclusive",
+        direction = "characterwise",
+      }, word:getRange(buffer))
     end)
 
     it("deals with being on a new line", function()
@@ -32,15 +29,12 @@ describe("Word", function()
 
       local word = Word:new()
 
-      assert.are.same(
-        {
-          start = 2,
-          finish = 3,
-          mode = "exclusive",
-          direction = "characterwise"
-        },
-        word:getRange(buffer)
-      )
+      assert.are.same({
+        start = 2,
+        finish = 3,
+        mode = "exclusive",
+        direction = "characterwise",
+      }, word:getRange(buffer))
     end)
 
     it("continues from punctuation to the next word", function()
@@ -50,15 +44,12 @@ describe("Word", function()
 
       local word = Word:new()
 
-      assert.are.same(
-        {
-          start = 2,
-          finish = 4,
-          mode = "exclusive",
-          direction = "characterwise"
-        },
-        word:getRange(buffer)
-      )
+      assert.are.same({
+        start = 2,
+        finish = 4,
+        mode = "exclusive",
+        direction = "characterwise",
+      }, word:getRange(buffer))
     end)
 
     it("stops on punctuation", function()
@@ -68,15 +59,12 @@ describe("Word", function()
 
       local word = Word:new()
 
-      assert.are.same(
-        {
-          start = 0,
-          finish = 2,
-          mode = "exclusive",
-          direction = "characterwise"
-        },
-        word:getRange(buffer)
-      )
+      assert.are.same({
+        start = 0,
+        finish = 2,
+        mode = "exclusive",
+        direction = "characterwise",
+      }, word:getRange(buffer))
     end)
 
     it("moves from punctuation", function()
@@ -86,15 +74,12 @@ describe("Word", function()
 
       local word = Word:new()
 
-      assert.are.same(
-        {
-          start = 2,
-          finish = 3,
-          mode = "exclusive",
-          direction = "characterwise"
-        },
-        word:getRange(buffer)
-      )
+      assert.are.same({
+        start = 2,
+        finish = 3,
+        mode = "exclusive",
+        direction = "characterwise",
+      }, word:getRange(buffer))
     end)
 
     it("stops on new lines", function()
@@ -104,15 +89,12 @@ describe("Word", function()
 
       local word = Word:new()
 
-      assert.are.same(
-        {
-          start = 4,
-          finish = 7,
-          mode = "exclusive",
-          direction = "characterwise"
-        },
-        word:getRange(buffer)
-      )
+      assert.are.same({
+        start = 4,
+        finish = 7,
+        mode = "exclusive",
+        direction = "characterwise",
+      }, word:getRange(buffer))
     end)
 
     it("flips to an inclusive motion if last word in buffer #focus", function()
@@ -122,15 +104,12 @@ describe("Word", function()
 
       local word = Word:new()
 
-      assert.are.same(
-        {
-          start = 0,
-          finish = 3,
-          mode = "inclusive",
-          direction = "characterwise"
-        },
-        word:getRange(buffer)
-      )
+      assert.are.same({
+        start = 0,
+        finish = 3,
+        mode = "inclusive",
+        direction = "characterwise",
+      }, word:getRange(buffer))
     end)
   end)
 
@@ -138,16 +117,13 @@ describe("Word", function()
     it("returns the key sequence to move by word", function()
       local word = Word:new()
 
-      assert.are.same(
+      assert.are.same({
         {
-          {
-            modifiers = { 'alt' },
-            key = 'right',
-            selection = true
-          }
+          modifiers = { "alt" },
+          key = "right",
+          selection = true,
         },
-        word:getMovements()
-      )
+      }, word:getMovements())
     end)
   end)
 end)

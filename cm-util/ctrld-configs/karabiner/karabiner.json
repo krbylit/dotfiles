@@ -234,9 +234,7 @@
               {
                 "conditions": [
                   {
-                    "bundle_identifiers": [
-                      "^com\\.mitchellh\\.ghostty$"
-                    ],
+                    "bundle_identifiers": ["^com\\.mitchellh\\.ghostty$"],
                     "type": "frontmost_application_unless"
                   }
                 ],

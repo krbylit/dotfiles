@@ -14,8 +14,8 @@ Key benefits:
 
 ## Configuration Files
 
-| File | Purpose |
-|------|---------|
+| File         | Purpose                                                                           |
+| ------------ | --------------------------------------------------------------------------------- |
 | `config.yml` | Main configuration (symlinked from `cm-util/ctrld-configs/lazydocker/config.yml`) |
 
 The configuration is managed through chezmoi's symlink system, pointing to a shared config file in `cm-util/ctrld-configs/lazydocker/`. This allows the same configuration to be used across multiple machines while keeping machine-specific settings separate.
@@ -39,8 +39,8 @@ Logs are configured with timestamps enabled for debugging, and the main panel wr
 ```yaml
 logs:
   timestamps: true
-  since: ""  # Shows all logs (not just recent)
-  tail: ""   # Shows all log lines (no limit)
+  since: "" # Shows all logs (not just recent)
+  tail: "" # Shows all log lines (no limit)
 ```
 
 ### Docker Compose Custom Commands
@@ -73,11 +73,11 @@ Real-time resource monitoring with color-coded graphs:
 
 ```yaml
 gui:
-  scrollHeight: 2                    # Smooth scrolling
-  sidePanelWidth: 0.333             # 1/3 screen width for side panels
-  showBottomLine: true              # Show keybinding hints
-  expandFocusedSidePanel: false     # No accordion effect
-  screenMode: "normal"              # Default screen mode (normal/half/fullscreen)
+  scrollHeight: 2 # Smooth scrolling
+  sidePanelWidth: 0.333 # 1/3 screen width for side panels
+  showBottomLine: true # Show keybinding hints
+  expandFocusedSidePanel: false # No accordion effect
+  screenMode: "normal" # Default screen mode (normal/half/fullscreen)
   containerStatusHealthStyle: "long" # Full text status (not icons)
 ```
 
@@ -85,93 +85,93 @@ gui:
 
 ### Global Navigation
 
-| Key | Action | Description |
-|-----|--------|-------------|
-| `+` | Next screen mode | Cycle through normal → half → fullscreen |
-| `_` | Previous screen mode | Cycle backwards through screen modes |
-| `1` | Focus projects | Switch to projects panel |
-| `2` | Focus services | Switch to services panel |
-| `3` | Focus containers | Switch to containers panel |
-| `4` | Focus images | Switch to images panel |
-| `5` | Focus volumes | Switch to volumes panel |
-| `6` | Focus networks | Switch to networks panel |
-| `[` | Previous tab | Navigate to previous tab in current panel |
-| `]` | Next tab | Navigate to next tab in current panel |
-| `Enter` | Focus main panel | Move cursor to main content area |
-| `Esc` | Return | Go back to previous panel/view |
+| Key     | Action               | Description                               |
+| ------- | -------------------- | ----------------------------------------- |
+| `+`     | Next screen mode     | Cycle through normal → half → fullscreen  |
+| `_`     | Previous screen mode | Cycle backwards through screen modes      |
+| `1`     | Focus projects       | Switch to projects panel                  |
+| `2`     | Focus services       | Switch to services panel                  |
+| `3`     | Focus containers     | Switch to containers panel                |
+| `4`     | Focus images         | Switch to images panel                    |
+| `5`     | Focus volumes        | Switch to volumes panel                   |
+| `6`     | Focus networks       | Switch to networks panel                  |
+| `[`     | Previous tab         | Navigate to previous tab in current panel |
+| `]`     | Next tab             | Navigate to next tab in current panel     |
+| `Enter` | Focus main panel     | Move cursor to main content area          |
+| `Esc`   | Return               | Go back to previous panel/view            |
 
 ### Project Panel
 
-| Key | Action | Description |
-|-----|--------|-------------|
+| Key | Action      | Description                      |
+| --- | ----------- | -------------------------------- |
 | `e` | Edit config | Open Lazydocker config in editor |
-| `o` | Open config | View Lazydocker config file |
-| `m` | View logs | Display project-wide logs |
+| `o` | Open config | View Lazydocker config file      |
+| `m` | View logs   | Display project-wide logs        |
 
 ### Containers Panel
 
-| Key | Action | Description |
-|-----|--------|-------------|
-| `d` | Remove | Delete selected container |
-| `e` | Toggle stopped | Show/hide stopped containers |
-| `p` | Pause | Pause running container |
-| `s` | Stop | Stop running container |
-| `r` | Restart | Restart container |
-| `a` | Attach | Attach to container's stdin/stdout |
-| `m` | View logs | Stream container logs |
-| `E` | Exec shell | Open shell in container (via custom `sh` command) |
-| `c` | Custom command | Run predefined custom command |
-| `b` | Bulk commands | View available bulk operations |
-| `w` | Open browser | Open container's first HTTP port in browser |
-| `/` | Filter | Filter container list by text |
+| Key | Action         | Description                                       |
+| --- | -------------- | ------------------------------------------------- |
+| `d` | Remove         | Delete selected container                         |
+| `e` | Toggle stopped | Show/hide stopped containers                      |
+| `p` | Pause          | Pause running container                           |
+| `s` | Stop           | Stop running container                            |
+| `r` | Restart        | Restart container                                 |
+| `a` | Attach         | Attach to container's stdin/stdout                |
+| `m` | View logs      | Stream container logs                             |
+| `E` | Exec shell     | Open shell in container (via custom `sh` command) |
+| `c` | Custom command | Run predefined custom command                     |
+| `b` | Bulk commands  | View available bulk operations                    |
+| `w` | Open browser   | Open container's first HTTP port in browser       |
+| `/` | Filter         | Filter container list by text                     |
 
 ### Services Panel (Docker Compose)
 
-| Key | Action | Description |
-|-----|--------|-------------|
-| `u` | Up service | Start selected service |
-| `d` | Remove | Remove service containers |
-| `s` | Stop | Stop service |
-| `p` | Pause | Pause service |
-| `r` | Restart | Restart service |
-| `S` | Start | Start stopped service |
-| `a` | Attach | Attach to service output |
-| `m` | View logs | Stream service logs |
-| `U` | Up project | Start all services in compose file |
-| `D` | Down project | Stop and remove all project containers |
-| `R` | Restart options | View restart menu |
-| `c` | Custom command | Run custom service command |
-| `b` | Bulk commands | View bulk operations |
-| `E` | Exec shell | Open shell in service container |
-| `w` | Open browser | Open service in browser |
-| `/` | Filter | Filter services by text |
+| Key | Action          | Description                            |
+| --- | --------------- | -------------------------------------- |
+| `u` | Up service      | Start selected service                 |
+| `d` | Remove          | Remove service containers              |
+| `s` | Stop            | Stop service                           |
+| `p` | Pause           | Pause service                          |
+| `r` | Restart         | Restart service                        |
+| `S` | Start           | Start stopped service                  |
+| `a` | Attach          | Attach to service output               |
+| `m` | View logs       | Stream service logs                    |
+| `U` | Up project      | Start all services in compose file     |
+| `D` | Down project    | Stop and remove all project containers |
+| `R` | Restart options | View restart menu                      |
+| `c` | Custom command  | Run custom service command             |
+| `b` | Bulk commands   | View bulk operations                   |
+| `E` | Exec shell      | Open shell in service container        |
+| `w` | Open browser    | Open service in browser                |
+| `/` | Filter          | Filter services by text                |
 
 ### Images Panel
 
-| Key | Action | Description |
-|-----|--------|-------------|
+| Key | Action         | Description              |
+| --- | -------------- | ------------------------ |
 | `c` | Custom command | Run custom image command |
-| `d` | Remove | Delete selected image |
-| `b` | Bulk commands | View bulk operations |
-| `/` | Filter | Filter images by text |
+| `d` | Remove         | Delete selected image    |
+| `b` | Bulk commands  | View bulk operations     |
+| `/` | Filter         | Filter images by text    |
 
 ### Volumes Panel
 
-| Key | Action | Description |
-|-----|--------|-------------|
+| Key | Action         | Description               |
+| --- | -------------- | ------------------------- |
 | `c` | Custom command | Run custom volume command |
-| `d` | Remove | Delete selected volume |
-| `b` | Bulk commands | View bulk operations |
-| `/` | Filter | Filter volumes by text |
+| `d` | Remove         | Delete selected volume    |
+| `b` | Bulk commands  | View bulk operations      |
+| `/` | Filter         | Filter volumes by text    |
 
 ### Networks Panel
 
-| Key | Action | Description |
-|-----|--------|-------------|
+| Key | Action         | Description                |
+| --- | -------------- | -------------------------- |
 | `c` | Custom command | Run custom network command |
-| `d` | Remove | Delete selected network |
-| `b` | Bulk commands | View bulk operations |
-| `/` | Filter | Filter networks by text |
+| `d` | Remove         | Delete selected network    |
+| `b` | Bulk commands  | View bulk operations       |
+| `/` | Filter         | Filter networks by text    |
 
 ## Common Workflows
 
@@ -327,9 +327,9 @@ All compose-related commands reference this template, making it easy to switch b
    customCommands:
      services:
        - name: "Your command name:"
-         attach: true  # Show output in terminal
+         attach: true # Show output in terminal
          command: "{{ .DockerCompose }} your-command {{ .Service.Name }}"
-         serviceNames: []  # Empty = available for all services
+         serviceNames: [] # Empty = available for all services
    ```
 
 3. Apply changes: `chezmoi apply`
@@ -342,7 +342,7 @@ All compose-related commands reference this template, making it easy to switch b
 
    ```yaml
    gui:
-     sidePanelWidth: 0.25  # 25% of screen width (default: 0.333)
+     sidePanelWidth: 0.25 # 25% of screen width (default: 0.333)
    ```
 
 3. Apply changes and restart
@@ -354,9 +354,9 @@ All compose-related commands reference this template, making it easy to switch b
 
    ```yaml
    logs:
-     timestamps: false  # Hide timestamps
-     since: "1h"        # Show only last hour
-     tail: "200"        # Show only last 200 lines
+     timestamps: false # Hide timestamps
+     since: "1h" # Show only last hour
+     tail: "200" # Show only last 200 lines
    ```
 
 3. Apply changes and restart

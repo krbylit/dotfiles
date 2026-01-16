@@ -19,7 +19,6 @@
   `ollama pull nomic-embed-text`
   `ollama pull deepseek-r1:14b`
 - Configure `aichat`
-
   - Create the file `~/.config/aichat/config.yaml` by running the following command in a terminal:
 
     ```

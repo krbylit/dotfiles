@@ -5,7 +5,7 @@ local Motion = dofile(vimModeScriptPath .. "lib/motion.lua")
 local stringUtils = dofile(vimModeScriptPath .. "lib/utils/string_utils.lua")
 local utf8 = dofile(vimModeScriptPath .. "vendor/luautf8.lua")
 
-local InWord = Motion:new{ name = 'in_word' }
+local InWord = Motion:new({ name = "in_word" })
 
 function InWord:getRange(buffer)
   local start = buffer:getCaretPosition()
@@ -32,8 +32,8 @@ function InWord:getRange(buffer)
   return {
     start = start,
     finish = finish,
-    mode = 'inclusive',
-    direction = 'characterwise',
+    mode = "inclusive",
+    direction = "characterwise",
   }
 end
 

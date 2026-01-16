@@ -18,10 +18,10 @@
                   },
                   {
                     "identifiers": [
-                        {
+                      {
                         "product_id": 33,
                         "vendor_id": 1278
-                        }
+                      }
                     ],
                     "type": "device_unless"
                   }
@@ -117,10 +117,10 @@
                 "conditions": [
                   {
                     "identifiers": [
-                        {
+                      {
                         "product_id": 33,
                         "vendor_id": 1278
-                        }
+                      }
                     ],
                     "type": "device_unless"
                   }
@@ -148,10 +148,10 @@
                   },
                   {
                     "identifiers": [
-                        {
+                      {
                         "product_id": 33,
                         "vendor_id": 1278
-                        }
+                      }
                     ],
                     "type": "device_unless"
                   }

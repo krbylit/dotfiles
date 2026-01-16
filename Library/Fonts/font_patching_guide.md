@@ -31,7 +31,7 @@ Icons (Nerd Fonts, Phosphor) typically use Em size 1000, but Departure Mono uses
 Departure Mono released version 1.500 with additional characters. The goal was to incorporate these new characters into the custom font while preserving:
 
 - All Nerd Fonts icons
-- All Phosphor icons  
+- All Phosphor icons
 - All manual glyph corrections
 - The Em size 1000 adjustment
 
@@ -85,16 +85,16 @@ for font_path in sys.argv[1:]:
     print(f"\n{'='*60}")
     print(f"Font: {font_path}")
     print(f"{'='*60}")
-    
+
     font = fontforge.open(font_path)
-    
+
     print(f"Em Size: {font.em}")
     print(f"Ascent: {font.ascent}")
     print(f"Descent: {font.descent}")
     print(f"Family Name: {font.familyname}")
     print(f"Font Name: {font.fontname}")
     print(f"Full Name: {font.fullname}")
-    
+
     # Check a sample glyph size
     if ord('A') in font:
         glyph = font[ord('A')]
@@ -103,13 +103,14 @@ for font_path in sys.argv[1:]:
         print(f"  Bounding box: {bb}")
         print(f"  Height: {bb[3] - bb[1]}")
         print(f"  Width: {glyph.width}")
-    
+
     font.close()
 
 print(f"\n{'='*60}")
 ```
 
 **Expected output:**
+
 - Custom font: Em size 1000
 - New Departure: Em size 550
 - Scale factor: ~1.818x
@@ -184,22 +185,22 @@ added_count = 0
 for glyph in new_departure.glyphs():
     if glyph.unicode < 0:  # Skip unmapped glyphs
         continue
-    
+
     unicode_val = glyph.unicode
-    
+
     # Check if this is a base Departure glyph (not icon)
     # Icons typically start at 0xE000 (Private Use Area)
     # Also check common icon ranges: 0xF0000-0xFFFFF
     is_icon = (unicode_val >= 0xE000 and unicode_val <= 0xF8FF) or \
               (unicode_val >= 0xF0000 and unicode_val <= 0x10FFFF)
-    
+
     if is_icon:
         continue  # Skip icons, keep the old custom ones
-    
+
     # Copy the glyph from new Departure
     new_departure.selection.select(unicode_val)
     new_departure.copy()
-    
+
     if unicode_val in custom:
         custom.selection.select(unicode_val)
         custom.paste()
@@ -328,11 +329,13 @@ From the [Departure Mono documentation](https://github.com/rektdeckard/departure
 Ghostty's `font-size` setting uses **points (pt)**, not pixels. The conversion depends on display DPI:
 
 **For Retina/HiDPI displays (most modern Macs):**
+
 - DPI: 144 (2x scaling)
 - Formula: `pixels = points × 2`
 - For 11px increments: use point sizes **5.5, 11, 16.5, 22, 27.5, 33**
 
 **Example configuration:**
+
 ```conf
 # 16.5pt = 33px on Retina display (multiple of 11px for pixel-perfect rendering)
 font-size = 16.5
@@ -364,6 +367,7 @@ By changing Em size from 550 → 1000, we maintain pixel-perfectness while ensur
 **Cause**: macOS native controls use OS/2 table metrics differently than terminal rendering.
 
 **Solutions**:
+
 1. Use `fix_os2_metrics.py` to correct the OS/2 table
 2. Or use the old font for window titles only:
    ```conf
@@ -380,6 +384,7 @@ By changing Em size from 550 → 1000, we maintain pixel-perfectness while ensur
 ## Git History
 
 Original font creation commit:
+
 ```
 212ee84 - cm: add departure mono font and nerd font patch (Dec 1, 2024)
 ```
@@ -403,6 +408,7 @@ When Departure Mono releases new versions:
 ## Summary
 
 This custom font combines the best of multiple sources:
+
 - **Departure Mono**: Pixel-perfect bitmap-inspired monospace font
 - **Nerd Fonts**: Programming icons and symbols
 - **Phosphor**: Additional icon coverage

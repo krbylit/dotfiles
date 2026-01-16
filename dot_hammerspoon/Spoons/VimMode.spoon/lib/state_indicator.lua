@@ -14,7 +14,7 @@ local function rgba(r, g, b, a)
     red = r / 255,
     green = g / 255,
     blue = b / 255,
-    alpha = a
+    alpha = a,
   }
 end
 
@@ -23,7 +23,7 @@ local colors = {
   insert = rgba(50, 50, 50, 1),
   normal = rgba(4, 135, 250, 0.95),
   visual = rgba(210, 152, 97, 0.95),
-  replace = rgba(219, 104, 107, 0.95)
+  replace = rgba(219, 104, 107, 0.95),
 }
 
 colors["visual-replace"] = colors.replace
@@ -33,60 +33,66 @@ local defaultHeight = 25
 
 local function getFocusedElementPosition()
   local systemElement = ax.systemWideElement()
-  if not systemElement then return nil end
+  if not systemElement then
+    return nil
+  end
 
   local currentElement = systemElement:attributeValue("AXFocusedUIElement")
-  if not currentElement then return nil end
+  if not currentElement then
+    return nil
+  end
 
   -- we don't want to get position for anything that isn't a text field
-  if not axUtils.isTextField(currentElement) then return nil end
+  if not axUtils.isTextField(currentElement) then
+    return nil
+  end
 
-  local position = currentElement:attributeValue('AXPosition')
-  if not position then return nil end
+  local position = currentElement:attributeValue("AXPosition")
+  if not position then
+    return nil
+  end
 
   return {
     x = position.x,
-    y = position.y
+    y = position.y,
   }
 end
 
 function StateIndicator:new(vim)
-  local canvas = hs.canvas.new{
+  local canvas = hs.canvas.new({
     w = defaultWidth,
     h = defaultHeight,
     x = 100,
     y = 100,
-  }
+  })
 
-  canvas:insertElement(
-    {
-      type = 'rectangle',
-      action = 'fill',
-      roundedRectRadii = { xRadius = 2, yRadius = 2 },
-      fillColor = colors.normal,
-      strokeColor = { white = 1.0 },
-      strokeWidth = 3.0,
-      frame = { x = "0%", y = "0%", h = "100%", w = "100%", },
-      withShadow = true
+  canvas:insertElement({
+    type = "rectangle",
+    action = "fill",
+    roundedRectRadii = { xRadius = 2, yRadius = 2 },
+    fillColor = colors.normal,
+    strokeColor = { white = 1.0 },
+    strokeWidth = 3.0,
+    frame = { x = "0%", y = "0%", h = "100%", w = "100%" },
+    withShadow = true,
+  }, elementIndexBox)
+
+  canvas:insertElement({
+    type = "text",
+    action = "fill",
+    frame = {
+      x = "5%",
+      y = "10%",
+      h = "100%",
+      w = "95%",
     },
-    elementIndexBox
-  )
-
-  canvas:insertElement(
-    {
-      type = 'text',
-      action = 'fill',
-      frame = {
-        x = "5%", y = "10%", h = "100%", w = "95%"
-      },
-      text = "placeholder" -- we'll override this in render()
-    }
-  )
+    text = "placeholder", -- we'll override this in render()
+  })
 
   local indicator = {
     canvas = canvas,
     vim = vim,
-    showing = false
+    showing = false,
   }
 
   setmetatable(indicator, self)
@@ -100,22 +106,24 @@ end
 function StateIndicator:render()
   local vim = self.vim
 
-  if not vim.config.shouldShowAlertInNormalMode then return false end
+  if not vim.config.shouldShowAlertInNormalMode then
+    return false
+  end
 
   local canvas = self.canvas
 
   -- set the inner text
-  canvas:elementAttribute(elementIndexText, 'text', self:getBoxText())
+  canvas:elementAttribute(elementIndexText, "text", self:getBoxText())
 
   -- set the box color
   local boxFillColor = colors[self:getIndicatorMode()] or colors.default
-  canvas:elementAttribute(elementIndexBox, 'fillColor', boxFillColor)
+  canvas:elementAttribute(elementIndexBox, "fillColor", boxFillColor)
 
   -- move the canvas to the element
   canvas:topLeft(self:getElementPosition(defaultWidth))
 
   -- Fade out if we're in insert mode
-  return not vim:isMode('insert')
+  return not vim:isMode("insert")
 end
 
 local modes = {
@@ -123,15 +131,15 @@ local modes = {
   normal = "NORMAL",
   visual = "VISUAL",
   replace = "REPLACE",
-  ["visual-replace"] = "V-REPLACE"
+  ["visual-replace"] = "V-REPLACE",
 }
 
 function StateIndicator:getIndicatorMode()
   local vim = self.vim
   local state = vim.commandState
 
-  if state:getPendingInput() == 'replace' then
-    if vim:isMode('visual') then
+  if state:getPendingInput() == "replace" then
+    if vim:isMode("visual") then
       return "visual-replace"
     else
       return "replace"
@@ -154,7 +162,7 @@ function StateIndicator:getElementPosition(canvasWidth)
 
     return {
       x = elementPosition.x + xOffset,
-      y = elementPosition.y - defaultHeight - yOffset
+      y = elementPosition.y - defaultHeight - yOffset,
     }
   else
     -- get the frame of the screen we are currently focused on
@@ -169,7 +177,7 @@ function StateIndicator:getElementPosition(canvasWidth)
 
     return {
       x = x,
-      y = yBottom - defaultHeight - yOffset
+      y = yBottom - defaultHeight - yOffset,
     }
   end
 end
@@ -191,13 +199,10 @@ function StateIndicator:getBoxText()
 
   local fontName = self:getConfig().font or "Courier New Bold"
 
-  return hs.styledtext.new(
-    text,
-    {
-      font = { name = fontName, size = 14 },
-      color = { white = 1.0 }
-    }
-  )
+  return hs.styledtext.new(text, {
+    font = { name = fontName, size = 14 },
+    color = { white = 1.0 },
+  })
 end
 
 function StateIndicator:update()

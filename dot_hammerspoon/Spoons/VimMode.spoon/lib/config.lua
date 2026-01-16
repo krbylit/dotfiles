@@ -6,7 +6,7 @@ function Config:new(options)
   -- defaults
   local config = {
     alert = {
-      font = "Courier New"
+      font = "Courier New",
     },
     betaFeatures = {},
     fallbackOnlyApps = {},

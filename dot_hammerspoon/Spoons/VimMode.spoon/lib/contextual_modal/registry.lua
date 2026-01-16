@@ -4,7 +4,7 @@ local Registry = {}
 
 function Registry:new()
   local registry = {
-    fns = {}
+    fns = {},
   }
 
   setmetatable(registry, self)
@@ -14,10 +14,14 @@ function Registry:new()
 end
 
 function Registry:registerHandler(contextKey, mods, key, pressedfn, releasedfn, repeatfn)
-  if not self.fns[contextKey] then self.fns[contextKey] = {} end
+  if not self.fns[contextKey] then
+    self.fns[contextKey] = {}
+  end
   local context = self.fns[contextKey]
 
-  if not context[key] then context[key] = {} end
+  if not context[key] then
+    context[key] = {}
+  end
   local keyHandlers = context[key]
 
   table.insert(keyHandlers, {
@@ -25,8 +29,8 @@ function Registry:registerHandler(contextKey, mods, key, pressedfn, releasedfn, 
     handlers = {
       onPressed = pressedfn,
       onReleased = releasedfn,
-      onRepeat = repeatfn
-    }
+      onRepeat = repeatfn,
+    },
   })
 
   return self
@@ -34,10 +38,14 @@ end
 
 function Registry:hasAnyHandler(contextKey, mods, key)
   local context = self.fns[contextKey]
-  if not context then return false end
+  if not context then
+    return false
+  end
 
   local keyHandlers = context[key]
-  if not keyHandlers then return false end
+  if not keyHandlers then
+    return false
+  end
 
   for _, entry in pairs(keyHandlers) do
     if tableUtils.matches(entry.mods, mods) then
@@ -52,10 +60,14 @@ end
 
 function Registry:getHandler(contextKey, mods, key, eventType)
   local context = self.fns[contextKey]
-  if not context then return nil end
+  if not context then
+    return nil
+  end
 
   local keyHandlers = context[key]
-  if not keyHandlers then return nil end
+  if not keyHandlers then
+    return nil
+  end
 
   for _, entry in pairs(keyHandlers) do
     if tableUtils.matches(entry.mods, mods) then

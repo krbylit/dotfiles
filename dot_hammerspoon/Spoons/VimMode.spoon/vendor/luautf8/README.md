@@ -1,5 +1,4 @@
-UTF-8 module for Lua 5.x
-========================
+# UTF-8 module for Lua 5.x
 
 [![Build Status](https://travis-ci.org/starwing/luautf8.svg?branch=master)](https://travis-ci.org/starwing/luautf8)
 [![Coverage Status](https://coveralls.io/repos/github/starwing/luautf8/badge.svg?branch=master)](https://coveralls.io/github/starwing/luautf8?branch=master)
@@ -35,16 +34,14 @@ in your codes :-(
 
 [2]: http://www.lua.org/tests/5.2/
 
-LuaRocks Installation
----------------------
+## LuaRocks Installation
 
 `luarocks install luautf8`
 
 It's now full-compatible with Lua5.3's utf8 library, so replace this
 file (and headers) with lua5.3 source's lutf8lib.c is also okay.
 
-Usage
------
+## Usage
 
 Many routines are same as Lua's string module:
 
@@ -88,7 +85,7 @@ Some routines are new, with some Unicode-spec functions:
 escape a str to UTF-8 format string. It support several escape format:
 
 - `%ddd` - which ddd is a decimal number at any length:
-   change Unicode code point to UTF-8 format.
+  change Unicode code point to UTF-8 format.
 - `%{ddd}` - same as `%nnn` but has bracket around.
 - `%uddd` - same as `%ddd`, u stands Unicode
 - `%u{ddd}` - same as `%{ddd}`
@@ -173,15 +170,13 @@ point (number). utf8.lower/utf8.upper has the same extension.
 
 compare a and b without case, -1 means a < b, 0 means a == b and 1 means a > b.
 
-Improvement needed
-------------------
+## Improvement needed
 
 - add Lua 5.3 spec test-suite.
 - more test case.
 - grapheme-compose support, and affect in utf8.reverse and utf8.width
 - Unicode normalize algorithm implement.
 
-License
--------
+## License
 
 It use same license with Lua: <http://www.lua.org/license.html>

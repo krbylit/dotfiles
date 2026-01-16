@@ -366,6 +366,12 @@ on = "<C-s>"
 run = "plugin fzf-lua-live"
 desc = "Search text with fzf-lua live grep and navigate to file"
 
+# fzf-lua-files plugin for fzf-lua file search (mirrors Fish <C-f> binding)
+[[mgr.prepend_keymap]]
+on = "<C-f>"
+run = "plugin fzf-lua-files"
+desc = "Search files with fzf-lua and navigate to file"
+
 # popup-shell plugin for interactive fish shell
 [[mgr.prepend_keymap]]
 on = "<C-/>"
@@ -620,6 +626,10 @@ keymap = [
         "g",
         "d",
     ], run = "cd ~/Downloads", desc = "Go to the downloads directory" },
+    { on = [
+        "g",
+        "k",
+    ], run = "cd ~/Desktop", desc = "Go to Desktop" },
     { on = [
         "g",
         "<Space>",

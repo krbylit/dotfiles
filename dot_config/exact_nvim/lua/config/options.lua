@@ -12,7 +12,7 @@ vim.api.nvim_set_keymap("", " ", "<Nop>", { noremap = true, silent = true })
 vim.g.maplocalleader = " "
 -- Asynchronously set global for `$(chezmoi source-path)`
 vim.schedule(function()
-    vim.g.chezmoi_source_path = vim.fn.system("chezmoi source-path")
+  vim.g.chezmoi_source_path = vim.fn.system("chezmoi source-path")
 end)
 -- LazyVim root dir detection
 -- vim.g.root_spec = { { ".git" }, "lua", "lsp", "cwd" }
@@ -22,10 +22,10 @@ vim.g.root_spec = { "lsp", { ".git", "lua" }, "cwd" } -- default
 vim.opt.list = true
 -- Set 'listchars' to only display trailing spaces
 vim.opt.listchars = {
-    trail = "-", -- Show trailing spaces as `-`
-    tab = "  ", -- A tab will appear as spaces (effectively hidden)
-    nbsp = " ", -- Hide non-breaking spaces
-    space = " ", -- Hide space indicators
+  trail = "-", -- Show trailing spaces as `-`
+  tab = "  ", -- A tab will appear as spaces (effectively hidden)
+  nbsp = " ", -- Hide non-breaking spaces
+  space = " ", -- Hide space indicators
 }
 -- Remove 'blank' from sessionoptions to avoid opening empty unnamed buffers
 vim.opt.sessionoptions:remove("blank")
@@ -46,9 +46,9 @@ vim.opt.iskeyword:append("-")
 -- use bash for shell, fish is very slow in nvim
 -- opt.shell = "bash"
 if vim.env.IS_SSH ~= "1" then
-    opt.shell = "fish"
+  opt.shell = "fish"
 else
-    opt.shell = "bash"
+  opt.shell = "bash"
 end
 -- opt.shell = "/opt/homebrew/bin/fish"
 opt.undofile = true -- Save undo history between sessions
@@ -79,17 +79,17 @@ opt.winminheight = 1 -- Minimum window height
 
 -- OSC 52 clipboard support for SSH (Ghostty terminal supports this)
 if vim.env.IS_SSH == "1" then
-    vim.g.clipboard = {
-        name = "OSC 52",
-        copy = {
-            ["+"] = require("vim.ui.clipboard.osc52").copy("+"),
-            ["*"] = require("vim.ui.clipboard.osc52").copy("*"),
-        },
-        paste = {
-            ["+"] = require("vim.ui.clipboard.osc52").paste("+"),
-            ["*"] = require("vim.ui.clipboard.osc52").paste("*"),
-        },
-    }
+  vim.g.clipboard = {
+    name = "OSC 52",
+    copy = {
+      ["+"] = require("vim.ui.clipboard.osc52").copy("+"),
+      ["*"] = require("vim.ui.clipboard.osc52").copy("*"),
+    },
+    paste = {
+      ["+"] = require("vim.ui.clipboard.osc52").paste("+"),
+      ["*"] = require("vim.ui.clipboard.osc52").paste("*"),
+    },
+  }
 end
 
 -- Sync with system clipboard (uses OSC 52 on SSH, system clipboard locally)
@@ -104,19 +104,19 @@ vim.g.autoformat = true
 vim.g.lazyvim_prettier_needs_config = false
 
 if vim.fn.has("nvim-0.10") == 1 then
-    opt.smoothscroll = true
-    opt.foldexpr = "v:lua.require'lazyvim.util'.treesitter.foldexpr()"
-    opt.foldmethod = "expr"
-    opt.foldtext = ""
-    opt.foldcolumn = "1"
+  opt.smoothscroll = true
+  opt.foldexpr = "v:lua.require'lazyvim.util'.treesitter.foldexpr()"
+  opt.foldmethod = "expr"
+  opt.foldtext = ""
+  opt.foldcolumn = "1"
 else
-    opt.foldmethod = "indent"
-    opt.foldtext = "v:lua.require'lazyvim.util'.ui.foldtext()"
-    opt.foldcolumn = "1"
+  opt.foldmethod = "indent"
+  opt.foldtext = "v:lua.require'lazyvim.util'.ui.foldtext()"
+  opt.foldcolumn = "1"
 end
 
 if vim.env.IS_SSH ~= "1" then
-    vim.o.showtabline = 2
+  vim.o.showtabline = 2
 end
 
 -- ================================================================
@@ -131,47 +131,47 @@ vim.g.lazyvim_python_lsp = "pyright"
 -- WARN: May want to move all autocmds to autocmds.lua to decrease the chance of an autocmd being loaded more than once.
 -- Enable `csvview.nvim` for CSV files
 vim.api.nvim_create_autocmd("FileType", {
-    pattern = "csv",
-    callback = function()
-        require("csvview").enable()
-        vim.opt_local.wrap = false
-    end,
+  pattern = "csv",
+  callback = function()
+    require("csvview").enable()
+    vim.opt_local.wrap = false
+  end,
 })
 
 -- Disable diagnostics in certain filetypes
 local diagnostics_disabled_fts = {
-    "markdown",
-    "txt",
-    "json",
-    "sh",
-    "bash",
-    "zsh",
-    "fish",
-    "conf",
-    "cfg",
-    "ini",
-    "toml",
-    "yaml",
-    "yml",
-    "env",
-    "gitconfig",
+  "markdown",
+  "txt",
+  "json",
+  "sh",
+  "bash",
+  "zsh",
+  "fish",
+  "conf",
+  "cfg",
+  "ini",
+  "toml",
+  "yaml",
+  "yml",
+  "env",
+  "gitconfig",
 }
 vim.api.nvim_create_autocmd("FileType", {
-    pattern = diagnostics_disabled_fts,
-    callback = function()
-        -- Disable diagnostics only in current buffer.
-        vim.diagnostic.enable(false, { bufnr = 0 })
-    end,
+  pattern = diagnostics_disabled_fts,
+  callback = function()
+    -- Disable diagnostics only in current buffer.
+    vim.diagnostic.enable(false, { bufnr = 0 })
+  end,
 })
 
 -- Disable by file extension
 local diagnostics_disabled_extensions = {
-    "*.tfvars",
-    "*.tfbackend",
+  "*.tfvars",
+  "*.tfbackend",
 }
 -- Disable by file path
 local diagnostics_disabled_dirs = {
-    vim.fn.expand("$HOME") .. "/.local/share/nvim/scratch/*",
+  vim.fn.expand("$HOME") .. "/.local/share/nvim/scratch/*",
 }
 -- Combine for autocmd
 local diagnostics_disabled_patterns = {}
@@ -179,67 +179,67 @@ vim.list_extend(diagnostics_disabled_patterns, diagnostics_disabled_dirs)
 vim.list_extend(diagnostics_disabled_patterns, diagnostics_disabled_extensions)
 -- Strip newlines if they exist, as `patterns` disallows those.
 diagnostics_disabled_patterns = vim.tbl_map(function(p)
-    return p:gsub("\n", "")
+  return p:gsub("\n", "")
 end, diagnostics_disabled_patterns)
 -- Disable diagnostics by other patterns
 vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
-    pattern = diagnostics_disabled_patterns,
-    callback = function()
-        -- Disable diagnostics only in current buffer.
-        vim.diagnostic.enable(false, { bufnr = 0 })
-    end,
+  pattern = diagnostics_disabled_patterns,
+  callback = function()
+    -- Disable diagnostics only in current buffer.
+    vim.diagnostic.enable(false, { bufnr = 0 })
+  end,
 })
 
 -- Add chezmoi template files as filetypes to nvim so that yaml and toml LSPs can parse them
 -- TODO: move these to a separate options module and import here
 vim.filetype.add({
-    extension = {
-        tmpl = function(path, bufnr)
-            if path:find(".toml.tmpl") then
-                return "toml"
-            end
-            if path:find(".json.tmpl") then
-                return "json"
-            end
-            if path:find(".yaml.tmpl") then
-                return "yaml"
-            end
-            if path:find(".sh.tmpl") then
-                return "sh"
-            end
-            if path:find(".conf.tmpl") then
-                return "conf"
-            end
-        end,
-        chezmoiignore = "gitignore",
-        watchmanconfig = "json",
-        gitconfig = "gitconfig",
-        json = function(path, bufnr)
-            if path:find("neoconf") then
-                return "jsonc"
-            end
-            return "json"
-        end,
-        tfvars = "terraform",
-        tfbackend = "terraform",
-    },
-    filename = {
-        -- ["dot_zshrc"] = "zsh",
-        -- ["dot_gitconfig"] = "gitconfig",
-        -- ["dot_neoconf"] = "jsonc", -- NOTE: this one isn't working for some reason, hence above json func
-        -- ["neoconf"] = "jsonc",
-    },
-    pattern = {
-        [".*dot_zshrc"] = "zsh",
-        [".*dot_gitconfig"] = "gitconfig",
-        [".*gitconfig$"] = "gitconfig",
-        [".*dot_bash.*"] = "bash",
-        [".*ssh/.*config"] = "sshconfig",
-    },
-    -- pattern = {
-    -- 	[".*gitconfig$"] = "gitconfig",
-    -- 	[".*zshrc$"] = "zsh",
-    -- 	-- 	[".*%.toml%.tmpl$"] = "toml",
-    -- 	-- 	[".*%.yaml%.tmpl$"] = "yaml",
-    -- },
+  extension = {
+    tmpl = function(path, bufnr)
+      if path:find(".toml.tmpl") then
+        return "toml"
+      end
+      if path:find(".json.tmpl") then
+        return "json"
+      end
+      if path:find(".yaml.tmpl") then
+        return "yaml"
+      end
+      if path:find(".sh.tmpl") then
+        return "sh"
+      end
+      if path:find(".conf.tmpl") then
+        return "conf"
+      end
+    end,
+    chezmoiignore = "gitignore",
+    watchmanconfig = "json",
+    gitconfig = "gitconfig",
+    json = function(path, bufnr)
+      if path:find("neoconf") then
+        return "jsonc"
+      end
+      return "json"
+    end,
+    tfvars = "terraform",
+    tfbackend = "terraform",
+  },
+  filename = {
+    -- ["dot_zshrc"] = "zsh",
+    -- ["dot_gitconfig"] = "gitconfig",
+    -- ["dot_neoconf"] = "jsonc", -- NOTE: this one isn't working for some reason, hence above json func
+    -- ["neoconf"] = "jsonc",
+  },
+  pattern = {
+    [".*dot_zshrc"] = "zsh",
+    [".*dot_gitconfig"] = "gitconfig",
+    [".*gitconfig$"] = "gitconfig",
+    [".*dot_bash.*"] = "bash",
+    [".*ssh/.*config"] = "sshconfig",
+  },
+  -- pattern = {
+  -- 	[".*gitconfig$"] = "gitconfig",
+  -- 	[".*zshrc$"] = "zsh",
+  -- 	-- 	[".*%.toml%.tmpl$"] = "toml",
+  -- 	-- 	[".*%.yaml%.tmpl$"] = "yaml",
+  -- },
 })

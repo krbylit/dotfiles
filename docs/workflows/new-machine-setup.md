@@ -530,15 +530,15 @@ Scripts check for these environment variables:
 
 ### Installation Differences
 
-| Component | Local Machine | Remote SSH Machine |
-|-----------|---------------|-------------------|
-| **Brewfile** | Full `~/Brewfile` | Minimal `~/Brewfile_ssh` |
-| **GUI Apps** | Hammerspoon, Cursor, Ghostty | Skipped |
-| **CLI Tools** | All installed | All installed |
-| **Secrets** | Submodule initialized | Skipped |
-| **Git Hooks** | Pre-commit installed | Skipped |
-| **Window Manager** | Yabai, skhd started | Skipped |
-| **macOS Settings** | Applied | Applied (if macOS) |
+| Component          | Local Machine                | Remote SSH Machine       |
+| ------------------ | ---------------------------- | ------------------------ |
+| **Brewfile**       | Full `~/Brewfile`            | Minimal `~/Brewfile_ssh` |
+| **GUI Apps**       | Hammerspoon, Cursor, Ghostty | Skipped                  |
+| **CLI Tools**      | All installed                | All installed            |
+| **Secrets**        | Submodule initialized        | Skipped                  |
+| **Git Hooks**      | Pre-commit installed         | Skipped                  |
+| **Window Manager** | Yabai, skhd started          | Skipped                  |
+| **macOS Settings** | Applied                      | Applied (if macOS)       |
 
 ### Force SSH Mode Locally (Testing)
 
@@ -860,7 +860,7 @@ exit
 
 ### Automatic Sync Workflow
 
-For detailed multi-machine synchronization workflows, see [multi-machine-sync.md](./multi-machine-sync.md) *(coming soon)*.
+For detailed multi-machine synchronization workflows, see [multi-machine-sync.md](./multi-machine-sync.md) .
 
 ## Verification Checklist
 
@@ -901,7 +901,7 @@ After successful setup:
 5. **Read additional documentation**:
    - [configuration-changes.md](./configuration-changes.md) - How to modify configurations safely
    - [secrets-management.md](./secrets-management.md) - Managing secrets and encryption
-   - [multi-machine-sync.md](./multi-machine-sync.md) - Keeping machines synchronized *(coming soon)*
+   - [multi-machine-sync.md](./multi-machine-sync.md) - Keeping machines synchronized
 
 ## Related Documentation
 
@@ -909,7 +909,7 @@ After successful setup:
 - [README.md](../../README.md) - Repository overview and quick reference
 - [configuration-changes.md](./configuration-changes.md) - Making safe configuration changes
 - [secrets-management.md](./secrets-management.md) - Managing secrets across machines
-- [multi-machine-sync.md](./multi-machine-sync.md) - Multi-machine synchronization *(coming soon)*
+- [multi-machine-sync.md](./multi-machine-sync.md) - Multi-machine synchronization
 - [Chezmoi Official Docs](https://www.chezmoi.io/) - Comprehensive chezmoi documentation
 
 ## Notes

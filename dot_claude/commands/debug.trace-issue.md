@@ -470,7 +470,6 @@ This command helps trace and debug issues by analyzing code execution paths, dat
    ## Investigation Plan
 
    ### Immediate Checks (5 minutes)
-
    1. **Check logs** for this request:
 
       ```bash
@@ -600,7 +599,6 @@ This command helps trace and debug issues by analyzing code execution paths, dat
    ***
 
    ## Recommended Next Steps
-
    1. **Start with Hypothesis 1** (most likely):
       - Add logging for agency_id comparison
       - Reproduce issue

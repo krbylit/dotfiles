@@ -221,17 +221,17 @@ Chezmoi uses special filename prefixes in the **source directory** to control ho
 
 ### File Prefix Reference
 
-| Prefix | Purpose | Example Source | Example Destination | Permissions |
-|--------|---------|----------------|---------------------|-------------|
-| `dot_` | Creates dotfile (leading `.`) | `dot_gitconfig` | `~/.gitconfig` | Default (644) |
-| `private_` | Restricts permissions | `private_dot_bashrc` | `~/.bashrc` | 600 (owner only) |
-| `executable_` | Makes file executable | `executable_yabairc` | `~/.config/yabai/yabairc` | 755 (executable) |
-| `symlink_` | Creates symbolic link | `symlink_Brewfile.tmpl` | `~/Brewfile` → target | Link |
-| `exact_` | Directory managed exactly | `exact_nvim/` | `~/.config/nvim/` | Removes untracked |
-| `encrypted_` | GPG-encrypted file | `encrypted_key.asc` | Decrypted file | As specified |
-| `.tmpl` | Template file (suffix) | `config.yaml.tmpl` | `config.yaml` | Processed |
+| Prefix        | Purpose                       | Example Source          | Example Destination       | Permissions       |
+| ------------- | ----------------------------- | ----------------------- | ------------------------- | ----------------- |
+| `dot_`        | Creates dotfile (leading `.`) | `dot_gitconfig`         | `~/.gitconfig`            | Default (644)     |
+| `private_`    | Restricts permissions         | `private_dot_bashrc`    | `~/.bashrc`               | 600 (owner only)  |
+| `executable_` | Makes file executable         | `executable_yabairc`    | `~/.config/yabai/yabairc` | 755 (executable)  |
+| `symlink_`    | Creates symbolic link         | `symlink_Brewfile.tmpl` | `~/Brewfile` → target     | Link              |
+| `exact_`      | Directory managed exactly     | `exact_nvim/`           | `~/.config/nvim/`         | Removes untracked |
+| `encrypted_`  | GPG-encrypted file            | `encrypted_key.asc`     | Decrypted file            | As specified      |
+| `.tmpl`       | Template file (suffix)        | `config.yaml.tmpl`      | `config.yaml`             | Processed         |
 
-### dot_ - Creating Dotfiles
+### dot\_ - Creating Dotfiles
 
 The most common prefix. Converts files/directories to start with a `.` (dot):
 
@@ -254,7 +254,7 @@ Destination: ~/.vimrc
 - `dot_bashrc` → `~/.bashrc`
 - `dot_config/ripgrep/dot_ripgreprc` → `~/.config/ripgrep/.ripgreprc`
 
-### private_ - Restricting Permissions
+### private\_ - Restricting Permissions
 
 Creates files with `600` permissions (readable/writable by owner only):
 
@@ -278,7 +278,7 @@ Destination: ~/.ssh/config (with permissions 600)
 - `secrets/.config/gh/private_hosts.yml` → `~/.config/gh/hosts.yml` (600)
 - `dot_config/aichat/private_config.yaml` → `~/.config/aichat/config.yaml` (600)
 
-### executable_ - Creating Executable Scripts
+### executable\_ - Creating Executable Scripts
 
 Creates files with `755` permissions (executable by all, writable by owner):
 
@@ -301,7 +301,7 @@ Destination: ~/.config/skhd/util/focus_empty_space.sh (with permissions 755)
 - `dot_config/yabai/executable_yabairc` → `~/.config/yabai/yabairc` (755)
 - `dot_config/skhd/util/executable_focus_empty_space.sh` → `~/.config/skhd/util/focus_empty_space.sh` (755)
 
-### symlink_ - Creating Symbolic Links
+### symlink\_ - Creating Symbolic Links
 
 Creates a symbolic link instead of copying the file. The template must output the target path:
 
@@ -324,7 +324,7 @@ Destination: ~/Brewfile → (symlinks to that path)
 
 **Note**: Symlink templates must contain a valid file path as their output. See Section 4 for template syntax.
 
-### exact_ - Exact Directory Management
+### exact\_ - Exact Directory Management
 
 Marks a directory as "exact" - chezmoi removes any files in the destination that aren't in the source:
 
@@ -1101,20 +1101,20 @@ Source State                Target State              Destination State
 
 ### Quick Reference Table
 
-| Command | Purpose | Common Usage |
-|---------|---------|--------------|
-| `chezmoi edit <file>` | Edit file in source state | `chezmoi edit ~/.gitconfig` |
-| `chezmoi diff` | Show pending changes | `chezmoi diff` |
-| `chezmoi apply` | Apply changes to destination | `chezmoi apply` |
-| `chezmoi cd` | Navigate to source directory | `chezmoi cd` |
-| `chezmoi update` | Pull and apply remote changes | `chezmoi update` |
-| `chezmoi add <file>` | Add new file to chezmoi | `chezmoi add ~/.config/tool/config.yaml` |
-| `chezmoi forget <file>` | Stop tracking file | `chezmoi forget ~/.config/old/config.yaml` |
-| `chezmoi status` | Show managed files status | `chezmoi status` |
-| `chezmoi cat <file>` | Show target state of file | `chezmoi cat ~/.gitconfig` |
-| `chezmoi verify` | Verify destination matches target | `chezmoi verify` |
-| `chezmoi data` | Show template data | `chezmoi data` |
-| `chezmoi doctor` | Diagnose chezmoi setup | `chezmoi doctor` |
+| Command                 | Purpose                           | Common Usage                               |
+| ----------------------- | --------------------------------- | ------------------------------------------ |
+| `chezmoi edit <file>`   | Edit file in source state         | `chezmoi edit ~/.gitconfig`                |
+| `chezmoi diff`          | Show pending changes              | `chezmoi diff`                             |
+| `chezmoi apply`         | Apply changes to destination      | `chezmoi apply`                            |
+| `chezmoi cd`            | Navigate to source directory      | `chezmoi cd`                               |
+| `chezmoi update`        | Pull and apply remote changes     | `chezmoi update`                           |
+| `chezmoi add <file>`    | Add new file to chezmoi           | `chezmoi add ~/.config/tool/config.yaml`   |
+| `chezmoi forget <file>` | Stop tracking file                | `chezmoi forget ~/.config/old/config.yaml` |
+| `chezmoi status`        | Show managed files status         | `chezmoi status`                           |
+| `chezmoi cat <file>`    | Show target state of file         | `chezmoi cat ~/.gitconfig`                 |
+| `chezmoi verify`        | Verify destination matches target | `chezmoi verify`                           |
+| `chezmoi data`          | Show template data                | `chezmoi data`                             |
+| `chezmoi doctor`        | Diagnose chezmoi setup            | `chezmoi doctor`                           |
 
 ### Detailed Command Explanations
 
@@ -1442,7 +1442,7 @@ symlink_config.yaml.tmpl  # Links to it
 api_key = {{ (onepassword "tool-credentials").fields.api_key | quote }}
 ```
 
-### Use exact_ Carefully
+### Use exact\_ Carefully
 
 Only use `exact_` when you're sure:
 
@@ -1602,7 +1602,7 @@ chezmoi apply --verbose
 chezmoi cat ~/.config/file
 ```
 
-### Using exact_ on the Wrong Directories
+### Using exact\_ on the Wrong Directories
 
 **Problem**: Using `exact_` on directories you manually add files to:
 

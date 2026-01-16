@@ -6,7 +6,8 @@ import fontforge
 import sys
 
 if len(sys.argv) != 3:
-    print("Usage: fontforge -script fix_os2_metrics.py <input.otf> <output.otf>")
+    print(
+        "Usage: fontforge -script fix_os2_metrics.py <input.otf> <output.otf>")
     sys.exit(1)
 
 input_path = sys.argv[1]

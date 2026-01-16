@@ -261,12 +261,12 @@ This repository uses GitHub Actions to sync configurations to a public repositor
 
 **Security layers**:
 
-| Layer | File | Purpose | What it protects |
-|-------|------|---------|------------------|
-| `.gitignore` | Git | Prevents files from being committed | Build artifacts, local caches, temp files |
-| `.chezmoiignore` | Chezmoi | Prevents files from being applied to `$HOME` | Shared configs, secrets directory, dev metadata |
-| `secrets/` submodule | Git | Separate private repository | API keys, credentials, sensitive configs |
-| GitHub Actions filter | CI/CD | Syncs only approved files to public repo | Private information in public dotfiles |
+| Layer                 | File    | Purpose                                      | What it protects                                |
+| --------------------- | ------- | -------------------------------------------- | ----------------------------------------------- |
+| `.gitignore`          | Git     | Prevents files from being committed          | Build artifacts, local caches, temp files       |
+| `.chezmoiignore`      | Chezmoi | Prevents files from being applied to `$HOME` | Shared configs, secrets directory, dev metadata |
+| `secrets/` submodule  | Git     | Separate private repository                  | API keys, credentials, sensitive configs        |
+| GitHub Actions filter | CI/CD   | Syncs only approved files to public repo     | Private information in public dotfiles          |
 
 **Example flow**:
 
@@ -599,14 +599,14 @@ run_after_1-setup-fish.sh
 
 This repository has 6 scripts in `.chezmoiscripts/`:
 
-| Order | Script | Timing | Purpose |
-|-------|--------|--------|---------|
-| 1 | `run_once_before_1-setup-secrets-submodule.sh.tmpl` | Before, once | Initialize secrets git submodule |
-| 2 | `run_once_after_1-install-homebrew.sh` | After, once | Install Homebrew and run brew bundle |
-| 3 | `run_once_after_2-install-various.sh` | After, once | Install tools via curl, cargo, go, npm |
-| 4 | `run_once_after_3-install-uv-tools.sh.tmpl` | After, once | Install Python tools using uv |
-| 5 | `run_once_after_4-macos-settings.sh` | After, once | Configure macOS system settings |
-| 6 | `run_after_1-setup-fish.sh` | After, always | Link Fisher plugin files to Fish config |
+| Order | Script                                              | Timing        | Purpose                                 |
+| ----- | --------------------------------------------------- | ------------- | --------------------------------------- |
+| 1     | `run_once_before_1-setup-secrets-submodule.sh.tmpl` | Before, once  | Initialize secrets git submodule        |
+| 2     | `run_once_after_1-install-homebrew.sh`              | After, once   | Install Homebrew and run brew bundle    |
+| 3     | `run_once_after_2-install-various.sh`               | After, once   | Install tools via curl, cargo, go, npm  |
+| 4     | `run_once_after_3-install-uv-tools.sh.tmpl`         | After, once   | Install Python tools using uv           |
+| 5     | `run_once_after_4-macos-settings.sh`                | After, once   | Configure macOS system settings         |
+| 6     | `run_after_1-setup-fish.sh`                         | After, always | Link Fisher plugin files to Fish config |
 
 **For detailed documentation** of each script, including:
 

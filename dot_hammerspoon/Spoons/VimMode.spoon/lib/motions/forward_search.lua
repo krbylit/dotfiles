@@ -1,7 +1,7 @@
 local Motion = dofile(vimModeScriptPath .. "lib/motion.lua")
 local stringUtils = dofile(vimModeScriptPath .. "lib/utils/string_utils.lua")
 
-local ForwardSearch = Motion:new{ name = 'forward_search' }
+local ForwardSearch = Motion:new({ name = "forward_search" })
 
 function ForwardSearch:getRange(buffer)
   local start = buffer:getCaretPosition()
@@ -14,13 +14,15 @@ function ForwardSearch:getRange(buffer)
     stringStart + 1 -- start from the next char
   )
 
-  if not nextOccurringIndex then return nil end
+  if not nextOccurringIndex then
+    return nil
+  end
 
   return {
     start = start,
     finish = nextOccurringIndex - 1,
-    mode = 'inclusive',
-    direction = 'characterwise'
+    mode = "inclusive",
+    direction = "characterwise",
   }
 end
 

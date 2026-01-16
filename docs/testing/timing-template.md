@@ -8,31 +8,31 @@ This template provides a structured format for recording timing data during fres
 
 ## Test Metadata
 
-- **Tester name**: _____________________________________________
-- **Test date**: _____________________________________________
-- **Test start time**: _____________________________________________
-- **Test end time**: _____________________________________________
-- **Total elapsed time**: _________ minutes
+- **Tester name**: **********\*\***********\_**********\*\***********
+- **Test date**: **********\*\***********\_**********\*\***********
+- **Test start time**: **********\*\***********\_**********\*\***********
+- **Test end time**: **********\*\***********\_**********\*\***********
+- **Total elapsed time**: \***\*\_\*\*** minutes
 
 ---
 
 ## Machine Information
 
-- **Machine model**: _____________________________________________
-- **Processor**: _____________________________________________
-- **RAM**: _________ GB
+- **Machine model**: **********\*\***********\_**********\*\***********
+- **Processor**: **********\*\***********\_**********\*\***********
+- **RAM**: \***\*\_\*\*** GB
 - **Storage type**: SSD / HDD
-- **macOS version**: _____________________________________________
-- **macOS build**: _____________________________________________
+- **macOS version**: **********\*\***********\_**********\*\***********
+- **macOS build**: **********\*\***********\_**********\*\***********
 
 ---
 
 ## Network Information
 
 - **Connection type**: WiFi / Ethernet / Cellular
-- **Download speed**: _________ Mbps
-- **Upload speed**: _________ Mbps
-- **Latency to GitHub**: _________ ms
+- **Download speed**: \***\*\_\*\*** Mbps
+- **Upload speed**: \***\*\_\*\*** Mbps
+- **Latency to GitHub**: \***\*\_\*\*** ms
 
 ---
 
@@ -40,13 +40,13 @@ This template provides a structured format for recording timing data during fres
 
 ### Step 1: Prerequisites Validation
 
-| Checkpoint | Time | Duration | Notes |
-|------------|------|----------|-------|
-| Start | _________ | — | Review prerequisites |
-| Prerequisites verified | _________ | _________ min | |
-| **Total** | — | **_________ min** | |
+| Checkpoint             | Time           | Duration               | Notes                |
+| ---------------------- | -------------- | ---------------------- | -------------------- |
+| Start                  | \***\*\_\*\*** | —                      | Review prerequisites |
+| Prerequisites verified | \***\*\_\*\*** | \***\*\_\*\*** min     |                      |
+| **Total**              | —              | **\*\***\_\***\* min** |                      |
 
-**Status**: ✅ Success / ⚠️  Issues / ❌ Failed
+**Status**: ✅ Success / ⚠️ Issues / ❌ Failed
 
 **Issues**:
 
@@ -58,18 +58,18 @@ This template provides a structured format for recording timing data during fres
 
 ### Step 2: Install Homebrew
 
-| Checkpoint | Time | Duration | Notes |
-|------------|------|----------|-------|
-| Start | _________ | — | Begin Homebrew installation |
-| Installation script downloaded | _________ | _________ min | |
-| Homebrew installed | _________ | _________ min | |
-| PATH configured | _________ | _________ min | |
-| `brew --version` verified | _________ | _________ min | |
-| **Total** | — | **_________ min** | |
+| Checkpoint                     | Time           | Duration               | Notes                       |
+| ------------------------------ | -------------- | ---------------------- | --------------------------- |
+| Start                          | \***\*\_\*\*** | —                      | Begin Homebrew installation |
+| Installation script downloaded | \***\*\_\*\*** | \***\*\_\*\*** min     |                             |
+| Homebrew installed             | \***\*\_\*\*** | \***\*\_\*\*** min     |                             |
+| PATH configured                | \***\*\_\*\*** | \***\*\_\*\*** min     |                             |
+| `brew --version` verified      | \***\*\_\*\*** | \***\*\_\*\*** min     |                             |
+| **Total**                      | —              | **\*\***\_\***\* min** |                             |
 
-**Homebrew version**: _____________
+**Homebrew version**: **\*\***\_**\*\***
 
-**Status**: ✅ Success / ⚠️  Issues / ❌ Failed
+**Status**: ✅ Success / ⚠️ Issues / ❌ Failed
 
 **Issues**:
 
@@ -81,22 +81,22 @@ This template provides a structured format for recording timing data during fres
 
 ### Step 3: Install chezmoi and Clone Repository
 
-| Checkpoint | Time | Duration | Notes |
-|------------|------|----------|-------|
-| Start | _________ | — | Install chezmoi |
-| `brew install chezmoi` complete | _________ | _________ min | |
-| chezmoi version verified | _________ | _________ min | |
-| Repository clone started | _________ | _________ min | |
-| Secrets URL prompt | _________ | _________ min | |
-| GPG passphrase prompt | _________ | _________ min | |
-| Repository cloned | _________ | _________ min | |
-| **Total** | — | **_________ min** | |
+| Checkpoint                      | Time           | Duration               | Notes           |
+| ------------------------------- | -------------- | ---------------------- | --------------- |
+| Start                           | \***\*\_\*\*** | —                      | Install chezmoi |
+| `brew install chezmoi` complete | \***\*\_\*\*** | \***\*\_\*\*** min     |                 |
+| chezmoi version verified        | \***\*\_\*\*** | \***\*\_\*\*** min     |                 |
+| Repository clone started        | \***\*\_\*\*** | \***\*\_\*\*** min     |                 |
+| Secrets URL prompt              | \***\*\_\*\*** | \***\*\_\*\*** min     |                 |
+| GPG passphrase prompt           | \***\*\_\*\*** | \***\*\_\*\*** min     |                 |
+| Repository cloned               | \***\*\_\*\*** | \***\*\_\*\*** min     |                 |
+| **Total**                       | —              | **\*\***\_\***\* min** |                 |
 
-**chezmoi version**: _____________
+**chezmoi version**: **\*\***\_**\*\***
 
-**Repository size**: _________ MB
+**Repository size**: \***\*\_\*\*** MB
 
-**Status**: ✅ Success / ⚠️  Issues / ❌ Failed
+**Status**: ✅ Success / ⚠️ Issues / ❌ Failed
 
 **Issues**:
 
@@ -108,17 +108,17 @@ This template provides a structured format for recording timing data during fres
 
 ### Step 4: Review Configuration
 
-| Checkpoint | Time | Duration | Notes |
-|------------|------|----------|-------|
-| Start | _________ | — | Review what will be applied |
-| `chezmoi diff` run | _________ | _________ min | |
-| `chezmoi apply --dry-run` run | _________ | _________ min | |
-| Configuration reviewed | _________ | _________ min | |
-| **Total** | — | **_________ min** | |
+| Checkpoint                    | Time           | Duration               | Notes                       |
+| ----------------------------- | -------------- | ---------------------- | --------------------------- |
+| Start                         | \***\*\_\*\*** | —                      | Review what will be applied |
+| `chezmoi diff` run            | \***\*\_\*\*** | \***\*\_\*\*** min     |                             |
+| `chezmoi apply --dry-run` run | \***\*\_\*\*** | \***\*\_\*\*** min     |                             |
+| Configuration reviewed        | \***\*\_\*\*** | \***\*\_\*\*** min     |                             |
+| **Total**                     | —              | **\*\***\_\***\* min** |                             |
 
-**Files to be modified**: _________ count
+**Files to be modified**: \***\*\_\*\*** count
 
-**Status**: ✅ Success / ⚠️  Issues / ❌ Failed
+**Status**: ✅ Success / ⚠️ Issues / ❌ Failed
 
 **Issues**:
 
@@ -130,24 +130,24 @@ This template provides a structured format for recording timing data during fres
 
 ### Step 5: Apply Dotfiles
 
-| Checkpoint | Time | Duration | Notes |
-|------------|------|----------|-------|
-| Start | _________ | — | Apply all configurations |
-| `chezmoi apply` started | _________ | — | |
-| Secrets submodule initialized | _________ | _________ min | |
-| Homebrew bundle started | _________ | _________ min | |
-| Homebrew formulae installed | _________ | _________ min | Number: ____ |
-| Homebrew casks installed | _________ | _________ min | Number: ____ |
-| Homebrew taps added | _________ | _________ min | Number: ____ |
-| Fish shell setup started | _________ | _________ min | |
-| Fisher plugins installed | _________ | _________ min | Number: ____ |
-| Additional tools installed | _________ | _________ min | |
-| Configuration files applied | _________ | _________ min | |
-| **Total** | — | **_________ min** | |
+| Checkpoint                    | Time           | Duration               | Notes                    |
+| ----------------------------- | -------------- | ---------------------- | ------------------------ |
+| Start                         | \***\*\_\*\*** | —                      | Apply all configurations |
+| `chezmoi apply` started       | \***\*\_\*\*** | —                      |                          |
+| Secrets submodule initialized | \***\*\_\*\*** | \***\*\_\*\*** min     |                          |
+| Homebrew bundle started       | \***\*\_\*\*** | \***\*\_\*\*** min     |                          |
+| Homebrew formulae installed   | \***\*\_\*\*** | \***\*\_\*\*** min     | Number: \_\_\_\_         |
+| Homebrew casks installed      | \***\*\_\*\*** | \***\*\_\*\*** min     | Number: \_\_\_\_         |
+| Homebrew taps added           | \***\*\_\*\*** | \***\*\_\*\*** min     | Number: \_\_\_\_         |
+| Fish shell setup started      | \***\*\_\*\*** | \***\*\_\*\*** min     |                          |
+| Fisher plugins installed      | \***\*\_\*\*** | \***\*\_\*\*** min     | Number: \_\_\_\_         |
+| Additional tools installed    | \***\*\_\*\*** | \***\*\_\*\*** min     |                          |
+| Configuration files applied   | \***\*\_\*\*** | \***\*\_\*\*** min     |                          |
+| **Total**                     | —              | **\*\***\_\***\* min** |                          |
 
-**Homebrew packages installed**: _________ total
+**Homebrew packages installed**: \***\*\_\*\*** total
 
-**Status**: ✅ Success / ⚠️  Issues / ❌ Failed
+**Status**: ✅ Success / ⚠️ Issues / ❌ Failed
 
 **Issues**:
 
@@ -165,21 +165,21 @@ This template provides a structured format for recording timing data during fres
 
 ### Step 6: Set Fish as Default Shell
 
-| Checkpoint | Time | Duration | Notes |
-|------------|------|----------|-------|
-| Start | _________ | — | Configure Fish shell |
-| Added Fish to `/etc/shells` | _________ | _________ min | |
-| `chsh -s` command run | _________ | _________ min | |
-| Terminal restarted | _________ | _________ min | |
-| Fish prompt verified | _________ | _________ min | |
-| Starship prompt verified | _________ | _________ min | |
-| **Total** | — | **_________ min** | |
+| Checkpoint                  | Time           | Duration               | Notes                |
+| --------------------------- | -------------- | ---------------------- | -------------------- |
+| Start                       | \***\*\_\*\*** | —                      | Configure Fish shell |
+| Added Fish to `/etc/shells` | \***\*\_\*\*** | \***\*\_\*\*** min     |                      |
+| `chsh -s` command run       | \***\*\_\*\*** | \***\*\_\*\*** min     |                      |
+| Terminal restarted          | \***\*\_\*\*** | \***\*\_\*\*** min     |                      |
+| Fish prompt verified        | \***\*\_\*\*** | \***\*\_\*\*** min     |                      |
+| Starship prompt verified    | \***\*\_\*\*** | \***\*\_\*\*** min     |                      |
+| **Total**                   | —              | **\*\***\_\***\* min** |                      |
 
-**Fish version**: _____________
+**Fish version**: **\*\***\_**\*\***
 
-**Starship version**: _____________
+**Starship version**: **\*\***\_**\*\***
 
-**Status**: ✅ Success / ⚠️  Issues / ❌ Failed
+**Status**: ✅ Success / ⚠️ Issues / ❌ Failed
 
 **Issues**:
 
@@ -191,18 +191,18 @@ This template provides a structured format for recording timing data during fres
 
 ### Step 7: Configure macOS Permissions
 
-| Checkpoint | Time | Duration | Notes |
-|------------|------|----------|-------|
-| Start | _________ | — | Grant system permissions |
-| Yabai accessibility granted | _________ | _________ min | |
-| Skhd accessibility granted | _________ | _________ min | |
-| Karabiner input monitoring granted | _________ | _________ min | |
-| Karabiner accessibility granted | _________ | _________ min | |
-| Hammerspoon accessibility granted | _________ | _________ min | |
-| All permissions verified | _________ | _________ min | |
-| **Total** | — | **_________ min** | |
+| Checkpoint                         | Time           | Duration               | Notes                    |
+| ---------------------------------- | -------------- | ---------------------- | ------------------------ |
+| Start                              | \***\*\_\*\*** | —                      | Grant system permissions |
+| Yabai accessibility granted        | \***\*\_\*\*** | \***\*\_\*\*** min     |                          |
+| Skhd accessibility granted         | \***\*\_\*\*** | \***\*\_\*\*** min     |                          |
+| Karabiner input monitoring granted | \***\*\_\*\*** | \***\*\_\*\*** min     |                          |
+| Karabiner accessibility granted    | \***\*\_\*\*** | \***\*\_\*\*** min     |                          |
+| Hammerspoon accessibility granted  | \***\*\_\*\*** | \***\*\_\*\*** min     |                          |
+| All permissions verified           | \***\*\_\*\*** | \***\*\_\*\*** min     |                          |
+| **Total**                          | —              | **\*\***\_\***\* min** |                          |
 
-**Status**: ✅ Success / ⚠️  Issues / ❌ Failed
+**Status**: ✅ Success / ⚠️ Issues / ❌ Failed
 
 **Issues**:
 
@@ -220,16 +220,16 @@ This template provides a structured format for recording timing data during fres
 
 ### Step 8: Start Services
 
-| Checkpoint | Time | Duration | Notes |
-|------------|------|----------|-------|
-| Start | _________ | — | Start window management |
-| `brew services start yabai` | _________ | _________ min | |
-| `brew services start skhd` | _________ | _________ min | |
-| Service status verified | _________ | _________ min | |
-| Window tiling tested | _________ | _________ min | |
-| **Total** | — | **_________ min** | |
+| Checkpoint                  | Time           | Duration               | Notes                   |
+| --------------------------- | -------------- | ---------------------- | ----------------------- |
+| Start                       | \***\*\_\*\*** | —                      | Start window management |
+| `brew services start yabai` | \***\*\_\*\*** | \***\*\_\*\*** min     |                         |
+| `brew services start skhd`  | \***\*\_\*\*** | \***\*\_\*\*** min     |                         |
+| Service status verified     | \***\*\_\*\*** | \***\*\_\*\*** min     |                         |
+| Window tiling tested        | \***\*\_\*\*** | \***\*\_\*\*** min     |                         |
+| **Total**                   | —              | **\*\***\_\***\* min** |                         |
 
-**Status**: ✅ Success / ⚠️  Issues / ❌ Failed
+**Status**: ✅ Success / ⚠️ Issues / ❌ Failed
 
 **Issues**:
 
@@ -241,21 +241,21 @@ This template provides a structured format for recording timing data during fres
 
 ### Step 9: Verify Installation
 
-| Checkpoint | Time | Duration | Notes |
-|------------|------|----------|-------|
-| Start | _________ | — | Run verification checklist |
-| Shell environment verified | _________ | _________ min | |
-| Development tools verified | _________ | _________ min | |
-| Window management verified | _________ | _________ min | |
-| Keyboard customization verified | _________ | _________ min | |
-| Text editor verified | _________ | _________ min | |
-| Git configuration verified | _________ | _________ min | |
-| Additional tools verified | _________ | _________ min | |
-| **Total** | — | **_________ min** | |
+| Checkpoint                      | Time           | Duration               | Notes                      |
+| ------------------------------- | -------------- | ---------------------- | -------------------------- |
+| Start                           | \***\*\_\*\*** | —                      | Run verification checklist |
+| Shell environment verified      | \***\*\_\*\*** | \***\*\_\*\*** min     |                            |
+| Development tools verified      | \***\*\_\*\*** | \***\*\_\*\*** min     |                            |
+| Window management verified      | \***\*\_\*\*** | \***\*\_\*\*** min     |                            |
+| Keyboard customization verified | \***\*\_\*\*** | \***\*\_\*\*** min     |                            |
+| Text editor verified            | \***\*\_\*\*** | \***\*\_\*\*** min     |                            |
+| Git configuration verified      | \***\*\_\*\*** | \***\*\_\*\*** min     |                            |
+| Additional tools verified       | \***\*\_\*\*** | \***\*\_\*\*** min     |                            |
+| **Total**                       | —              | **\*\***\_\***\* min** |                            |
 
-**Tools verified**: _____ / _____ total
+**Tools verified**: **\_** / **\_** total
 
-**Status**: ✅ Success / ⚠️  Issues / ❌ Failed
+**Status**: ✅ Success / ⚠️ Issues / ❌ Failed
 
 **Issues**:
 
@@ -269,29 +269,29 @@ This template provides a structured format for recording timing data during fres
 
 ### Installation Steps Totals
 
-| Step | Duration | % of Total | Status |
-|------|----------|------------|--------|
-| 1. Prerequisites | _________ min | ____% | ✅ ⚠️  ❌ |
-| 2. Homebrew | _________ min | ____% | ✅ ⚠️  ❌ |
-| 3. chezmoi + Clone | _________ min | ____% | ✅ ⚠️  ❌ |
-| 4. Review Config | _________ min | ____% | ✅ ⚠️  ❌ |
-| 5. Apply Dotfiles | _________ min | ____% | ✅ ⚠️  ❌ |
-| 6. Set Fish Shell | _________ min | ____% | ✅ ⚠️  ❌ |
-| 7. Permissions | _________ min | ____% | ✅ ⚠️  ❌ |
-| 8. Start Services | _________ min | ____% | ✅ ⚠️  ❌ |
-| 9. Verify | _________ min | ____% | ✅ ⚠️  ❌ |
-| **TOTAL** | **_________ min** | **100%** | |
+| Step               | Duration               | % of Total | Status   |
+| ------------------ | ---------------------- | ---------- | -------- |
+| 1. Prerequisites   | \***\*\_\*\*** min     | \_\_\_\_%  | ✅ ⚠️ ❌ |
+| 2. Homebrew        | \***\*\_\*\*** min     | \_\_\_\_%  | ✅ ⚠️ ❌ |
+| 3. chezmoi + Clone | \***\*\_\*\*** min     | \_\_\_\_%  | ✅ ⚠️ ❌ |
+| 4. Review Config   | \***\*\_\*\*** min     | \_\_\_\_%  | ✅ ⚠️ ❌ |
+| 5. Apply Dotfiles  | \***\*\_\*\*** min     | \_\_\_\_%  | ✅ ⚠️ ❌ |
+| 6. Set Fish Shell  | \***\*\_\*\*** min     | \_\_\_\_%  | ✅ ⚠️ ❌ |
+| 7. Permissions     | \***\*\_\*\*** min     | \_\_\_\_%  | ✅ ⚠️ ❌ |
+| 8. Start Services  | \***\*\_\*\*** min     | \_\_\_\_%  | ✅ ⚠️ ❌ |
+| 9. Verify          | \***\*\_\*\*** min     | \_\_\_\_%  | ✅ ⚠️ ❌ |
+| **TOTAL**          | **\*\***\_\***\* min** | **100%**   |          |
 
 ### Category Breakdown
 
-| Category | Duration | % of Total |
-|----------|----------|------------|
-| System prerequisites | _________ min | ____% |
-| Package installation (Homebrew) | _________ min | ____% |
-| Configuration application | _________ min | ____% |
-| Permission granting | _________ min | ____% |
-| Verification testing | _________ min | ____% |
-| **TOTAL** | **_________ min** | **100%** |
+| Category                        | Duration               | % of Total |
+| ------------------------------- | ---------------------- | ---------- |
+| System prerequisites            | \***\*\_\*\*** min     | \_\_\_\_%  |
+| Package installation (Homebrew) | \***\*\_\*\*** min     | \_\_\_\_%  |
+| Configuration application       | \***\*\_\*\*** min     | \_\_\_\_%  |
+| Permission granting             | \***\*\_\*\*** min     | \_\_\_\_%  |
+| Verification testing            | \***\*\_\*\*** min     | \_\_\_\_%  |
+| **TOTAL**                       | **\*\***\_\***\* min** | **100%**   |
 
 ---
 
@@ -300,24 +300,24 @@ This template provides a structured format for recording timing data during fres
 ### SC-001: Installation Time Target
 
 - **Target**: < 60 minutes
-- **Actual time**: _________ minutes
-- **Difference**: _________ minutes (under/over target)
-- **Percentage of target**: _____%
+- **Actual time**: \***\*\_\*\*** minutes
+- **Difference**: \***\*\_\*\*** minutes (under/over target)
+- **Percentage of target**: **\_**%
 - **Met**: ✅ Yes / ❌ No
 
 ### Time Breakdown Analysis
 
 **Fastest steps** (< 2 minutes):
 
-1. _____________________________________________
-2. _____________________________________________
-3. _____________________________________________
+1. ***
+2. ***
+3. ***
 
 **Slowest steps** (> 10 minutes):
 
-1. _____________________________________________
-2. _____________________________________________
-3. _____________________________________________
+1. ***
+2. ***
+3. ***
 
 **Bottlenecks identified**:
 
@@ -337,17 +337,17 @@ This template provides a structured format for recording timing data during fres
 
 ### Download Activity
 
-| Item | Size | Time | Speed |
-|------|------|------|-------|
-| Homebrew installer | _______ MB | _______ min | _______ Mbps |
-| Dotfiles repository | _______ MB | _______ min | _______ Mbps |
-| Homebrew formulae | _______ MB | _______ min | _______ Mbps |
-| Homebrew casks | _______ MB | _______ min | _______ Mbps |
-| Fish plugins | _______ MB | _______ min | _______ Mbps |
-| Neovim plugins | _______ MB | _______ min | _______ Mbps |
-| **Total downloaded** | **_______ MB** | **_______ min** | **avg _______ Mbps** |
+| Item                 | Size                  | Time                   | Speed                   |
+| -------------------- | --------------------- | ---------------------- | ----------------------- |
+| Homebrew installer   | **\_\_\_** MB         | **\_\_\_** min         | **\_\_\_** Mbps         |
+| Dotfiles repository  | **\_\_\_** MB         | **\_\_\_** min         | **\_\_\_** Mbps         |
+| Homebrew formulae    | **\_\_\_** MB         | **\_\_\_** min         | **\_\_\_** Mbps         |
+| Homebrew casks       | **\_\_\_** MB         | **\_\_\_** min         | **\_\_\_** Mbps         |
+| Fish plugins         | **\_\_\_** MB         | **\_\_\_** min         | **\_\_\_** Mbps         |
+| Neovim plugins       | **\_\_\_** MB         | **\_\_\_** min         | **\_\_\_** Mbps         |
+| **Total downloaded** | \***\*\_\_\_** MB\*\* | \***\*\_\_\_** min\*\* | **avg **\_\_\_** Mbps** |
 
-**Network-dependent time**: _________ minutes (____% of total)
+**Network-dependent time**: \***\*\_\*\*** minutes (\_\_\_\_% of total)
 
 **Network speed impact**:
 
@@ -361,22 +361,22 @@ This template provides a structured format for recording timing data during fres
 
 ### CPU Usage
 
-- **Average during Homebrew install**: _______%
-- **Peak during installation**: _______%
-- **Normal idle after setup**: _______%
+- **Average during Homebrew install**: **\_\_\_**%
+- **Peak during installation**: **\_\_\_**%
+- **Normal idle after setup**: **\_\_\_**%
 
 ### Memory Usage
 
-- **During installation**: _________ GB
-- **After installation**: _________ GB
-- **Available after setup**: _________ GB
+- **During installation**: \***\*\_\*\*** GB
+- **After installation**: \***\*\_\*\*** GB
+- **Available after setup**: \***\*\_\*\*** GB
 
 ### Disk Usage
 
-- **Before installation**: _________ GB used
-- **After installation**: _________ GB used
-- **Space consumed**: _________ GB
-- **Homebrew cache size**: _________ GB
+- **Before installation**: \***\*\_\*\*** GB used
+- **After installation**: \***\*\_\*\*** GB used
+- **Space consumed**: \***\*\_\*\*** GB
+- **Homebrew cache size**: \***\*\_\*\*** GB
 
 **Performance notes**:
 
@@ -390,12 +390,12 @@ This template provides a structured format for recording timing data during fres
 
 ### Historical Timing Data
 
-| Test Date | macOS Version | Total Time | Network Speed | Notes |
-|-----------|---------------|------------|---------------|-------|
-| _________ | _____________ | _______ min | _______ Mbps | _____________ |
-| _________ | _____________ | _______ min | _______ Mbps | _____________ |
-| _________ | _____________ | _______ min | _______ Mbps | _____________ |
-| **This test** | _____________ | **_______ min** | **_______ Mbps** | |
+| Test Date      | macOS Version      | Total Time             | Network Speed           | Notes              |
+| -------------- | ------------------ | ---------------------- | ----------------------- | ------------------ |
+| \***\*\_\*\*** | **\*\***\_**\*\*** | **\_\_\_** min         | **\_\_\_** Mbps         | **\*\***\_**\*\*** |
+| \***\*\_\*\*** | **\*\***\_**\*\*** | **\_\_\_** min         | **\_\_\_** Mbps         | **\*\***\_**\*\*** |
+| \***\*\_\*\*** | **\*\***\_**\*\*** | **\_\_\_** min         | **\_\_\_** Mbps         | **\*\***\_**\*\*** |
+| **This test**  | **\*\***\_**\*\*** | \***\*\_\_\_** min\*\* | \***\*\_\_\_** Mbps\*\* |                    |
 
 **Trend analysis**:
 
@@ -445,17 +445,17 @@ Example:
 
 ### Additional Tests (Not part of installation time)
 
-| Test | Duration | Status |
-|------|----------|--------|
-| Window management workflow | _________ min | ✅ ⚠️  ❌ |
-| Keymap discoverability (4 scenarios) | _________ min | ✅ ⚠️  ❌ |
-| Fish functions (5 tested) | _________ min | ✅ ⚠️  ❌ |
-| Neovim plugin system | _________ min | ✅ ⚠️  ❌ |
-| Troubleshooting scenarios (3 tested) | _________ min | ✅ ⚠️  ❌ |
-| Multi-machine sync (optional) | _________ min | ✅ ⚠️  ❌ N/A |
-| **Total validation time** | **_________ min** | |
+| Test                                 | Duration               | Status       |
+| ------------------------------------ | ---------------------- | ------------ |
+| Window management workflow           | \***\*\_\*\*** min     | ✅ ⚠️ ❌     |
+| Keymap discoverability (4 scenarios) | \***\*\_\*\*** min     | ✅ ⚠️ ❌     |
+| Fish functions (5 tested)            | \***\*\_\*\*** min     | ✅ ⚠️ ❌     |
+| Neovim plugin system                 | \***\*\_\*\*** min     | ✅ ⚠️ ❌     |
+| Troubleshooting scenarios (3 tested) | \***\*\_\*\*** min     | ✅ ⚠️ ❌     |
+| Multi-machine sync (optional)        | \***\*\_\*\*** min     | ✅ ⚠️ ❌ N/A |
+| **Total validation time**            | **\*\***\_\***\* min** |              |
 
-**Total test session time** (installation + validation): _________ minutes
+**Total test session time** (installation + validation): \***\*\_\*\*** minutes
 
 ---
 
@@ -487,10 +487,10 @@ Example:
 
 ---
 
-**Data collected by**: _____________________________________________
+**Data collected by**: **********\*\***********\_**********\*\***********
 
-**Collection date**: _____________________________________________
+**Collection date**: **********\*\***********\_**********\*\***********
 
 **Data quality**: Excellent / Good / Fair / Poor
 
-**Next timing test scheduled**: _____________________________________________
+**Next timing test scheduled**: **********\*\***********\_**********\*\***********

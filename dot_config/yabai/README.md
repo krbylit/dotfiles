@@ -36,10 +36,10 @@ Yabai is a tiling window manager for macOS that provides powerful window managem
 
 ## Configuration Files
 
-| File | Purpose |
-|------|---------|
-| `executable_yabairc` | Main yabai configuration file that defines layouts, window rules, space assignments, and signal handlers |
-| `ext-config/scripted-yabairc` | Alternative/backup scripted configuration |
+| File                          | Purpose                                                                                                  |
+| ----------------------------- | -------------------------------------------------------------------------------------------------------- |
+| `executable_yabairc`          | Main yabai configuration file that defines layouts, window rules, space assignments, and signal handlers |
+| `ext-config/scripted-yabairc` | Alternative/backup scripted configuration                                                                |
 
 ## Key Features
 
@@ -65,11 +65,7 @@ Nine labeled spaces are configured for different workflows:
 4. **dev** - Development tools (Proxyman, Postman, Docker, MongoDB Compass)
 5. **misc** - General utilities (Finder)
 
-**Secondary Display Spaces** (or main display if single monitor):
-6. **comms** - Communication apps (Slack, Zoom, Mail, Outlook)
-7. **ref** - Reference materials (Notion Calendar, LM Studio, Ollama)
-8. **debug** - Debugging and AI tools (Chrome, Claude, ChatGPT, kitty)
-9. **util** - System utilities (Calendar, Figma, 1Password, Activity Monitor)
+**Secondary Display Spaces** (or main display if single monitor): 6. **comms** - Communication apps (Slack, Zoom, Mail, Outlook) 7. **ref** - Reference materials (Notion Calendar, LM Studio, Ollama) 8. **debug** - Debugging and AI tools (Chrome, Claude, ChatGPT, kitty) 9. **util** - System utilities (Calendar, Figma, 1Password, Activity Monitor)
 
 ### Window Rules
 

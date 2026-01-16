@@ -11,7 +11,9 @@ import fontforge
 import sys
 
 if len(sys.argv) != 4:
-    print("Usage: fontforge -script update_departure_with_em_size.py <custom_font.otf> <new_departure.otf> <output.otf>")
+    print(
+        "Usage: fontforge -script update_departure_with_em_size.py <custom_font.otf> <new_departure.otf> <output.otf>"
+    )
     print("")
     print("Example:")
     print("  fontforge -script update_departure_with_em_size.py \\")
@@ -54,22 +56,22 @@ added_count = 0
 for glyph in new_departure.glyphs():
     if glyph.unicode < 0:  # Skip unmapped glyphs
         continue
-    
+
     unicode_val = glyph.unicode
-    
+
     # Check if this is a base Departure glyph (not icon)
     # Icons typically start at 0xE000 (Private Use Area)
     # Also check common icon ranges: 0xF0000-0xFFFFF
     is_icon = (unicode_val >= 0xE000 and unicode_val <= 0xF8FF) or \
               (unicode_val >= 0xF0000 and unicode_val <= 0x10FFFF)
-    
+
     if is_icon:
         continue  # Skip icons, keep the old custom ones
-    
+
     # Copy the glyph from new Departure
     new_departure.selection.select(unicode_val)
     new_departure.copy()
-    
+
     if unicode_val in custom:
         custom.selection.select(unicode_val)
         custom.paste()
@@ -100,5 +102,8 @@ print(f"\nSaving to: {output_path}")
 custom.generate(output_path)
 
 print("\n✓ Font updated successfully!")
-print(f"\nNew Departure glyphs scaled to Em size {custom_em} for pixel-perfect rendering.")
-print(f"Your custom glyphs (Nerd Fonts, Phosphor, manual edits) are preserved.")
+print(
+    f"\nNew Departure glyphs scaled to Em size {custom_em} for pixel-perfect rendering."
+)
+print(
+    f"Your custom glyphs (Nerd Fonts, Phosphor, manual edits) are preserved.")

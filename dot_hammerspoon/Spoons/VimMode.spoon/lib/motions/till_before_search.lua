@@ -1,13 +1,15 @@
 local Motion = dofile(vimModeScriptPath .. "lib/motion.lua")
 local ForwardSearch = dofile(vimModeScriptPath .. "lib/motions/forward_search.lua")
 
-local TillBeforeSearch = Motion:new{ name = 'till_before_search' }
+local TillBeforeSearch = Motion:new({ name = "till_before_search" })
 
 function TillBeforeSearch:getRange(buffer, ...)
   local motion = ForwardSearch:new():setExtraChar(self:getExtraChar())
   local range = motion:getRange(buffer, ...)
 
-  if not range then return nil end
+  if not range then
+    return nil
+  end
 
   -- go right before the search result
   range.finish = range.finish - 1

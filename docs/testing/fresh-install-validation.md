@@ -43,11 +43,11 @@ After completing this validation:
 Before beginning, ensure you have:
 
 - [ ] **Fresh macOS installation** (macOS 15.0+ recommended)
-  - Version: _____________
-  - Build: _____________
+  - Version: **\*\***\_**\*\***
+  - Build: **\*\***\_**\*\***
 - [ ] **Administrator access** with sudo privileges
 - [ ] **Stable internet connection**
-  - Speed test result: _________ Mbps download
+  - Speed test result: \***\*\_\*\*** Mbps download
   - Connection type: WiFi / Ethernet
 - [ ] **GitHub account** with SSH keys configured
   - SSH key added to GitHub: Yes / No
@@ -85,7 +85,7 @@ Follow INSTALL.md exactly as written, recording times and observations at each s
 
 **Reference**: INSTALL.md - Prerequisites section
 
-**Start time**: _________
+**Start time**: \***\*\_\*\***
 
 **Actions**:
 
@@ -101,9 +101,9 @@ Follow INSTALL.md exactly as written, recording times and observations at each s
 - [ ] No additional prerequisites discovered during testing
 - [ ] Prerequisites section is complete and accurate
 
-**End time**: _________
+**End time**: \***\*\_\*\***
 
-**Duration**: _________ minutes
+**Duration**: \***\*\_\*\*** minutes
 
 **Issues found**:
 
@@ -123,7 +123,7 @@ Follow INSTALL.md exactly as written, recording times and observations at each s
 
 **Reference**: INSTALL.md - Step 1: Install Homebrew
 
-**Start time**: _________
+**Start time**: \***\*\_\*\***
 
 **Actions**:
 
@@ -140,11 +140,11 @@ Follow INSTALL.md exactly as written, recording times and observations at each s
 - [ ] Installation instructions clear for both Apple Silicon and Intel
 - [ ] No errors during installation
 
-**End time**: _________
+**End time**: \***\*\_\*\***
 
-**Duration**: _________ minutes
+**Duration**: \***\*\_\*\*** minutes
 
-**Homebrew version**: _____________
+**Homebrew version**: **\*\***\_**\*\***
 
 **Issues found**:
 
@@ -158,7 +158,7 @@ Follow INSTALL.md exactly as written, recording times and observations at each s
 
 **Reference**: INSTALL.md - Steps 2-3
 
-**Start time**: _________
+**Start time**: \***\*\_\*\***
 
 **Actions**:
 
@@ -176,11 +176,11 @@ Follow INSTALL.md exactly as written, recording times and observations at each s
 - [ ] Instructions for what to enter are clear
 - [ ] chezmoi.toml created with correct configuration
 
-**End time**: _________
+**End time**: \***\*\_\*\***
 
-**Duration**: _________ minutes
+**Duration**: \***\*\_\*\*** minutes
 
-**chezmoi version**: _____________
+**chezmoi version**: **\*\***\_**\*\***
 
 **Issues found**:
 
@@ -194,7 +194,7 @@ Follow INSTALL.md exactly as written, recording times and observations at each s
 
 **Reference**: INSTALL.md - Step 4: Review configuration before applying
 
-**Start time**: _________
+**Start time**: \***\*\_\*\***
 
 **Actions**:
 
@@ -210,11 +210,11 @@ Follow INSTALL.md exactly as written, recording times and observations at each s
 - [ ] Important files documented in INSTALL.md appear in diff
 - [ ] Instructions for interpreting diff output are clear
 
-**End time**: _________
+**End time**: \***\*\_\*\***
 
-**Duration**: _________ minutes
+**Duration**: \***\*\_\*\*** minutes
 
-**File count**: _________ files to be created/modified
+**File count**: \***\*\_\*\*** files to be created/modified
 
 **Issues found**:
 
@@ -228,7 +228,7 @@ Follow INSTALL.md exactly as written, recording times and observations at each s
 
 **Reference**: INSTALL.md - Step 5: Apply dotfiles
 
-**Start time**: _________
+**Start time**: \***\*\_\*\***
 
 **Actions**:
 
@@ -246,11 +246,11 @@ Follow INSTALL.md exactly as written, recording times and observations at each s
 - [ ] No critical errors during application
 - [ ] INSTALL.md accurately describes what happens during this step
 
-**End time**: _________
+**End time**: \***\*\_\*\***
 
-**Duration**: _________ minutes
+**Duration**: \***\*\_\*\*** minutes
 
-**Homebrew packages installed**: _________ (approximate count)
+**Homebrew packages installed**: \***\*\_\*\*** (approximate count)
 
 **Issues found**:
 
@@ -264,7 +264,7 @@ Follow INSTALL.md exactly as written, recording times and observations at each s
 
 **Reference**: INSTALL.md - Step 6: Set Fish as your default shell
 
-**Start time**: _________
+**Start time**: \***\*\_\*\***
 
 **Actions**:
 
@@ -281,13 +281,13 @@ Follow INSTALL.md exactly as written, recording times and observations at each s
 - [ ] Starship prompt appears correctly
 - [ ] Instructions are clear and complete
 
-**End time**: _________
+**End time**: \***\*\_\*\***
 
-**Duration**: _________ minutes
+**Duration**: \***\*\_\*\*** minutes
 
-**Fish version**: _____________
+**Fish version**: **\*\***\_**\*\***
 
-**Starship version**: _____________
+**Starship version**: **\*\***\_**\*\***
 
 **Issues found**:
 
@@ -301,7 +301,7 @@ Follow INSTALL.md exactly as written, recording times and observations at each s
 
 **Reference**: INSTALL.md - Step 7: Configure macOS permissions
 
-**Start time**: _________
+**Start time**: \***\*\_\*\***
 
 **Actions**:
 
@@ -321,9 +321,9 @@ Follow INSTALL.md exactly as written, recording times and observations at each s
 - [ ] Instructions for granting permissions are clear
 - [ ] Screenshots or detailed steps provided (if needed)
 
-**End time**: _________
+**End time**: \***\*\_\*\***
 
-**Duration**: _________ minutes
+**Duration**: \***\*\_\*\*** minutes
 
 **Issues found**:
 
@@ -337,7 +337,7 @@ Follow INSTALL.md exactly as written, recording times and observations at each s
 
 **Reference**: INSTALL.md - Step 8: Start services
 
-**Start time**: _________
+**Start time**: \***\*\_\*\***
 
 **Actions**:
 
@@ -354,9 +354,9 @@ Follow INSTALL.md exactly as written, recording times and observations at each s
 - [ ] Window tiling behavior works
 - [ ] No errors in service logs
 
-**End time**: _________
+**End time**: \***\*\_\*\***
 
-**Duration**: _________ minutes
+**Duration**: \***\*\_\*\*** minutes
 
 **Issues found**:
 
@@ -370,7 +370,7 @@ Follow INSTALL.md exactly as written, recording times and observations at each s
 
 **Reference**: INSTALL.md - Verification Checklist
 
-**Start time**: _________
+**Start time**: \***\*\_\*\***
 
 **Actions**:
 
@@ -426,9 +426,9 @@ Go through INSTALL.md's verification checklist systematically:
 - [ ] Fisher plugins installed: `fisher list` shows plugins
 - [ ] No critical errors in any tool
 
-**End time**: _________
+**End time**: \***\*\_\*\***
 
-**Duration**: _________ minutes
+**Duration**: \***\*\_\*\*** minutes
 
 **Issues found**:
 
@@ -446,7 +446,7 @@ After basic installation, test specific workflows and documentation.
 
 **Reference**: KEYMAPS.md - Window Management section
 
-**Start time**: _________
+**Start time**: \***\*\_\*\***
 
 **Actions**:
 
@@ -466,9 +466,9 @@ After basic installation, test specific workflows and documentation.
 - [ ] Window state toggles work
 - [ ] All hotkeys documented in KEYMAPS.md
 
-**End time**: _________
+**End time**: \***\*\_\*\***
 
-**Duration**: _________ minutes
+**Duration**: \***\*\_\*\*** minutes
 
 **Issues found**:
 
@@ -488,34 +488,34 @@ After basic installation, test specific workflows and documentation.
 
 #### Scenario 1: Find "move window to space 2"
 
-- Start time: _________
+- Start time: \***\*\_\*\***
 - Method used: Cmd+F search / Table of contents / Reading sections
-- Found in: _________ seconds
-- Location: Page/section _____________
+- Found in: \***\*\_\*\*** seconds
+- Location: Page/section **\*\***\_**\*\***
 - Success: Yes / No
 
 #### Scenario 2: Find "toggle Neovim file explorer"
 
-- Start time: _________
-- Method used: _____________
-- Found in: _________ seconds
-- Location: _____________
+- Start time: \***\*\_\*\***
+- Method used: **\*\***\_**\*\***
+- Found in: \***\*\_\*\*** seconds
+- Location: **\*\***\_**\*\***
 - Success: Yes / No
 
 #### Scenario 3: Find "open Yazi from Neovim"
 
-- Start time: _________
-- Method used: _____________
-- Found in: _________ seconds
-- Location: _____________
+- Start time: \***\*\_\*\***
+- Method used: **\*\***\_**\*\***
+- Found in: \***\*\_\*\*** seconds
+- Location: **\*\***\_**\*\***
 - Success: Yes / No
 
 #### Scenario 4: Find "Fish vi-mode escape key"
 
-- Start time: _________
-- Method used: _____________
-- Found in: _________ seconds
-- Location: _____________
+- Start time: \***\*\_\*\***
+- Method used: **\*\***\_**\*\***
+- Found in: \***\*\_\*\*** seconds
+- Location: **\*\***\_**\*\***
 - Success: Yes / No
 
 **Validation**:
@@ -526,7 +526,7 @@ After basic installation, test specific workflows and documentation.
 - [ ] Cross-references work correctly
 - [ ] Search functionality effective
 
-**Average lookup time**: _________ seconds
+**Average lookup time**: \***\*\_\*\*** seconds
 
 **SC-002 met** (< 2 min): Yes / No
 
@@ -542,7 +542,7 @@ After basic installation, test specific workflows and documentation.
 
 **Reference**: dot_config/fish/TOOLS.md
 
-**Start time**: _________
+**Start time**: \***\*\_\*\***
 
 **Actions**:
 
@@ -553,11 +553,11 @@ After basic installation, test specific workflows and documentation.
 
 **Functions tested**:
 
-1. Function: _____________ | Works: Yes/No | Doc accurate: Yes/No
-2. Function: _____________ | Works: Yes/No | Doc accurate: Yes/No
-3. Function: _____________ | Works: Yes/No | Doc accurate: Yes/No
-4. Function: _____________ | Works: Yes/No | Doc accurate: Yes/No
-5. Function: _____________ | Works: Yes/No | Doc accurate: Yes/No
+1. Function: **\*\***\_**\*\*** | Works: Yes/No | Doc accurate: Yes/No
+2. Function: **\*\***\_**\*\*** | Works: Yes/No | Doc accurate: Yes/No
+3. Function: **\*\***\_**\*\*** | Works: Yes/No | Doc accurate: Yes/No
+4. Function: **\*\***\_**\*\*** | Works: Yes/No | Doc accurate: Yes/No
+5. Function: **\*\***\_**\*\*** | Works: Yes/No | Doc accurate: Yes/No
 
 **Validation**:
 
@@ -566,9 +566,9 @@ After basic installation, test specific workflows and documentation.
 - [ ] Function categories are helpful
 - [ ] Examples provided are correct
 
-**End time**: _________
+**End time**: \***\*\_\*\***
 
-**Duration**: _________ minutes
+**Duration**: \***\*\_\*\*** minutes
 
 **Issues found**:
 
@@ -582,7 +582,7 @@ After basic installation, test specific workflows and documentation.
 
 **Reference**: dot_config/exact_nvim/README.md
 
-**Start time**: _________
+**Start time**: \***\*\_\*\***
 
 **Actions**:
 
@@ -606,9 +606,9 @@ After basic installation, test specific workflows and documentation.
 - [ ] Yazi integration works
 - [ ] README.md accurately describes setup
 
-**End time**: _________
+**End time**: \***\*\_\*\***
 
-**Duration**: _________ minutes
+**Duration**: \***\*\_\*\*** minutes
 
 **Issues found**:
 
@@ -629,7 +629,7 @@ After basic installation, test specific workflows and documentation.
 1. Revoke Yabai accessibility permission
 2. Attempt to use window management
 3. Follow TROUBLESHOOTING.md to resolve
-4. Document time to resolution: _________ minutes
+4. Document time to resolution: \***\*\_\*\*** minutes
 5. Success: Yes / No
 
 **Scenario 2: Simulate Fish function not found**
@@ -637,7 +637,7 @@ After basic installation, test specific workflows and documentation.
 1. Temporarily rename a Fish function file
 2. Try to use the function
 3. Follow TROUBLESHOOTING.md to diagnose
-4. Document time to resolution: _________ minutes
+4. Document time to resolution: \***\*\_\*\*** minutes
 5. Success: Yes / No
 
 **Scenario 3: Simulate LSP not working**
@@ -645,7 +645,7 @@ After basic installation, test specific workflows and documentation.
 1. Open file type without LSP installed
 2. Notice lack of completions
 3. Follow TROUBLESHOOTING.md to install LSP
-4. Document time to resolution: _________ minutes
+4. Document time to resolution: \***\*\_\*\*** minutes
 5. Success: Yes / No
 
 **Validation**:
@@ -671,7 +671,7 @@ After basic installation, test specific workflows and documentation.
 
 **Prerequisites**: Access to second machine or VM
 
-**Start time**: _________
+**Start time**: \***\*\_\*\***
 
 **Actions**:
 
@@ -687,9 +687,9 @@ After basic installation, test specific workflows and documentation.
 - [ ] Sync workflow documented clearly
 - [ ] No conflicts during synchronization
 
-**End time**: _________
+**End time**: \***\*\_\*\***
 
-**Duration**: _________ minutes
+**Duration**: \***\*\_\*\*** minutes
 
 **SC-010 met** (< 30 min): Yes / No
 
@@ -708,40 +708,40 @@ Review all success criteria from the project specification:
 ### SC-001: Setup Time
 
 - **Target**: Complete fresh installation in < 60 minutes
-- **Actual time**: _________ minutes (Steps 1-8 total)
+- **Actual time**: \***\*\_\*\*** minutes (Steps 1-8 total)
 - **Met**: Yes / No
-- **Notes**: _____________________________________________
+- **Notes**: **********\*\***********\_**********\*\***********
 
 ### SC-002: Keymap Lookup Time
 
 - **Target**: Find any keymap in < 2 minutes
-- **Actual average**: _________ seconds
+- **Actual average**: \***\*\_\*\*** seconds
 - **Met**: Yes / No
-- **Notes**: _____________________________________________
+- **Notes**: **********\*\***********\_**********\*\***********
 
 ### SC-003: Self-Service Troubleshooting
 
 - **Target**: 90%+ common issues resolvable via docs
-- **Tested scenarios**: _________ total
-- **Resolved via docs**: _________ count
-- **Percentage**: _________ %
+- **Tested scenarios**: \***\*\_\*\*** total
+- **Resolved via docs**: \***\*\_\*\*** count
+- **Percentage**: \***\*\_\*\*** %
 - **Met**: Yes / No
-- **Notes**: _____________________________________________
+- **Notes**: **********\*\***********\_**********\*\***********
 
 ### SC-004: Multi-Machine Comparison
 
 - **Target**: Document findings from multiple machines
-- **Machines tested**: _____________
+- **Machines tested**: **\*\***\_**\*\***
 - **Findings documented**: Yes / No
 - **Met**: Yes / No / N/A
-- **Notes**: _____________________________________________
+- **Notes**: **********\*\***********\_**********\*\***********
 
 ### SC-010: Second Machine Setup
 
 - **Target**: < 30 minutes
-- **Actual time**: _________ minutes
+- **Actual time**: \***\*\_\*\*** minutes
 - **Met**: Yes / No / N/A
-- **Notes**: _____________________________________________
+- **Notes**: **********\*\***********\_**********\*\***********
 
 ---
 
@@ -749,34 +749,34 @@ Review all success criteria from the project specification:
 
 ### Machine Specifications
 
-- **Model**: _____________________________________________
-- **Processor**: _____________________________________________
-- **RAM**: _____________________________________________
-- **Storage**: _____________________________________________
-- **macOS Version**: _____________________________________________
-- **macOS Build**: _____________________________________________
+- **Model**: **********\*\***********\_**********\*\***********
+- **Processor**: **********\*\***********\_**********\*\***********
+- **RAM**: **********\*\***********\_**********\*\***********
+- **Storage**: **********\*\***********\_**********\*\***********
+- **macOS Version**: **********\*\***********\_**********\*\***********
+- **macOS Build**: **********\*\***********\_**********\*\***********
 
 ### Network Information
 
 - **Connection type**: WiFi / Ethernet
-- **Download speed**: _________ Mbps
-- **Upload speed**: _________ Mbps
-- **Latency**: _________ ms
+- **Download speed**: \***\*\_\*\*** Mbps
+- **Upload speed**: \***\*\_\*\*** Mbps
+- **Latency**: \***\*\_\*\*** ms
 
 ### Overall Timing
 
-- **Total installation time**: _________ minutes
-- **Homebrew packages**: _________ minutes
-- **Configuration application**: _________ minutes
-- **Permissions setup**: _________ minutes
-- **Verification**: _________ minutes
+- **Total installation time**: \***\*\_\*\*** minutes
+- **Homebrew packages**: \***\*\_\*\*** minutes
+- **Configuration application**: \***\*\_\*\*** minutes
+- **Permissions setup**: \***\*\_\*\*** minutes
+- **Verification**: \***\*\_\*\*** minutes
 
 ### Overall Results
 
 - **Installation successful**: Yes / No
 - **All tools functional**: Yes / No
 - **Documentation accurate**: Yes / No
-- **Success criteria met**: ___ / 5
+- **Success criteria met**: \_\_\_ / 5
 
 ### Pass/Fail Assessment
 
@@ -957,10 +957,10 @@ Quick reference checklist for testing:
 
 ---
 
-**Test conducted by**: _____________________________________________
+**Test conducted by**: **********\*\***********\_**********\*\***********
 
-**Test date**: _____________________________________________
+**Test date**: **********\*\***********\_**********\*\***********
 
-**Test duration**: _________ hours
+**Test duration**: \***\*\_\*\*** hours
 
-**Next test scheduled**: _____________________________________________
+**Next test scheduled**: **********\*\***********\_**********\*\***********

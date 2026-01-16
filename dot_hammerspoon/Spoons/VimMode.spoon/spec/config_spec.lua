@@ -1,4 +1,4 @@
-local Config = require('lib/config')
+local Config = require("lib/config")
 
 describe("Config", function()
   describe("default values", function()

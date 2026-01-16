@@ -1,4 +1,3 @@
-
 -- function to get paths of selected elements or current directory
 -- if no elements are selected
 local get_paths = ya.sync(function()
@@ -21,15 +20,15 @@ end)
 -- Function to get total size from output
 -- Unix use `du`, Windows use PowerShell
 local function get_total_size(items)
-  local is_windows = package.config:sub(1,1) == '\\'
+  local is_windows = package.config:sub(1, 1) == "\\"
 
   if is_windows then
     local total = 0
     for _, path in ipairs(items) do
       path = path:gsub('"', '\\"')
       local ps_cmd = string.format(
-      [[powershell -Command "& { $p = '%s'; if (Test-Path $p) { if ((Get-ChildItem -Path $p -Recurse -Force -ErrorAction SilentlyContinue | Measure-Object Length -Sum).Sum) { (Get-ChildItem -Path $p -Recurse -Force -ErrorAction SilentlyContinue | Measure-Object Length -Sum).Sum } else { (Get-Item $p).Length } } }"]],
-      path
+        [[powershell -Command "& { $p = '%s'; if (Test-Path $p) { if ((Get-ChildItem -Path $p -Recurse -Force -ErrorAction SilentlyContinue | Measure-Object Length -Sum).Sum) { (Get-ChildItem -Path $p -Recurse -Force -ErrorAction SilentlyContinue | Measure-Object Length -Sum).Sum } else { (Get-Item $p).Length } } }"]],
+        path
       )
       local pipe = io.popen(ps_cmd)
       local result = pipe:read("*a")
@@ -41,7 +40,9 @@ local function get_total_size(items)
       -- }
       pipe:close()
       local num = tonumber(result)
-      if num then total = total + num end
+      if num then
+        total = total + num
+      end
     end
     return total
   else
@@ -93,10 +94,10 @@ return {
       notification_content = notification_content .. "\nCopied to clipboard."
     end
 
-    ya.notify {
+    ya.notify({
       title = "What size",
       content = notification_content,
       timeout = 4,
-    }
+    })
   end,
 }

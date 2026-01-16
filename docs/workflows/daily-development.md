@@ -1501,21 +1501,21 @@ profile_fish               # Opens sorted profile in Neovim
 
 ## Summary: Tool Integration Matrix
 
-| Tool | Integrates With | Integration Method | Benefit |
-|------|----------------|-------------------|---------|
-| **Karabiner** | skhd, all apps | Hardware keyboard remapping | Vim navigation everywhere |
-| **skhd** | Yabai, apps | Hotkey → command mapping | Keyboard-driven window management |
-| **Yabai** | skhd, all windows | Window manager API | Automatic tiling and organization |
-| **Fish** | All CLI tools | Shell functions, keybindings | Enhanced command execution |
-| **FZF** | Fish, ripgrep, fd, bat, zoxide | Stdin/stdout pipes | Universal selection interface |
-| **Neovim** | LSP, Copilot, system clipboard | Plugins, config | Intelligent code editing |
-| **Lazygit** | Git, Delta, Neovim | Pager, editor integration | Interactive Git management |
-| **Delta** | Git, Lazygit, FZF | Pager configuration | Enhanced diff viewing |
-| **Bat** | FZF, Fish functions, cat | Pager, preview command | Syntax-highlighted file viewing |
-| **Ripgrep** | FZF, Fish functions | Search command | Fast code search |
-| **Zoxide** | Fish, FZF | Directory tracking | Smart navigation |
-| **Yazi** | Fish, Lazygit, ripgrep | Shell integration, plugins | Visual file management |
-| **Ghostty** | Fish, tmux, Neovim | Terminal emulator | Fast, native terminal |
+| Tool          | Integrates With                | Integration Method           | Benefit                           |
+| ------------- | ------------------------------ | ---------------------------- | --------------------------------- |
+| **Karabiner** | skhd, all apps                 | Hardware keyboard remapping  | Vim navigation everywhere         |
+| **skhd**      | Yabai, apps                    | Hotkey → command mapping     | Keyboard-driven window management |
+| **Yabai**     | skhd, all windows              | Window manager API           | Automatic tiling and organization |
+| **Fish**      | All CLI tools                  | Shell functions, keybindings | Enhanced command execution        |
+| **FZF**       | Fish, ripgrep, fd, bat, zoxide | Stdin/stdout pipes           | Universal selection interface     |
+| **Neovim**    | LSP, Copilot, system clipboard | Plugins, config              | Intelligent code editing          |
+| **Lazygit**   | Git, Delta, Neovim             | Pager, editor integration    | Interactive Git management        |
+| **Delta**     | Git, Lazygit, FZF              | Pager configuration          | Enhanced diff viewing             |
+| **Bat**       | FZF, Fish functions, cat       | Pager, preview command       | Syntax-highlighted file viewing   |
+| **Ripgrep**   | FZF, Fish functions            | Search command               | Fast code search                  |
+| **Zoxide**    | Fish, FZF                      | Directory tracking           | Smart navigation                  |
+| **Yazi**      | Fish, Lazygit, ripgrep         | Shell integration, plugins   | Visual file management            |
+| **Ghostty**   | Fish, tmux, Neovim             | Terminal emulator            | Fast, native terminal             |
 
 **Key insight**: Every tool is designed to enhance another, creating a cohesive ecosystem where the whole is greater than the sum of its parts.
 

@@ -245,7 +245,6 @@ This command performs a thorough code review of changes, analyzing for common is
    For each changed file, analyze across these dimensions:
 
    ### A. **Correctness & Bugs** (🐛)
-
    - Logic errors
    - Off-by-one errors
    - Null/undefined handling
@@ -257,7 +256,6 @@ This command performs a thorough code review of changes, analyzing for common is
    - Deadlock potential
 
    ### B. **Security** (🔒)
-
    - SQL injection vulnerabilities
    - XSS vulnerabilities
    - Command injection
@@ -270,7 +268,6 @@ This command performs a thorough code review of changes, analyzing for common is
    - Output encoding
 
    ### C. **Performance** (⚡)
-
    - Inefficient algorithms (O(n²) when O(n) possible)
    - Unnecessary loops or iterations
    - Database N+1 queries
@@ -282,7 +279,6 @@ This command performs a thorough code review of changes, analyzing for common is
    - Inefficient data structures
 
    ### D. **Maintainability** (🔧)
-
    - Code clarity and readability
    - Function/method length (>50 lines?)
    - Cyclomatic complexity
@@ -294,7 +290,6 @@ This command performs a thorough code review of changes, analyzing for common is
    - Testability
 
    ### E. **Best Practices** (✨)
-
    - Language idioms and conventions
    - Framework best practices
    - Project-specific patterns (from CLAUDE.md)
@@ -305,7 +300,6 @@ This command performs a thorough code review of changes, analyzing for common is
    - Configuration management
 
    ### F. **Testing** (🧪)
-
    - Are tests included for new code?
    - Are tests comprehensive?
    - Edge cases tested?
@@ -314,7 +308,6 @@ This command performs a thorough code review of changes, analyzing for common is
    - Test coverage gaps
 
    ### G. **Documentation** (📚)
-
    - Public API documented?
    - Complex logic explained?
    - Breaking changes noted?
@@ -381,172 +374,179 @@ This command performs a thorough code review of changes, analyzing for common is
 
 10. **Generate Review Report**:
 
-   Use this structured format:
+Use this structured format:
 
-   ````markdown
-   # Code Review Report
+````markdown
+# Code Review Report
 
-   **Scope**: [what was reviewed]
-   **Files Changed**: [count]
-   **Lines Changed**: [+additions / -deletions]
-   **Review Date**: [timestamp]
-   **PR**: [#number (if detected) or "N/A"]
+**Scope**: [what was reviewed]
+**Files Changed**: [count]
+**Lines Changed**: [+additions / -deletions]
+**Review Date**: [timestamp]
+**PR**: [#number (if detected) or "N/A"]
 
-   ---
+---
 
-   ## Summary
+## Summary
 
-   **Overall Assessment**: [APPROVE | APPROVE WITH COMMENTS | REQUEST CHANGES | REJECT]
+**Overall Assessment**: [APPROVE | APPROVE WITH COMMENTS | REQUEST CHANGES | REJECT]
 
-   **Critical Issues**: [count] 🔴
-   **High Priority**: [count] 🟠
-   **Medium Priority**: [count] 🟡
-   **Low Priority**: [count] 🟢
+**Critical Issues**: [count] 🔴
+**High Priority**: [count] 🟠
+**Medium Priority**: [count] 🟡
+**Low Priority**: [count] 🟢
 
-   **Recommendation**: [One paragraph summary and recommendation]
+**Recommendation**: [One paragraph summary and recommendation]
 
-   ---
+---
 
-   ## Critical Issues 🔴
+## Critical Issues 🔴
 
-   [If any]
+[If any]
 
-   ### [File:Line] - [Issue Title]
+### [File:Line] - [Issue Title]
 
-   **Category**: [Security/Bug/etc]
-   **Severity**: CRITICAL
+**Category**: [Security/Bug/etc]
+**Severity**: CRITICAL
 
-   **Issue**:
-   [Description of the problem]
+**Issue**:
+[Description of the problem]
 
-   **Current Code**:
+**Current Code**:
 
-   ```language
-   [Problematic code snippet]
-   ```
-   ````
+```language
+[Problematic code snippet]
+```
+````
 
-   **Problem**:
-   [Why this is critical]
+**Problem**:
+[Why this is critical]
 
-   **Suggested Fix**:
+**Suggested Fix**:
 
-   ```language
-   [Better code]
-   ```
+```language
+[Better code]
+```
 
-   **Impact**: [What happens if not fixed]
+**Impact**: [What happens if not fixed]
 
-   ***
+---
 
-   ## High Priority Issues 🟠
+## High Priority Issues 🟠
 
-   [Similar format for each issue]
+[Similar format for each issue]
 
-   ***
+---
 
-   ## Medium Priority Issues 🟡
+## Medium Priority Issues 🟡
 
-   [Similar format]
+[Similar format]
 
-   ***
+---
 
-   ## Low Priority Issues 🟢
+## Low Priority Issues 🟢
 
-   [Similar format]
+[Similar format]
 
-   ***
+---
 
-   ## Positive Observations ✅
+## Positive Observations ✅
 
-   [Highlight good things]:
-   - Good error handling in [file:line]
-   - Excellent test coverage for [feature]
-   - Clear naming in [file:line]
-   - Efficient algorithm used for [functionality]
+[Highlight good things]:
 
-   ***
+- Good error handling in [file:line]
+- Excellent test coverage for [feature]
+- Clear naming in [file:line]
+- Efficient algorithm used for [functionality]
 
-   ## Recommendations
+---
 
-   ### Must Do (Before Merge)
+## Recommendations
 
-   1. [Critical fix #1]
-   2. [Critical fix #2]
+### Must Do (Before Merge)
 
-   ### Should Do (Before Merge)
+1.  [Critical fix #1]
+2.  [Critical fix #2]
 
-   1. [High priority fix #1]
-   2. [High priority fix #2]
+### Should Do (Before Merge)
 
-   ### Could Do (Follow-up)
+1.  [High priority fix #1]
+2.  [High priority fix #2]
 
-   1. [Medium/Low priority improvements]
+### Could Do (Follow-up)
 
-   ***
+1.  [Medium/Low priority improvements]
 
-   ## Testing Gaps
+---
 
-   [If applicable]
-   - Missing tests for [scenario]
-   - Edge case not covered: [case]
-   - Error path not tested: [path]
+## Testing Gaps
 
-   ***
+[If applicable]
 
-   ## Documentation Gaps
+- Missing tests for [scenario]
+- Edge case not covered: [case]
+- Error path not tested: [path]
 
-   [If applicable]
-   - Public function [name] lacks documentation
-   - Complex algorithm in [file:line] needs explanation
-   - Breaking change not documented
+---
 
-   ***
+## Documentation Gaps
 
-   ## Performance Notes
+[If applicable]
 
-   [If applicable]
-   - O(n²) algorithm in [file:line] - consider [optimization]
-   - Possible N+1 query in [file:line]
-   - Large object copy in [file:line] - consider reference
+- Public function [name] lacks documentation
+- Complex algorithm in [file:line] needs explanation
+- Breaking change not documented
 
-   ***
+---
 
-   ## Security Notes
+## Performance Notes
 
-   [If applicable]
-   - Potential [vulnerability] in [file:line]
-   - Input validation missing for [parameter]
-   - Sensitive data logging in [file:line]
+[If applicable]
 
-   ***
+- O(n²) algorithm in [file:line] - consider [optimization]
+- Possible N+1 query in [file:line]
+- Large object copy in [file:line] - consider reference
 
-   ## Next Steps
+---
 
-   1. [Immediate action item]
-   2. [Next action item]
+## Security Notes
 
-   **Estimated Time to Address**: [rough estimate]
+[If applicable]
 
-   ```
+- Potential [vulnerability] in [file:line]
+- Input validation missing for [parameter]
+- Sensitive data logging in [file:line]
 
-   ```
+---
+
+## Next Steps
+
+1.  [Immediate action item]
+2.  [Next action item]
+
+**Estimated Time to Address**: [rough estimate]
+
+```
+
+```
 
 11. **Provide Context-Aware Analysis**:
-   - **For Rust**: Focus on ownership/borrowing issues, unsafe code, error handling with Result/Option
-   - **For JavaScript/TypeScript**: Focus on type safety, async/await patterns, null/undefined
-   - **For Python**: Focus on type hints, exception handling, PEP 8
-   - **For SQL**: Focus on injection, indexes, N+1 queries
-   - **For API code**: Focus on validation, auth, rate limiting, error responses
+
+- **For Rust**: Focus on ownership/borrowing issues, unsafe code, error handling with Result/Option
+- **For JavaScript/TypeScript**: Focus on type safety, async/await patterns, null/undefined
+- **For Python**: Focus on type hints, exception handling, PEP 8
+- **For SQL**: Focus on injection, indexes, N+1 queries
+- **For API code**: Focus on validation, auth, rate limiting, error responses
 
 12. **Check Against Project Standards**:
 
-   From CLAUDE.md, verify:
-   - Naming conventions followed?
-   - File organization correct?
-   - Error handling patterns consistent?
-   - Testing standards met?
-   - Documentation requirements satisfied?
+From CLAUDE.md, verify:
+
+- Naming conventions followed?
+- File organization correct?
+- Error handling patterns consistent?
+- Testing standards met?
+- Documentation requirements satisfied?
 
 13. **Report Results**:
 
@@ -556,7 +556,7 @@ This command performs a thorough code review of changes, analyzing for common is
 - Give actionable recommendations
 - Suggest review decision (approve/request changes)
 
-   **File Output**:
+  **File Output**:
   - Generate filename: `PR_REVIEW_<timestamp>.md` (e.g., `PR_REVIEW_2025-01-15_143022.md`)
   - Timestamp format: `YYYY-MM-DD_HHMMSS`
   - Write the complete markdown report to this file
@@ -568,32 +568,32 @@ This command performs a thorough code review of changes, analyzing for common is
 
     **Add the following section to the report** (before Cross-Review Analysis):
 
-    ```markdown
+    ````markdown
     ---
-
+    
     ## Existing PR Comments Analysis 💬
-
+    
     **PR Information**:
     - **PR Number**: #[number]
     - **PR Title**: [title]
     - **PR State**: [open/closed/merged]
     - **PR URL**: [url]
     - **Base Branch**: [branch]
-
+    
     **Comments Analyzed**:
     - **Review Comments** (line-specific): [count]
     - **General Comments**: [count]
     - **PR Reviews**: [count]
-
+    
     ---
 
     ### Addressed Issues ✅
 
     [Issues that were flagged in PR comments but have been fixed in current code]
 
-    | Location | Commenter | Issue Raised | Status | Verification |
-    |----------|-----------|--------------|--------|--------------|
-    | [file:line] | @[user] | [summary of comment] | Fixed ✅ | [How it was fixed] |
+    | Location    | Commenter | Issue Raised         | Status   | Verification       |
+    | ----------- | --------- | -------------------- | -------- | ------------------ |
+    | [file:line] | @[user]   | [summary of comment] | Fixed ✅ | [How it was fixed] |
 
     **Example**:
     | Location | Commenter | Issue Raised | Status | Verification |
@@ -606,11 +606,12 @@ This command performs a thorough code review of changes, analyzing for common is
 
     [Issues flagged in PR comments that are still present in current code]
 
-    | Location | Commenter | Issue Raised | Current Review Severity | Still Valid? |
-    |----------|-----------|--------------|------------------------|--------------|
-    | [file:line] | @[user] | [summary] | 🔴/🟠/🟡/🟢 | Yes/Partially/No |
+    | Location    | Commenter | Issue Raised | Current Review Severity | Still Valid?     |
+    | ----------- | --------- | ------------ | ----------------------- | ---------------- |
+    | [file:line] | @[user]   | [summary]    | 🔴/🟠/🟡/🟢             | Yes/Partially/No |
 
     **Details for each**:
+
     - **[file:line]** - @[user] ([timestamp])
       - **Comment**: [full comment text]
       - **Current Code**:
@@ -626,11 +627,12 @@ This command performs a thorough code review of changes, analyzing for common is
 
     [Issues identified by BOTH PR comments AND current review - high confidence]
 
-    | Issue | Flagged By | Severity | Agreement Level |
-    |-------|------------|----------|-----------------|
-    | [issue summary] | @[user1], @[user2], this review | 🔴/🟠/🟡/🟢 | Full/Partial |
+    | Issue           | Flagged By                      | Severity    | Agreement Level |
+    | --------------- | ------------------------------- | ----------- | --------------- |
+    | [issue summary] | @[user1], @[user2], this review | 🔴/🟠/🟡/🟢 | Full/Partial    |
 
     **Details**:
+
     - **[Issue]**:
       - **PR Comment** (@[user]): [summary of their concern]
       - **Current Review**: [our finding]
@@ -643,8 +645,8 @@ This command performs a thorough code review of changes, analyzing for common is
 
     [Issues found by current review but NOT mentioned in any PR comments]
 
-    | Location | Issue | Severity | Why Might This Be Missed? |
-    |----------|-------|----------|---------------------------|
+    | Location    | Issue   | Severity    | Why Might This Be Missed?                            |
+    | ----------- | ------- | ----------- | ---------------------------------------------------- |
     | [file:line] | [issue] | 🔴/🟠/🟡/🟢 | [Possible reason previous reviewers didn't catch it] |
 
     ---
@@ -653,11 +655,12 @@ This command performs a thorough code review of changes, analyzing for common is
 
     [PR comments that appear invalid, outdated, or incorrect]
 
-    | Location | Commenter | Comment | Assessment |
-    |----------|-----------|---------|------------|
-    | [file:line] | @[user] | [summary] | Invalid/Outdated/Incorrect - [reason] |
+    | Location    | Commenter | Comment   | Assessment                            |
+    | ----------- | --------- | --------- | ------------------------------------- |
+    | [file:line] | @[user]   | [summary] | Invalid/Outdated/Incorrect - [reason] |
 
     **Details**:
+
     - **[file:line]** - @[user] comment:
       - **Comment**: [full text]
       - **Why Invalid**: [Code has changed / Comment was incorrect / Misunderstanding / etc.]
@@ -669,14 +672,15 @@ This command performs a thorough code review of changes, analyzing for common is
 
     **Total PR Comments Evaluated**: [count]
 
-    | Category | Count | Percentage |
-    |----------|-------|------------|
-    | Addressed ✅ | [N] | [%] |
-    | Still Outstanding ⚠️ | [N] | [%] |
-    | Consensus with Current Review 🎯 | [N] | [%] |
-    | Outdated/Invalid ❓ | [N] | [%] |
+    | Category                         | Count | Percentage |
+    | -------------------------------- | ----- | ---------- |
+    | Addressed ✅                     | [N]   | [%]        |
+    | Still Outstanding ⚠️             | [N]   | [%]        |
+    | Consensus with Current Review 🎯 | [N]   | [%]        |
+    | Outdated/Invalid ❓              | [N]   | [%]        |
 
     **Key Takeaways**:
+
     - [Summary of how well issues have been addressed]
     - [Note any patterns in what's been fixed vs outstanding]
     - [Comment on review quality/usefulness]
@@ -686,20 +690,24 @@ This command performs a thorough code review of changes, analyzing for common is
     ### Recommended Actions Based on PR Comments
 
     **Must Address**:
+
     1. [Outstanding critical/high issues from PR comments]
     2. [Consensus issues flagged by multiple reviewers]
 
     **Should Consider**:
+
     1. [Valid medium-priority comments not yet addressed]
 
     **Can Dismiss**:
+
     1. [Invalid/outdated comments with justification]
 
     **Response Suggestions**:
+
     - Reply to addressed comments: "✅ Fixed in [commit sha] - [brief description]"
     - Reply to outstanding issues: "[Status update / plan to address / reason not addressing]"
     - Reply to invalid comments: "This appears outdated - [explanation]"
-    ```
+    ````
 
 15. **Cross-Review Analysis (Senior Engineer Meta-Review)**:
 
@@ -714,16 +722,16 @@ This command performs a thorough code review of changes, analyzing for common is
     a. **Read all existing PR review files** (excluding the one just written)
 
     b. **Act as a Senior Software Engineer** reviewing the work of junior engineers:
-       - Treat all other PR_REVIEW files as reviews written by junior engineers
-       - Treat the current review as your own authoritative analysis
-       - Apply critical evaluation to all claims and findings
+    - Treat all other PR_REVIEW files as reviews written by junior engineers
+    - Treat the current review as your own authoritative analysis
+    - Apply critical evaluation to all claims and findings
 
     c. **Perform comparative analysis**:
-       - Identify issues raised in other reviews that the current review missed
-       - Evaluate the validity of each claim in other reviews
-       - Note any false positives or over-reported issues in other reviews
-       - Identify consensus findings (issues flagged by multiple reviews)
-       - Note conflicting assessments between reviews
+    - Identify issues raised in other reviews that the current review missed
+    - Evaluate the validity of each claim in other reviews
+    - Note any false positives or over-reported issues in other reviews
+    - Identify consensus findings (issues flagged by multiple reviews)
+    - Note conflicting assessments between reviews
 
     d. **Append a "Cross-Review Analysis" section** to the current PR review file:
 
@@ -734,14 +742,15 @@ This command performs a thorough code review of changes, analyzing for common is
 
     **Reviews Analyzed**: [count] additional PR review(s) found
     **Review Files**:
+
     - [list of other PR_REVIEW filenames with timestamps]
 
     ### Missed Issues from Other Reviews
 
     [Issues flagged by other reviews that this review did not catch, with evaluation of their validity]
 
-    | Source Review | Issue | Validity Assessment | Action Recommended |
-    |---------------|-------|---------------------|-------------------|
+    | Source Review | Issue   | Validity Assessment           | Action Recommended          |
+    | ------------- | ------- | ----------------------------- | --------------------------- |
     | PR_REVIEW_xxx | [issue] | Valid/Invalid/Partially Valid | Include/Dismiss/Investigate |
 
     ### Consensus Findings
@@ -754,9 +763,9 @@ This command performs a thorough code review of changes, analyzing for common is
 
     [Where reviews disagree on severity or validity]
 
-    | Issue | This Review | Other Review(s) | Senior Assessment |
-    |-------|-------------|-----------------|-------------------|
-    | [issue] | [this assessment] | [other assessment] | [final ruling] |
+    | Issue   | This Review       | Other Review(s)    | Senior Assessment |
+    | ------- | ----------------- | ------------------ | ----------------- |
+    | [issue] | [this assessment] | [other assessment] | [final ruling]    |
 
     ### Questionable Claims in Other Reviews
 
@@ -773,6 +782,7 @@ This command performs a thorough code review of changes, analyzing for common is
     ### Final Recommendations
 
     Based on cross-review analysis:
+
     1. [Consolidated action item accounting for all reviews]
     2. [Additional item if other reviews raised valid points]
 
@@ -780,8 +790,8 @@ This command performs a thorough code review of changes, analyzing for common is
     ```
 
     e. **If no other PR review files exist**:
-       - Do not append anything
-       - Optionally note to user: "No other PR review files found for cross-analysis"
+    - Do not append anything
+    - Optionally note to user: "No other PR review files found for cross-analysis"
 
 ## Review Quality Guidelines
 
@@ -850,7 +860,7 @@ This command performs a thorough code review of changes, analyzing for common is
 - Defer usage
 - Interface design
 
-### Java/C #
+### Java/C
 
 - Null reference exceptions
 - Resource disposal (try-with-resources, using)

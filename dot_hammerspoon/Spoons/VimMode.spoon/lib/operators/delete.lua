@@ -1,5 +1,5 @@
 local Operator = dofile(vimModeScriptPath .. "lib/operator.lua")
-local Delete = Operator:new{name = 'delete'}
+local Delete = Operator:new({ name = "delete" })
 local utf8 = dofile(vimModeScriptPath .. "vendor/luautf8.lua")
 
 function Delete.getModifiedBuffer(_, buffer, rangeStart, rangeFinish)
@@ -19,15 +19,15 @@ function Delete.getModifiedBuffer(_, buffer, rangeStart, rangeFinish)
 end
 
 function Delete.modifySelection()
-  hs.eventtap.keyStroke({}, 'delete', 0)
+  hs.eventtap.keyStroke({}, "delete", 0)
 end
 
 function Delete.getKeys()
   return {
     {
       modifiers = {},
-      key = 'delete'
-    }
+      key = "delete",
+    },
   }
 end
 

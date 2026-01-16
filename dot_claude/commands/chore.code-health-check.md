@@ -715,7 +715,6 @@ This command performs a comprehensive "health check" of the codebase by studying
    ## 5. Summary of Recommendations
 
    ### Immediate Actions (High Confidence, Low Risk)
-
    1. **Delete dead code** (15 items):
       - `src/old_parser.rs` (unused since refactor)
       - `PersonService::legacy_format()` (zero references)
@@ -735,7 +734,6 @@ This command performs a comprehensive "health check" of the codebase by studying
       - [etc.]
 
    ### Review Required (Medium Confidence)
-
    1. **Verify test-only code** (10 items):
       - Confirm these are intentional test fixtures
 
@@ -743,7 +741,6 @@ This command performs a comprehensive "health check" of the codebase by studying
       - Double-check these aren't alternative implementations
 
    ### Future Consideration (Lower Priority)
-
    1. **Medium/low-value simplifications** (20 items)
 
    ***
@@ -774,9 +771,9 @@ This command performs a comprehensive "health check" of the codebase by studying
 
 10. **Interactive Implementation** (if --implement flag provided):
 
-   **IMPORTANT**: Do NOT implement anything without explicit user approval for each change.
+    **IMPORTANT**: Do NOT implement anything without explicit user approval for each change.
 
-   a. **Group changes by category**:
+a. **Group changes by category**:
 
 - Group 1: Dead code deletion (high confidence)
 - Group 2: Outdated code removal (high confidence)
@@ -785,60 +782,60 @@ This command performs a comprehensive "health check" of the codebase by studying
 - Group 5: Medium-value simplifications and abstractions
 - Group 6: Everything else
 
-   b. **For each group**:
+  b. **For each group**:
 
-   i. **Present summary**:
+  i. **Present summary**:
 
-   ````
-   Group: Dead Code Deletion (High Confidence)
-   Items: 15
-   Files affected: 8
-   Lines removed: ~500
+  ````
+  Group: Dead Code Deletion (High Confidence)
+  Items: 15
+  Files affected: 8
+  Lines removed: ~500
 
-         Items:
-         1. src/old_parser.rs (entire file, 120 lines)
-         2. src/domain/person_service.rs:legacy_format() (35 lines)
-         ...
+        Items:
+        1. src/old_parser.rs (entire file, 120 lines)
+        2. src/domain/person_service.rs:legacy_format() (35 lines)
+        ...
 
-         Approve deletion of these 15 items? [y/N/show]
-         ```
+        Approve deletion of these 15 items? [y/N/show]
+        ```
 
-   ii. **Handle user response**: - `y` or `yes`: Proceed with deletion - `n` or `no`: Skip this group - `show`: Show detailed diff for each item, allow individual approval - `show N`: Show detailed diff for item N only
+  ii. **Handle user response**: - `y` or `yes`: Proceed with deletion - `n` or `no`: Skip this group - `show`: Show detailed diff for each item, allow individual approval - `show N`: Show detailed diff for item N only
 
-   iii. **Implement approved changes**:
-       - Delete dead code files/functions
-       - Remove outdated modules
-       - Refactor complex code
-       - Run tests after each change to verify no breakage
-       - If tests fail, STOP and report error, don't continue
+  iii. **Implement approved changes**:
+      - Delete dead code files/functions
+      - Remove outdated modules
+      - Refactor complex code
+      - Run tests after each change to verify no breakage
+      - If tests fail, STOP and report error, don't continue
 
-   iv. **Create atomic commit**:
+  iv. **Create atomic commit**:
 
-       **IMPORTANT**: Read `~/.claude/commands/commit-atomic.md` to understand the
-       commit message quality guidelines.
+      **IMPORTANT**: Read `~/.claude/commands/commit-atomic.md` to understand the
+      commit message quality guidelines.
 
-       Apply those same standards here, with these specifics:
-       - **Type determination**:
-         - Dead code deletion → `refactor:` or `chore:`
-         - Outdated code removal → `refactor:`
-         - Simplification → `refactor:`
-         - Abstraction/pattern implementation → `refactor:`
-       - **Scope**: The area affected (e.g., `domain`, `api`, or specific module)
-       - **Subject examples**:
-         - `refactor: remove dead code from person service`
-         - `refactor: remove outdated cache implementation`
-         - `refactor: extract duplicate error handling`
-         - `refactor: replace conditionals with lookup table`
-         - `refactor: implement builder pattern for Config`
-       - **Body**: IMPORTANT - include list of deleted/changed items with brief context
-       - **Validation**: Use the same validation checklist from commit-atomic.md
+      Apply those same standards here, with these specifics:
+      - **Type determination**:
+        - Dead code deletion → `refactor:` or `chore:`
+        - Outdated code removal → `refactor:`
+        - Simplification → `refactor:`
+        - Abstraction/pattern implementation → `refactor:`
+      - **Scope**: The area affected (e.g., `domain`, `api`, or specific module)
+      - **Subject examples**:
+        - `refactor: remove dead code from person service`
+        - `refactor: remove outdated cache implementation`
+        - `refactor: extract duplicate error handling`
+        - `refactor: replace conditionals with lookup table`
+        - `refactor: implement builder pattern for Config`
+      - **Body**: IMPORTANT - include list of deleted/changed items with brief context
+      - **Validation**: Use the same validation checklist from commit-atomic.md
 
-   c. **After all groups processed**:
-   - Run full test suite
-   - Generate summary report of what was changed
-   - Suggest next steps (e.g., "run linter", "update documentation")
+  c. **After all groups processed**:
+  - Run full test suite
+  - Generate summary report of what was changed
+  - Suggest next steps (e.g., "run linter", "update documentation")
 
-   ````
+  ````
 
 1. **Validation**:
 
@@ -852,7 +849,7 @@ This command performs a comprehensive "health check" of the codebase by studying
 - [ ] Binary and deleted files excluded
 - [ ] Report clearly indicates git scope and limitations
 
-   **Before generating report**:
+  **Before generating report**:
 
 - [ ] Project context gathered (CLAUDE.md, README, TODO, git history)
 - [ ] Dead code analysis filtered false positives (public API, entry points, trait impls)
@@ -866,7 +863,7 @@ This command performs a comprehensive "health check" of the codebase by studying
 - [ ] Risk levels assigned (low/medium/high)
 - [ ] Recommendations are actionable
 
-   **Before implementing** (if --implement):
+  **Before implementing** (if --implement):
 
 - [ ] User approved changes
 - [ ] Tests pass before changes
@@ -1383,7 +1380,7 @@ To implement these changes, run:
 /codebase-health --focus=brute-force --implement
 ```
 
-````
+`````
 
 ### Example 5: Branch health check (git scope)
 
@@ -1503,7 +1500,7 @@ Or check specific commit:
 ```bash
 /codebase-health --scope=commit abc123f
 ```
-````
+`````
 
 ### Example 6: Commit range health check
 
@@ -1527,4 +1524,5 @@ Or check specific commit:
 Additional user context: $ARGUMENTS
 
 ```
-````
+
+```

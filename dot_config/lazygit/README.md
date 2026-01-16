@@ -6,11 +6,11 @@ Lazygit is a terminal UI for Git commands, providing an intuitive, keyboard-driv
 
 ## Configuration Files
 
-| File | Purpose |
-|------|---------|
-| `symlink_config.yml.tmpl` | Symlinks to the main config in `cm-util/ctrld-configs/lazygit/config.yml` |
-| `cm-util/ctrld-configs/lazygit/config.yml` | Main configuration file for UI, git behavior, and keybindings |
-| `themes/catppuccin/` | Collection of Catppuccin theme variants (frappe, latte, macchiato, mocha) |
+| File                                       | Purpose                                                                   |
+| ------------------------------------------ | ------------------------------------------------------------------------- |
+| `symlink_config.yml.tmpl`                  | Symlinks to the main config in `cm-util/ctrld-configs/lazygit/config.yml` |
+| `cm-util/ctrld-configs/lazygit/config.yml` | Main configuration file for UI, git behavior, and keybindings             |
+| `themes/catppuccin/`                       | Collection of Catppuccin theme variants (frappe, latte, macchiato, mocha) |
 
 ## Key Features
 
@@ -69,127 +69,127 @@ Alternative theme (Catppuccin Macchiato Mauve) is commented out in the config fo
 
 ### Navigation (Universal)
 
-| Key | Action |
-|-----|--------|
-| `j` / `k` | Move down/up |
-| `h` / `l` | Move to previous/next panel |
+| Key               | Action                            |
+| ----------------- | --------------------------------- |
+| `j` / `k`         | Move down/up                      |
+| `h` / `l`         | Move to previous/next panel       |
 | `<C-u>` / `<C-d>` | Page up/down (replaces `,` / `.`) |
-| `H` / `L` | Scroll left/right in main view |
-| `<` / `>` | Jump to top/bottom |
-| `1` - `5` | Jump to specific panel |
-| `<Tab>` | Toggle between panels |
-| `<Esc>` | Return/cancel |
-| `q` | Quit |
-| `Q` | Quit without changing directory |
+| `H` / `L`         | Scroll left/right in main view    |
+| `<` / `>`         | Jump to top/bottom                |
+| `1` - `5`         | Jump to specific panel            |
+| `<Tab>`           | Toggle between panels             |
+| `<Esc>`           | Return/cancel                     |
+| `q`               | Quit                              |
+| `Q`               | Quit without changing directory   |
 
 ### Search and Selection
 
-| Key | Action |
-|-----|--------|
-| `/` | Start search |
-| `n` / `N` | Next/previous match |
-| `v` | Toggle range select |
+| Key                   | Action                 |
+| --------------------- | ---------------------- |
+| `/`                   | Start search           |
+| `n` / `N`             | Next/previous match    |
+| `v`                   | Toggle range select    |
 | `<S-Down>` / `<S-Up>` | Extend range selection |
-| `<Space>` | Select/toggle item |
+| `<Space>`             | Select/toggle item     |
 
 ### Files Panel
 
-| Key | Action |
-|-----|--------|
-| `c` | Commit changes |
-| `C` | Commit with editor |
-| `w` | Commit without pre-commit hooks |
-| `A` | Amend last commit |
-| `a` | Stage/unstage all |
-| `s` | Stash all changes |
-| `S` | View stash options |
-| `D` | View reset options |
-| `x` | Confirm discard |
-| `i` | Ignore file |
-| `f` | Fetch |
-| `r` | Refresh files |
-| `o` | Edit file (opens in Neovim) |
-| `e` | Open with system default app |
-| `` ` `` | Toggle tree view |
-| `M` | Open merge tool |
-| `y` | Copy file info to clipboard |
+| Key     | Action                          |
+| ------- | ------------------------------- |
+| `c`     | Commit changes                  |
+| `C`     | Commit with editor              |
+| `w`     | Commit without pre-commit hooks |
+| `A`     | Amend last commit               |
+| `a`     | Stage/unstage all               |
+| `s`     | Stash all changes               |
+| `S`     | View stash options              |
+| `D`     | View reset options              |
+| `x`     | Confirm discard                 |
+| `i`     | Ignore file                     |
+| `f`     | Fetch                           |
+| `r`     | Refresh files                   |
+| `o`     | Edit file (opens in Neovim)     |
+| `e`     | Open with system default app    |
+| `` ` `` | Toggle tree view                |
+| `M`     | Open merge tool                 |
+| `y`     | Copy file info to clipboard     |
 
 ### Branches Panel
 
-| Key | Action |
-|-----|--------|
-| `c` | Checkout branch by name |
-| `F` | Force checkout branch |
-| `r` | Rebase branch |
-| `R` | Rename branch |
+| Key | Action                    |
+| --- | ------------------------- |
+| `c` | Checkout branch by name   |
+| `F` | Force checkout branch     |
+| `r` | Rebase branch             |
+| `R` | Rename branch             |
 | `M` | Merge into current branch |
-| `f` | Fast-forward branch |
-| `u` | Set upstream |
-| `T` | Create tag |
-| `P` | Push tag |
-| `o` | Create pull request |
+| `f` | Fast-forward branch       |
+| `u` | Set upstream              |
+| `T` | Create tag                |
+| `P` | Push tag                  |
+| `o` | Create pull request       |
 | `O` | View pull request options |
-| `s` | Change sort order |
+| `s` | Change sort order         |
 
 ### Commits Panel
 
-| Key | Action |
-|-----|--------|
-| `s` | Squash down |
-| `S` | Squash above commits |
-| `r` | Rename commit |
-| `R` | Rename with editor |
-| `f` | Mark commit as fixup |
-| `F` | Create fixup commit |
-| `A` | Amend to commit |
-| `a` | Reset commit author |
-| `p` | Pick commit (during rebase) |
-| `t` | Revert commit |
-| `C` | Cherry-pick copy |
-| `V` | Paste commits |
-| `B` | Mark as base for rebase |
-| `T` | Tag commit |
-| `i` | Start interactive rebase |
-| `b` | View bisect options |
-| `g` | View reset options |
-| `o` | Open commit in browser |
-| `y` | Copy commit attribute |
-| `<C-j>` / `<C-k>` | Move commit down/up |
-| `<C-l>` | Open log menu |
+| Key               | Action                      |
+| ----------------- | --------------------------- |
+| `s`               | Squash down                 |
+| `S`               | Squash above commits        |
+| `r`               | Rename commit               |
+| `R`               | Rename with editor          |
+| `f`               | Mark commit as fixup        |
+| `F`               | Create fixup commit         |
+| `A`               | Amend to commit             |
+| `a`               | Reset commit author         |
+| `p`               | Pick commit (during rebase) |
+| `t`               | Revert commit               |
+| `C`               | Cherry-pick copy            |
+| `V`               | Paste commits               |
+| `B`               | Mark as base for rebase     |
+| `T`               | Tag commit                  |
+| `i`               | Start interactive rebase    |
+| `b`               | View bisect options         |
+| `g`               | View reset options          |
+| `o`               | Open commit in browser      |
+| `y`               | Copy commit attribute       |
+| `<C-j>` / `<C-k>` | Move commit down/up         |
+| `<C-l>`           | Open log menu               |
 
 ### Main Panel (Staging/Diff View)
 
-| Key | Action |
-|-----|--------|
-| `a` | Toggle select hunk |
-| `b` | Pick both hunks (merge conflicts) |
-| `E` | Edit selected hunk |
-| `<Enter>` | Stage/unstage selected line/hunk |
-| `<C-b>` / `<C-f>` | Page up/down |
-| `<C-w>` | Toggle whitespace in diff |
-| `{` / `}` | Decrease/increase diff context |
-| `(` / `)` | Decrease/increase rename similarity threshold |
+| Key               | Action                                        |
+| ----------------- | --------------------------------------------- |
+| `a`               | Toggle select hunk                            |
+| `b`               | Pick both hunks (merge conflicts)             |
+| `E`               | Edit selected hunk                            |
+| `<Enter>`         | Stage/unstage selected line/hunk              |
+| `<C-b>` / `<C-f>` | Page up/down                                  |
+| `<C-w>`           | Toggle whitespace in diff                     |
+| `{` / `}`         | Decrease/increase diff context                |
+| `(` / `)`         | Decrease/increase rename similarity threshold |
 
 ### Special Commands
 
-| Key | Action |
-|-----|--------|
-| `:` | Execute shell command |
-| `?` | Open keybindings menu |
-| `@` | Open extras menu |
-| `m` | Create rebase options menu |
-| `R` | Refresh (force update) |
-| `P` | Push files |
-| `p` | Pull files |
-| `W` or `<C-e>` | Open diffing menu |
-| `<C-s>` | Open filtering menu |
-| `<C-p>` | Create patch options menu |
-| `<C-r>` | Open recent repos |
-| `<C-t>` | Open external diff tool |
-| `<C-o>` | Copy to clipboard |
-| `z` / `<C-z>` | Undo/redo |
-| `[` / `]` | Previous/next tab |
-| `+` / `_` | Increase/decrease window size |
+| Key            | Action                        |
+| -------------- | ----------------------------- |
+| `:`            | Execute shell command         |
+| `?`            | Open keybindings menu         |
+| `@`            | Open extras menu              |
+| `m`            | Create rebase options menu    |
+| `R`            | Refresh (force update)        |
+| `P`            | Push files                    |
+| `p`            | Pull files                    |
+| `W` or `<C-e>` | Open diffing menu             |
+| `<C-s>`        | Open filtering menu           |
+| `<C-p>`        | Create patch options menu     |
+| `<C-r>`        | Open recent repos             |
+| `<C-t>`        | Open external diff tool       |
+| `<C-o>`        | Copy to clipboard             |
+| `z` / `<C-z>`  | Undo/redo                     |
+| `[` / `]`      | Previous/next tab             |
+| `+` / `_`      | Increase/decrease window size |
 
 ## Common Workflows
 
@@ -335,8 +335,8 @@ git:
 
 ```yaml
 refresher:
-  refreshInterval: 30  # File refresh in seconds (default: 10)
-  fetchInterval: 300   # Remote fetch in seconds (default: 60)
+  refreshInterval: 30 # File refresh in seconds (default: 10)
+  fetchInterval: 300 # Remote fetch in seconds (default: 60)
 ```
 
 ### Customizing Commit Behavior
@@ -347,7 +347,7 @@ refresher:
 git:
   commit:
     autoWrapCommitMessage: true
-    autoWrapWidth: 72  # or 50 for subject line limit
+    autoWrapWidth: 72 # or 50 for subject line limit
 ```
 
 **Skip hooks with prefix**:
@@ -356,7 +356,7 @@ Configure commits starting with a specific prefix to skip pre-commit hooks:
 
 ```yaml
 git:
-  skipHookPrefix: WIP  # "WIP: message" skips hooks
+  skipHookPrefix: WIP # "WIP: message" skips hooks
 ```
 
 **Sign commits by default**:
@@ -364,7 +364,7 @@ git:
 ```yaml
 git:
   commit:
-    signOff: true  # Adds Signed-off-by line
+    signOff: true # Adds Signed-off-by line
 ```
 
 ### Changing the Pager
@@ -374,7 +374,7 @@ git:
 ```yaml
 git:
   paging:
-    pager: "diff-so-fancy"  # or "bat", or any other
+    pager: "diff-so-fancy" # or "bat", or any other
 ```
 
 **Use Git's configured pager**:
@@ -382,7 +382,7 @@ git:
 ```yaml
 git:
   paging:
-    useConfig: true  # Use $GIT_PAGER or git config pager
+    useConfig: true # Use $GIT_PAGER or git config pager
 ```
 
 ## Integration Points

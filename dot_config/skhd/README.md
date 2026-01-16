@@ -35,11 +35,11 @@ skhd translates keyboard input into Yabai window manager commands, creating a se
 
 ## Configuration Files
 
-| File | Purpose |
-|------|---------|
-| `skhdrc` | Main hotkey configuration file defining all 76 keyboard shortcuts |
+| File                        | Purpose                                                                                              |
+| --------------------------- | ---------------------------------------------------------------------------------------------------- |
+| `skhdrc`                    | Main hotkey configuration file defining all 76 keyboard shortcuts                                    |
 | `util/focus_empty_space.sh` | Helper script for "show desktop" functionality - finds and focuses first empty space on each display |
-| `README.md` | This documentation file |
+| `README.md`                 | This documentation file                                                                              |
 
 ## Key Features
 
@@ -73,129 +73,129 @@ The configuration follows a consistent modifier key scheme:
 
 #### MacOS Override
 
-| Hotkey | Action | Description |
-|--------|--------|-------------|
-| `cmd + h` | No-op | Disables macOS default hide window behavior to prevent conflicts |
+| Hotkey    | Action | Description                                                      |
+| --------- | ------ | ---------------------------------------------------------------- |
+| `cmd + h` | No-op  | Disables macOS default hide window behavior to prevent conflicts |
 
 #### Application Launch
 
-| Hotkey | Action | Description |
-|--------|--------|-------------|
+| Hotkey          | Action         | Description                                       |
+| --------------- | -------------- | ------------------------------------------------- |
 | `ctrl + return` | Launch Ghostty | Opens or focuses the Ghostty terminal application |
 
 #### Space Switching (13 hotkeys)
 
-| Hotkey | Action | Description |
-|--------|--------|-------------|
-| `alt + d` | Show desktop | Changes all displays to first empty space (via helper script) |
-| `alt + 1` | Focus space 1 | Switch to virtual space 1 |
-| `alt + 2` | Focus space 2 | Switch to virtual space 2 |
-| `alt + 3` | Focus space 3 | Switch to virtual space 3 |
-| `alt + 4` | Focus space 4 | Switch to virtual space 4 |
-| `alt + 5` | Focus space 5 | Switch to virtual space 5 |
-| `alt + 6` | Focus space 6 | Switch to virtual space 6 |
-| `alt + 7` | Focus space 7 | Switch to virtual space 7 |
-| `alt + 8` | Focus space 8 | Switch to virtual space 8 |
-| `alt + 9` | Focus space 9 | Switch to virtual space 9 |
-| `alt + 0` | Focus space 10 | Switch to virtual space 10 |
-| `alt + ]` | Next space | Focus next space in sequence (keycode 0x1E) |
-| `alt + [` | Previous space | Focus previous space in sequence (keycode 0x21) |
+| Hotkey    | Action         | Description                                                   |
+| --------- | -------------- | ------------------------------------------------------------- |
+| `alt + d` | Show desktop   | Changes all displays to first empty space (via helper script) |
+| `alt + 1` | Focus space 1  | Switch to virtual space 1                                     |
+| `alt + 2` | Focus space 2  | Switch to virtual space 2                                     |
+| `alt + 3` | Focus space 3  | Switch to virtual space 3                                     |
+| `alt + 4` | Focus space 4  | Switch to virtual space 4                                     |
+| `alt + 5` | Focus space 5  | Switch to virtual space 5                                     |
+| `alt + 6` | Focus space 6  | Switch to virtual space 6                                     |
+| `alt + 7` | Focus space 7  | Switch to virtual space 7                                     |
+| `alt + 8` | Focus space 8  | Switch to virtual space 8                                     |
+| `alt + 9` | Focus space 9  | Switch to virtual space 9                                     |
+| `alt + 0` | Focus space 10 | Switch to virtual space 10                                    |
+| `alt + ]` | Next space     | Focus next space in sequence (keycode 0x1E)                   |
+| `alt + [` | Previous space | Focus previous space in sequence (keycode 0x21)               |
 
 #### Window Focus (5 hotkeys)
 
-| Hotkey | Action | Description |
-|--------|--------|-------------|
-| `ctrl + alt + j` | Focus south | Change focus to window below current window |
-| `ctrl + alt + k` | Focus north | Change focus to window above current window |
-| `ctrl + alt + h` | Focus west | Change focus to window left of current window |
-| `ctrl + alt + l` | Focus east | Change focus to window right of current window |
-| `ctrl + alt + p` | Focus recent | Change focus to most recently focused window |
+| Hotkey           | Action       | Description                                    |
+| ---------------- | ------------ | ---------------------------------------------- |
+| `ctrl + alt + j` | Focus south  | Change focus to window below current window    |
+| `ctrl + alt + k` | Focus north  | Change focus to window above current window    |
+| `ctrl + alt + h` | Focus west   | Change focus to window left of current window  |
+| `ctrl + alt + l` | Focus east   | Change focus to window right of current window |
+| `ctrl + alt + p` | Focus recent | Change focus to most recently focused window   |
 
 #### Display Focus (2 hotkeys)
 
-| Hotkey | Action | Description |
-|--------|--------|-------------|
-| `alt + w` | Focus west display | Switch focus to external monitor on the left |
+| Hotkey    | Action             | Description                                   |
+| --------- | ------------------ | --------------------------------------------- |
+| `alt + w` | Focus west display | Switch focus to external monitor on the left  |
 | `alt + e` | Focus east display | Switch focus to external monitor on the right |
 
 #### Layout Manipulation (4 hotkeys)
 
-| Hotkey | Action | Description |
-|--------|--------|-------------|
+| Hotkey            | Action           | Description                                      |
+| ----------------- | ---------------- | ------------------------------------------------ |
 | `shift + alt + r` | Rotate clockwise | Rotate current space layout 270° (90° clockwise) |
-| `shift + alt + y` | Mirror Y-axis | Flip layout vertically along Y-axis |
-| `shift + alt + x` | Mirror X-axis | Flip layout horizontally along X-axis |
-| `shift + alt + e` | Balance layout | Resize all windows to occupy equal area |
+| `shift + alt + y` | Mirror Y-axis    | Flip layout vertically along Y-axis              |
+| `shift + alt + x` | Mirror X-axis    | Flip layout horizontally along X-axis            |
+| `shift + alt + e` | Balance layout   | Resize all windows to occupy equal area          |
 
 #### Window State (3 hotkeys)
 
-| Hotkey | Action | Description |
-|--------|--------|-------------|
-| `shift + alt + t` | Toggle float | Toggle between floating and tiled, positions float window in center 2×2 grid |
-| `shift + alt + m` | Toggle zoom | Maximize window (toggle zoom-fullscreen) |
-| `shift + alt + f` | Toggle fullscreen | Toggle native macOS fullscreen mode |
+| Hotkey            | Action            | Description                                                                  |
+| ----------------- | ----------------- | ---------------------------------------------------------------------------- |
+| `shift + alt + t` | Toggle float      | Toggle between floating and tiled, positions float window in center 2×2 grid |
+| `shift + alt + m` | Toggle zoom       | Maximize window (toggle zoom-fullscreen)                                     |
+| `shift + alt + f` | Toggle fullscreen | Toggle native macOS fullscreen mode                                          |
 
 #### Window Movement (21 hotkeys)
 
 **Directional Warping (4 hotkeys)**
 
-| Hotkey | Action | Description |
-|--------|--------|-------------|
+| Hotkey            | Action     | Description                              |
+| ----------------- | ---------- | ---------------------------------------- |
 | `shift + alt + j` | Warp south | Move window south and reposition in tree |
 | `shift + alt + k` | Warp north | Move window north and reposition in tree |
-| `shift + alt + h` | Warp west | Move window west and reposition in tree |
-| `shift + alt + l` | Warp east | Move window east and reposition in tree |
+| `shift + alt + h` | Warp west  | Move window west and reposition in tree  |
+| `shift + alt + l` | Warp east  | Move window east and reposition in tree  |
 
 **Display Movement (2 hotkeys)**
 
-| Hotkey | Action | Description |
-|--------|--------|-------------|
-| `shift + alt + w` | Move to west display | Move window to left monitor and follow focus |
+| Hotkey            | Action               | Description                                   |
+| ----------------- | -------------------- | --------------------------------------------- |
+| `shift + alt + w` | Move to west display | Move window to left monitor and follow focus  |
 | `shift + alt + e` | Move to east display | Move window to right monitor and follow focus |
 
 **Space Movement (12 hotkeys)**
 
-| Hotkey | Action | Description |
-|--------|--------|-------------|
-| `shift + alt + p` | Move to previous space | Move window to previous space |
-| `shift + alt + n` | Move to next space | Move window to next space |
-| `shift + alt + 1` | Move to space 1 | Move window to space 1 and maintain focus |
-| `shift + alt + 2` | Move to space 2 | Move window to space 2 and maintain focus |
-| `shift + alt + 3` | Move to space 3 | Move window to space 3 and maintain focus |
-| `shift + alt + 4` | Move to space 4 | Move window to space 4 and maintain focus |
-| `shift + alt + 5` | Move to space 5 | Move window to space 5 and maintain focus |
-| `shift + alt + 6` | Move to space 6 | Move window to space 6 and maintain focus |
-| `shift + alt + 7` | Move to space 7 | Move window to space 7 and maintain focus |
-| `shift + alt + 8` | Move to space 8 | Move window to space 8 and maintain focus |
-| `shift + alt + 9` | Move to space 9 | Move window to space 9 and maintain focus |
-| `shift + alt + 0` | Move to space 10 | Move window to space 10 and maintain focus |
+| Hotkey            | Action                 | Description                                |
+| ----------------- | ---------------------- | ------------------------------------------ |
+| `shift + alt + p` | Move to previous space | Move window to previous space              |
+| `shift + alt + n` | Move to next space     | Move window to next space                  |
+| `shift + alt + 1` | Move to space 1        | Move window to space 1 and maintain focus  |
+| `shift + alt + 2` | Move to space 2        | Move window to space 2 and maintain focus  |
+| `shift + alt + 3` | Move to space 3        | Move window to space 3 and maintain focus  |
+| `shift + alt + 4` | Move to space 4        | Move window to space 4 and maintain focus  |
+| `shift + alt + 5` | Move to space 5        | Move window to space 5 and maintain focus  |
+| `shift + alt + 6` | Move to space 6        | Move window to space 6 and maintain focus  |
+| `shift + alt + 7` | Move to space 7        | Move window to space 7 and maintain focus  |
+| `shift + alt + 8` | Move to space 8        | Move window to space 8 and maintain focus  |
+| `shift + alt + 9` | Move to space 9        | Move window to space 9 and maintain focus  |
+| `shift + alt + 0` | Move to space 10       | Move window to space 10 and maintain focus |
 
 **Note**: Moving to numbered spaces uses a sophisticated approach - it queries the window ID, moves the window, then refocuses it to maintain keyboard control.
 
 #### Layout Mode (4 hotkeys)
 
-| Hotkey | Action | Description |
-|--------|--------|-------------|
-| `alt + b` | BSP layout | Change current space to Binary Space Partitioning layout |
-| `alt + f` | Float layout | Change current space to floating layout mode |
-| `alt + s` | Stack layout | Change current space to stack layout mode |
-| `alt + t` | Toggle stack/BSP | Toggle between stack and BSP layouts |
+| Hotkey    | Action           | Description                                              |
+| --------- | ---------------- | -------------------------------------------------------- |
+| `alt + b` | BSP layout       | Change current space to Binary Space Partitioning layout |
+| `alt + f` | Float layout     | Change current space to floating layout mode             |
+| `alt + s` | Stack layout     | Change current space to stack layout mode                |
+| `alt + t` | Toggle stack/BSP | Toggle between stack and BSP layouts                     |
 
 #### Space Management (1 hotkey)
 
-| Hotkey | Action | Description |
-|--------|--------|-------------|
+| Hotkey            | Action        | Description                        |
+| ----------------- | ------------- | ---------------------------------- |
 | `shift + alt + q` | Destroy space | Delete the currently focused space |
 
 #### Yabai Service Control (5 hotkeys)
 
-| Hotkey | Action | Description |
-|--------|--------|-------------|
-| `ctrl + alt + q` | Stop Yabai | Stop the Yabai window manager service |
-| `ctrl + alt + s` | Start Yabai | Start the Yabai window manager service |
-| `ctrl + alt + r` | Restart Yabai | Restart the Yabai window manager service |
-| `alt + r` | Full system refresh | Comprehensive restart: unhide processes, restart skhd, reload scripting addition, restart Yabai, reapply rules |
-| `alt + a` | Reapply rules | Apply/reapply all Yabai window rules to current windows |
+| Hotkey           | Action              | Description                                                                                                    |
+| ---------------- | ------------------- | -------------------------------------------------------------------------------------------------------------- |
+| `ctrl + alt + q` | Stop Yabai          | Stop the Yabai window manager service                                                                          |
+| `ctrl + alt + s` | Start Yabai         | Start the Yabai window manager service                                                                         |
+| `ctrl + alt + r` | Restart Yabai       | Restart the Yabai window manager service                                                                       |
+| `alt + r`        | Full system refresh | Comprehensive restart: unhide processes, restart skhd, reload scripting addition, restart Yabai, reapply rules |
+| `alt + a`        | Reapply rules       | Apply/reapply all Yabai window rules to current windows                                                        |
 
 ## Customization Guide
 
@@ -548,4 +548,4 @@ This separation allows:
 - [Official skhd Documentation](https://github.com/koekeishiya/skhd)
 - [skhd Example Configuration](https://github.com/koekeishiya/skhd/blob/master/examples/skhdrc)
 - [Yabai Documentation](https://github.com/koekeishiya/yabai/wiki) - Understanding the window manager skhd controls
-- [Yabai + skhd Setup Guide](https://github.com/koekeishiya/yabai/wiki/Installing-yabai-(latest-release))
+- [Yabai + skhd Setup Guide](<https://github.com/koekeishiya/yabai/wiki/Installing-yabai-(latest-release)>)

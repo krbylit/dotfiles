@@ -798,11 +798,11 @@ Keep a reference of which machines have which hostnames:
 
 ## Machines
 
-| Hostname | OS | Architecture | Purpose | Notes |
-|----------|----|--------------|---------| ------|
-| work-laptop | macOS | arm64 | Work | Company MacBook Pro M1 |
-| personal-desktop | linux | amd64 | Personal | Home Ubuntu desktop |
-| home-server | linux | arm64 | Server | Raspberry Pi 4 |
+| Hostname         | OS    | Architecture | Purpose  | Notes                  |
+| ---------------- | ----- | ------------ | -------- | ---------------------- |
+| work-laptop      | macOS | arm64        | Work     | Company MacBook Pro M1 |
+| personal-desktop | linux | amd64        | Personal | Home Ubuntu desktop    |
+| home-server      | linux | arm64        | Server   | Raspberry Pi 4         |
 ```
 
 ### 5. Use Shared Defaults with Overrides

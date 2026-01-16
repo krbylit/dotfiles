@@ -1,7 +1,7 @@
 ---@type LazySpec
 return {
-    "glacambre/firenvim",
-    build = ":call firenvim#install(0)",
-    
-    enabled = false,
+  "glacambre/firenvim",
+  build = ":call firenvim#install(0)",
+
+  enabled = false,
 }

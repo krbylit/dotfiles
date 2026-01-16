@@ -643,18 +643,18 @@ set -gx DOCKER_BUILDKIT 1
 
 **Vi-mode enhancements:**
 
-| Key | Mode | Action |
-|-----|------|--------|
-| `Ctrl+Y` | Insert | Accept autosuggestion |
-| `Ctrl+X` | Insert | Clear line |
-| `Ctrl+J` | Insert/Normal | Down or search |
-| `Ctrl+K` | Insert/Normal | Up or search |
-| `Ctrl+U` | All | Delete from cursor to line start |
-| `Ctrl+W` | All | Delete previous word |
-| `yy` | Normal | Copy line to clipboard |
-| `Ctrl+S` | Insert/Normal | Live ripgrep search |
-| `Ctrl+Z` | Insert/Normal | Zellij session picker |
-| `Alt+L` | All | Unmapped (allows OS-level shortcuts) |
+| Key      | Mode          | Action                               |
+| -------- | ------------- | ------------------------------------ |
+| `Ctrl+Y` | Insert        | Accept autosuggestion                |
+| `Ctrl+X` | Insert        | Clear line                           |
+| `Ctrl+J` | Insert/Normal | Down or search                       |
+| `Ctrl+K` | Insert/Normal | Up or search                         |
+| `Ctrl+U` | All           | Delete from cursor to line start     |
+| `Ctrl+W` | All           | Delete previous word                 |
+| `yy`     | Normal        | Copy line to clipboard               |
+| `Ctrl+S` | Insert/Normal | Live ripgrep search                  |
+| `Ctrl+Z` | Insert/Normal | Zellij session picker                |
+| `Alt+L`  | All           | Unmapped (allows OS-level shortcuts) |
 
 **How to discover key codes:**
 
@@ -733,15 +733,15 @@ fish_key_reader  # Press keys to see their codes
 
 **Managed by Fisher** (`jorgebucaran/fisher`):
 
-| Plugin | Purpose |
-|--------|---------|
-| `patrickf1/fzf.fish` | FZF integration (file search, history, git log) |
-| `jorgebucaran/nvm.fish` | Node version manager |
-| `catppuccin/fish` | Catppuccin theme |
-| `oh-my-fish/plugin-bang-bang` | Bash-style `!!` and `!$` expansions |
-| `edc/bass` | Run Bash scripts in Fish |
-| `gazorby/fifc` | FZF completion with man page preview |
-| `laughedelic/fish_logo` | Fish logo for greeting |
+| Plugin                        | Purpose                                         |
+| ----------------------------- | ----------------------------------------------- |
+| `patrickf1/fzf.fish`          | FZF integration (file search, history, git log) |
+| `jorgebucaran/nvm.fish`       | Node version manager                            |
+| `catppuccin/fish`             | Catppuccin theme                                |
+| `oh-my-fish/plugin-bang-bang` | Bash-style `!!` and `!$` expansions             |
+| `edc/bass`                    | Run Bash scripts in Fish                        |
+| `gazorby/fifc`                | FZF completion with man page preview            |
+| `laughedelic/fish_logo`       | Fish logo for greeting                          |
 
 **External CLI tools integrated:**
 

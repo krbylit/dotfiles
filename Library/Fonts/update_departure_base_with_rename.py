@@ -7,7 +7,9 @@ import fontforge
 import sys
 
 if len(sys.argv) != 4:
-    print("Usage: fontforge -script update_departure_base_with_rename.py <custom_font.otf> <new_departure.otf> <output.otf>")
+    print(
+        "Usage: fontforge -script update_departure_base_with_rename.py <custom_font.otf> <new_departure.otf> <output.otf>"
+    )
     print("")
     print("Example:")
     print("  fontforge -script update_departure_base_with_rename.py \\")
@@ -34,9 +36,9 @@ added_count = 0
 for glyph in new_departure.glyphs():
     if glyph.unicode < 0:  # Skip unmapped glyphs
         continue
-    
+
     unicode_val = glyph.unicode
-    
+
     # Check if this glyph exists in custom font
     if unicode_val in custom:
         # Update existing glyph (this updates base Departure characters)
@@ -75,7 +77,11 @@ print(f"\nSaving to: {output_path}")
 custom.generate(output_path)
 
 print("\n✓ Font updated successfully!")
-print(f"\nYour custom glyphs (Nerd Fonts, Phosphor, manual edits) are preserved.")
+print(
+    f"\nYour custom glyphs (Nerd Fonts, Phosphor, manual edits) are preserved."
+)
 print(f"Base Departure glyphs have been updated to the latest version.")
 print(f"\nThe font will appear as '{custom.familyname}' in Font Book.")
-print(f"After testing, you can replace the old font and remove the 'Updated' suffix.")
+print(
+    f"After testing, you can replace the old font and remove the 'Updated' suffix."
+)

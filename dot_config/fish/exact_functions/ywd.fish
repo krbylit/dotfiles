@@ -1,4 +1,4 @@
 function ywd --wraps='pwd | pbcopy' --description 'alias ywd pwd | pbcopy'
-  pwd | pbcopy $argv
-        
+    pwd | pbcopy $argv
+
 end

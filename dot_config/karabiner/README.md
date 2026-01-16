@@ -41,8 +41,8 @@ This configuration implements a comprehensive Vim-centric navigation philosophy 
 
 ## Configuration Files
 
-| File | Purpose |
-|------|---------|
+| File             | Purpose                                                                                           |
+| ---------------- | ------------------------------------------------------------------------------------------------- |
 | `karabiner.json` | Main configuration file containing all complex modifications, profiles, and device-specific rules |
 
 **Note**: The actual configuration file is managed through chezmoi and located at `/Users/kirbylittle/.local/share/chezmoi/cm-util/ctrld-configs/karabiner/karabiner.json`. Edit using `chezmoi edit` and apply with `chezmoi apply`.
@@ -134,25 +134,25 @@ The configuration includes several features to prevent accidental commands:
 #### Vim Navigation in Non-Terminal Apps (4 rules)
 
 5. **Use ctrl + h for left arrow** - Left Control + h → Left Arrow (except Ghostty/Kitty)
-2. **Use ctrl + j for down arrow** - Left Control + j → Down Arrow (except Ghostty/Kitty)
-3. **Use ctrl + k for up arrow** - Left Control + k → Up Arrow (except Ghostty/Kitty)
-4. **Use ctrl + l for right arrow** - Left Control + l → Right Arrow (except Ghostty/Kitty)
+6. **Use ctrl + j for down arrow** - Left Control + j → Down Arrow (except Ghostty/Kitty)
+7. **Use ctrl + k for up arrow** - Left Control + k → Up Arrow (except Ghostty/Kitty)
+8. **Use ctrl + l for right arrow** - Left Control + l → Right Arrow (except Ghostty/Kitty)
 
 #### Application Switcher (2 rules)
 
 9. **Use Alt + c to move right in Application Switcher** - Option + c → Command + Tab
-2. **Use Alt + x to move left in Application Switcher** - Option + x → Command + Shift + Tab
+10. **Use Alt + x to move left in Application Switcher** - Option + x → Command + Shift + Tab
 
 #### Keyboard-Adaptive Keys (3 rules)
 
 11. **Ctrl to Esc and Ctrl (HHKB)** - Control → Dual-function (HHKB only)
-2. **Ctrl to Alt/Option (Mac KB)** - Control → Option (Mac keyboard only)
-3. **Caps Lock to Esc and Ctrl (Mac KB)** - Caps Lock → Dual-function (Mac keyboard only)
+12. **Ctrl to Alt/Option (Mac KB)** - Control → Option (Mac keyboard only)
+13. **Caps Lock to Esc and Ctrl (Mac KB)** - Caps Lock → Dual-function (Mac keyboard only)
 
 #### Safety Features (2 rules)
 
 14. **Mac OSX: double-tap right shift key → caps lock toggle** - Right Shift double-tap → Caps Lock
-2. **Mac OSX: left cmd + double-tap q → close application** - Command + q double-tap → Quit app
+15. **Mac OSX: left cmd + double-tap q → close application** - Command + q double-tap → Quit app
 
 #### Disabled Shortcuts (4 rules combined)
 
@@ -245,9 +245,7 @@ To make a rule work only in specific applications, add a `conditions` array with
   "conditions": [
     {
       "type": "frontmost_application_if",
-      "bundle_identifiers": [
-        "^com\\.example\\.app$"
-      ]
+      "bundle_identifiers": ["^com\\.example\\.app$"]
     }
   ]
 }
@@ -269,12 +267,8 @@ For keys that behave differently when tapped vs. held:
   "from": {
     "key_code": "your_key"
   },
-  "to": [
-    { "key_code": "held_behavior" }
-  ],
-  "to_if_alone": [
-    { "key_code": "tapped_behavior" }
-  ]
+  "to": [{ "key_code": "held_behavior" }],
+  "to_if_alone": [{ "key_code": "tapped_behavior" }]
 }
 ```
 

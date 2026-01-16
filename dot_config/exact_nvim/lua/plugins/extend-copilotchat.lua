@@ -21,17 +21,16 @@
 -- 	-- rest of your config
 -- })
 return {
-    "CopilotC-Nvim/CopilotChat.nvim",
-    
-    dependencies = {
-        "zbirenbaum/copilot.lua",
-        opts = {
-            suggestion = { enabled = false },
-            panel = { enabled = false },
-        },
-        
-    },
+  "CopilotC-Nvim/CopilotChat.nvim",
+
+  dependencies = {
+    "zbirenbaum/copilot.lua",
     opts = {
-        model = "claude-sonnet-4",
+      suggestion = { enabled = false },
+      panel = { enabled = false },
     },
+  },
+  opts = {
+    model = "claude-sonnet-4",
+  },
 }

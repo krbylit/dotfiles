@@ -30,6 +30,7 @@ desc = "Search text with fzf-lua live grep and navigate to file"
 ## Usage
 
 Press `sf` in yazi to open fzf-lua's live grep interface. Type your search query and:
+
 - Navigate with arrow keys or `<C-j>`/`<C-k>`
 - Press `<Enter>` to select a file
 - Press `<Esc>` or `<C-c>` to cancel
@@ -39,6 +40,7 @@ The selected file will be revealed in yazi.
 ## Comparison with ripgrep-live
 
 This plugin uses fzf-lua's native live grep, which provides:
+
 - Consistent interface with Fish shell's `<C-s>` binding
 - Integration with Neovim's fzf-lua plugin
 - Advanced preview features from fzf-lua

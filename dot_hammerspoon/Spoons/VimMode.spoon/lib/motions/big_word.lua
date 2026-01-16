@@ -3,7 +3,7 @@ local stringUtils = dofile(vimModeScriptPath .. "lib/utils/string_utils.lua")
 local isWhitespace = stringUtils.isWhitespace
 local utf8 = dofile(vimModeScriptPath .. "vendor/luautf8.lua")
 
-local BigWord = Motion:new{ name = 'big_word' }
+local BigWord = Motion:new({ name = "big_word" })
 
 -- <C-Right>	or					*<C-Right>* *W*
 -- W			[count] WORDS forward.  |exclusive| motion.
@@ -26,8 +26,8 @@ function BigWord.getRange(_, buffer)
 
   local range = {
     start = start,
-    mode = 'exclusive',
-    direction = 'characterwise'
+    mode = "exclusive",
+    direction = "characterwise",
   }
 
   local seenWhitespace = false
@@ -40,17 +40,23 @@ function BigWord.getRange(_, buffer)
     local charIndex = range.finish + 1 -- lua strings are 1-indexed :(
     local char = utf8.sub(contents, charIndex, charIndex)
 
-    if seenWhitespace and not isWhitespace(char) then break end
-    if not seenWhitespace and isWhitespace(char) then seenWhitespace = true end
+    if seenWhitespace and not isWhitespace(char) then
+      break
+    end
+    if not seenWhitespace and isWhitespace(char) then
+      seenWhitespace = true
+    end
 
     range.finish = range.finish + 1
 
-    if char == "\n" then break end
+    if char == "\n" then
+      break
+    end
   end
 
   if range.finish == bufferLength then
     -- don't go off the right edge of the buffer
-    range.mode = 'inclusive'
+    range.mode = "inclusive"
   end
 
   return range
@@ -59,10 +65,10 @@ end
 function BigWord.getMovements()
   return {
     {
-      modifiers = { 'alt' },
-      key = 'right',
-      selection = true
-    }
+      modifiers = { "alt" },
+      key = "right",
+      selection = true,
+    },
   }
 end
 

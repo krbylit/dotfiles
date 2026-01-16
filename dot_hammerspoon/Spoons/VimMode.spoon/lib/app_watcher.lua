@@ -28,10 +28,10 @@ function AppWatcher:new(vim)
       MacVim = true,
       iTerm = true,
       iTerm2 = true,
-      Terminal = true
+      Terminal = true,
     },
     vim = vim,
-    watcher = nil
+    watcher = nil,
   }
 
   setmetatable(watcher, self)
@@ -78,18 +78,17 @@ end
 
 function AppWatcher:createWatcher()
   -- build the watcher
-  self.watcher =
-    hs.application.watcher.new(function(applicationName, eventType, application)
-      local disabled = self.disabled[applicationName]
+  self.watcher = hs.application.watcher.new(function(applicationName, eventType, application)
+    local disabled = self.disabled[applicationName]
 
-      if eventType == hs.application.watcher.activated then
-        if disabled then
-          self:disableVim()
-        else
-          self:enableVim()
-        end
+    if eventType == hs.application.watcher.activated then
+      if disabled then
+        self:disableVim()
+      else
+        self:enableVim()
       end
-    end)
+    end
+  end)
 
   -- If we are currently in this disabled application, exit vim mode
   -- and disable

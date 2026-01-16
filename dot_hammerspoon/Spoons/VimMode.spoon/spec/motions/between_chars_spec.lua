@@ -13,7 +13,7 @@ describe("BetweenChars", function()
       buffer:setSelectionRange(0, 0)
 
       local betweenChars = BetweenChars:new()
-      betweenChars:setSearchChars('<', '>')
+      betweenChars:setSearchChars("<", ">")
 
       assert.are.same(nil, betweenChars:getRange(buffer))
     end)
@@ -24,17 +24,14 @@ describe("BetweenChars", function()
       buffer:setSelectionRange(0, 0)
 
       local betweenChars = BetweenChars:new()
-      betweenChars:setSearchChars('<', '>')
+      betweenChars:setSearchChars("<", ">")
 
-      assert.are.same(
-        {
-          start = 1,
-          finish = 4,
-          mode = "inclusive",
-          direction = "characterwise"
-        },
-        betweenChars:getRange(buffer)
-      )
+      assert.are.same({
+        start = 1,
+        finish = 4,
+        mode = "inclusive",
+        direction = "characterwise",
+      }, betweenChars:getRange(buffer))
     end)
 
     it("handles the right edge", function()
@@ -43,17 +40,14 @@ describe("BetweenChars", function()
       buffer:setSelectionRange(5, 0)
 
       local betweenChars = BetweenChars:new()
-      betweenChars:setSearchChars('<', '>')
+      betweenChars:setSearchChars("<", ">")
 
-      assert.are.same(
-        {
-          start = 1,
-          finish = 4,
-          mode = "inclusive",
-          direction = "characterwise"
-        },
-        betweenChars:getRange(buffer)
-      )
+      assert.are.same({
+        start = 1,
+        finish = 4,
+        mode = "inclusive",
+        direction = "characterwise",
+      }, betweenChars:getRange(buffer))
     end)
 
     it("handles between the chars", function()
@@ -62,17 +56,14 @@ describe("BetweenChars", function()
       buffer:setSelectionRange(3, 0)
 
       local betweenChars = BetweenChars:new()
-      betweenChars:setSearchChars('<', '>')
+      betweenChars:setSearchChars("<", ">")
 
-      assert.are.same(
-        {
-          start = 1,
-          finish = 4,
-          mode = "inclusive",
-          direction = "characterwise"
-        },
-        betweenChars:getRange(buffer)
-      )
+      assert.are.same({
+        start = 1,
+        finish = 4,
+        mode = "inclusive",
+        direction = "characterwise",
+      }, betweenChars:getRange(buffer))
     end)
   end)
 end)

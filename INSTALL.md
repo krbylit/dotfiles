@@ -4,7 +4,7 @@
 
 This guide provides step-by-step instructions for installing and configuring this dotfiles repository on a fresh macOS system. Follow these instructions to set up a complete development environment with window management, shell configuration, and all supporting tools.
 
-**Estimated completion time**: 60 minutes or less
+**Estimated completion time**: 90 minutes or less
 
 ## Table of Contents
 

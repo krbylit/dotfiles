@@ -47,9 +47,9 @@ Personal macOS development environment managed with [chezmoi](https://www.chezmo
 **New to these dotfiles?** Start here:
 
 1. **[Installation Guide](./INSTALL.md)** - Complete setup instructions for fresh macOS installation (~60 minutes)
-2. **[Chezmoi Workflow](./CHEZMOI.md)** - How to make configuration changes safely *(coming soon)*
-3. **[Keymaps Reference](./docs/KEYMAPS.md)** - Find any keyboard shortcut across all tools *(coming soon)*
-4. **[Troubleshooting](./docs/TROUBLESHOOTING.md)** - Common issues and solutions *(coming soon)*
+2. **[Chezmoi Workflow](./CHEZMOI.md)** - How to make configuration changes safely
+3. **[Keymaps Reference](./docs/KEYMAPS.md)** - Find any keyboard shortcut across all tools
+4. **[Troubleshooting](./docs/TROUBLESHOOTING.md)** - Common issues and solutions
 
 ## What's Included
 
@@ -68,31 +68,31 @@ This repository contains configurations for a complete macOS development environ
 
 ### Priority 1: Essential Configuration
 
-| Tool | Purpose | Config Location |
-|------|---------|----------------|
-| **Fish Shell** | Primary shell with 77+ custom functions | `dot_config/fish/` |
-| **Neovim** | Primary text editor with LSP and plugins | `dot_config/exact_nvim/` |
-| **Yabai** | Tiling window manager | `dot_config/exact_yabai/` |
-| **Skhd** | Hotkey daemon for window management | `dot_config/exact_skhd/` |
-| **Karabiner** | Hardware keyboard remapping | `dot_config/karabiner/` |
-| **Git** | Version control with Delta diff viewer | `dot_gitconfig`, `dot_config/git/` |
-| **Starship** | Shell prompt | `dot_config/starship.toml` |
-| **Chezmoi** | Dotfiles management | `.chezmoi.toml.tmpl`, `.chezmoiscripts/` |
+| Tool           | Purpose                                  | Config Location                          |
+| -------------- | ---------------------------------------- | ---------------------------------------- |
+| **Fish Shell** | Primary shell with 77+ custom functions  | `dot_config/fish/`                       |
+| **Neovim**     | Primary text editor with LSP and plugins | `dot_config/exact_nvim/`                 |
+| **Yabai**      | Tiling window manager                    | `dot_config/exact_yabai/`                |
+| **Skhd**       | Hotkey daemon for window management      | `dot_config/exact_skhd/`                 |
+| **Karabiner**  | Hardware keyboard remapping              | `dot_config/karabiner/`                  |
+| **Git**        | Version control with Delta diff viewer   | `dot_gitconfig`, `dot_config/git/`       |
+| **Starship**   | Shell prompt                             | `dot_config/starship.toml`               |
+| **Chezmoi**    | Dotfiles management                      | `.chezmoi.toml.tmpl`, `.chezmoiscripts/` |
 
 ### Priority 2: Supporting Tools
 
-| Tool | Purpose | Config Location |
-|------|---------|----------------|
-| **Ghostty** | Terminal emulator | `dot_config/ghostty/` |
-| **Tmux** | Terminal multiplexer | `dot_config/tmux/` |
-| **Zellij** | Modern terminal workspace | `dot_config/zellij/` |
-| **Yazi** | TUI file manager | `dot_config/yazi/` |
-| **Lazygit** | TUI git client | `dot_config/lazygit/` |
-| **Lazydocker** | TUI docker client | `dot_config/lazydocker/` |
-| **Atuin** | Shell history with sync | `dot_config/atuin/` |
-| **Bat** | Enhanced `cat` with syntax highlighting | `dot_config/bat/` |
-| **Bottom/Btop** | System monitoring | `dot_config/bottom/`, `dot_config/btop/` |
-| **Ripgrep** | Fast text search | `dot_config/ripgrep/` |
+| Tool            | Purpose                                 | Config Location                          |
+| --------------- | --------------------------------------- | ---------------------------------------- |
+| **Ghostty**     | Terminal emulator                       | `dot_config/ghostty/`                    |
+| **Tmux**        | Terminal multiplexer                    | `dot_config/tmux/`                       |
+| **Zellij**      | Modern terminal workspace               | `dot_config/zellij/`                     |
+| **Yazi**        | TUI file manager                        | `dot_config/yazi/`                       |
+| **Lazygit**     | TUI git client                          | `dot_config/lazygit/`                    |
+| **Lazydocker**  | TUI docker client                       | `dot_config/lazydocker/`                 |
+| **Atuin**       | Shell history with sync                 | `dot_config/atuin/`                      |
+| **Bat**         | Enhanced `cat` with syntax highlighting | `dot_config/bat/`                        |
+| **Bottom/Btop** | System monitoring                       | `dot_config/bottom/`, `dot_config/btop/` |
+| **Ripgrep**     | Fast text search                        | `dot_config/ripgrep/`                    |
 
 ### Priority 3: Supplementary Tools
 
@@ -103,19 +103,19 @@ Additional configured tools: AiChat, Delta, Eza, Fish plugins (Fisher), FZF, Tel
 ### Getting Started
 
 - **[INSTALL.md](./INSTALL.md)** - Step-by-step installation guide
-- **[CHEZMOI.md](./CHEZMOI.md)** - Chezmoi workflow for configuration changes *(coming soon)*
+- **[CHEZMOI.md](./CHEZMOI.md)** - Chezmoi workflow for configuration changes
 
 ### Reference Guides
 
-- **[docs/KEYMAPS.md](./docs/KEYMAPS.md)** - Unified keyboard shortcuts reference *(coming soon)*
-- **[docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md)** - System architecture and tool interactions *(coming soon)*
-- **[docs/DESIGN.md](./docs/DESIGN.md)** - Design philosophy and rationale *(coming soon)*
+- **[docs/KEYMAPS.md](./docs/KEYMAPS.md)** - Unified keyboard shortcuts reference
+- **[docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md)** - System architecture and tool interactions
+- **[docs/DESIGN.md](./docs/DESIGN.md)** - Design philosophy and rationale
 
 ### Workflows
 
-- **[docs/workflows/new-machine-setup.md](./docs/workflows/new-machine-setup.md)** - Setting up additional machines *(coming soon)*
-- **[docs/workflows/configuration-changes.md](./docs/workflows/configuration-changes.md)** - Making safe modifications *(coming soon)*
-- **[docs/workflows/multi-machine-sync.md](./docs/workflows/multi-machine-sync.md)** - Keeping machines in sync *(coming soon)*
+- **[docs/workflows/new-machine-setup.md](./docs/workflows/new-machine-setup.md)** - Setting up additional machines
+- **[docs/workflows/configuration-changes.md](./docs/workflows/configuration-changes.md)** - Making safe modifications
+- **[docs/workflows/multi-machine-sync.md](./docs/workflows/multi-machine-sync.md)** - Keeping machines in sync
 - **[docs/workflows/secrets-management.md](./docs/workflows/secrets-management.md)** - Managing secrets and encryption
 
 ### Tool-Specific Documentation
@@ -190,7 +190,7 @@ git commit -m "Update fish config"
 git push
 ```
 
-See [CHEZMOI.md](./CHEZMOI.md) for the complete workflow *(coming soon)*.
+See [CHEZMOI.md](./CHEZMOI.md) for the complete workflow .
 
 ### Syncing Multiple Machines
 
@@ -205,11 +205,11 @@ git push
 
 ### Finding Keyboard Shortcuts
 
-See [docs/KEYMAPS.md](./docs/KEYMAPS.md) for searchable keymap reference across all layers *(coming soon)*.
+See [docs/KEYMAPS.md](./docs/KEYMAPS.md) for searchable keymap reference across all layers .
 
 ### Troubleshooting Common Issues
 
-See [TROUBLESHOOTING.md](./docs/TROUBLESHOOTING.md) for solutions to common problems *(coming soon)*.
+See [TROUBLESHOOTING.md](./docs/TROUBLESHOOTING.md) for solutions to common problems .
 
 ## Manual Dependencies
 
@@ -269,7 +269,7 @@ chezmoi cd
 - `encrypted_*` → GPG-encrypted file
 - `*.tmpl` → Template file (processed with Go templates)
 
-See [CHEZMOI.md](./CHEZMOI.md) for detailed explanations *(coming soon)*.
+See [CHEZMOI.md](./CHEZMOI.md) for detailed explanations .
 
 ## Secrets and Encryption
 

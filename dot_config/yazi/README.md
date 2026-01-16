@@ -62,14 +62,14 @@
 
 ## Configuration Files
 
-| File | Purpose |
-|------|---------|
-| `keymap.toml` | Custom keybindings and plugin shortcuts |
-| `yazi.toml` | Manager settings, file openers, previewers, and plugin configuration |
-| `theme.toml` | Theme/flavor selection (currently Nord) |
-| `yazi-starship.toml` | Starship prompt configuration for Yazi status line |
-| `flavors/` | Collection of color themes (Catppuccin, Nord, Tokyo Night, etc.) |
-| `plugins/` | Symlinked to `~/.local/share/chezmoi/cm-util/ctrld-configs/yazi/plugins/` |
+| File                 | Purpose                                                                   |
+| -------------------- | ------------------------------------------------------------------------- |
+| `keymap.toml`        | Custom keybindings and plugin shortcuts                                   |
+| `yazi.toml`          | Manager settings, file openers, previewers, and plugin configuration      |
+| `theme.toml`         | Theme/flavor selection (currently Nord)                                   |
+| `yazi-starship.toml` | Starship prompt configuration for Yazi status line                        |
+| `flavors/`           | Collection of color themes (Catppuccin, Nord, Tokyo Night, etc.)          |
+| `plugins/`           | Symlinked to `~/.local/share/chezmoi/cm-util/ctrld-configs/yazi/plugins/` |
 
 ## Key Features
 
@@ -115,165 +115,165 @@ Configured previewers for enhanced file viewing:
 
 ### Navigation & Movement
 
-| Key | Action | Description |
-|-----|--------|-------------|
-| `j` / `k` | Move down/up | Single line movement |
-| `h` / `l` | Leave/Enter | Parent directory / Child directory |
-| `H` / `L` | Back/Forward | Directory history navigation |
-| `gg` / `G` | Jump to top/bottom | First/last item |
-| `Ctrl-u` / `Ctrl-d` | Page up/down | Full page scroll |
-| `Ctrl-k` / `Ctrl-j` | Half page up/down | 10% scroll |
-| `1`-`9` | Relative motion | Jump N lines with vim motions |
-| `[` / `]` | Previous/Next tab | Switch between tabs |
-| `{` / `}` | Swap tabs | Reorder tabs |
+| Key                 | Action             | Description                        |
+| ------------------- | ------------------ | ---------------------------------- |
+| `j` / `k`           | Move down/up       | Single line movement               |
+| `h` / `l`           | Leave/Enter        | Parent directory / Child directory |
+| `H` / `L`           | Back/Forward       | Directory history navigation       |
+| `gg` / `G`          | Jump to top/bottom | First/last item                    |
+| `Ctrl-u` / `Ctrl-d` | Page up/down       | Full page scroll                   |
+| `Ctrl-k` / `Ctrl-j` | Half page up/down  | 10% scroll                         |
+| `1`-`9`             | Relative motion    | Jump N lines with vim motions      |
+| `[` / `]`           | Previous/Next tab  | Switch between tabs                |
+| `{` / `}`           | Swap tabs          | Reorder tabs                       |
 
 ### Quick Jump Shortcuts
 
-| Key | Action | Description |
-|-----|--------|-------------|
-| `gh` | Go home | Jump to `~` |
-| `gc` | Go config | Jump to `~/.config` |
-| `gd` | Go downloads | Jump to `~/Downloads` |
-| `gm` | Go chezmoi | Jump to `~/.local/share/chezmoi/` |
-| `g<Space>` | Go interactive | Select directory with picker |
-| `z` | Zoxide jump | Jump using zoxide |
-| `Z` | FZF jump | Jump or reveal file with fzf |
+| Key        | Action         | Description                       |
+| ---------- | -------------- | --------------------------------- |
+| `gh`       | Go home        | Jump to `~`                       |
+| `gc`       | Go config      | Jump to `~/.config`               |
+| `gd`       | Go downloads   | Jump to `~/Downloads`             |
+| `gm`       | Go chezmoi     | Jump to `~/.local/share/chezmoi/` |
+| `g<Space>` | Go interactive | Select directory with picker      |
+| `z`        | Zoxide jump    | Jump using zoxide                 |
+| `Z`        | FZF jump       | Jump or reveal file with fzf      |
 
 ### File Operations
 
-| Key | Action | Description |
-|-----|--------|-------------|
-| `<Space>` | Toggle selection | Select/deselect current file |
-| `v` / `V` | Visual mode | Enter selection mode |
-| `Ctrl-a` | Select all | Select all files |
-| `y` / `x` | Yank/Cut | Copy/cut selected files |
-| `p` / `P` | Paste | Paste / paste with overwrite |
-| `d` / `D` | Remove | Trash / permanently delete |
-| `a` | Create | Create file (end with `/` for directory) |
-| `r` | Rename | Rename with cursor before extension |
-| `oo` / `O` | Open | Open selected files / interactive open |
-| `-` / `_` | Symlink | Create absolute/relative symlink |
-| `Ctrl--` | Hardlink | Create hardlink |
+| Key        | Action           | Description                              |
+| ---------- | ---------------- | ---------------------------------------- |
+| `<Space>`  | Toggle selection | Select/deselect current file             |
+| `v` / `V`  | Visual mode      | Enter selection mode                     |
+| `Ctrl-a`   | Select all       | Select all files                         |
+| `y` / `x`  | Yank/Cut         | Copy/cut selected files                  |
+| `p` / `P`  | Paste            | Paste / paste with overwrite             |
+| `d` / `D`  | Remove           | Trash / permanently delete               |
+| `a`        | Create           | Create file (end with `/` for directory) |
+| `r`        | Rename           | Rename with cursor before extension      |
+| `oo` / `O` | Open             | Open selected files / interactive open   |
+| `-` / `_`  | Symlink          | Create absolute/relative symlink         |
+| `Ctrl--`   | Hardlink         | Create hardlink                          |
 
 ### Search & Filter
 
-| Key | Action | Description |
-|-----|--------|-------------|
-| `s` | Searchjump | Fast fuzzy file search (plugin) |
-| `Ctrl-s` | Ripgrep Live | Interactive text search in files |
-| `f` / `F` | Filter | Smart filter / plugin smart-filter |
-| `/` | Find | Find files by name |
-| `n` / `N` | Find next/previous | Navigate search results |
-| `S` | Search content | Search using ripgrep |
-| `.` | Toggle hidden | Show/hide hidden files |
+| Key       | Action             | Description                        |
+| --------- | ------------------ | ---------------------------------- |
+| `s`       | Searchjump         | Fast fuzzy file search (plugin)    |
+| `Ctrl-s`  | Ripgrep Live       | Interactive text search in files   |
+| `f` / `F` | Filter             | Smart filter / plugin smart-filter |
+| `/`       | Find               | Find files by name                 |
+| `n` / `N` | Find next/previous | Navigate search results            |
+| `S`       | Search content     | Search using ripgrep               |
+| `.`       | Toggle hidden      | Show/hide hidden files             |
 
 ### Linemode Display
 
 Change what information is displayed in file listings:
 
-| Key | Mode | Shows |
-|-----|------|-------|
-| `ms` | Size | File sizes |
-| `mp` | Permissions | File permissions |
-| `mm` | Mtime | Modified time |
-| `mb` | Btime | Birth/creation time |
-| `mo` | Owner | File owner |
-| `mn` | None | Minimal display |
+| Key  | Mode        | Shows               |
+| ---- | ----------- | ------------------- |
+| `ms` | Size        | File sizes          |
+| `mp` | Permissions | File permissions    |
+| `mm` | Mtime       | Modified time       |
+| `mb` | Btime       | Birth/creation time |
+| `mo` | Owner       | File owner          |
+| `mn` | None        | Minimal display     |
 
 ### Sorting
 
 All sort commands support reverse with uppercase:
 
-| Key | Sort By | Reverse |
-|-----|---------|---------|
-| `,a` / `,A` | Alphabetical | `,A` |
-| `,n` / `,N` | Natural | `,N` |
-| `,m` / `,M` | Modified time | `,M` |
-| `,b` / `,B` | Birth time | `,B` |
-| `,s` / `,S` | Size | `,S` |
-| `,e` / `,E` | Extension | `,E` |
-| `,r` | Random | N/A |
+| Key         | Sort By       | Reverse |
+| ----------- | ------------- | ------- |
+| `,a` / `,A` | Alphabetical  | `,A`    |
+| `,n` / `,N` | Natural       | `,N`    |
+| `,m` / `,M` | Modified time | `,M`    |
+| `,b` / `,B` | Birth time    | `,B`    |
+| `,s` / `,S` | Size          | `,S`    |
+| `,e` / `,E` | Extension     | `,E`    |
+| `,r`        | Random        | N/A     |
 
 Sorting preferences are saved per-directory with `pref-by-location` plugin.
 
 ### Preference Management
 
-| Key | Action | Description |
-|-----|--------|-------------|
-| `,t` | Toggle auto-save | Enable/disable preference saving |
-| `,d` | Disable auto-save | Turn off preference saving |
+| Key  | Action            | Description                                   |
+| ---- | ----------------- | --------------------------------------------- |
+| `,t` | Toggle auto-save  | Enable/disable preference saving              |
+| `,d` | Disable auto-save | Turn off preference saving                    |
 | `,R` | Reset preferences | Clear saved preferences for current directory |
 
 ### Copy to Clipboard
 
-| Key | Copies | Description |
-|-----|--------|-------------|
-| `cc` | Full path | `/full/path/to/file.txt` |
-| `cd` | Directory path | `/full/path/to/` |
-| `cf` | Filename | `file.txt` |
-| `cn` | Name without ext | `file` |
+| Key  | Copies           | Description              |
+| ---- | ---------------- | ------------------------ |
+| `cc` | Full path        | `/full/path/to/file.txt` |
+| `cd` | Directory path   | `/full/path/to/`         |
+| `cf` | Filename         | `file.txt`               |
+| `cn` | Name without ext | `file`                   |
 
 ### Projects & Sessions
 
-| Key | Action | Description |
-|-----|--------|-------------|
-| `q` | Save & quit | Save current project and exit |
-| `Ps` | Save project | Save current session |
-| `Pl` | Load project | Pick and load a project |
-| `PP` | Load last | Load most recent project |
-| `Pd` | Delete project | Remove saved project |
-| `PD` | Delete all | Clear all projects |
-| `Pm` / `PM` | Merge | Merge current tab/project to another |
+| Key         | Action         | Description                          |
+| ----------- | -------------- | ------------------------------------ |
+| `q`         | Save & quit    | Save current project and exit        |
+| `Ps`        | Save project   | Save current session                 |
+| `Pl`        | Load project   | Pick and load a project              |
+| `PP`        | Load last      | Load most recent project             |
+| `Pd`        | Delete project | Remove saved project                 |
+| `PD`        | Delete all     | Clear all projects                   |
+| `Pm` / `PM` | Merge          | Merge current tab/project to another |
 
 ### Bookmarks
 
-| Key | Action | Description |
-|-----|--------|-------------|
-| `m` | Save bookmark | Mark current location |
-| `'` | Jump to bookmark | Select and jump to bookmark |
-| `bd` | Delete bookmark | Remove a bookmark |
-| `bD` | Delete all bookmarks | Clear all bookmarks |
+| Key  | Action               | Description                 |
+| ---- | -------------------- | --------------------------- |
+| `m`  | Save bookmark        | Mark current location       |
+| `'`  | Jump to bookmark     | Select and jump to bookmark |
+| `bd` | Delete bookmark      | Remove a bookmark           |
+| `bD` | Delete all bookmarks | Clear all bookmarks         |
 
 ### Shell Commands
 
-| Key | Action | Description |
-|-----|--------|-------------|
-| `;` | Shell interactive | Run shell command in background |
-| `:` | Shell block | Run shell command (blocks until done) |
-| `':` | Custom shell block | Plugin custom-shell (interactive, blocking) |
-| `';` | Custom shell async | Plugin custom-shell (interactive, async) |
-| `Ctrl-/` | Popup shell | Open Fish shell in popup window |
+| Key      | Action             | Description                                 |
+| -------- | ------------------ | ------------------------------------------- |
+| `;`      | Shell interactive  | Run shell command in background             |
+| `:`      | Shell block        | Run shell command (blocks until done)       |
+| `':`     | Custom shell block | Plugin custom-shell (interactive, blocking) |
+| `';`     | Custom shell async | Plugin custom-shell (interactive, async)    |
+| `Ctrl-/` | Popup shell        | Open Fish shell in popup window             |
 
 ### macOS-Specific
 
-| Key | Action | Description |
-|-----|--------|-------------|
-| `Ctrl-p` | Quick Look | Open macOS Quick Look preview |
-| `of` | Open in Finder | Open current directory in Finder |
+| Key      | Action         | Description                      |
+| -------- | -------------- | -------------------------------- |
+| `Ctrl-p` | Quick Look     | Open macOS Quick Look preview    |
+| `of`     | Open in Finder | Open current directory in Finder |
 
 ### Git Integration
 
-| Key | Action | Description |
-|-----|--------|-------------|
+| Key  | Action  | Description                         |
+| ---- | ------- | ----------------------------------- |
 | `gl` | Lazygit | Launch lazygit in current directory |
 
 ### Preview & Tasks
 
-| Key | Action | Description |
-|-----|--------|-------------|
-| `Ctrl-b` / `Ctrl-f` | Seek preview | Scroll preview up/down |
-| `<Tab>` | Spot file | Focus on file spot view |
-| `w` | Tasks manager | Show background tasks |
+| Key                 | Action        | Description             |
+| ------------------- | ------------- | ----------------------- |
+| `Ctrl-b` / `Ctrl-f` | Seek preview  | Scroll preview up/down  |
+| `<Tab>`             | Spot file     | Focus on file spot view |
+| `w`                 | Tasks manager | Show background tasks   |
 
 ### Help & Exit
 
-| Key | Action | Description |
-|-----|--------|-------------|
-| `?` / `~` / `F1` | Help | Open help menu |
-| `q` | Quit | Save project and exit |
-| `Q` | Quit no-cwd | Exit without saving cwd |
-| `Ctrl-c` | Close tab | Close current tab |
-| `Ctrl-z` | Suspend | Suspend Yazi process |
+| Key              | Action      | Description             |
+| ---------------- | ----------- | ----------------------- |
+| `?` / `~` / `F1` | Help        | Open help menu          |
+| `q`              | Quit        | Save project and exit   |
+| `Q`              | Quit no-cwd | Exit without saving cwd |
+| `Ctrl-c`         | Close tab   | Close current tab       |
+| `Ctrl-z`         | Suspend     | Suspend Yazi process    |
 
 ## Manager Configuration
 

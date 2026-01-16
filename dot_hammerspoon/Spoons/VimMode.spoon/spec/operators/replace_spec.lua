@@ -19,10 +19,7 @@ describe("Replace", function()
       local newBuffer = replace:getModifiedBuffer(buffer, 0, 0)
 
       assert.are.equals("1bc", newBuffer:getValue())
-      assert.are.same(
-        Selection:new(0, 0),
-        newBuffer:getSelectionRange()
-      )
+      assert.are.same(Selection:new(0, 0), newBuffer:getSelectionRange())
     end)
 
     it("replaces the range in the middle", function()
@@ -36,10 +33,7 @@ describe("Replace", function()
       local newBuffer = replace:getModifiedBuffer(buffer, 1, 1)
 
       assert.are.equals("adc", newBuffer:getValue())
-      assert.are.same(
-        Selection:new(1, 0),
-        newBuffer:getSelectionRange()
-      )
+      assert.are.same(Selection:new(1, 0), newBuffer:getSelectionRange())
     end)
 
     it("replaces with multiple chars if it's a range > 1", function()
@@ -53,10 +47,7 @@ describe("Replace", function()
       local newBuffer = replace:getModifiedBuffer(buffer, 0, 2)
 
       assert.are.equals("*** def", newBuffer:getValue())
-      assert.are.same(
-        Selection:new(0, 0),
-        newBuffer:getSelectionRange()
-      )
+      assert.are.same(Selection:new(0, 0), newBuffer:getSelectionRange())
     end)
   end)
 end)

@@ -14,17 +14,14 @@ end
 
 browserUtils.frontmostCurrentUrl = function()
   if browserUtils.isFrontmostChrome() then
-    result, url = hs.osascript.applescript(
-      'tell application "Google Chrome" to return URL of active tab of front window'
-    )
+    result, url =
+      hs.osascript.applescript('tell application "Google Chrome" to return URL of active tab of front window')
 
     if result and url then
       return url
     end
   elseif browserUtils.isFrontmostSafari() then
-    result, url = hs.osascript.applescript(
-      'tell application "Safari" to return URL of current tab of window 1'
-    )
+    result, url = hs.osascript.applescript('tell application "Safari" to return URL of current tab of window 1')
 
     if result and url then
       return url
