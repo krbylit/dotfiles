@@ -23,6 +23,49 @@ elseif logo_height > 10 then
 end
 local lolcat_delay = math.max(1, math.floor(4 / logo_speed_multiplier))
 
+local tte_cmds = {
+  "synthgrid --text-gradient-steps 12 --grid-gradient-steps 12 --max-active-blocks .9",
+  "slide --movement-speed 2 --final-gradient-steps 24 --final-gradient-frames 12 --movement-easing in_out_circ",
+  "sweep --final-gradient-steps 24",
+  "expand --movement-speed .5 --final-gradient-steps 24 --final-gradient-frames 8",
+  "middleout --center-movement-speed 1.5 --full-movement-speed .5 --final-gradient-steps 24",
+  "overflow --overflow-cycles-range 4-5 --overflow-speed 3 --final-gradient-steps 24",
+  "randomsequence --speed .05 --final-gradient-steps 24 --final-gradient-frames 12",
+  "scattered --movement-speed .75 --final-gradient-steps 24 --final-gradient-frames 12",
+  "slice --movement-speed .35",
+  "beams --beam-delay 2 --beam-gradient-frames 2 --final-wipe-speed 5 --beam-row-speed-range 40-60 --beam-column-speed-range 15-20",
+  "smoke --final-gradient-steps 24",
+  "highlight --highlight-brightness 1.75 --highlight-width 4 --final-gradient-steps 12",
+}
+local random_tte_cmd = tte_cmds[math.random(#tte_cmds)]
+
+local terminal_toys_cmds = {
+  "terminal-toys cube --tick-rate 20 --amplitude 5 --frequency 5 --color-speed .5",
+  "terminal-toys cube --tick-rate 20 --amplitude 3 --frequency 1 --speed 1 --color-speed .2 --x-rotation-speed .04 --y-rotation-speed .75",
+  "terminal-toys cube --tick-rate 20 --amplitude 3 --frequency 1 --speed 1 --color-speed .2 --x-rotation-speed .4 --y-rotation-speed .01",
+  "terminal-toys cube --tick-rate 20 --amplitude 3 --frequency 1 --speed 1 --color-speed .2 --x-rotation-speed .4 --y-rotation-speed .1",
+  "terminal-toys cube --tick-rate 20 --amplitude 5 --frequency 5 --speed .5 --color-speed .5 --x-rotation-speed .04 --y-rotation-speed .75 --z-rotation-speed .1",
+  "terminal-toys cube --tick-rate 20 --amplitude 5 --frequency 5 --speed .5 --color-speed .5 --x-rotation-speed .4 --y-rotation-speed .01 --z-rotation-speed .1",
+  "terminal-toys cube --tick-rate 20 --amplitude 5 --frequency 5 --speed .5 --color-speed .5 --x-rotation-speed .4 --y-rotation-speed .1 --z-rotation-speed .1",
+  "terminal-toys cube --tick-rate 20 --amplitude 5 --frequency 5 --speed .5 --color-speed .5 --x-rotation-speed .04 --y-rotation-speed .75",
+  "terminal-toys cube --tick-rate 20 --amplitude 5 --frequency 5 --speed .5 --color-speed .5 --x-rotation-speed .4 --y-rotation-speed .01",
+  "terminal-toys cube --tick-rate 20 --amplitude 5 --frequency 5 --speed .5 --color-speed .5 --x-rotation-speed .4 --y-rotation-speed .1",
+  "terminal-toys cube --tick-rate 20 --amplitude 5 --frequency 5",
+  "terminal-toys cube --tick-rate 20 --amplitude 3 --frequency 1 --speed 1 --x-rotation-speed .04 --y-rotation-speed .75",
+  "terminal-toys cube --tick-rate 20 --amplitude 3 --frequency 1 --speed 1 --x-rotation-speed .4 --y-rotation-speed .01",
+  "terminal-toys cube --tick-rate 20 --amplitude 3 --frequency 1 --speed 1 --x-rotation-speed .4 --y-rotation-speed .1",
+  "terminal-toys cube --tick-rate 20 --amplitude 5 --frequency 5 --speed .5 --x-rotation-speed .04 --y-rotation-speed .75 --z-rotation-speed .1",
+  "terminal-toys cube --tick-rate 20 --amplitude 5 --frequency 5 --speed .5 --x-rotation-speed .4 --y-rotation-speed .01 --z-rotation-speed .1",
+  "terminal-toys cube --tick-rate 20 --amplitude 5 --frequency 5 --speed .5 --x-rotation-speed .4 --y-rotation-speed .1 --z-rotation-speed .1",
+  "terminal-toys cube --tick-rate 20 --amplitude 5 --frequency 5 --speed .5 --x-rotation-speed .04 --y-rotation-speed .75",
+  "terminal-toys cube --tick-rate 20 --amplitude 5 --frequency 5 --speed .5 --x-rotation-speed .4 --y-rotation-speed .01",
+  "terminal-toys cube --tick-rate 20 --amplitude 5 --frequency 5 --speed .5 --x-rotation-speed .4 --y-rotation-speed .1",
+  -- "terminal-toys life -m Braille",
+  -- "terminal-toys bubble -m Braille -a 25 -b 50 -n 8",
+  -- "terminal-toys bubble -m Braille -a 10 -b 150",
+}
+local random_terminal_toys_cmd = terminal_toys_cmds[math.random(#terminal_toys_cmds)]
+
 local picker = require("snacks.picker")
 
 ---@diagnostic disable: missing-fields
@@ -391,58 +434,95 @@ return {
     },
     ---@type snacks.dashboard.Config
     dashboard = {
-      enabled = true,
+      enabled = vim.env.IS_SSH ~= "1",
       -- height = terminal_height,
       -- width = terminal_width,
       -- row = 1,
       -- col = 1,
       pane_gap = 4,
       sections = {
+        -- lolcat logo
+        -- {
+        --   pane = 1,
+        --   section = "terminal",
+        --   -- cmd = 'cat "' .. logo_file .. '" | lolcat -a -d 2 -s 15 -F 0.3 -t -p 100 -f',
+        --   -- Using lolcat
+        --   cmd = 'bash -c "for i in {1..10}; do clear; cat \\"'
+        --     .. logo_file
+        --     .. '\\" | lolcat -a -d '
+        --     .. lolcat_delay
+        --     .. ' -s 15 -F 0.3 -t -p 100 -f; sleep 4; done"',
+        --   height = logo_height,
+        --   width = logo_width,
+        --   -- height = math.floor(terminal_height / 3),
+        --   -- width = terminal_width,
+        --   -- indent = indent,
+        --   -- random = 100,
+        --   padding = 2,
+        --   ttl = 0, -- cmd is cached by snacks, so upping random or setting ttl to 0 makes it refresh on every load
+        -- },
+        -- tte logo
+        {
+          pane = 1,
+          height = 1,
+        },
         {
           pane = 1,
           section = "terminal",
-          -- cmd = 'cat "' .. logo_file .. '" | lolcat -a -d 2 -s 15 -F 0.3 -t -p 100 -f',
-          cmd = 'bash -c "for i in {1..10}; do clear; cat \\"'
-            .. logo_file
-            .. '\\" | lolcat -a -d '
-            .. lolcat_delay
-            .. ' -s 15 -F 0.3 -t -p 100 -f; sleep 4; done"',
-          height = logo_height,
           width = logo_width,
-          -- height = math.floor(terminal_height / 3),
-          -- width = terminal_width,
-          -- indent = indent,
-          -- random = 100,
-          padding = 2,
+          cmd = 'bash -c "tte --input-file \\"' .. logo_file .. '\\" ' .. random_tte_cmd .. '"',
+          height = logo_height + 1, -- tte cuts off unless we add a line
+          padding = 1,
           ttl = 0, -- cmd is cached by snacks, so upping random or setting ttl to 0 makes it refresh on every load
+        },
+        -- terminal-toys animation
+        {
+          pane = 2,
+          height = 1,
         },
         {
           pane = 2,
+          section = "terminal",
+          -- cmd = random_terminal_toys_cmd,
+          cmd = "terminal-toys bubble -m Braille -a 25 -b 50 -n 8",
           height = logo_height,
-          padding = logo_height + 1,
+          padding = 2, -- for use with terminal-toys
+          ttl = 0, -- cmd is cached by snacks, so upping random or setting ttl to 0 makes it refresh on every load
         },
+        -- blank panel (for use when terminal-toys not in use)
         -- {
-        --     pane = 3,
-        --     height = logo_height,
-        --     padding = logo_height + 1,
+        --   pane = 2,
+        --   height = logo_height,
+        --   -- padding = logo_height + 1, -- for use with lolcat
+        --   padding = logo_height + 2, -- for use with tte
         -- },
         { icon = " ", pane = 2, title = "Keymaps", section = "keys", indent = 2, padding = 1 },
         { icon = " ", title = "Projects", section = "projects", indent = 2, padding = 1 },
         { icon = " ", title = "Recent Files", section = "recent_files", indent = 2, padding = 1 },
-        {
-          pane = 3,
-          icon = " ",
-          title = "Git Status",
-          -- cmd = "hub --no-pager diff --stat -B -M -C",
-          -- cmd = "hub status --short --branch --renames",
-          cmd = "git rev-parse --is-inside-work-tree >/dev/null 2>&1 && hub status --short --branch --renames || true",
-          section = "terminal",
-          height = 10,
-          ttl = 0,
-        },
+        -- {
+        --   pane = 3,
+        --   icon = " ",
+        --   title = "Git Status",
+        --   -- cmd = "hub --no-pager diff --stat -B -M -C",
+        --   -- cmd = "hub status --short --branch --renames",
+        --   cmd = "git rev-parse --is-inside-work-tree >/dev/null 2>&1 && hub status --short --branch --renames || true",
+        --   section = "terminal",
+        --   height = 5,
+        --   ttl = 0,
+        -- },
         {
           pane = 2,
           section = "startup",
+        },
+        -- terminal-toys animation
+        {
+          section = "terminal",
+          cmd = random_terminal_toys_cmd,
+          height = 15,
+          -- height = terminal_height - logo_height - 15, -- fill height
+          width = terminal_width,
+          -- padding = 3, -- for use with terminal-toys
+          ttl = 0, -- cmd is cached by snacks, so upping random or setting ttl to 0 makes it refresh on every load
         },
       },
     },

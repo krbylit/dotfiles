@@ -20,7 +20,7 @@ return {
       -- enabled = function(buf)
       --   return vim.g.sidekick_nes ~= false and vim.b.sidekick_nes ~= false
       -- end,
-      enabled = true,
+      enabled = false,
       debounce = 100,
       trigger = {
         -- events that trigger sidekick next edit suggestions

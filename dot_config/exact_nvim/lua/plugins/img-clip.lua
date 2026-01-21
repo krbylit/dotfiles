@@ -197,21 +197,21 @@ return {
       mode = { "n", "i" },
       desc = "Paste image from clipboard",
     },
-    {
-      "<C-v>",
-      function()
-        -- Only paste images in agentic buffers
-        local bufname = vim.bo.filetype(0)
-        if bufname:match("sidekick_terminal") then
-          vim.cmd("PasteImage")
-        else
-          -- Fall back to default <C-p> behavior in other buffers
-          vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<C-v>", true, false, true), "n", false)
-        end
-      end,
-      mode = { "n", "i" },
-      desc = "Paste image from clipboard (Agentic buffers)",
-    },
+    -- {
+    --   "<C-i>",
+    --   function()
+    --     -- Only paste images in agentic buffers
+    --     local bufname = vim.bo.filetype(0)
+    --     if bufname:match("sidekick_terminal") then
+    --       vim.cmd("PasteImage")
+    --     else
+    --       -- Fall back to default <C-p> behavior in other buffers
+    --       vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<C-v>", true, false, true), "n", false)
+    --     end
+    --   end,
+    --   mode = { "n", "i" },
+    --   desc = "Paste image from clipboard (Agentic buffers)",
+    -- },
     -- {
     --     "<C-p>",
     --     function()

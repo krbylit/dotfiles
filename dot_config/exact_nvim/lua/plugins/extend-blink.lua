@@ -222,16 +222,16 @@ return {
     ---@type blink.cmp.KeymapConfig,
     keymap = {
       preset = "enter",
-      ["<Tab>"] = {
-        "snippet_forward",
-        function() -- sidekick next edit suggestion
-          return require("sidekick").nes_jump_or_apply()
-        end,
-        function() -- if you are using Neovim's native inline completions
-          return vim.lsp.inline_completion.get()
-        end,
-        "fallback",
-      },
+      -- ["<Tab>"] = {
+      --   "snippet_forward",
+      --   function() -- sidekick next edit suggestion
+      --     return require("sidekick").nes_jump_or_apply()
+      --   end,
+      --   function() -- if you are using Neovim's native inline completions
+      --     return vim.lsp.inline_completion.get()
+      --   end,
+      --   "fallback",
+      -- },
       ["<C-y>"] = { "select_and_accept", "fallback" },
       -- NOTE: We can enable normal <Tab> behavior of indenting instead of accepting ghost text by setting to `fallback`. Otherwise, <S-Tab> will insert tab when ghost text showing.
       -- ["<Tab>"] = { "fallback" },

@@ -10,4 +10,14 @@ tools = [
     { name = "cfn-lint", version = "latest" },
     { name = "aider-chat", version = "latest" },
     { name = "neovim-remote", version = "latest" },
+    { name = "terminaltexteffects", version = "latest" },
+]
+tools_ssh = [
+    { name = "pip", version = "latest" },
+    { name = "pipx", version = "latest" },
+    { name = "ruff-lsp", version = "latest" },
+    { name = "ruff", version = "latest" },
+    { name = "pre-commit", version = "latest" },
+    { name = "yapf", version = "latest" },
+    { name = "neovim-remote", version = "latest" },
 ]

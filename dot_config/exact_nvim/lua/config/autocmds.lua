@@ -242,6 +242,13 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "sidekick_terminal",
+  callback = function()
+    vim.keymap.set({ "n", "i" }, "<C-v>", vim.cmd("PasteImage"), { buffer = true })
+  end,
+})
+
 -- Increase terminal scrollback buffer
 vim.api.nvim_create_autocmd("TermOpen", {
   callback = function()
