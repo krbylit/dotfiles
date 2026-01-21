@@ -242,6 +242,13 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
+-- Increase terminal scrollback buffer
+vim.api.nvim_create_autocmd("TermOpen", {
+  callback = function()
+    vim.opt_local.scrollback = 100000
+  end,
+})
+
 -- Open help docs in a new tab
 vim.api.nvim_create_autocmd("BufEnter", {
   -- pattern = "*.txt",

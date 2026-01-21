@@ -42,6 +42,20 @@ return {
         height = 0,
         width = 0,
       },
+      terminal = {
+        keys = {
+          -- Keymap to escape to normal mode in nvim. Allows scrolling terminal, entering commands, etc.
+          term_normal = {
+            "<c-q>",
+            function(self)
+              vim.cmd("stopinsert")
+            end,
+            mode = "t",
+            expr = true,
+            desc = "Escape to normal mode",
+          },
+        },
+      },
     },
     bigfile = { enabled = true },
     ---@type snacks.terminal.Config
@@ -159,6 +173,9 @@ return {
           -- Refresh the picker to show the new state
           picker:find()
         end,
+        sidekick_send = function(...)
+          return require("sidekick.cli.picker.snacks").send(...)
+        end,
       },
       ---@type snacks.picker.sources.Config
       win = {
@@ -174,6 +191,11 @@ return {
             -- NOTE: This lets us close all selected buffers. We get this from default snacks keymaps as <C-x>, but put here explicitly for documentation
             -- ["<C-x>"] = { "bufdelete", mode = { "n", "i" } },
             ["<C-o>"] = { "bufdelete_unselected", mode = { "n", "i" } },
+            -- Send selection to Sidekick (CLI AI Agent)
+            ["<c-i>"] = {
+              "sidekick_send",
+              mode = { "n", "i" },
+            },
           },
         },
         -- result list window
@@ -519,6 +541,32 @@ return {
       win = { style = "scratch" },
       ---@type table<string, snacks.win.Config>
       win_by_ft = {
+        python = {
+          keys = {
+            ["source"] = {
+              "<cr>",
+              function(self)
+                local name = "scratch." .. vim.fn.fnamemodify(vim.api.nvim_buf_get_name(self.buf), ":e")
+                Snacks.debug.run({ buf = self.buf, name = name })
+              end,
+              desc = "Source buffer",
+              mode = { "n", "x" },
+            },
+          },
+        },
+        javascript = {
+          keys = {
+            ["source"] = {
+              "<cr>",
+              function(self)
+                local name = "scratch." .. vim.fn.fnamemodify(vim.api.nvim_buf_get_name(self.buf), ":e")
+                Snacks.debug.run({ buf = self.buf, name = name })
+              end,
+              desc = "Source buffer",
+              mode = { "n", "x" },
+            },
+          },
+        },
         lua = {
           keys = {
             ["source"] = {

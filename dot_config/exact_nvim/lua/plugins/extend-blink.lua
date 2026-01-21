@@ -7,13 +7,13 @@ return {
     { "saghen/blink.compat" },
     { "mikavilpas/blink-ripgrep.nvim" },
   },
-  --- @type blink.cmp.ConfigStrict
+  ---@type blink.cmp.ConfigStrict
   opts = {
-    -- --- @type blink.cmp.AppearanceConfig,
+    -- ---@type blink.cmp.AppearanceConfig,
     -- appearance = {},
-    -- --- @type blink.cmp.FuzzyConfig,
+    -- ---@type blink.cmp.FuzzyConfig,
     -- fuzzy = {},
-    -- --- @type blink.cmp.SnippetsConfig,
+    -- ---@type blink.cmp.SnippetsConfig,
     -- snippets = {},
     cmdline = {
       enabled = true,
@@ -27,8 +27,8 @@ return {
         menu = { auto_show = true },
       },
     },
-    --- @type blink.cmp.CompletionConfig,
-    --- @type blink.cmp.SignatureConfig,
+    ---@type blink.cmp.CompletionConfig,
+    ---@type blink.cmp.SignatureConfig,
     signature = {
       enabled = false,
       -- window = { border = "single" }
@@ -74,7 +74,7 @@ return {
         enabled = true,
       },
     },
-    --- @type blink.cmp.SourceConfig
+    ---@type blink.cmp.SourceConfig
     sources = {
       default = { "lsp", "path", "snippets", "buffer", "copilot", "ripgrep" },
       -- default = { "lsp", "path", "snippets", "buffer", "ripgrep" },
@@ -92,7 +92,7 @@ return {
         "avante_mentions",
         "avante_files",
       },
-      --- @type blink.cmp.SourceProviderConfig
+      ---@type blink.cmp.SourceProviderConfig
       providers = {
         ripgrep = {
           module = "blink-ripgrep",
@@ -219,9 +219,19 @@ return {
         -- },
       },
     },
-    --- @type blink.cmp.KeymapConfig,
+    ---@type blink.cmp.KeymapConfig,
     keymap = {
       preset = "enter",
+      ["<Tab>"] = {
+        "snippet_forward",
+        function() -- sidekick next edit suggestion
+          return require("sidekick").nes_jump_or_apply()
+        end,
+        function() -- if you are using Neovim's native inline completions
+          return vim.lsp.inline_completion.get()
+        end,
+        "fallback",
+      },
       ["<C-y>"] = { "select_and_accept", "fallback" },
       -- NOTE: We can enable normal <Tab> behavior of indenting instead of accepting ghost text by setting to `fallback`. Otherwise, <S-Tab> will insert tab when ghost text showing.
       -- ["<Tab>"] = { "fallback" },
