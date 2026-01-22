@@ -48,6 +48,7 @@ if vim.env.IS_SSH == "1" then
   table.insert(disabled, { "krbylit/agentic.nvim", enabled = false })
   table.insert(disabled, { "carlos-algms/agentic.nvim", enabled = false })
   table.insert(disabled, { "stevearc/overseer.nvim", enabled = false })
+  table.insert(disabled, { "folke/sidekick.nvim", enabled = false })
   -- table.insert(disabled, { "", enabled = false })
 end
 

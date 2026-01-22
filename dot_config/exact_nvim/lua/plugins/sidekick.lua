@@ -2,12 +2,6 @@ return {
   "folke/sidekick.nvim",
   ---@type sidekick.Config
   opts = {
-    -- cli = {
-    --   mux = {
-    --     backend = "zellij",
-    --     enabled = true,
-    --   },
-    -- },
     jump = {
       jumplist = true, -- add an entry to the jumplist
     },
@@ -20,7 +14,7 @@ return {
       -- enabled = function(buf)
       --   return vim.g.sidekick_nes ~= false and vim.b.sidekick_nes ~= false
       -- end,
-      enabled = false,
+      enabled = true,
       debounce = 100,
       trigger = {
         -- events that trigger sidekick next edit suggestions
@@ -44,7 +38,10 @@ return {
         --- This is run when a new terminal is created, before starting it.
         --- Here you can change window options `terminal.opts`.
         ---@param terminal sidekick.cli.Terminal
-        config = function(terminal) end,
+        config = function(terminal)
+          -- Force terminal to use Normal highlight group background
+          terminal.opts.wo.winhighlight = "Normal:Normal,NormalNC:NormalNC"
+        end,
         wo = {}, ---@type vim.wo
         bo = {}, ---@type vim.bo
         layout = "right", ---@type "float"|"left"|"bottom"|"top"|"right"
@@ -174,17 +171,17 @@ return {
     debug = false, -- enable debug logging
   },
   keys = {
-    -- {
-    --   "<tab>",
-    --   function()
-    --     -- if there is a next edit, jump to it, otherwise apply it if any
-    --     if not require("sidekick").nes_jump_or_apply() then
-    --       return "<Tab>" -- fallback to normal tab
-    --     end
-    --   end,
-    --   expr = true,
-    --   desc = "Goto/Apply Next Edit Suggestion",
-    -- },
+    {
+      "<tab>",
+      function()
+        -- if there is a next edit, jump to it, otherwise apply it if any
+        if not require("sidekick").nes_jump_or_apply() then
+          return "<tab>" -- fallback to normal tab
+        end
+      end,
+      expr = true,
+      desc = "Goto/Apply Next Edit Suggestion",
+    },
     {
       "<c-.>",
       function()

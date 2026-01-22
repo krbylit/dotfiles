@@ -258,16 +258,22 @@ return {
           })
           local mode_status = require("noice").api.status.mode.get()
 
-          return MiniStatusline.combine_groups({
-            { hl = mode_hl, strings = { mode } },
-            { hl = "MiniStatuslineDevinfo", strings = { git, diff, diagnostics, lsp } },
-            "%<", -- Mark general truncate point
-            { hl = "MiniStatuslinePathName", strings = { filename } },
-            "%=", -- End left alignment
-            { hl = "MiniStatuslineRecording", strings = { mode_status } },
-            { hl = "MiniStatuslineFileinfo", strings = { fileinfo } },
-            { hl = mode_hl, strings = { search, location } },
-          })
+          if vim.bo.filetype == "snacks_dashboard" then
+            return MiniStatusline.combine_groups({
+              { hl = "MiniStatuslinePathName", strings = { filename } },
+            })
+          else
+            return MiniStatusline.combine_groups({
+              { hl = mode_hl, strings = { mode } },
+              { hl = "MiniStatuslineDevinfo", strings = { git, diff, diagnostics, lsp } },
+              "%<", -- Mark general truncate point
+              { hl = "MiniStatuslinePathName", strings = { filename } },
+              "%=", -- End left alignment
+              { hl = "MiniStatuslineRecording", strings = { mode_status } },
+              { hl = "MiniStatuslineFileinfo", strings = { fileinfo } },
+              { hl = mode_hl, strings = { search, location } },
+            })
+          end
         end,
         inactive = nil,
       }

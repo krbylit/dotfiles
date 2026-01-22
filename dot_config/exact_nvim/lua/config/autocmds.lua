@@ -242,17 +242,22 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
-vim.api.nvim_create_autocmd("FileType", {
-  pattern = "sidekick_terminal",
-  callback = function()
-    vim.keymap.set({ "n", "i" }, "<C-v>", vim.cmd("PasteImage"), { buffer = true })
-  end,
-})
-
--- Increase terminal scrollback buffer
-vim.api.nvim_create_autocmd("TermOpen", {
+-- Settings for terminal buffers
+-- Use pattern term://* to only fire for terminal buffers (more efficient than checking buftype)
+vim.api.nvim_create_autocmd({ "TermOpen", "BufWinEnter" }, {
+  pattern = "term://*",
   callback = function()
     vim.opt_local.scrollback = 100000
+    -- Force terminal to use Normal highlight group background instead of black
+    -- Use vim.schedule to ensure this runs after other plugins (like sidekick) set their options
+    vim.schedule(function()
+      vim.opt_local.winhighlight = "Normal:Normal,NormalNC:NormalNC"
+    end)
+    if vim.bo.filetype == "sidekick_terminal" then
+      vim.keymap.set({ "n", "i" }, "<C-v>", function()
+        vim.cmd("PasteImage")
+      end, { buffer = true })
+    end
   end,
 })
 

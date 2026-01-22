@@ -44,9 +44,9 @@ return {
       format = (function()
         local default_format = MiniTabline.default_format
         return function(buf_id, label)
-          -- if vim.bo.filetype == "snacks_dashboard" then
-          -- 	return "" -- Hide tabline label
-          -- end
+          if vim.bo.filetype == "snacks_dashboard" then
+            return "" -- Hide tabline label
+          end
           -- Add a `+` to the end of the tab label if the buffer is modified
           local suffix = vim.bo[buf_id].modified and "+ " or ""
           return default_format(buf_id, label) .. suffix
