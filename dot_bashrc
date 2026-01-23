@@ -1,28 +1,28 @@
 # Source .bashrc.private from `secrets/`
 if [[ -n "$SSH_CONNECTION" || -n "$SSH_CLIENT" || -n "$SSH_TTY" ]]; then
-    export IS_SSH=1
+  export IS_SSH=1
 else
-    export IS_SSH=0
+  export IS_SSH=0
 fi
 PRIVATE_BASHRC="$HOME/private.bashrc"
 if [ -f "$PRIVATE_BASHRC" ]; then
-    source "$PRIVATE_BASHRC"
+  source "$PRIVATE_BASHRC"
 fi
 if [ -n "$TERM" ] && tput setaf 1 &>/dev/null; then
-    DIR_PROMPT="\[$(tput setaf 6)\]\w"
-    GIT_PROMPT="\[$(tput setaf 5)\]\$(git symbolic-ref --short HEAD 2>/dev/null)"
-    # Check if CUSTOM_HOSTNAME is set by ~/.ssh/config and use it in the prompt, otherwise use the default hostname
-    if [ -n "$CUSTOM_HOSTNAME" ]; then
-        USER_PROMPT="\[$(tput setaf 4)\]\u\[$(tput setaf 2)\]@\[$(tput setaf 4)\]$CUSTOM_HOSTNAME"
-    else
-        USER_PROMPT="\[$(tput setaf 4)\]\u\[$(tput setaf 2)\]@\[$(tput setaf 4)\]\h"
-    fi
-    PS1="${DIR_PROMPT} ${GIT_PROMPT}\n${USER_PROMPT} \[$(tput setaf 2)\]\$ \[$(tput sgr0)\]"
+  DIR_PROMPT="\[$(tput setaf 6)\]\w"
+  GIT_PROMPT="\[$(tput setaf 5)\]\$(git symbolic-ref --short HEAD 2>/dev/null)"
+  # Check if CUSTOM_HOSTNAME is set by ~/.ssh/config and use it in the prompt, otherwise use the default hostname
+  if [ -n "$CUSTOM_HOSTNAME" ]; then
+    USER_PROMPT="\[$(tput setaf 4)\]\u\[$(tput setaf 2)\]@\[$(tput setaf 4)\]$CUSTOM_HOSTNAME"
+  else
+    USER_PROMPT="\[$(tput setaf 4)\]\u\[$(tput setaf 2)\]@\[$(tput setaf 4)\]\h"
+  fi
+  PS1="${DIR_PROMPT} ${GIT_PROMPT}\n${USER_PROMPT} \[$(tput setaf 2)\]\$ \[$(tput sgr0)\]"
 else
-    DIR_PROMPT="\w"
-    GIT_PROMPT="\$(git symbolic-ref --short HEAD 2>/dev/null)"
-    USER_PROMPT="\u@\h"
-    PS1="${DIR_PROMPT} ${GIT_PROMPT}\n${USER_PROMPT} \$ "
+  DIR_PROMPT="\w"
+  GIT_PROMPT="\$(git symbolic-ref --short HEAD 2>/dev/null)"
+  USER_PROMPT="\u@\h"
+  PS1="${DIR_PROMPT} ${GIT_PROMPT}\n${USER_PROMPT} \$ "
 fi
 
 export DOCKER_BUILDKIT=1
@@ -46,7 +46,7 @@ export LESS='-RFX'
 # env setup
 # Homebrew
 if [ -x /home/linuxbrew/.linuxbrew/bin/brew ]; then
-    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 fi
 
 # PATH
@@ -54,16 +54,16 @@ export PATH="$HOME/.local/share/bob/nvim-bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
 
 y() {
-    local tmp
-    tmp=$(mktemp -t "yazi-cwd.XXXXXX")
+  local tmp
+  tmp=$(mktemp -t "yazi-cwd.XXXXXX")
 
-    yazi "$@" --cwd-file="$tmp"
-    local cwd
-    cwd=$(cat "$tmp")
-    if [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
-        cd "$cwd"
-    fi
-    rm -f "$tmp"
+  yazi "$@" --cwd-file="$tmp"
+  local cwd
+  cwd=$(cat "$tmp")
+  if [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
+    cd "$cwd"
+  fi
+  rm -f "$tmp"
 }
 
 # ~/.bashrc: executed by bash(1) for non-login shells.
@@ -103,7 +103,7 @@ shopt -s checkwinsize
 
 # set variable identifying the chroot you work in (used in the prompt below)
 if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
-    debian_chroot=$(cat /etc/debian_chroot)
+  debian_chroot=$(cat /etc/debian_chroot)
 fi
 
 # set a fancy prompt (non-color, unless we know we "want" color)
@@ -117,14 +117,14 @@ esac
 #force_color_prompt=yes
 
 if [ -n "$force_color_prompt" ]; then
-    if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
-        # We have color support; assume it's compliant with Ecma-48
-        # (ISO/IEC-6429). (Lack of such support is extremely rare, and such
-        # a case would tend to support setf rather than setaf.)
-        color_prompt=yes
-    else
-        color_prompt=
-    fi
+  if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
+    # We have color support; assume it's compliant with Ecma-48
+    # (ISO/IEC-6429). (Lack of such support is extremely rare, and such
+    # a case would tend to support setf rather than setaf.)
+    color_prompt=yes
+  else
+    color_prompt=
+  fi
 fi
 
 # if [ "$color_prompt" = yes ]; then
@@ -145,14 +145,14 @@ unset color_prompt force_color_prompt
 
 # enable color support of ls and also add handy aliases
 if [ -x /usr/bin/dircolors ]; then
-    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
-    alias ls='ls --color=auto'
-    #alias dir='dir --color=auto'
-    #alias vdir='vdir --color=auto'
+  test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+  alias ls='ls --color=auto'
+  #alias dir='dir --color=auto'
+  #alias vdir='vdir --color=auto'
 
-    alias grep='grep --color=auto'
-    alias fgrep='fgrep --color=auto'
-    alias egrep='egrep --color=auto'
+  alias grep='grep --color=auto'
+  alias fgrep='fgrep --color=auto'
+  alias egrep='egrep --color=auto'
 fi
 
 # colored GCC warnings and errors
@@ -173,18 +173,18 @@ alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo
 # See /usr/share/doc/bash-doc/examples in the bash-doc package.
 
 if [ -f ~/.bash_aliases ]; then
-    . ~/.bash_aliases
+  . ~/.bash_aliases
 fi
 
 # enable programmable completion features (you don't need to enable
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
 # sources /etc/bash.bashrc).
 if ! shopt -oq posix; then
-    if [ -f /usr/share/bash-completion/bash_completion ]; then
-        . /usr/share/bash-completion/bash_completion
-    elif [ -f /etc/bash_completion ]; then
-        . /etc/bash_completion
-    fi
+  if [ -f /usr/share/bash-completion/bash_completion ]; then
+    . /usr/share/bash-completion/bash_completion
+  elif [ -f /etc/bash_completion ]; then
+    . /etc/bash_completion
+  fi
 fi
 
 export NVM_DIR="$HOME/.nvm"
@@ -193,5 +193,5 @@ export NVM_DIR="$HOME/.nvm"
 
 # Start zoxide
 if [ -x zoxide ]; then
-    eval "$(zoxide init bash)"
+  eval "$(zoxide init bash)"
 fi

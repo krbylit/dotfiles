@@ -58,6 +58,7 @@ opt.undofile = true -- Save undo history between sessions
 opt.expandtab = true -- Convert tabs to spaces
 opt.autoindent = true
 opt.cursorline = true -- Enable highlighting of the current line
+opt.cursorlineopt = "number" -- Only highlight the line number
 -- opt.scrolloff = 999 -- Lines of context
 opt.scrolloff = 8 -- Lines of context
 opt.relativenumber = true

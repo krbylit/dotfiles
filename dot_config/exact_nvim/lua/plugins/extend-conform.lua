@@ -16,6 +16,7 @@ return {
       lua = { "stylua" },
       fish = { "fish_indent" },
       sh = { "shfmt" },
+      zsh = { "shfmt" },
       -- NOTE: using these as formatters is what is causing formatting to ignore our project ESLint config. See our eslint setup in `extend-lspconfig.lua`, that properly applies our project-specific ESLint config.
       javascript = { "prettierd", "eslint_d" },
       typescript = { "prettierd", "eslint_d" },

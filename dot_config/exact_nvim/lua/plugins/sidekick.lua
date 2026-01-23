@@ -122,7 +122,62 @@ return {
       },
       --- Add custom context. See `lua/sidekick/context/init.lua`
       ---@type table<string, sidekick.context.Fn>
-      context = {},
+      context = {
+        -- Custom context that returns absolute file path instead of relative
+        abs_file = function(ctx)
+          local Loc = require("sidekick.cli.context.location")
+          -- Check if it's a valid file buffer
+          if not Loc.is_file(ctx.buf) then
+            return false
+          end
+          -- Get the absolute path (don't convert to relative)
+          -- Claude Code will automatically add @ prefix
+          local name = vim.api.nvim_buf_get_name(ctx.buf)
+          if not name or name == "" then
+            name = "[No Name]"
+          end
+          -- Return as sidekick.Text format with SidekickLocFile highlight
+          return { { { name, "SidekickLocFile" } } }
+        end,
+        -- Custom context that returns absolute path with position (/abs/path:L10:C5)
+        abs_position = function(ctx)
+          local Loc = require("sidekick.cli.context.location")
+          if not Loc.is_file(ctx.buf) then
+            return false
+          end
+          -- Get the absolute path (don't convert to relative)
+          -- Claude Code will automatically add @ prefix
+          local name = vim.api.nvim_buf_get_name(ctx.buf)
+          if not name or name == "" then
+            name = "[No Name]"
+          end
+          -- Format as absolute_path:L{row}:C{col} (@ will be added by Claude Code)
+          local location = string.format("%s:L%d:C%d", name, ctx.row, ctx.col)
+          return { { { location, "SidekickLocFile" } } }
+        end,
+        -- Custom context like {this} but uses absolute paths
+        abs_this = function(ctx)
+          local Loc = require("sidekick.cli.context.location")
+          local Context = require("sidekick.cli.context")
+          if Loc.is_file(ctx.buf) then
+            -- For file buffers, inline abs_position logic
+            -- Claude Code will automatically add @ prefix
+            local name = vim.api.nvim_buf_get_name(ctx.buf)
+            if not name or name == "" then
+              name = "[No Name]"
+            end
+            local location = string.format("%s:L%d:C%d", name, ctx.row, ctx.col)
+            return { { { location, "SidekickLocFile" } } }
+          end
+          -- For non-file buffers, return "this" + selection
+          local ret = { { { "this", "SidekickLocFile" } } }
+          local sel = Context.context.selection(ctx)
+          if sel then
+            vim.list_extend(ret, { { { " " } }, sel })
+          end
+          return ret
+        end,
+      },
       ---@type table<string, sidekick.Prompt|string|fun(ctx:sidekick.context.ctx):(string?)>
       prompts = {
         changes = "Can you review my changes?",
@@ -216,17 +271,17 @@ return {
     {
       "<leader>at",
       function()
-        require("sidekick.cli").send({ msg = "{this}" })
+        require("sidekick.cli").send({ msg = "{abs_this}" })
       end,
       mode = { "x", "n" },
-      desc = "Send This",
+      desc = "Send This (Absolute Path)",
     },
     {
       "<leader>af",
       function()
-        require("sidekick.cli").send({ msg = "{file}" })
+        require("sidekick.cli").send({ msg = "{abs_file}" })
       end,
-      desc = "Send File",
+      desc = "Send File (Absolute Path)",
     },
     {
       "<leader>av",

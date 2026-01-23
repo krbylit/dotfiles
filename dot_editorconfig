@@ -5,6 +5,7 @@ charset = utf-8
 end_of_line = lf
 insert_final_newline = true
 indent_style = space
+indent_size = 4
 trim_trailing_whitespace = true
 max_line_length = 120
 
@@ -46,8 +47,11 @@ indent_size = 4
 [*.{sh,bash,zsh,fish}]
 indent_size = 2
 
+[{*.bashrc,*.bash_profile,*.zshrc,*.zprofile,*dot_bashrc,*dot_zshrc}]
+indent_size = 2
+
 # Config files: 2 spaces
-[*.{ini,conf,cfg,env,properties}]
+[{**/.ssh/*config,*.ini,*.conf,*.config,*.cfg,*.env*,*.properties}]
 indent_size = 2
 
 # Markdown: 4 spaces, allow trailing whitespace

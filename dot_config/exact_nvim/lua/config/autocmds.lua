@@ -274,3 +274,17 @@ vim.api.nvim_create_autocmd("BufEnter", {
     end
   end,
 })
+
+-- Disable cursorline highlight in inactive windows. cursorline=false should be set in options.lua
+-- enable only in active window
+-- vim.api.nvim_create_autocmd({ "WinEnter", "BufWinEnter" }, {
+--   callback = function()
+--     vim.opt_local.cursorline = true
+--   end,
+-- })
+--
+-- vim.api.nvim_create_autocmd("WinLeave", {
+--   callback = function()
+--     vim.opt_local.cursorline = false
+--   end,
+-- })
