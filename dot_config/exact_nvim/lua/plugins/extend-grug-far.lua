@@ -1,3 +1,12 @@
+local augroup = vim.api.nvim_create_augroup("GrugFar", { clear = true })
+vim.api.nvim_create_autocmd("FileType", {
+  group = augroup,
+  pattern = "grug-far",
+  callback = function()
+    vim.opt_local.conceallevel = 0
+  end,
+})
+
 return {
   "MagicDuck/grug-far.nvim",
   keys = function(_, keys)

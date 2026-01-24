@@ -37,8 +37,11 @@ M.setup = function()
   -- 	vim.api.nvim_buf_set_lines(0, 0, vim.api.nvim_buf_line_count(0) - 1, false, readFile())
   -- end, {})
 
+  local augroup = vim.api.nvim_create_augroup("Firenvim", { clear = true })
+
   -- Set github textareas to markdown
   vim.api.nvim_create_autocmd({ "BufEnter" }, {
+    group = augroup,
     pattern = "github.com_*.txt",
     command = "set filetype=markdown",
   })
@@ -70,6 +73,7 @@ M.setup = function()
 
   -- Reapply transparency on buffer enter
   vim.api.nvim_create_autocmd("BufEnter", {
+    group = augroup,
     pattern = "*",
     callback = set_transparency,
   })

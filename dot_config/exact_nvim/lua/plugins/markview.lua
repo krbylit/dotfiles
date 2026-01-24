@@ -16,7 +16,9 @@ return {
     require("markview").setup(opts)
 
     -- Disable cursorline in markdown files
+    local augroup = vim.api.nvim_create_augroup("Markview", { clear = true })
     vim.api.nvim_create_autocmd("FileType", {
+      group = augroup,
       pattern = "markdown",
       callback = function()
         vim.opt_local.cursorline = false
