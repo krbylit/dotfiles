@@ -107,8 +107,8 @@ return {
       ---@type snacks.win.Config
       win = {
         style = "terminal",
-        position = "right",
-        width = 80, -- set your preferred column width
+        position = "float",
+        width = 160, -- set your preferred column width
       },
     },
     input = { enabled = true },

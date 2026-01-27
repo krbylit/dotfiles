@@ -169,10 +169,10 @@ DEBUG_APPS=(
 	"Google Chrome"
     Claude
     ChatGPT
-	kitty
 )
 
 UTIL_APPS=(
+	kitty
     Calendar
 	Figma
 	1Password

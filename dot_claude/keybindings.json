@@ -1,0 +1,67 @@
+{
+  "$schema": "https://platform.claude.com/docs/schemas/claude-code/keybindings.json",
+  "$docs": "https://code.claude.com/docs/en/keybindings",
+  "bindings": [
+    {
+      "context": "Global",
+      "bindings": {
+        "ctrl+c": "global:quit",
+        "ctrl+d": "global:quit",
+        "ctrl+l": "global:clearScreen",
+        "ctrl+z": "global:suspend"
+      }
+    },
+    {
+      "context": "History",
+      "bindings": {
+        "ctrl+p": "history:previous",
+        "up": "history:previous",
+        "ctrl+n": "history:next",
+        "down": "history:next",
+        "ctrl+r": "history:search",
+        "escape": "history:clearSearch",
+        "ctrl+c": "history:clearSearch"
+      }
+    },
+    {
+      "context": "Chat",
+      "bindings": {
+        "enter": "chat:submit",
+        "meta+enter": "chat:submit",
+        "shift+enter": "chat:newline",
+        "escape": "chat:cancel",
+        "ctrl+u": "chat:clearInput",
+        "ctrl+e": "chat:externalEditor",
+        "shift+tab": "chat:cycleMode",
+        "ctrl+m": "chat:cycleMode",
+        "meta+t": "chat:toggleThinking",
+        "left": "chat:cursorLeft",
+        "ctrl+b": "chat:cursorLeft",
+        "right": "chat:cursorRight",
+        "ctrl+f": "chat:cursorRight",
+        "ctrl+a": "chat:cursorStart",
+        "home": "chat:cursorStart",
+        "ctrl+e": "chat:cursorEnd",
+        "end": "chat:cursorEnd",
+        "alt+b": "chat:wordLeft",
+        "meta+b": "chat:wordLeft",
+        "alt+f": "chat:wordRight",
+        "meta+f": "chat:wordRight",
+        "backspace": "chat:deleteBackward",
+        "ctrl+h": "chat:deleteBackward",
+        "delete": "chat:deleteForward",
+        "ctrl+d": "chat:deleteForward",
+        "ctrl+w": "chat:deleteWordBackward",
+        "alt+backspace": "chat:deleteWordBackward",
+        "meta+backspace": "chat:deleteWordBackward",
+        "alt+d": "chat:deleteWordForward",
+        "alt+delete": "chat:deleteWordForward",
+        "meta+d": "chat:deleteWordForward",
+        "meta+delete": "chat:deleteWordForward",
+        "ctrl+k": "chat:deleteToEnd",
+        "ctrl+y": "chat:yank",
+        "ctrl+t": "chat:transpose"
+      }
+    }
+  ]
+}
