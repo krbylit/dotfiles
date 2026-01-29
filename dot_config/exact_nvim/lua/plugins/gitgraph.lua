@@ -2,6 +2,7 @@
 -- https://github.com/isakbm/gitgraph.nvim
 return {
   "isakbm/gitgraph.nvim",
+  enabled = false,
   lazy = true,
 
   -- dependencies = { "sindrets/diffview.nvim" },
