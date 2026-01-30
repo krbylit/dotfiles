@@ -1,6 +1,5 @@
 return {
   "ibhagwan/fzf-lua",
-  enabled = false,
   opts = {
     -- Highlight groups for path coloring
     hls = {

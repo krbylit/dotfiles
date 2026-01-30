@@ -82,6 +82,7 @@ return {
   ---@type markview.config
   opts = {
     preview = {
+      modes = { "n", "no", "c", "i" }, -- Enable preview in normal, operator-pending, command, and insert modes
       enable_hybrid_mode = false, -- Don't enable hybrid mode on attach, we can toggle on
       hybrid_modes = { "n", "i" },
       -- raw_previews = {

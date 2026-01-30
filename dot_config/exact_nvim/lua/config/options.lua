@@ -54,7 +54,7 @@ end
 opt.undofile = true -- Save undo history between sessions
 -- NOTE: setting `tabstop` here sets it globally, and that seems to be what causes indentation to sometimes change back to 4 even when in a project that sets it to 2. We don't need this here since we have a root ~/.editorconfig that sets to 4.
 -- opt.tabstop = 4 -- A tab is equal to 4 spaces
--- opt.shiftwidth = 0 -- Number of spaces to use for each step of (auto)indent; 0=use tabstop val
+opt.shiftwidth = 0 -- Number of spaces to use for each step of (auto)indent; 0=use tabstop val
 opt.expandtab = true -- Convert tabs to spaces
 opt.autoindent = true
 opt.cursorline = true -- Enable highlighting of the current line

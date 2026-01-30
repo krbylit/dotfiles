@@ -3,7 +3,7 @@
 
 return {
   "nmac427/guess-indent.nvim",
-  enabled = false,
+  enabled = true,
   config = function()
     require("guess-indent").setup({
       auto_cmd = true, -- Set to false to disable automatic execution

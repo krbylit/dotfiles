@@ -131,77 +131,7 @@ This command performs a thorough code review of local changes, analyzing for com
 
 5. **Perform Multi-Dimensional Review**:
 
-   For each changed file, analyze across these dimensions:
-
-   ### A. **Correctness & Bugs** (🐛)
-   - Logic errors
-   - Off-by-one errors
-   - Null/undefined handling
-   - Edge case coverage
-   - Error handling completeness
-   - Type mismatches (for typed languages)
-   - Resource leaks (unclosed files, connections)
-   - Race conditions
-   - Deadlock potential
-
-   ### B. **Security** (🔒)
-   - SQL injection vulnerabilities
-   - XSS vulnerabilities
-   - Command injection
-   - Path traversal
-   - Authentication/authorization bypass
-   - Sensitive data exposure
-   - Insecure dependencies
-   - CSRF protection
-   - Input validation
-   - Output encoding
-
-   ### C. **Performance** (⚡)
-   - Inefficient algorithms (O(n²) when O(n) possible)
-   - Unnecessary loops or iterations
-   - Database N+1 queries
-   - Missing indexes
-   - Excessive memory allocation
-   - Blocking operations in async code
-   - Missing caching opportunities
-   - Large object copies
-   - Inefficient data structures
-
-   ### D. **Maintainability** (🔧)
-   - Code clarity and readability
-   - Function/method length (>50 lines?)
-   - Cyclomatic complexity
-   - Duplication (DRY violations)
-   - Naming clarity
-   - Magic numbers/strings
-   - Comment quality (too few? too many?)
-   - Modularity and separation of concerns
-   - Testability
-
-   ### E. **Best Practices** (✨)
-   - Language idioms and conventions
-   - Framework best practices
-   - Project-specific patterns (from CLAUDE.md)
-   - SOLID principles
-   - Error handling patterns
-   - Logging appropriateness
-   - Dependency injection
-   - Configuration management
-
-   ### F. **Testing** (🧪)
-   - Are tests included for new code?
-   - Are tests comprehensive?
-   - Edge cases tested?
-   - Error paths tested?
-   - Test quality and clarity
-   - Test coverage gaps
-
-   ### G. **Documentation** (📚)
-   - Public API documented?
-   - Complex logic explained?
-   - Breaking changes noted?
-   - Examples provided?
-   - Documentation up to date?
+   For each changed file, review for: **security, correctness, performance, maintainability, best practices, testing, and documentation**.
 
 6. **Categorize Findings by Severity**:
 
@@ -289,19 +219,19 @@ Use this structured format:
 
 ## High Priority Issues 🟠
 
-[Similar format for each issue]
+[Same format for each issue]
 
 ---
 
 ## Medium Priority Issues 🟡
 
-[Similar format]
+[Same format for each issue]
 
 ---
 
 ## Low Priority Issues 🟢
 
-[Similar format]
+[Same format for each issue]
 
 ---
 
@@ -481,15 +411,7 @@ Use this structured format:
     - Do not append anything
     - Optionally note to user: "No other code review files found for cross-analysis"
 
-10. **Provide Context-Aware Analysis**:
-
-   - **For Rust**: Focus on ownership/borrowing issues, unsafe code, error handling with Result/Option
-   - **For JavaScript/TypeScript**: Focus on type safety, async/await patterns, null/undefined
-   - **For Python**: Focus on type hints, exception handling, PEP 8
-   - **For SQL**: Focus on injection, indexes, N+1 queries
-   - **For API code**: Focus on validation, auth, rate limiting, error responses
-
-11. **Check Against Project Standards**:
+10. **Check Against Project Standards**:
 
     From CLAUDE.md, verify:
 
@@ -501,78 +423,19 @@ Use this structured format:
 
 ## Review Quality Guidelines
 
-### Be Specific
-
-❌ "This code is inefficient"
+**Be specific with examples**:
 ✅ "This nested loop is O(n²). Consider using a HashSet for O(n) lookup: [code example]"
 
-### Provide Context
-
-❌ "Fix this bug"
+**Provide context**:
 ✅ "This will panic if agency_id is null. Add validation: `if agency_id.is_none() { return Err(...) }`"
 
-### Suggest Solutions
-
-❌ "Security issue here"
+**Suggest solutions**:
 ✅ "Potential SQL injection. Use parameterized query: `$1, $2` instead of string interpolation"
 
-### Explain Impact
-
-❌ "Bad practice"
-✅ "This blocks the async runtime. Use `tokio::spawn_blocking` for CPU-intensive work to prevent starving other tasks"
-
-### Balance Criticism with Positives
-
+**Balance criticism with positives**:
 - Note good patterns and decisions
 - Acknowledge tradeoffs made
 - Highlight improvements from previous code
-- Recognize when code is well-done
-
-## Language-Specific Focus Areas
-
-### Rust
-
-- Ownership/borrowing issues
-- Unsafe code justification
-- Error handling (Result/Option)
-- Panic potential
-- Performance (unnecessary clones, allocations)
-- Concurrency (Send/Sync, data races)
-- Lifetime annotations clarity
-
-### JavaScript/TypeScript
-
-- Type safety (any usage)
-- Null/undefined handling
-- Async/await patterns
-- Promise error handling
-- Memory leaks (closures, event listeners)
-- Bundle size impact
-
-### Python
-
-- Type hints
-- Exception handling
-- PEP 8 compliance
-- List comprehensions vs loops
-- Generator usage
-- Context managers
-
-### Go
-
-- Error handling (nil checks)
-- Goroutine leaks
-- Channel deadlocks
-- Defer usage
-- Interface design
-
-### Java/C#
-
-- Null reference exceptions
-- Resource disposal (try-with-resources, using)
-- Thread safety
-- Collection choices
-- Exception hierarchy
 
 ## Edge Cases & Error Handling
 
@@ -607,130 +470,6 @@ The working directory is clean. Specify a different scope:
 
 - Apply appropriate criteria (test-specific patterns)
 - Check for test quality, not production standards
-
-## Example Output
-
-````markdown
-# Code Review Report
-
-**Scope**: Uncommitted changes
-**Files Changed**: 3
-**Lines Changed**: +157 / -42
-**Review Date**: 2025-01-29 15:30
-
----
-
-## Summary
-
-**Overall Assessment**: REQUEST CHANGES
-
-**Critical Issues**: 1 🔴
-**High Priority**: 2 🟠
-**Medium Priority**: 3 🟡
-**Low Priority**: 2 🟢
-
-**Recommendation**: There is one critical security issue (SQL injection vulnerability) that must be fixed before merging. Additionally, two high-priority bug fixes are needed. The overall code quality is good, with clear naming and solid test coverage for happy paths. Address the critical and high-priority issues, then this will be ready to merge.
-
----
-
-## Critical Issues 🔴
-
-### src/api/handlers/persons.rs:45 - SQL Injection Vulnerability
-
-**Category**: Security
-**Severity**: CRITICAL
-
-**Issue**:
-User input is directly interpolated into SQL query without sanitization or parameterization.
-
-**Current Code**:
-
-```rust
-let query = format!("SELECT * FROM persons WHERE id = '{}'", person_id);
-```
-
-**Problem**:
-This allows SQL injection attacks. An attacker could provide `person_id = "'; DROP TABLE persons; --"` to execute arbitrary SQL.
-
-**Suggested Fix**:
-
-```rust
-let query = "SELECT * FROM persons WHERE id = $1";
-let result = conn.query(query, &[&person_id]).await?;
-```
-
-**Impact**: Critical security vulnerability allowing data theft, modification, or deletion.
-
----
-
-## High Priority Issues 🟠
-
-### src/domain/services/person_service.rs:78 - Potential Panic on None
-
-**Category**: Bug
-**Severity**: HIGH
-
-**Issue**:
-Calling `.unwrap()` on an Option without checking can cause panic.
-
-**Current Code**:
-
-```rust
-let agency_id = auth.agency_id.unwrap();
-```
-
-**Problem**:
-If `agency_id` is None, this will panic and crash the service. According to the codebase, agency_id should always be present after JWT validation, but defensive programming is better.
-
-**Suggested Fix**:
-
-```rust
-let agency_id = auth.agency_id
-    .ok_or(QueryError::Unauthorized("Missing agency_id in JWT"))?;
-```
-
-**Impact**: Service crashes on malformed JWTs, availability issue.
-
----
-
-## Positive Observations ✅
-
-- Excellent error handling structure using custom error types
-- Good use of async/await patterns throughout
-- Cache-aside pattern correctly implemented with TTL
-- Strong type safety using newtype pattern for IDs
-- Well-organized module structure following service layer pattern
-
----
-
-## Recommendations
-
-### Must Do (Before Merge)
-
-1. Fix SQL injection vulnerability (person_id parameterization)
-2. Replace `.unwrap()` with proper error handling
-
-### Should Do (Before Merge)
-
-1. Add tests for cache invalidation
-2. Don't leak database error details to clients
-
-### Could Do (Follow-up)
-
-1. Refactor long functions for better readability
-2. Improve variable naming (res → projection_data)
-
----
-
-## Next Steps
-
-1. Fix SQL injection (CRITICAL)
-2. Fix unwrap panic (HIGH)
-3. Add cache invalidation tests
-4. Generic error messages
-
-After addressing critical and high-priority issues, re-run review.
-```
 
 ## Context
 

@@ -11,10 +11,11 @@ return {
     },
     nes = {
       ---@type boolean|fun(buf:integer):boolean?
-      -- enabled = function(buf)
-      --   return vim.g.sidekick_nes ~= false and vim.b.sidekick_nes ~= false
-      -- end,
-      enabled = true,
+      enabled = function(buf)
+        -- return vim.g.sidekick_nes ~= false and vim.b.sidekick_nes ~= false
+        return vim.bo.filetype ~= "markdown"
+      end,
+      -- enabled = true,
       debounce = 100,
       trigger = {
         -- events that trigger sidekick next edit suggestions
