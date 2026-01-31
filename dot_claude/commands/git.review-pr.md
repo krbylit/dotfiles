@@ -131,7 +131,38 @@ This command performs a thorough code review of the pull request associated with
    - Note comment authors and timestamps
    - Store for later analysis
 
-3. **Gather Changes**:
+3. **Update All Branches to Latest**:
+
+   **CRITICAL**: Ensure you're reviewing the actual current state, not stale local copies.
+
+   ```bash
+   # Fetch latest from remote
+   git fetch origin
+
+   # Update base branch to latest
+   git fetch origin <base-branch>:<base-branch>
+
+   # Update PR branch (head branch) to latest
+   git fetch origin <head-branch>:<head-branch>
+   ```
+
+   If the fetch commands fail (e.g., branches don't exist locally), use:
+
+   ```bash
+   # Alternative: update current branch if you're on the PR branch
+   git pull origin <head-branch>
+   ```
+
+   **Verify branches are up to date**:
+   ```bash
+   # Confirm base branch is current
+   git log origin/<base-branch> --oneline -1
+
+   # Confirm head branch is current
+   git log origin/<head-branch> --oneline -1
+   ```
+
+4. **Gather Changes**:
 
    Use the base branch from PR metadata:
 
@@ -150,14 +181,14 @@ This command performs a thorough code review of the pull request associated with
    git log <base-branch>..HEAD
    ```
 
-4. **Analyze Project Context**:
+5. **Analyze Project Context**:
    - Read CLAUDE.md for project standards
    - Read README.md for architecture overview
    - Identify language/framework from file extensions
    - Note project patterns from existing code
    - Check for .editorconfig, .prettierrc, etc.
 
-5. **Perform Multi-Dimensional Review**:
+6. **Perform Multi-Dimensional Review**:
 
    For each changed file, analyze across these dimensions:
 
@@ -231,7 +262,7 @@ This command performs a thorough code review of the pull request associated with
    - Examples provided?
    - Documentation up to date?
 
-6. **Categorize Findings by Severity**:
+7. **Categorize Findings by Severity**:
 
    **🔴 CRITICAL**: Must fix before merging
    - Security vulnerabilities
@@ -257,7 +288,7 @@ This command performs a thorough code review of the pull request associated with
    - Documentation enhancements
    - Optimization opportunities
 
-7. **Evaluate Existing PR Comments**:
+8. **Evaluate Existing PR Comments**:
 
    For each comment/review fetched in step 2, perform analysis:
 
@@ -289,7 +320,7 @@ This command performs a thorough code review of the pull request associated with
    - **Still Outstanding**: Flagged in comments and still present
    - **Questionable Comments**: Comments that appear invalid or incorrect
 
-8. **Generate Review Report**:
+9. **Generate Review Report**:
 
 Use this structured format:
 
@@ -612,7 +643,7 @@ This section provides concise, technical comments for every issue found, suitabl
 
 ```
 
-9. **Cross-Review Analysis (Senior Engineer Meta-Review)**:
+10. **Cross-Review Analysis (Senior Engineer Meta-Review)**:
 
     After writing the review file, check for other `PR_REVIEW_*.md` files in the repository root:
 
@@ -696,7 +727,7 @@ This section provides concise, technical comments for every issue found, suitabl
     - Do not append anything
     - Optionally note to user: "No other PR review files found for cross-analysis"
 
-10. **Report Results**:
+11. **Report Results**:
 
     - Save the structured review report to a timestamped file in the repository root directory
     - Output a summary confirmation to the user
@@ -710,7 +741,7 @@ This section provides concise, technical comments for every issue found, suitabl
     - Write the complete markdown report to this file
     - Confirm to user: `📝 Review saved to PR_REVIEW_<timestamp>.md`
 
-11. **Provide Context-Aware Analysis**:
+12. **Provide Context-Aware Analysis**:
 
     - **For Rust**: Focus on ownership/borrowing issues, unsafe code, error handling with Result/Option
     - **For JavaScript/TypeScript**: Focus on type safety, async/await patterns, null/undefined
@@ -718,7 +749,7 @@ This section provides concise, technical comments for every issue found, suitabl
     - **For SQL**: Focus on injection, indexes, N+1 queries
     - **For API code**: Focus on validation, auth, rate limiting, error responses
 
-12. **Check Against Project Standards**:
+13. **Check Against Project Standards**:
 
     From CLAUDE.md, verify:
 
