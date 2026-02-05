@@ -13,7 +13,7 @@ return {
 
     -- Notification settings
     notifications = {
-      enabled = true, -- Master toggle for all notifications
+      enabled = false, -- Master toggle for all notifications
       level_up = true, -- Show level up notifications
       achievements = true, -- Show achievement unlock notifications
     },

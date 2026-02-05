@@ -152,20 +152,27 @@ end
 -- 	end,
 -- })
 
--- Trim trailing whitespace on save
-vim.api.nvim_create_autocmd("BufWritePre", {
-  pattern = "*", -- Applies to all files
-  command = [[%s/\s\+$//e]],
-})
+-- Trim trailing whitespace on save (excluding markdown files per .editorconfig)
+-- vim.api.nvim_create_autocmd("BufWritePre", {
+--   pattern = "*",
+--   callback = function()
+--     -- Skip markdown files - they need to preserve trailing whitespace per .editorconfig
+--     if vim.bo.filetype == "markdown" then
+--       return
+--     end
+--     -- Trim trailing whitespace for all other files
+--     vim.cmd([[%s/\s\+$//e]])
+--   end,
+-- })
 
 -- Use 2 spaces for markdown files
-vim.api.nvim_create_autocmd("FileType", {
-  pattern = "markdown",
-  callback = function()
-    vim.bo.tabstop = 2
-    vim.bo.shiftwidth = 2
-  end,
-})
+-- vim.api.nvim_create_autocmd("FileType", {
+--   pattern = "markdown",
+--   callback = function()
+--     vim.bo.tabstop = 2
+--     vim.bo.shiftwidth = 2
+--   end,
+-- })
 -- NOTE: Disabling to try manually controlling scrolloff
 -- -- Fix any jittering caused by high `scrolloff` value when near EOF or elsewhere
 -- vim.api.nvim_create_autocmd("InsertEnter", {
@@ -261,17 +268,11 @@ vim.api.nvim_create_autocmd({ "TermOpen", "BufWinEnter" }, {
   end,
 })
 
--- Open help docs in a new tab
-vim.api.nvim_create_autocmd("BufEnter", {
-  -- pattern = "*.txt",
+-- Open help docs in a vertical split on the right
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "help",
   callback = function()
-    if vim.bo.buftype == "help" then
-      -- vim.cmd("wincmd T") -- open in new tab
-      -- vim.cmd("wincmd |") -- maximize width
-      -- vim.cmd("wincmd _") -- maximize height
-      vim.cmd("wincmd L")
-      vim.cmd("vertical resize 90")
-    end
+    vim.cmd("wincmd L | vertical resize 90")
   end,
 })
 
