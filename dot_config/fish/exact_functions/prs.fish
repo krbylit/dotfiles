@@ -11,8 +11,8 @@ function prs --description 'Search GitHub PRs authored by me or requesting my re
     if test (count $filters) -eq 0
         echo "Usage: prs [me|req|todo|done]..."
         echo "  me       - List PRs authored by you"
-        echo "  req      - List PRs requesting your review (not started yet)"
-        echo "  todo     - List PRs where you have pending/draft reviews (started but not submitted)"
+        echo "  req      - List PRs requesting your review (first-time or re-requested)"
+        echo "  todo     - List PRs where you have pending/draft reviews"
         echo "  done     - List PRs where you have submitted reviews"
         echo ""
         echo "You can combine filters: prs req todo"
@@ -62,14 +62,15 @@ function prs --description 'Search GitHub PRs authored by me or requesting my re
                     set -l include false
                     # Check each filter
                     if contains req $review_filters
-                        # No reviews at all
-                        if test "$review_count" = "0"
+                        # Check if we're in requested_reviewers
+                        set -l is_requested (gh api "repos/$repo/pulls/$number" -q "[.requested_reviewers[].login] | contains([\"$username\"])")
+                        if test "$is_requested" = "true"
                             set include true
                         end
                     end
                     if contains todo $review_filters
-                        # Has reviews AND all are PENDING
-                        if test "$review_count" != "0" -a "$review_count" = "$pending_count"
+                        # Has any PENDING reviews
+                        if test "$pending_count" -gt "0"
                             set include true
                         end
                     end
