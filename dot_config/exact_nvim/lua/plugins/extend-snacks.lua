@@ -103,13 +103,15 @@ return {
     bigfile = { enabled = true },
     ---@type snacks.terminal.Config
     terminal = {
-      -- Open Snacks terminals as a right-side vertical split
+      -- Open Snacks terminals as float
       ---@type snacks.win.Config
       win = {
         style = "terminal",
         position = "float",
         width = 160, -- set your preferred column width
       },
+      -- Auto-run zellij when terminal opens
+      shell = "zellij",
     },
     input = { enabled = true },
     ---@type snacks.lazygit.Config: snacks.terminal.Opts

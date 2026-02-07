@@ -15,7 +15,7 @@ format = """
 [▓▒░](flamingo)( $terraform) (${custom.yazi_indicator} )$character($sudo )
 """
 right_format = '''
-($git_branch )($nodejs )($python )[┛](bold surface1)
+($git_branch )($rust )($nodejs )($python )[┛](bold surface1)
 '''
 # # Repo-dependent right-side design
 # format = """
@@ -169,13 +169,22 @@ format = '[\[$status - $common_meaning\]]($style)'
 
 [nodejs]
 style = 'bold green2'
+not_capable_style = 'bold red'
 symbol = ''
-format = '[$symbol ($version)]($style)($engines_version)(not_capable_style)'
+format = '[$symbol ($version)]($style)[(  ($engines_version))](not_capable_style)'
 
 [python]
 style = "bold pink"
 symbol = ''
-format = '[$symbol $pyenv_prefix($version)(  $virtualenv)]($style)'
+format = '[$symbol $pyenv_prefix($version)(  $virtualenv)]($style)'
+
+#    
+[rust]
+symbol = ''
+# versions available 'raw', 'major', 'minor', 'patch'
+version_format = 'v${raw}'
+style = 'bold red'
+format = '[$symbol $version]($style)'
 
 [container]
 disabled = true
