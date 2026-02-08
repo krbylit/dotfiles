@@ -5,25 +5,25 @@
 
 # Install Hammerspoon and VimMode
 if [ "${IS_SSH}" != "1" ]; then
-    if [ ! -d "$HOME/.hammerspoon/Spoons/VimMode.spoon" ]; then
-        curl -s https://raw.githubusercontent.com/dbalatero/VimMode.spoon/master/bin/installer | bash
-    fi
+  if [ ! -d "$HOME/.hammerspoon/Spoons/VimMode.spoon" ]; then
+    curl -s https://raw.githubusercontent.com/dbalatero/VimMode.spoon/master/bin/installer | bash
+  fi
 fi
 
 if [ "${IS_SSH}" != "1" ]; then
-    if ! command -v cursor-agent &>/dev/null; then
-        curl https://cursor.com/install -fsS | bash
-    fi
+  if ! command -v cursor-agent &>/dev/null; then
+    curl https://cursor.com/install -fsS | bash
+  fi
 fi
 
 # Install Rust. brew install doesn't seem to play nice
 if ! command -v rustup &>/dev/null; then
-    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+  curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 fi
 
 # Install nix. Needed for nil-ls in nvim
 if ! command -v nix &>/dev/null; then
-    curl -L https://nixos.org/nix/install | sh
+  curl -L https://nixos.org/nix/install | sh
 fi
 
 # # Install sbarlua, required for our sketchybar config
@@ -31,13 +31,13 @@ fi
 
 # Install Ghostty ascii animation (`ghostty_animation`)
 if [ "${IS_SSH}" != "1" ]; then
-    if ! command -v ghostty_animation &>/dev/null; then
-        cd ~/Downloads
-        git clone https://github.com/lukeshere/ghostty-animation-command
-        cd ghostty-animation-command
-        cargo build
-        mv target/debug/ghostty_animation /usr/local/bin
-    fi
+  if ! command -v ghostty_animation &>/dev/null; then
+    cd ~/Downloads
+    git clone https://github.com/lukeshere/ghostty-animation-command
+    cd ghostty-animation-command
+    cargo build
+    mv target/debug/ghostty_animation /usr/local/bin
+  fi
 fi
 
 # We use Zellij here
@@ -48,174 +48,180 @@ fi
 
 # Install aider chat
 if [ "${IS_SSH}" != "1" ]; then
-    if ! command -v aider &>/dev/null; then
-        uv tool install aider-install
-        # NOTE: need to source config again as this wasn't immediately available in PATH
-        source ~/.config/fish/config.fish
-        aider-install
-        uv tool install --force --python python3.12 aider-chat@latest
-    fi
+  if ! command -v aider &>/dev/null; then
+    uv tool install aider-install
+    # NOTE: need to source config again as this wasn't immediately available in PATH
+    source ~/.config/fish/config.fish
+    aider-install
+    uv tool install --force --python python3.12 aider-chat@latest
+  fi
 fi
 
 if [ "${IS_SSH}" != "1" ]; then
-    if ! command -v specify &>/dev/null; then
-        uv tool install specify-cli --from git+https://github.com/github/spec-kit.git
-    fi
+  if ! command -v specify &>/dev/null; then
+    uv tool install specify-cli --from git+https://github.com/github/spec-kit.git
+  fi
 fi
 
 if [ "${IS_SSH}" != "1" ]; then
-    if ! command -v claude-code-acp &>/dev/null; then
-        npm install -g @zed-industries/claude-code-acp
-    fi
+  if ! command -v claude-code-acp &>/dev/null; then
+    npm install -g @zed-industries/claude-code-acp
+  fi
 fi
 
 if ! command -v typescript-language-server &>/dev/null; then
-    npm install -g typescript typescript-language-server
+  npm install -g typescript typescript-language-server
 fi
 
 if [ "${IS_SSH}" != "1" ]; then
-    if ! command -v claude &>/dev/null; then
-        npm install -g @anthropic-ai/claude-code
-    fi
+  if ! command -v claude &>/dev/null; then
+    npm install -g @anthropic-ai/claude-code
+  fi
 fi
 
 if [ "${IS_SSH}" != "1" ]; then
-    if ! command -v reddix &>/dev/null; then
-        curl --proto '=https' --tlsv1.2 -LsSf https://github.com/ck-zhang/reddix/releases/latest/download/reddix-installer.sh | sh
-    fi
+  if ! command -v reddix &>/dev/null; then
+    curl --proto '=https' --tlsv1.2 -LsSf https://github.com/ck-zhang/reddix/releases/latest/download/reddix-installer.sh | sh
+  fi
 fi
 
 if [ "${IS_SSH}" != "1" ]; then
-    if ! command -v csvi &>/dev/null; then
-        go install github.com/hymkor/csvi/cmd/csvi@latest
-    fi
+  if ! command -v csvi &>/dev/null; then
+    go install github.com/hymkor/csvi/cmd/csvi@latest
+  fi
 fi
 
 if [ "${IS_SSH}" != "1" ]; then
-    if ! command -v pomo &>/dev/null; then
-        go install github.com/Bahaaio/pomo@latest
-    fi
+  if ! command -v pomo &>/dev/null; then
+    go install github.com/Bahaaio/pomo@latest
+  fi
 fi
 
 if [ "${IS_SSH}" != "1" ]; then
-    if ! command -v trex &>/dev/null; then
-        go install github.com/samyakbardiya/trex@latest
-    fi
+  if ! command -v trex &>/dev/null; then
+    go install github.com/samyakbardiya/trex@latest
+  fi
 fi
 
 if [ "${IS_SSH}" != "1" ]; then
-    if ! command -v e2c &>/dev/null; then
-        go install github.com/nlamirault/e2c/cmd/e2c@latest
-    fi
+  if ! command -v e2c &>/dev/null; then
+    go install github.com/nlamirault/e2c/cmd/e2c@latest
+  fi
 fi
 
 if [ "${IS_SSH}" != "1" ]; then
-    if ! command -v tclock &>/dev/null; then
-        cargo install clock-tui
-    fi
+  if ! command -v tclock &>/dev/null; then
+    cargo install wiki-tui
+  fi
 fi
 
 if [ "${IS_SSH}" != "1" ]; then
-    if ! command -v filessh &>/dev/null; then
-        cargo install --locked filessh
-    fi
+  if ! command -v tclock &>/dev/null; then
+    cargo install clock-tui
+  fi
 fi
 
 if [ "${IS_SSH}" != "1" ]; then
-    if ! command -v trip &>/dev/null; then
-        # TUI for network monitoring
-        cargo install trippy --locked
-    fi
+  if ! command -v filessh &>/dev/null; then
+    cargo install --locked filessh
+  fi
 fi
 
 if [ "${IS_SSH}" != "1" ]; then
-    if ! command -v rustnet &>/dev/null; then
-        # TUI for network monitoring
-        cargo install rustnet-monitor
-    fi
+  if ! command -v trip &>/dev/null; then
+    # TUI for network monitoring
+    cargo install trippy --locked
+  fi
 fi
 
 if [ "${IS_SSH}" != "1" ]; then
-    if ! command -v gittype &>/dev/null; then
-        cargo install gittype
-    fi
+  if ! command -v rustnet &>/dev/null; then
+    # TUI for network monitoring
+    cargo install rustnet-monitor
+  fi
 fi
 
 if [ "${IS_SSH}" != "1" ]; then
-    if ! command -v glues &>/dev/null; then
-        cargo install glues
-    fi
+  if ! command -v gittype &>/dev/null; then
+    cargo install gittype
+  fi
+fi
+
+if [ "${IS_SSH}" != "1" ]; then
+  if ! command -v glues &>/dev/null; then
+    cargo install glues
+  fi
 fi
 
 # Terminal local network file sharing TUI
 if [ "${IS_SSH}" != "1" ]; then
-    if ! command -v jocalsend &>/dev/null; then
-        cargo install jocalsend
-    fi
+  if ! command -v jocalsend &>/dev/null; then
+    cargo install jocalsend
+  fi
 fi
 
 if [ "${IS_SSH}" != "1" ]; then
-    if ! command -v regname &>/dev/null; then
-        cargo install --locked --git https://github.com/linkdd/regname
-    fi
+  if ! command -v regname &>/dev/null; then
+    cargo install --locked --git https://github.com/linkdd/regname
+  fi
 fi
 
 if [ "${IS_SSH}" != "1" ]; then
-    if ! command -v hygg &>/dev/null; then
-        cargo install --locked hygg
-    fi
+  if ! command -v hygg &>/dev/null; then
+    cargo install --locked hygg
+  fi
 fi
 
 if [ "${IS_SSH}" != "1" ]; then
-    if ! command -v nerdlog &>/dev/null; then
-        go install github.com/dimonomid/nerdlog/cmd/nerdlog@master
-    fi
+  if ! command -v nerdlog &>/dev/null; then
+    go install github.com/dimonomid/nerdlog/cmd/nerdlog@master
+  fi
 fi
 
 if [ "${IS_SSH}" != "1" ]; then
-    if ! command -v tuios &>/dev/null; then
-        go install github.com/Gaurav-Gosain/tuios/cmd/tuios@latest
-    fi
+  if ! command -v tuios &>/dev/null; then
+    go install github.com/Gaurav-Gosain/tuios/cmd/tuios@latest
+  fi
 fi
 
 if [ "${IS_SSH}" != "1" ]; then
-    if ! command -v stormy &>/dev/null; then
-        if command -v go &>/dev/null; then
-            go install github.com/ashish0kumar/stormy@latest
-        fi
+  if ! command -v stormy &>/dev/null; then
+    if command -v go &>/dev/null; then
+      go install github.com/ashish0kumar/stormy@latest
     fi
+  fi
 fi
 
 if [ "${IS_SSH}" == "1" ]; then
-    if ! command -v systemd-manager-tui &>/dev/null; then
-        if command -v cargo &>/dev/null; then
-            cargo install --locked systemd-manager-tui
-        fi
+  if ! command -v systemd-manager-tui &>/dev/null; then
+    if command -v cargo &>/dev/null; then
+      cargo install --locked systemd-manager-tui
     fi
+  fi
 fi
 
 if ! command -v zellij &>/dev/null; then
-    if command -v cargo &>/dev/null; then
-        cargo install --locked zellij
-    fi
+  if command -v cargo &>/dev/null; then
+    cargo install --locked zellij
+  fi
 fi
 
 if ! command -v ugdb &>/dev/null; then
-    if command -v cargo &>/dev/null; then
-        cargo install ugdb
-    fi
+  if command -v cargo &>/dev/null; then
+    cargo install ugdb
+  fi
 fi
 
 if [ "${IS_SSH}" != "1" ]; then
-    if ! command -v ziina &>/dev/null; then
-        go install github.com/ziinaio/zmate@latest
-    fi
+  if ! command -v ziina &>/dev/null; then
+    go install github.com/ziinaio/zmate@latest
+  fi
 fi
 
 # Install our gitleaks pre-commit hook
 if [ "${IS_SSH}" != "1" ]; then
-    cd $HOME/.local/share/chezmoi && pre-commit autoupdate
-    cd $HOME/.local/share/chezmoi && pre-commit install
+  cd $HOME/.local/share/chezmoi && pre-commit autoupdate
+  cd $HOME/.local/share/chezmoi && pre-commit install
 fi
 
 # NOTE: handling this with submodule setup script now
@@ -224,7 +230,7 @@ fi
 
 # Update fisher plugins
 if command -v fish &>/dev/null; then
-    fish -c "fisher update"
+  fish -c "fisher update"
 fi
 
 # FIX: Something is up with `bob` (maybe just local install). Can't find/use/install "stable" release.
