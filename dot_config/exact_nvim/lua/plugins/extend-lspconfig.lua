@@ -22,12 +22,59 @@
 --     end,
 -- })
 
+-- Fix: Clean up LspNotify autocmds before vim exits
+-- The folding range provider creates LspNotify autocmds that try to access
+-- buffers during destruction, causing "Error in LspNotify Autocommands" error on quit.
+-- Solution: Remove these autocmds before buffers are destroyed
+vim.api.nvim_create_autocmd("VimLeavePre", {
+  callback = function()
+    -- Get all autocmds and delete any LspNotify handlers
+    -- These will try to access buffers during cleanup and cause errors
+    local all_aus = vim.api.nvim_get_autocmds({})
+    for _, au in ipairs(all_aus) do
+      if au.event == "LspNotify" then
+        pcall(vim.api.nvim_del_autocmd, au.id)
+      end
+    end
+  end,
+})
+
+-- TODO: Unsure whether this is actually a reasonable solution
+-- Fix: Make LSP shutdown instant by wrapping client:stop()
+-- The built-in LSP exit handler calls client:stop() which waits ~1 second
+-- Combine with VimLeavePre autocmd in `init.lua`
+-- Wrap each client's stop method when they attach
+-- vim.api.nvim_create_autocmd("LspAttach", {
+--   callback = function(args)
+--     local client = vim.lsp.get_client_by_id(args.data.client_id)
+--     if not client then
+--       return
+--     end
+--
+--     -- Wrap this client's stop method to force immediate termination
+--     local original_stop = client.stop
+--     client.stop = function(self, force)
+--       -- Immediately terminate RPC without waiting for graceful shutdown
+--       if self.rpc and self.rpc.terminate then
+--         pcall(self.rpc.terminate, self.rpc)
+--       end
+--       -- Call original stop with force=true
+--       return original_stop(self, true)
+--     end
+--   end,
+-- })
+
 -- Enable inline completions
 vim.api.nvim_create_autocmd("LspAttach", {
   callback = function(args)
     local bufnr = args.buf
-    local client = assert(vim.lsp.get_client_by_id(args.data.client_id))
+    local client = vim.lsp.get_client_by_id(args.data.client_id)
 
+    if not client then
+      return
+    end
+
+    -- Enable inline completions if supported
     if client:supports_method(vim.lsp.protocol.Methods.textDocument_inlineCompletion, bufnr) then
       vim.lsp.inline_completion.enable(true, { bufnr = bufnr })
 
