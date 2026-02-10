@@ -1,126 +1,105 @@
-# Git PR Review Skill
+# GitHub PR Review Skill
 
-Comprehensive code review skill for GitHub pull requests that analyzes code across multiple quality dimensions and provides structured, actionable feedback.
+Comprehensive GitHub pull request review using coordinated agent teams.
 
-## Overview
+## What It Does
 
-This skill performs deep analysis of PRs including:
-- **Code correctness** (bugs, edge cases, error handling)
-- **Security vulnerabilities** (injection, XSS, auth bypass, data exposure)
-- **Performance issues** (inefficient algorithms, N+1 queries, blocking ops)
-- **Maintainability** (code clarity, complexity, duplication)
-- **Best practices** (language idioms, framework patterns)
-- **Testing coverage** (edge cases, error paths)
-- **Documentation completeness** (API docs, breaking changes)
+This skill performs thorough PR reviews by spawning 5 specialized review agents who analyze code from different perspectives (historical validation, current code, security, performance, testing). Agents debate findings to eliminate false positives and reach consensus on severity.
 
-Additionally analyzes existing PR comments to identify addressed issues, outstanding concerns, and cross-references findings across multiple reviews.
+## When It Triggers
 
-## Invocation Methods
+### Automatic Activation
 
-### Auto-Activation
-
-The skill automatically activates when you:
-- Mention "review", "PR", or "pull request"
-- Ask to "check" or "analyze" code changes
-- Want to "evaluate" or "assess" a PR
-- Discuss code quality, security, or performance in PR context
+- User mentions "review", "PR", or "pull request"
+- "Check this code" or "analyze changes"
+- Code quality, security, or performance questions
 
 ### Manual Invocation
 
-You can explicitly invoke with slash commands:
-
-```bash
-/git.review-pr-skill         # Invoke the skill
-/git.review-pr-skill [args]  # With optional focus areas
 ```
-
-**Legacy command** (original implementation):
-```bash
 /git.review-pr
+/git.review-pr-skill
 ```
 
 ## Prerequisites
 
-1. GitHub repository with remote
-2. `gh` CLI installed and authenticated
-3. Current branch has an associated open PR
+- GitHub repository with remote
+- `gh` CLI installed and authenticated
+- Current branch has an open pull request
 
-## Output
+## How It Works
 
-Generates timestamped markdown report: `PR_REVIEW_<YYYY-MM-DD_HHMMSS>.md`
+1. **PR Discovery** - Fetch PR metadata and existing comments
+2. **Agent Spawning** - 5 specialized review agents analyze different dimensions
+3. **Agent Debate** - Cross-verification of findings with severity calibration
+4. **Report Generation** - Consensus review saved to `PR_REVIEW_[timestamp].md`
+5. **Recommendation** - Overall assessment (Approve/Request Changes/Block)
 
-Report includes:
-- Executive summary with overall assessment
-- **All Issues (Quick Reference)** section with concise, expert-level comments
-- Detailed issue analysis by severity (Critical/High/Medium/Low)
-- Positive observations
-- Testing and documentation gaps
-- Existing PR comments analysis (addressed/outstanding/consensus/questionable)
-- Cross-review meta-analysis (if other reviews exist)
-- Actionable next steps
+## Review Dimensions
 
-## Language Support
+- **Historical Validation** - Compare with existing reviews
+- **Current Code** - Fresh analysis of all changes
+- **Security & Risk** - Injection, XSS, auth bypass, data exposure
+- **Performance & Architecture** - Algorithms, queries, patterns
+- **Testing & Documentation** - Coverage, edge cases, API docs
 
-Optimized review patterns for:
-- **Rust**: Ownership/borrowing, unsafe code, Result/Option
-- **JavaScript/TypeScript**: Type safety, async/await, null/undefined
-- **Python**: Type hints, exception handling, PEP 8
-- **Go**: Error handling, goroutines, nil checks
-- **Java/C#**: Null exceptions, resource disposal, thread safety
+## Supporting Files
 
-## Resources
+- **SKILL.md** - Main skill definition with YAML frontmatter
+- **README.md** (this file) - Usage guide
+- **templates/review-report.md** - Full report template
+- **templates/comment-examples.md** - Comment style guide
+- **checklists/** - Language-specific review patterns
+  - rust.md - Rust ownership, unsafe, Result/Option
+  - javascript-typescript.md - Type safety, async patterns
+  - python.md - Type hints, PEP 8, exception handling
+  - go.md - Error handling, goroutines, interfaces
 
-- `SKILL.md` - Main skill definition with triggers and workflow
-- `templates/review-report.md` - Structured report template
-- `templates/comment-examples.md` - Style guide with examples
-- `checklists/*.md` - Language-specific review checklists
+## Comment Style
 
-## Features
+Uses collaborative, expert-level comments:
 
-### Existing PR Comment Analysis
-- Fetches all review comments, general comments, and PR reviews
-- Determines which issues have been addressed vs still outstanding
-- Identifies consensus issues (flagged by multiple reviewers)
-- Spots questionable/outdated comments
-- Provides reviewer agreement statistics
-
-### Cross-Review Meta-Analysis
-- Detects other `PR_REVIEW_*.md` files in repo
-- Acts as Senior Engineer evaluating all reviews
-- Identifies missed issues, consensus findings, conflicting assessments
-- Evaluates validity of claims across reviews
-- Provides consolidated recommendations with confidence level
-
-### Comment Style
-- Collaborative tone ("I think...", "Can we...?")
-- Specific problem identification
-- Context and impact explanation
-- Code suggestions when helpful
-- Appropriate detail level based on issue complexity
-
-## Examples
-
-### Basic Review
 ```
-User: Can you review my PR?
-Claude: [Activates git-review-pr skill, generates comprehensive report]
+✅ Good: "I think there's a possible null reference here."
+
+✅ Good: "Since we're getting this from the client, I think it might
+be a good idea to do a bit of validation on it."
+
+❌ Avoid: "This code is wrong and needs to be fixed."
 ```
 
-### Security-Focused
-```
-User: Check this PR for security issues
-Claude: [Emphasizes security dimension in analysis]
+See `templates/comment-examples.md` for more examples.
+
+## Example Output
+
+```markdown
+# Pull Request Review
+
+**PR**: #123 - Add user authentication
+**Recommendation**: ⚠️  Request Changes
+
+## Summary
+The authentication implementation is mostly solid but has 2 critical
+security issues and 3 performance concerns that should be addressed.
+
+## All Issues (Quick Reference)
+🔴 Missing JWT signature validation at handlers/auth.rs:45
+🟠 N+1 query in user lookup at services/user_service.rs:78
+...
+
+[Detailed sections follow]
 ```
 
-### Performance Review
-```
-User: Is this PR performant?
-Claude: [Focuses on performance analysis]
-```
+## Best Practices
 
-## Notes
+1. Skill runs in forked context with general-purpose agent
+2. Always checks for existing `PR_REVIEW_*.md` files
+3. Cross-references with GitHub PR comments
+4. Applies language-specific focus (see checklists/)
+5. Balances criticism with positive observations
 
-- Report files accumulate in repo root - consider archiving old reviews
-- Cross-review analysis provides quality assurance across multiple reviews
-- Skill adapts depth based on change size and complexity
-- Always reads project standards (CLAUDE.md) when available
+## Related
+
+- Uses `gh` CLI for GitHub API access
+- Coordinates review agents via Task tool
+- Saves timestamped reports for historical comparison

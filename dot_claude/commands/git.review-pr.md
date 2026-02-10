@@ -1,6 +1,6 @@
 ---
 description: Review the current branch's pull request on GitHub with comprehensive analysis
-allowed-tools: Bash, Read
+allowed-tools: Bash, Read, Task
 ---
 
 ## User Input
@@ -13,7 +13,192 @@ You **MUST** consider the user input before proceeding (if not empty).
 
 ## Outline
 
-This command performs a thorough code review of the pull request associated with the current branch, analyzing for common issues, security vulnerabilities, performance problems, maintainability concerns, and adherence to project standards.
+This command performs a thorough code review of the pull request associated with the current branch by coordinating a team of specialized review agents who independently analyze different aspects of the PR, then engage in scientific debate to reach consensus on actual issues and their severity.
+
+## Orchestration Strategy
+
+**You are the LEAD REVIEWER**. Your role is to:
+
+1. Coordinate agent teammates (spawn tasks and wait for completion)
+2. Facilitate debate between agents
+3. Synthesize consensus findings
+4. Write the final PR review document
+
+**CRITICAL**: You do NOT pick up any tasks created for teammates. You ONLY coordinate and synthesize.
+
+### Phase 1: Initial Setup and Agent Deployment
+
+1. **Perform initial PR detection and setup** (steps 1-5 from Execution Steps below):
+   - Detect and validate PR
+   - Fetch existing PR comments and reviews
+   - Update all branches to latest
+   - Gather changes (diff, commits)
+   - Analyze project context
+
+2. **Prepare shared context for all agents**:
+   - Create a temporary context file containing:
+     - PR metadata (number, title, URL, author, base/head branches)
+     - List of changed files
+     - PR diff summary
+     - Existing PR comments and reviews data
+     - Project context (CLAUDE.md standards, README architecture notes)
+   - This file will be shared with all agents to ensure consistent baseline
+
+3. **Spawn 5 specialized review agents in parallel** using the Task tool:
+
+   **Agent 1: Historical Validation Reviewer** (REQUIRED)
+   - **Task**: Review all existing PR*REVIEW*\*.md documents and GitHub PR comments/reviews
+   - **Goal**: Determine which historical issues are still valid in current code
+   - **Deliverables**:
+     - For each issue in PR_REVIEW docs: Valid/Fixed/Invalid + git commit citation if fixed
+     - For each GitHub comment: Valid/Addressed/Outdated + verification details
+     - List of issues that are consensus (flagged by multiple historical sources)
+   - **Reference**: Execution Steps 2, 8, 10 below
+
+   **Agent 2: Current Implementation Reviewer** (REQUIRED)
+   - **Task**: Review current PR implementation for bugs, logic errors, correctness issues
+   - **Goal**: Identify problems that exist in the current state of the code
+   - **Deliverables**:
+     - List of issues found with severity (🔴 CRITICAL, 🟠 HIGH, 🟡 MEDIUM, 🟢 LOW)
+     - Evidence (file:line, code snippets, problem description)
+     - Hypotheses for why each issue is a problem
+     - Suggested fixes where applicable
+   - **Reference**: Execution Steps 6-7, dimensions A (Correctness & Bugs)
+
+   **Agent 3: Security & Correctness Reviewer**
+   - **Task**: Review PR for security vulnerabilities and critical correctness issues
+   - **Goal**: Identify security risks, injection vulnerabilities, auth/authz issues, data corruption risks
+   - **Deliverables**:
+     - Security issues with severity and impact assessment
+     - Correctness issues that could lead to data corruption or system crashes
+     - Evidence and suggested mitigations
+   - **Reference**: Execution Steps 6-7, dimensions B (Security)
+
+   **Agent 4: Performance & Architecture Reviewer**
+   - **Task**: Review PR for performance issues and architectural concerns
+   - **Goal**: Identify inefficient algorithms, N+1 queries, poor architecture choices, maintainability issues
+   - **Deliverables**:
+     - Performance bottlenecks with complexity analysis
+     - Architectural anti-patterns or violations
+     - Maintainability concerns (code clarity, duplication, complexity)
+     - Suggested optimizations
+   - **Reference**: Execution Steps 6-7, dimensions C (Performance), D (Maintainability), E (Best Practices)
+
+   **Agent 5: Testing & Documentation Reviewer**
+   - **Task**: Review PR for test coverage and documentation quality
+   - **Goal**: Identify testing gaps, missing documentation, inadequate examples
+   - **Deliverables**:
+     - Missing tests (edge cases, error paths, critical functionality)
+     - Documentation gaps (public APIs, complex logic, breaking changes)
+     - Test quality issues
+     - Suggested test cases and documentation improvements
+   - **Reference**: Execution Steps 6-7, dimensions F (Testing), G (Documentation)
+
+   **Task prompts should include**:
+   - Path to shared context file
+   - Specific dimension(s) to focus on
+   - Reference to relevant sections in Execution Steps below
+   - Instruction to report findings in structured format (file:line, severity, issue, evidence, hypothesis)
+
+### Phase 2: Agent Debate and Consensus Building
+
+Once all agents have completed their reviews:
+
+1. **Cross-Agent Debate Facilitation**:
+
+   Create a structured debate session using the Task tool where:
+
+   a. **Agent 1 (Historical) vs Agent 2 (Current) Primary Debate**:
+   - Focus: Which issues are actually present in current code?
+   - Agent 1 presents: "These historical issues are still valid because [evidence]"
+   - Agent 2 presents: "These are the current issues I found, some overlap with historical"
+   - Debate points:
+     - Are historical issues truly fixed? (Agent 1 claims fixed, Agent 2 verifies)
+     - Are current issues genuinely new or were they missed historically?
+     - Which issues have highest confidence (flagged by both)?
+
+   b. **Multi-Agent Cross-Review Debate**:
+   - All agents (2-5) review each other's findings
+   - Challenge process:
+     - Agent 2 challenges Agent 3: "Your security issue at file:line is not actually exploitable because [reason]"
+     - Agent 3 defends or concedes: "You're right, but there's still a risk due to [factor]" OR "Conceded, this is not a security issue"
+     - Agent 4 identifies overlap: "My performance issue at file:line overlaps with Agent 2's correctness issue - they're the same root cause"
+     - Agent 5 flags missing context: "Agent 3's claim about missing validation ignores the test coverage I found"
+   - Each agent must:
+     - Defend their findings with evidence
+     - Concede when proven wrong
+     - Identify overlaps and conflicts
+     - Adjust severity ratings based on debate
+
+   c. **Severity Calibration Debate**:
+   - For issues flagged by multiple agents with different severities:
+     - Agents discuss: Should this be 🔴 CRITICAL or 🟠 HIGH?
+     - Evidence-based reasoning required
+     - Consensus severity level reached
+
+   d. **False Positive Elimination**:
+   - Agents attempt to disprove each other's findings
+   - Only findings that survive scrutiny remain
+   - Questionable findings marked as "needs investigation" or downgraded
+
+2. **Debate Protocol**:
+   - Each round of debate is explicit message exchange between agents
+   - Agents must cite evidence (file:line, code snippets, commit SHAs)
+   - Hypothesis must be testable/verifiable
+   - Concessions must be explicit
+   - Consensus must be documented
+
+3. **Your role as Lead**:
+   - Spawn debate task with all agent findings as input
+   - Monitor debate for resolution
+   - Do NOT participate in the debate
+   - Wait for consensus output
+
+### Phase 3: Consensus Synthesis and Report Generation
+
+After debate concludes:
+
+1. **Collect consensus findings** from debate output:
+   - **Consensus Issues**: Issues flagged by multiple agents that survived debate
+   - **New Issues**: Issues found by current review (Agents 2-5) not in historical sources
+   - **Addressed Issues**: Historical issues (Agent 1) verified as fixed with citations
+   - **Still Outstanding**: Historical issues (Agent 1) confirmed still present by Agent 2
+   - **Dismissed Issues**: Issues that were disproven during debate
+   - **Positive Observations**: Good patterns noted by any agent
+
+2. **You (Lead) write the final PR*REVIEW*<timestamp>.md document**:
+   - Use the template structure from Step 9 in Execution Steps below
+   - Populate all sections with consensus findings from debate
+   - **DO NOT include debate transcript** in the document
+   - Focus on consensus outcomes only
+   - Categorize issues by severity (🔴🟠🟡🟢) based on post-debate consensus
+   - Include "Existing PR Comments Analysis" section using Agent 1's findings
+   - Include cross-reference between historical and current findings
+   - Maintain professional, collaborative tone (see Comment Style Guidelines below)
+
+3. **Perform Cross-Review Analysis** (Step 10):
+   - Check for other PR*REVIEW*\*.md files
+   - Compare your consensus findings with past reviews
+   - Append Cross-Review Analysis section if other reviews exist
+
+4. **Save and report**:
+   - Write final document to `PR_REVIEW_<timestamp>.md`
+   - Provide summary to user with severity counts
+   - Offer final recommendation (APPROVE/APPROVE WITH COMMENTS/REQUEST CHANGES/REJECT)
+
+## Key Principles
+
+- **Explicit Debate**: Agents MUST exchange messages and challenge each other, not just submit independent reports
+- **Evidence-Based**: All claims must be backed by code evidence
+- **Consensus Focus**: Only include findings that survived debate in final document
+- **Lead Coordinates Only**: You do not pick up teammate tasks, only orchestrate and synthesize
+- **No Debate in Output**: Final markdown document contains consensus only, not debate details
+
+---
+
+## Execution Steps (Reference Material for Agents)
+
+The following steps provide detailed guidance for agents performing their specialized reviews. As the lead, you've already completed steps 1-5 during setup. Agents will reference relevant sections based on their assignments.
 
 ### Execution Steps
 
@@ -154,6 +339,7 @@ This command performs a thorough code review of the pull request associated with
    ```
 
    **Verify branches are up to date**:
+
    ```bash
    # Confirm base branch is current
    git log origin/<base-branch> --oneline -1
@@ -193,6 +379,7 @@ This command performs a thorough code review of the pull request associated with
    For each changed file, analyze across these dimensions:
 
    ### A. **Correctness & Bugs** (🐛)
+
    - Logic errors
    - Off-by-one errors
    - Null/undefined handling
@@ -204,6 +391,7 @@ This command performs a thorough code review of the pull request associated with
    - Deadlock potential
 
    ### B. **Security** (🔒)
+
    - SQL injection vulnerabilities
    - XSS vulnerabilities
    - Command injection
@@ -216,6 +404,7 @@ This command performs a thorough code review of the pull request associated with
    - Output encoding
 
    ### C. **Performance** (⚡)
+
    - Inefficient algorithms (O(n²) when O(n) possible)
    - Unnecessary loops or iterations
    - Database N+1 queries
@@ -227,6 +416,7 @@ This command performs a thorough code review of the pull request associated with
    - Inefficient data structures
 
    ### D. **Maintainability** (🔧)
+
    - Code clarity and readability
    - Function/method length (>50 lines?)
    - Cyclomatic complexity
@@ -238,6 +428,7 @@ This command performs a thorough code review of the pull request associated with
    - Testability
 
    ### E. **Best Practices** (✨)
+
    - Language idioms and conventions
    - Framework best practices
    - Project-specific patterns (from CLAUDE.md)
@@ -248,6 +439,7 @@ This command performs a thorough code review of the pull request associated with
    - Configuration management
 
    ### F. **Testing** (🧪)
+
    - Are tests included for new code?
    - Are tests comprehensive?
    - Edge cases tested?
@@ -256,6 +448,7 @@ This command performs a thorough code review of the pull request associated with
    - Test coverage gaps
 
    ### G. **Documentation** (📚)
+
    - Public API documented?
    - Complex logic explained?
    - Breaking changes noted?
@@ -503,6 +696,7 @@ This section provides concise, technical comments for every issue found, suitabl
 ## Existing PR Comments Analysis 💬
 
 **PR Information**:
+
 - **PR Number**: #[number]
 - **PR Title**: [title]
 - **PR State**: [open/closed/merged]
@@ -510,6 +704,7 @@ This section provides concise, technical comments for every issue found, suitabl
 - **Base Branch**: [branch]
 
 **Comments Analyzed**:
+
 - **Review Comments** (line-specific): [count]
 - **General Comments**: [count]
 - **PR Reviews**: [count]
@@ -728,7 +923,6 @@ This section provides concise, technical comments for every issue found, suitabl
     - Optionally note to user: "No other PR review files found for cross-analysis"
 
 11. **Report Results**:
-
     - Save the structured review report to a timestamped file in the repository root directory
     - Output a summary confirmation to the user
     - Provide clear severity counts
@@ -742,7 +936,6 @@ This section provides concise, technical comments for every issue found, suitabl
     - Confirm to user: `📝 Review saved to PR_REVIEW_<timestamp>.md`
 
 12. **Provide Context-Aware Analysis**:
-
     - **For Rust**: Focus on ownership/borrowing issues, unsafe code, error handling with Result/Option
     - **For JavaScript/TypeScript**: Focus on type safety, async/await patterns, null/undefined
     - **For Python**: Focus on type hints, exception handling, PEP 8
@@ -752,7 +945,6 @@ This section provides concise, technical comments for every issue found, suitabl
 13. **Check Against Project Standards**:
 
     From CLAUDE.md, verify:
-
     - Naming conventions followed?
     - File organization correct?
     - Error handling patterns consistent?
@@ -793,6 +985,7 @@ When writing comments in the "Summary - All Issues (Quick Reference)" section, f
    - "Unlikely as the edge cases are, it's not expensive to handle them here."
 
 7. **Include Code Suggestions**: When helpful, provide concrete examples:
+
    ```suggestion
    const userActorDocId = event?.actors?.find((actor) => actor.docType === 'User')?.docId;
    ```
@@ -816,27 +1009,35 @@ When writing comments in the "Summary - All Issues (Quick Reference)" section, f
 ### Examples from Actual Reviews
 
 **Simple Validation**:
+
 > I think there's a possible null reference here.
 
 **With Suggested Fix**:
+
 > Since we're getting `receivingAgencyId` from the client, I think it might be a good idea to do a bit of validation on it.
 
 **Guard Against Edge Case**:
+
 > I think this may guard against a possible race completely. As unlikely as it is, I believe a very quick double click could still trigger the race.
 
 **Architectural Pattern**:
+
 > I think it may be safer to use the factory pattern for this, like `userModel.js` and `upload.js` does.
 
 **With Standard Library Suggestion**:
+
 > I think it is actually beneficial to use `urllib` here like was suggested. It's part of standard library, so we don't have to worry about dependency creep. Unlikely as the edge cases are, it's not expensive to handle them here.
 
 **Infinite Loop Concern**:
+
 > I think there's possible infinite render recursion with watching just `roi`.
 
 **Dependency Array Concern**:
+
 > Are all of these really required in the dependency array? This worries me about high potential for unnecessary re-renders.
 
 **Scope Recognition**:
+
 > Yeah, it's an unfortunate hack, but I believe out of scope for this one. I believe it also may have less affect on results returned than it seems.
 
 ## Review Quality Guidelines
@@ -974,3 +1175,4 @@ This is the first review of this PR.
 ## Context
 
 User-provided arguments: $ARGUMENTS
+````

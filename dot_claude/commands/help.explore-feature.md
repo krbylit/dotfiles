@@ -14,7 +14,214 @@ You **MUST** consider the user input before proceeding (if not empty).
 
 ## Outline
 
-This command explores a feature by either analyzing code references (file names, function names, variable names) or by understanding natural language feature descriptions. It maps out all related code, dependencies, data flow, and provides a comprehensive overview of how the feature works.
+This command explores a feature by coordinating a team of specialized exploration agents who independently investigate different aspects of the feature (architecture, data flow, dependencies, etc.), then engage in scientific debate to reach consensus on how the feature actually works and is structured.
+
+## Orchestration Strategy
+
+**You are the LEAD EXPLORER**. Your role is to:
+
+1. Determine exploration scope and agent assignments dynamically
+2. Coordinate agent teammates (spawn tasks and wait for completion)
+3. Facilitate debate between agents
+4. Synthesize consensus understanding
+5. Write the final feature exploration document
+
+**CRITICAL**: You do NOT pick up any tasks created for teammates. You ONLY coordinate and synthesize.
+
+### Phase 1: Initial Assessment and Agent Deployment
+
+1. **Parse arguments and identify exploration type** (Step 1):
+   - Determine if input is code reference or natural language
+   - Extract flags (--format, --depth)
+   - Identify feature scope and complexity
+
+2. **Perform initial discovery** (Steps 2-3):
+   - Find entry points using Grep/Glob
+   - Read primary entry point file(s)
+   - Get preliminary understanding of feature scope
+
+3. **Assess feature complexity and determine agent assignments**:
+
+   **Decision criteria**:
+   - Small feature (<5 files): 3 agents
+   - Medium feature (5-20 files): 4 agents
+   - Large feature (>20 files): 5 agents
+
+   **Determine focus areas dynamically** based on what you discovered:
+
+   **Example focus area assignments** (adjust based on actual feature):
+
+   a. **For a backend API feature**:
+   - Agent 1: API layer & entry points (routes, handlers, controllers)
+   - Agent 2: Domain/business logic layer (services, models, validation)
+   - Agent 3: Data access & infrastructure (repositories, database, external APIs)
+   - Agent 4: Cross-cutting concerns (auth, caching, logging, error handling)
+   - Agent 5: Tests & documentation (if large feature)
+
+   b. **For a frontend feature**:
+   - Agent 1: Component hierarchy & UI structure
+   - Agent 2: State management & data flow
+   - Agent 3: API integration & side effects
+   - Agent 4: Routing & navigation (if applicable)
+   - Agent 5: Tests & accessibility (if large feature)
+
+   c. **For a CLI/tool feature**:
+   - Agent 1: Command interface & argument parsing
+   - Agent 2: Core logic & implementation
+   - Agent 3: File I/O & external integrations
+   - Agent 4: Error handling & output formatting
+
+   d. **For a library/module**:
+   - Agent 1: Public API surface & exports
+   - Agent 2: Internal implementation details
+   - Agent 3: Dependencies (internal & external)
+   - Agent 4: Usage patterns & integration points
+
+   **Key principle**: Focus areas should be **orthogonal** (minimal overlap) so agents explore different dimensions and can challenge each other's findings.
+
+4. **Prepare shared context**:
+   - Create temporary context file containing:
+     - Feature entry points identified
+     - List of potentially related files
+     - Initial hypotheses about feature structure
+     - Project architecture context (from CLAUDE.md, README)
+     - Output format and depth requirements
+
+5. **Spawn 3-5 specialized exploration agents in parallel** using the Task tool:
+
+   **Agent task structure**:
+   - **Focus area**: [Specific layer/aspect to explore]
+   - **Goal**: Map all components, dependencies, and behavior in this focus area
+   - **Hypothesis formation**: Form hypotheses about:
+     - What components exist in this focus area?
+     - How do they interact with components in other focus areas?
+     - What patterns are being used?
+     - How does data flow through this area?
+   - **Deliverables**:
+     - Component inventory (file:line references)
+     - Dependency map (what this area depends on)
+     - Reverse dependency map (what depends on this area)
+     - Data flow through this area
+     - Hypotheses about behavior and patterns
+     - Uncertainty flags (areas where evidence is ambiguous)
+   - **Reference**: Use relevant sections from Execution Steps below
+
+   **Example agent prompts**:
+
+   ```
+   Agent 1: Explore API Layer
+   - Find all HTTP routes related to [feature]
+   - Identify handlers and their parameters
+   - Map request/response flow
+   - Hypothesize about what downstream dependencies handlers use
+   - Flag any ambiguities
+
+   Agent 2: Explore Domain Logic
+   - Find all services/business logic for [feature]
+   - Identify domain models and their relationships
+   - Map business rules and validation logic
+   - Hypothesize about data sources used
+   - Flag any ambiguities
+   ```
+
+### Phase 2: Agent Debate and Consensus Building
+
+Once all agents have completed their exploration:
+
+1. **Hypothesis Verification Debate**:
+
+   Create a structured debate session using the Task tool where:
+
+   a. **Dependency Verification**:
+   - Agent 1 claims: "The API handler calls ServiceX.methodY"
+   - Agent 2 (who explored ServiceX) verifies: "Confirmed, ServiceX.methodY exists at file:line" OR "No, ServiceX doesn't have methodY, Agent 1 may have misread"
+   - Cross-verification of all claimed dependencies
+
+   b. **Data Flow Debate**:
+   - Each agent presents their understanding of data flow through their area
+   - Agents challenge inconsistencies:
+     - Agent 2: "I see data coming FROM the handler, but Agent 1 claims data flows TO the handler first"
+     - Agents examine code together to resolve conflicts
+     - Consensus data flow path established
+
+   c. **Architecture Pattern Debate**:
+   - Agents propose patterns they observed:
+     - Agent 1: "This looks like a Service Layer pattern"
+     - Agent 3: "Disagree, the repository calls business logic directly, violating Service Layer"
+     - Agents examine evidence and reach consensus on actual patterns used
+
+   d. **Completeness Challenge**:
+   - Each agent challenges others on missed components:
+     - Agent 4: "Did anyone find error handling for [scenario]?"
+     - Agent 2: "Yes, I found it at file:line"
+     - Agent 3: "I found additional error handling you both missed at file:line"
+   - Comprehensive component list built through challenges
+
+   e. **Uncertainty Resolution**:
+   - Agents collaborate on ambiguous areas:
+     - Agent 1: "I couldn't determine if caching is used"
+     - Agent 4: "I found cache initialization at file:line, confirming it is used"
+     - Flagged uncertainties resolved through collective knowledge
+
+2. **Debate Protocol**:
+   - Agents MUST challenge each other's hypotheses with evidence
+   - Code references (file:line) required for all claims
+   - Agents must concede when proven wrong and update their understanding
+   - Conflicts resolved through code examination, not assumption
+   - Consensus documented for each aspect (dependencies, data flow, patterns, etc.)
+
+3. **Your role as Lead**:
+   - Spawn debate task with all agent findings as input
+   - Monitor debate for resolution
+   - Do NOT participate in the debate
+   - Wait for consensus output
+
+### Phase 3: Consensus Synthesis and Report Generation
+
+After debate concludes:
+
+1. **Collect consensus understanding** from debate output:
+   - **Component inventory**: Complete list of files/functions involved (verified across agents)
+   - **Architecture layers**: Agreed-upon layer structure and component categorization
+   - **Dependencies**: Verified dependency graph (both forward and reverse)
+   - **Data flow**: Consensus data flow path from entry to exit
+   - **Control flow**: Agreed-upon execution paths (happy path, error paths, edge cases)
+   - **Patterns**: Identified architecture patterns (verified with evidence)
+   - **Cross-cutting concerns**: Auth, logging, caching, error handling (as applicable)
+   - **Complexity metrics**: File count, LOC, dependency count (from combined findings)
+   - **Uncertainties**: Any remaining ambiguities flagged by all agents
+
+2. **You (Lead) write the final exploration report**:
+   - Use template structure from Step 7 in Execution Steps below
+   - Populate with consensus findings from debate
+   - **DO NOT include debate transcript** in the document
+   - Focus on consensus understanding only
+   - Use appropriate output format (--format flag):
+     - map: Hierarchical feature map (default)
+     - list: Flat file list
+     - graph: Dependency graph
+   - Respect depth flag (shallow/standard/deep)
+   - Maintain clear, technical documentation tone
+
+3. **Save and report**:
+   - Write document to appropriate location
+   - Provide summary to user with key insights
+   - Suggest related explorations if applicable
+
+## Key Principles
+
+- **Dynamic Assignment**: You determine agent count and focus areas based on actual feature complexity
+- **Explicit Debate**: Agents MUST challenge each other's hypotheses and verify dependencies
+- **Evidence-Based**: All claims verified with code references
+- **Consensus Focus**: Only include verified findings in final document
+- **Lead Coordinates Only**: You do not pick up teammate tasks, only orchestrate and synthesize
+- **No Debate in Output**: Final document contains consensus understanding only
+
+---
+
+## Execution Steps (Reference Material for Agents)
+
+The following steps provide detailed guidance for agents performing their specialized explorations. As the lead, you've already completed steps 1-3 during initial assessment. Agents will reference relevant sections based on their focus area assignments.
 
 ### Execution Steps
 

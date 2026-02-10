@@ -11,10 +11,11 @@ return {
     },
     nes = {
       ---@type boolean|fun(buf:integer):boolean?
-      enabled = function(buf)
-        -- return vim.g.sidekick_nes ~= false and vim.b.sidekick_nes ~= false
-        return vim.bo.filetype ~= "markdown"
-      end,
+      enabled = false,
+      -- enabled = function(buf)
+      --   -- return vim.g.sidekick_nes ~= false and vim.b.sidekick_nes ~= false
+      --   return vim.bo.filetype ~= "markdown"
+      -- end,
       -- enabled = true,
       debounce = 100,
       trigger = {
@@ -62,7 +63,7 @@ return {
         ---@type table<string, sidekick.cli.Keymap|false>
         keys = {
           -- NOTE: Since agent CLIs run in zellij, we can scroll back using zellij's scroll mode (<c-g>s, u/d/j/k)
-          buffers = { "<c-b>", "buffers", mode = "nt", desc = "open buffer picker" },
+          buffers = { "<c-a>", "buffers", mode = "nt", desc = "open buffer picker" },
           files = { "<c-f>", "files", mode = "nt", desc = "open file picker" },
           hide_n = { "q", "hide", mode = "n", desc = "hide the terminal window" },
           hide_ctrl_q = { "<c-q>", "hide", mode = "n", desc = "hide the terminal window" },
@@ -307,6 +308,49 @@ return {
         require("sidekick.cli").toggle({ name = "claude", focus = true })
       end,
       desc = "Sidekick Toggle Claude",
+    },
+    {
+      "<leader>an",
+      function()
+        local vault_path = vim.env.OBSIDIAN_VAULT_PATH
+        if not vault_path then
+          vim.notify("OBSIDIAN_VAULT_PATH environment variable not set", vim.log.levels.ERROR)
+          return
+        end
+
+        local template_path = vault_path .. "/03_Resources/claude/templates/prompt_template.md"
+        local prompts_dir = vault_path .. "/03_Resources/claude/prompts"
+
+        -- Get directory name for subdirectory (use git repo root if in a git repo)
+        local target_base_dir = vim.fn.getcwd()
+        local git_root = vim.fn.system("git rev-parse --show-toplevel 2>/dev/null"):gsub("%s+$", "")
+        if vim.v.shell_error == 0 and git_root ~= "" then
+          target_base_dir = git_root
+        end
+        local current_dir_name = vim.fs.basename(target_base_dir)
+        local target_dir = string.format("%s/%s", prompts_dir, current_dir_name)
+
+        -- Create subdirectory if it doesn't exist
+        vim.fn.mkdir(target_dir, "p")
+
+        -- Generate timestamp in YYYYMMDD-HHMMSS format
+        local timestamp = os.date("%Y-%m-%dT%H-%M-%S")
+        local new_filename = string.format("%s_prompt.md", timestamp)
+        local new_filepath = string.format("%s/%s", target_dir, new_filename)
+
+        -- Copy template to new file
+        local copy_cmd = string.format("cp '%s' '%s'", template_path, new_filepath)
+        local result = os.execute(copy_cmd)
+
+        if result == 0 or result == true then
+          -- Open the new file in current nvim session
+          vim.cmd.edit(new_filepath)
+          vim.notify("Created new prompt: " .. new_filename, vim.log.levels.INFO)
+        else
+          vim.notify("Failed to create prompt file", vim.log.levels.ERROR)
+        end
+      end,
+      desc = "New Claude Prompt from Template",
     },
   },
 }

@@ -173,6 +173,13 @@ if [ "${IS_SSH}" != "1" ]; then
 fi
 
 if [ "${IS_SSH}" != "1" ]; then
+  if command -v gh &>/dev/null; then
+    gh extension install dlvhdr/gh-dash
+    gh extension install dlvhdr/gh-enhance
+  fi
+fi
+
+if [ "${IS_SSH}" != "1" ]; then
   if ! command -v nerdlog &>/dev/null; then
     go install github.com/dimonomid/nerdlog/cmd/nerdlog@master
   fi
