@@ -9,6 +9,13 @@
 --   profile file *
 -- ]])
 
+-- Hot reload function for individual modules
+-- Use: `:lua R("plugins.statuscol"`
+function R(name)
+  package.loaded[name] = nil
+  return require(name)
+end
+
 local function snapshot()
   -- Core metrics
   local n_maps = #vim.api.nvim_get_keymap("n")

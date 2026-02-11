@@ -7,6 +7,7 @@
 return {
   "nvim-mini/mini.animate",
 
+  lazy = false,
   -- enabled = false,
   version = "*",
   opts = {

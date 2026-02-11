@@ -24,6 +24,7 @@ bind --mode default ctrl-s 'commandline -f repaint; set -l result (nvim -l "$XDG
 # fzf-lua files search
 bind --mode insert ctrl-f 'commandline -f repaint; set -l result (nvim -l "$XDG_DATA_HOME/nvim/lazy/fzf-lua/scripts/cli.lua" files); and commandline --current-token --replace -- (string escape -- $result)'
 bind --mode default ctrl-f 'commandline -f repaint; set -l result (nvim -l "$XDG_DATA_HOME/nvim/lazy/fzf-lua/scripts/cli.lua" files); and commandline --current-token --replace -- (string escape -- $result)'
+bind --mode insert ctrl-n 'commandline -f repaint; set -l result (nvim -l "$XDG_DATA_HOME/nvim/lazy/fzf-lua/scripts/cli.lua" files "cwd=~/.nb/home"); and commandline --current-token --replace -- (string escape -- $result)'
 # fzf-lua files search (chezmoi source path only)
 bind --mode insert ctrl-m 'commandline -f repaint; set -l result (nvim -l "$XDG_DATA_HOME/nvim/lazy/fzf-lua/scripts/cli.lua" files "cwd=$CHEZMOI_SOURCE_PATH"); and commandline --current-token --replace -- (string escape -- $result)'
 bind --mode default ctrl-m 'commandline -f repaint; set -l result (nvim -l "$XDG_DATA_HOME/nvim/lazy/fzf-lua/scripts/cli.lua" files "cwd=$CHEZMOI_SOURCE_PATH"); and commandline --current-token --replace -- (string escape -- $result)'

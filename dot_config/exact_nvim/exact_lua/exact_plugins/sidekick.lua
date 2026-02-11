@@ -139,6 +139,7 @@ return {
             name = "[No Name]"
           end
           -- Return as sidekick.Text format with SidekickLocFile highlight
+          -- TODO: Make file loc insert into prompt wrapped in `` instead of ""
           return { { { name, "SidekickLocFile" } } }
         end,
         -- Custom context that returns absolute path with position (/abs/path:L10:C5)

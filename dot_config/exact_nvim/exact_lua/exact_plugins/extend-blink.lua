@@ -1,6 +1,7 @@
 ---@diagnostic disable: missing-fields
 return {
   "saghen/blink.cmp",
+  lazy = false,
   dependencies = {
     -- NOTE: necessary here otherwise copilot shows up in LazyVim as disabled, possibly a LazyVim bug
     { "zbirenbaum/copilot.lua", opts = {} },

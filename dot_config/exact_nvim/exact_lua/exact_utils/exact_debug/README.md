@@ -152,6 +152,113 @@ profiler.set_autocmd_threshold(5)     -- Report autocmds >5ms
 
 ---
 
+### 5. Window Switch Profiler (`window-switch-profiler.lua`)
+
+**Purpose**: Diagnose lag specifically when switching between windows.
+
+**When to use**: When you experience lag, cursor disappearing, or unresponsive commands after window switches.
+
+**Commands**:
+```vim
+:WindowSwitchProfilerEnable    " Start monitoring
+:WindowSwitchProfilerDisable   " Stop monitoring
+:WindowSwitchProfilerToggle    " Toggle on/off
+:WindowSwitchProfilerReport    " Show summary report
+:WindowSwitchProfilerClear     " Clear collected data
+```
+
+**Lua API**:
+```lua
+local profiler = require("utils.debug.window-switch-profiler")
+
+profiler.enable()   -- Start monitoring
+profiler.disable()  -- Stop monitoring
+profiler.toggle()   -- Toggle
+profiler.report()   -- Show report
+profiler.clear()    -- Clear data
+```
+
+**How it works**:
+- Measures time from WinEnter to first CursorMoved
+- Simple and accurate for active profiling sessions
+- 500ms timeout fallback for switches without interaction
+
+**Important**: Be intentional during profiling - don't continuously scroll immediately after switching windows, as this will measure scroll time rather than switch lag.
+
+**What it monitors**:
+- Window switch timing (WinEnter to first interaction)
+- Window types (normal, noice, snacks, terminal, etc.)
+- Cursor visibility and responsiveness
+- Autocmd firing during switches
+- Redraw operations
+
+**Output**:
+- Real-time notifications for slow switches (>50ms, interaction-only)
+- Log file: `/tmp/nvim-window-switch-profile.log`
+- Summary report showing:
+  - Slow switches by pattern (e.g., "noice -> normal")
+  - Average/max switch times by pattern
+  - Autocmd frequency during switches
+
+**Recommended usage**:
+```vim
+:WindowSwitchProfilerEnable
+" ... switch windows normally, move cursor briefly in each ...
+:WindowSwitchProfilerReport
+```
+
+---
+
+### 6. Memory Leak Detector (`memory-leak-detector.lua`)
+
+**Purpose**: Monitor memory growth, autocmd accumulation, and resource leaks over time.
+
+**When to use**: When nvim gets slower the longer it runs, or when investigating "lag increases with runtime" issues.
+
+**Commands**:
+```vim
+:MemoryLeakDetectorStart    " Start monitoring
+:MemoryLeakDetectorStop     " Stop and show report
+:MemoryLeakDetectorToggle   " Toggle on/off
+:MemoryLeakDetectorReport   " Show current report
+```
+
+**Lua API**:
+```lua
+local detector = require("utils.debug.memory-leak-detector")
+
+detector.start()                -- Start monitoring
+detector.stop()                 -- Stop and show report
+detector.report()               -- Show current report
+detector.set_interval(60)       -- Sample every 60 seconds
+detector.set_threshold(50)      -- Alert on 50MB growth
+```
+
+**What it monitors**:
+- Memory usage (RSS) over time
+- Autocmd registration growth
+- Buffer accumulation
+- Plugin loading
+- Timer/resource leaks (heuristic)
+
+**Output**:
+- Real-time alerts on significant growth
+- Periodic sampling (default: every 30 seconds)
+- Log file: `/tmp/nvim-memory-leak-detector.log`
+- Summary report showing:
+  - Memory growth rate (MB/minute)
+  - Autocmd accumulation by event type
+  - Buffer and plugin statistics
+  - Recommendations
+
+**Recommended workflow**:
+1. Start detector when you begin a long editing session
+2. Use nvim normally for 15-30 minutes
+3. Check report to see growth patterns
+4. If memory is growing significantly, look for autocmd accumulation or buffer leaks
+
+---
+
 ## Troubleshooting Workflows
 
 ### "Nvim is generally slow/sluggish"
@@ -197,6 +304,40 @@ profiler.set_autocmd_threshold(5)     -- Report autocmds >5ms
    - LSP clients not shutting down
    - Slow VimLeavePre handlers
    - Large plugin counts
+
+### "Window switching is laggy (cursor disappears, commands don't work)"
+
+1. Start window switch profiler:
+   ```vim
+   :WindowSwitchProfilerEnable
+   ```
+2. Switch between windows normally (especially between noice/snacks and normal buffers)
+3. Check the report:
+   ```vim
+   :WindowSwitchProfilerReport
+   ```
+4. Look for patterns (e.g., "noice -> normal: 85ms")
+5. If specific patterns are slow, investigate:
+   - Autocmd frequency during switches
+   - Redraw operations
+   - Window type combinations
+
+### "Nvim gets slower the longer it runs"
+
+1. Start memory leak detector at the beginning of your session:
+   ```vim
+   :MemoryLeakDetectorStart
+   ```
+2. Use nvim normally for 30+ minutes
+3. Check the report:
+   ```vim
+   :MemoryLeakDetectorReport
+   ```
+4. Look for:
+   - Memory growth rate (>1MB/min is concerning)
+   - Autocmd accumulation (+50 or more autocmds)
+   - Buffer accumulation (+20 or more buffers)
+5. If autocmds are accumulating, check which events are growing
 
 ### "I want to compare before/after a change"
 
@@ -267,5 +408,7 @@ All log files are written to `/tmp/`:
 - `/tmp/nvim-lag-detector.log` - Real-time lag events
 - `/tmp/nvim-runtime-profile.log` - Comprehensive profiling data
 - `/tmp/nvim-quit-profile.log` - Exit performance data
+- `/tmp/nvim-window-switch-profile.log` - Window switching performance
+- `/tmp/nvim-memory-leak-detector.log` - Memory and resource tracking
 
 These are overwritten each session.

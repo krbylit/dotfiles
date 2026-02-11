@@ -2,6 +2,7 @@
 -- https://github.com/folke/edgy.nvim
 return {
   "folke/edgy.nvim",
+  lazy = false,
   opts = function()
     local opts = {}
     -- Somehow this works in combination with the autocmd for "help" files to open them in a v-split

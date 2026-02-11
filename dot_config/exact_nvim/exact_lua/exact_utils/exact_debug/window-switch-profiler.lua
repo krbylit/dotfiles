@@ -1,0 +1,501 @@
+-- ================================================================
+-- Window Switch Profiler
+-- ================================================================
+-- Specialized tool for diagnosing lag when switching between windows
+-- Tracks cursor rendering, redraw operations, and window focus events
+--
+-- Usage:
+--   :lua require("utils.debug.window-switch-profiler").enable()
+--   (switch between windows)
+--   :lua require("utils.debug.window-switch-profiler").report()
+--
+-- This addresses the specific issue described in statuscol.lua:
+-- - Lag when switching windows (especially noice/snacks -> normal buffers)
+-- - Cursor disappearing during window switch
+-- - Movement commands not working immediately after switch
+
+local M = {}
+
+local config = {
+  enabled = false,
+  detailed_logging = true,
+}
+
+local state = {
+  switches = {},
+  current_switch = nil,
+  last_window = nil,
+  autocmd_counts = {},
+  redraw_counts = {},
+}
+
+local log_file = "/tmp/nvim-window-switch-profile.log"
+
+local function log_msg(msg)
+  if config.detailed_logging then
+    vim.fn.writefile(vim.split(msg, "\n"), log_file, "a")
+  end
+end
+
+local function format_time(ms)
+  if ms < 1 then
+    return string.format("%.2fms", ms)
+  elseif ms < 1000 then
+    return string.format("%.1fms", ms)
+  else
+    return string.format("%.2fs", ms / 1000)
+  end
+end
+
+local function get_window_type(winid)
+  local bufnr = vim.api.nvim_win_get_buf(winid)
+  local buftype = vim.api.nvim_get_option_value("buftype", { buf = bufnr })
+  local filetype = vim.api.nvim_get_option_value("filetype", { buf = bufnr })
+
+  -- Detect special window types
+  if buftype == "nofile" then
+    if filetype:match("^noice") then
+      return "noice"
+    elseif filetype:match("^snacks") then
+      return "snacks"
+    elseif filetype == "neo-tree" then
+      return "neo-tree"
+    else
+      return "nofile:" .. filetype
+    end
+  elseif buftype == "terminal" then
+    return "terminal"
+  elseif buftype == "prompt" then
+    return "prompt"
+  elseif buftype == "help" then
+    return "help"
+  else
+    return "normal:" .. (filetype ~= "" and filetype or "unknown")
+  end
+end
+
+local function start_switch(from_win, to_win)
+  if not config.enabled then
+    return
+  end
+
+  state.current_switch = {
+    start_time = vim.loop.hrtime(),
+    from_window = from_win,
+    to_window = to_win,
+    from_type = get_window_type(from_win),
+    to_type = get_window_type(to_win),
+    autocmds_fired = {},
+    redraws = 0,
+    first_move = false,
+  }
+
+  log_msg(
+    string.format(
+      "\n[%s] START SWITCH: %s (win %d) -> %s (win %d)",
+      os.date("%H:%M:%S"),
+      state.current_switch.from_type,
+      from_win,
+      state.current_switch.to_type,
+      to_win
+    )
+  )
+end
+
+local function end_switch()
+  if not config.enabled or not state.current_switch then
+    return
+  end
+
+  local elapsed_ms = (vim.loop.hrtime() - state.current_switch.start_time) / 1000000
+  state.current_switch.total_time_ms = elapsed_ms
+
+  -- Calculate time until cursor appeared
+  if state.current_switch.cursor_appeared_at then
+    state.current_switch.cursor_delay_ms = (state.current_switch.cursor_appeared_at - state.current_switch.start_time)
+      / 1000000
+  end
+
+  table.insert(state.switches, state.current_switch)
+
+  log_msg(
+    string.format(
+      "[%s] END SWITCH: took %s, redraws=%d, autocmds=%d",
+      os.date("%H:%M:%S"),
+      format_time(elapsed_ms),
+      state.current_switch.redraws,
+      #state.current_switch.autocmds_fired
+    )
+  )
+
+  -- Report slow switches
+  if elapsed_ms > 50 then
+    vim.notify(
+      string.format(
+        "🪟 Slow window switch: %s -> %s took %s",
+        state.current_switch.from_type,
+        state.current_switch.to_type,
+        format_time(elapsed_ms)
+      ),
+      vim.log.levels.WARN
+    )
+  end
+
+  state.current_switch = nil
+end
+
+local function track_autocmd(event_name)
+  if not config.enabled or not state.current_switch then
+    return
+  end
+
+  table.insert(state.current_switch.autocmds_fired, {
+    event = event_name,
+    time_offset_ms = (vim.loop.hrtime() - state.current_switch.start_time) / 1000000,
+  })
+
+  state.autocmd_counts[event_name] = (state.autocmd_counts[event_name] or 0) + 1
+
+  log_msg(
+    string.format(
+      "  [+%.1fms] AUTOCMD: %s",
+      (vim.loop.hrtime() - state.current_switch.start_time) / 1000000,
+      event_name
+    )
+  )
+end
+
+local function track_redraw()
+  if not config.enabled or not state.current_switch then
+    return
+  end
+
+  state.current_switch.redraws = state.current_switch.redraws + 1
+  log_msg(
+    string.format(
+      "  [+%.1fms] REDRAW #%d",
+      (vim.loop.hrtime() - state.current_switch.start_time) / 1000000,
+      state.current_switch.redraws
+    )
+  )
+end
+
+-- Track cursor state
+local function check_cursor_visibility()
+  if not config.enabled or not state.current_switch then
+    return
+  end
+
+  if not state.current_switch.cursor_visible then
+    -- Check if cursor is now visible (has moved from initial position)
+    -- This is a heuristic - we assume cursor is visible when we can query its position
+    local ok, cursor_pos = pcall(vim.api.nvim_win_get_cursor, 0)
+    if ok and cursor_pos then
+      state.current_switch.cursor_visible = true
+      state.current_switch.cursor_appeared_at = vim.loop.hrtime()
+      log_msg(
+        string.format(
+          "  [+%.1fms] CURSOR VISIBLE",
+          (vim.loop.hrtime() - state.current_switch.start_time) / 1000000
+        )
+      )
+    end
+  end
+end
+
+-- Monitor window switches
+local function setup_monitoring()
+  local augroup = vim.api.nvim_create_augroup("WindowSwitchProfiler", { clear = true })
+
+  -- Track when we enter a new window
+  vim.api.nvim_create_autocmd("WinEnter", {
+    group = augroup,
+    callback = function()
+      if not config.enabled then
+        return
+      end
+
+      local current_win = vim.api.nvim_get_current_win()
+
+      -- End previous switch if one was in progress
+      if state.current_switch then
+        end_switch()
+      end
+
+      -- Start new switch tracking
+      if state.last_window and state.last_window ~= current_win then
+        start_switch(state.last_window, current_win)
+      end
+
+      track_autocmd("WinEnter")
+    end,
+  })
+
+  -- Track when we leave a window
+  vim.api.nvim_create_autocmd("WinLeave", {
+    group = augroup,
+    callback = function()
+      if not config.enabled then
+        return
+      end
+
+      state.last_window = vim.api.nvim_get_current_win()
+      track_autocmd("WinLeave")
+    end,
+  })
+
+  -- Track cursor movement - end switch on first movement
+  vim.api.nvim_create_autocmd("CursorMoved", {
+    group = augroup,
+    callback = function()
+      if not config.enabled then
+        return
+      end
+
+      track_autocmd("CursorMoved")
+
+      -- End switch on first CursorMoved in new window
+      if state.current_switch and not state.current_switch.first_move then
+        state.current_switch.first_move = true
+        -- Schedule end_switch to run after all autocmds complete
+        vim.schedule(function()
+          if state.current_switch then
+            end_switch()
+          end
+        end)
+      end
+    end,
+  })
+
+  -- Track redraws
+  vim.api.nvim_create_autocmd({ "UIEnter", "WinResized", "VimResized" }, {
+    group = augroup,
+    callback = function(ev)
+      if not config.enabled then
+        return
+      end
+
+      track_autocmd(ev.event)
+      track_redraw()
+    end,
+  })
+
+  -- Track buffer enter (happens during window switch)
+  vim.api.nvim_create_autocmd("BufEnter", {
+    group = augroup,
+    callback = function()
+      if not config.enabled then
+        return
+      end
+
+      track_autocmd("BufEnter")
+    end,
+  })
+
+  -- Fallback: end switch after 500ms if no cursor movement
+  -- (Handles viewing windows without interaction)
+  vim.api.nvim_create_autocmd("WinEnter", {
+    group = augroup,
+    callback = function()
+      if not config.enabled or not state.current_switch then
+        return
+      end
+
+      vim.defer_fn(function()
+        if state.current_switch and not state.current_switch.first_move then
+          end_switch()
+        end
+      end, 500)
+    end,
+  })
+end
+
+-- Public API
+function M.enable()
+  if config.enabled then
+    vim.notify("Window switch profiler already enabled", vim.log.levels.INFO)
+    return
+  end
+
+  config.enabled = true
+  state.switches = {}
+  state.current_switch = nil
+  state.last_window = vim.api.nvim_get_current_win()
+  state.autocmd_counts = {}
+  state.redraw_counts = {}
+
+  -- Initialize log
+  vim.fn.writefile(
+    { "=== WINDOW SWITCH PROFILER SESSION " .. os.date("%Y-%m-%d %H:%M:%S") .. " ===" },
+    log_file
+  )
+
+  setup_monitoring()
+
+  vim.notify("🪟 Window switch profiler enabled", vim.log.levels.INFO)
+end
+
+function M.disable()
+  if not config.enabled then
+    vim.notify("Window switch profiler not enabled", vim.log.levels.INFO)
+    return
+  end
+
+  config.enabled = false
+
+  -- End any in-progress switch
+  if state.current_switch then
+    end_switch()
+  end
+
+  vim.notify("Window switch profiler disabled", vim.log.levels.INFO)
+
+  if #state.switches > 0 then
+    M.report()
+  end
+end
+
+function M.toggle()
+  if config.enabled then
+    M.disable()
+  else
+    M.enable()
+  end
+end
+
+function M.report()
+  if #state.switches == 0 then
+    vim.notify("No window switches recorded", vim.log.levels.INFO)
+    return
+  end
+
+  local report = {}
+  table.insert(report, "\n=== WINDOW SWITCH PROFILER REPORT ===")
+  table.insert(report, string.format("Total switches recorded: %d\n", #state.switches))
+
+  -- Find slow switches
+  local slow_switches = vim.tbl_filter(function(s)
+    return s.total_time_ms > 20
+  end, state.switches)
+
+  if #slow_switches > 0 then
+    table.insert(report, "SLOW SWITCHES (>20ms):")
+    table.sort(slow_switches, function(a, b)
+      return a.total_time_ms > b.total_time_ms
+    end)
+
+    for i, switch in ipairs(slow_switches) do
+      if i > 20 then
+        break
+      end
+      table.insert(
+        report,
+        string.format(
+          "  %s -> %s: %s (cursor: %s, redraws: %d)",
+          switch.from_type,
+          switch.to_type,
+          format_time(switch.total_time_ms),
+          switch.cursor_delay_ms and format_time(switch.cursor_delay_ms) or "never",
+          switch.redraws
+        )
+      )
+    end
+  else
+    table.insert(report, "No slow switches detected (all <20ms)")
+  end
+
+  -- Analyze switch patterns
+  table.insert(report, "\nSWITCH PATTERNS:")
+  local patterns = {}
+  for _, switch in ipairs(state.switches) do
+    local pattern = string.format("%s -> %s", switch.from_type, switch.to_type)
+    if not patterns[pattern] then
+      patterns[pattern] = { count = 0, total_time = 0, max_time = 0 }
+    end
+    patterns[pattern].count = patterns[pattern].count + 1
+    patterns[pattern].total_time = patterns[pattern].total_time + switch.total_time_ms
+    patterns[pattern].max_time = math.max(patterns[pattern].max_time, switch.total_time_ms)
+  end
+
+  local sorted_patterns = {}
+  for pattern, stats in pairs(patterns) do
+    table.insert(sorted_patterns, {
+      pattern = pattern,
+      count = stats.count,
+      avg_time = stats.total_time / stats.count,
+      max_time = stats.max_time,
+    })
+  end
+  table.sort(sorted_patterns, function(a, b)
+    return a.avg_time > b.avg_time
+  end)
+
+  for i, item in ipairs(sorted_patterns) do
+    if i > 10 then
+      break
+    end
+    table.insert(
+      report,
+      string.format(
+        "  %s: %dx, avg=%s, max=%s",
+        item.pattern,
+        item.count,
+        format_time(item.avg_time),
+        format_time(item.max_time)
+      )
+    )
+  end
+
+  -- Autocmd frequency
+  table.insert(report, "\nAUTOCMD FREQUENCY:")
+  local sorted_autocmds = {}
+  for event, count in pairs(state.autocmd_counts) do
+    table.insert(sorted_autocmds, { event = event, count = count })
+  end
+  table.sort(sorted_autocmds, function(a, b)
+    return a.count > b.count
+  end)
+
+  for i, item in ipairs(sorted_autocmds) do
+    if i > 10 then
+      break
+    end
+    table.insert(report, string.format("  %s: %d times", item.event, item.count))
+  end
+
+  table.insert(report, "\n📄 Detailed log: " .. log_file)
+
+  local report_text = table.concat(report, "\n")
+  print(report_text)
+  log_msg("\n" .. report_text)
+end
+
+function M.clear()
+  state.switches = {}
+  state.autocmd_counts = {}
+  state.redraw_counts = {}
+  vim.notify("Window switch profiler data cleared", vim.log.levels.INFO)
+end
+
+-- Create user commands
+vim.api.nvim_create_user_command("WindowSwitchProfilerEnable", function()
+  M.enable()
+end, { desc = "Enable window switch profiler" })
+
+vim.api.nvim_create_user_command("WindowSwitchProfilerDisable", function()
+  M.disable()
+end, { desc = "Disable window switch profiler" })
+
+vim.api.nvim_create_user_command("WindowSwitchProfilerToggle", function()
+  M.toggle()
+end, { desc = "Toggle window switch profiler" })
+
+vim.api.nvim_create_user_command("WindowSwitchProfilerReport", function()
+  M.report()
+end, { desc = "Show window switch profiler report" })
+
+vim.api.nvim_create_user_command("WindowSwitchProfilerClear", function()
+  M.clear()
+end, { desc = "Clear window switch profiler data" })
+
+return M

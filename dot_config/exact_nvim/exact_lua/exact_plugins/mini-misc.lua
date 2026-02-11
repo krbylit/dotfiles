@@ -3,6 +3,7 @@
 
 return {
   "nvim-mini/mini.misc",
+  lazy = false,
 
   -- version = false,
   config = function()

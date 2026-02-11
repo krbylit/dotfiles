@@ -478,53 +478,53 @@ return {
           ttl = 0, -- cmd is cached by snacks, so upping random or setting ttl to 0 makes it refresh on every load
         },
         -- terminal-toys animation
-        {
-          pane = 2,
-          height = 1,
-        },
-        {
-          pane = 2,
-          section = "terminal",
-          -- cmd = random_terminal_toys_cmd,
-          cmd = "terminal-toys bubble -m Braille -a 25 -b 50 -n 8",
-          height = logo_height,
-          padding = 2, -- for use with terminal-toys
-          ttl = 0, -- cmd is cached by snacks, so upping random or setting ttl to 0 makes it refresh on every load
-        },
-        -- blank panel (for use when terminal-toys not in use)
         -- {
         --   pane = 2,
-        --   height = logo_height,
-        --   -- padding = logo_height + 1, -- for use with lolcat
-        --   padding = logo_height + 2, -- for use with tte
+        --   height = 1,
         -- },
+        -- {
+        --   pane = 2,
+        --   section = "terminal",
+        --   -- cmd = random_terminal_toys_cmd,
+        --   cmd = "terminal-toys bubble -m Braille -a 25 -b 50 -n 8",
+        --   height = logo_height,
+        --   padding = 2, -- for use with terminal-toys
+        --   ttl = 0, -- cmd is cached by snacks, so upping random or setting ttl to 0 makes it refresh on every load
+        -- },
+        -- blank panel (for use when terminal-toys not in use)
+        {
+          pane = 2,
+          height = logo_height,
+          -- padding = logo_height + 1, -- for use with lolcat
+          padding = logo_height + 2, -- for use with tte
+        },
         { icon = " ", pane = 2, title = "Keymaps", section = "keys", indent = 2, padding = 1 },
         { icon = " ", title = "Projects", section = "projects", indent = 2, padding = 1 },
         { icon = " ", title = "Recent Files", section = "recent_files", indent = 2, padding = 1 },
-        -- {
-        --   pane = 3,
-        --   icon = " ",
-        --   title = "Git Status",
-        --   -- cmd = "hub --no-pager diff --stat -B -M -C",
-        --   -- cmd = "hub status --short --branch --renames",
-        --   cmd = "git rev-parse --is-inside-work-tree >/dev/null 2>&1 && hub status --short --branch --renames || true",
-        --   section = "terminal",
-        --   height = 5,
-        --   ttl = 0,
-        -- },
         {
           pane = 2,
-          section = "startup",
+          icon = " ",
+          title = "Git Status",
+          -- cmd = "hub --no-pager diff --stat -B -M -C",
+          -- cmd = "hub status --short --branch --renames",
+          cmd = "git rev-parse --is-inside-work-tree >/dev/null 2>&1 && hub status --short --branch --renames || true",
+          section = "terminal",
+          height = 5,
+          ttl = 0,
         },
         -- terminal-toys animation
+        -- {
+        --   section = "terminal",
+        --   cmd = random_terminal_toys_cmd,
+        --   height = 15,
+        --   -- height = terminal_height - logo_height - 15, -- fill height
+        --   width = terminal_width,
+        --   -- padding = 3, -- for use with terminal-toys
+        --   ttl = 0, -- cmd is cached by snacks, so upping random or setting ttl to 0 makes it refresh on every load
+        -- },
         {
-          section = "terminal",
-          cmd = random_terminal_toys_cmd,
-          height = 15,
-          -- height = terminal_height - logo_height - 15, -- fill height
-          width = terminal_width,
-          -- padding = 3, -- for use with terminal-toys
-          ttl = 0, -- cmd is cached by snacks, so upping random or setting ttl to 0 makes it refresh on every load
+          pane = 1,
+          section = "startup",
         },
       },
     },

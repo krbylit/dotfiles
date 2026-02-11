@@ -2,6 +2,7 @@
 -- https://github.com/stevearc/conform.nvim
 return {
   "stevearc/conform.nvim",
+  lazy = false,
   ---@type conform.setupOpts
   opts = {
     ---@type conform.DefaultFormatOpts

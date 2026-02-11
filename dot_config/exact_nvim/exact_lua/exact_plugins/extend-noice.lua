@@ -3,6 +3,7 @@
 
 return {
   "folke/noice.nvim",
+  lazy = false,
   opts = {
     cmdline = {
       enabled = true, -- enables the Noice cmdline UI

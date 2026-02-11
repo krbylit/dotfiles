@@ -1,11 +1,8 @@
 -- Taken from: https://github.com/mcauley-penney/nvim/blob/main/lua/plugins/statuscol.lua
 
--- TODO: Don't show statuscolumn at all in Scratch buffer. Add util for detecting Scratch buffer based off our diagnostic disable logic, use here and in diagnostic disable
 return {
   "luukvbaal/statuscol.nvim",
-  -- condition = function()
-  --     return tools.is_scratch_buffer()
-  -- end,
+  lazy = false,
   config = function()
     local builtin = require("statuscol.builtin")
     require("statuscol").setup({
@@ -24,14 +21,14 @@ return {
           },
           condition = {
             function()
-              -- return tools.is_scratch_buffer() or tools.diagnostics_available() or " "
-              return tools.diagnostics_available() or " "
+              if not tools.is_scratch_buffer() then
+                return tools.diagnostics_available() or " "
+              else
+                return false
+              end
             end,
           },
         },
-        -- {
-        --     text = { " " },
-        -- },
         {
           text = {
             "%=",
@@ -92,14 +89,12 @@ return {
             maxwidth = 1,
             colwidth = 1,
           },
-          -- condition = {
-          --     function()
-          --         return tools.is_scratch_buffer()
-          --     end,
-          -- },
+          condition = {
+            function()
+              return not tools.is_scratch_buffer()
+            end,
+          },
         },
-        -- FIX: Big lag when going over a marked line
-        -- What we were seeing here was actually just a long line that took a bit to render coming into our field of view. This is especially noticeable when we have scrolloff=999, where it feels like the lag is from moving up/down onto a particular line, but it is actually that the expensive render line is going into/out of view at the bottom or top of screen.
         {
           -- Mark signs
           text = {
@@ -108,36 +103,26 @@ return {
             end,
           },
         },
-        -- {
-        -- Blank space
-        --     text = { " " },
-        -- },
         {
           -- Fold signs
           text = { builtin.foldfunc },
           click = "v:lua.ScFa",
-          -- FIX: With this condition check, segments are disabled always, not just scratch buffers.
-          -- condition = {
-          --     function()
-          --         return tools.is_scratch_buffer()
-          --     end,
-          -- },
+          condition = {
+            function()
+              return vim.api.nvim_get_option_value("modifiable", { buf = 0 }) or " "
+            end,
+          },
         },
         {
           text = { " " },
-          -- condition = {
-          --     function()
-          --         return tools.is_scratch_buffer()
-          --     end,
-          -- },
         },
         {
           text = { " " },
-          -- condition = {
-          --     function()
-          --         return tools.is_scratch_buffer()
-          --     end,
-          -- },
+          condition = {
+            function()
+              return not tools.is_scratch_buffer()
+            end,
+          },
         },
       },
     })

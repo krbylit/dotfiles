@@ -3,6 +3,7 @@
 
 return {
   "nmac427/guess-indent.nvim",
+  lazy = false,
   enabled = true,
   config = function()
     require("guess-indent").setup({

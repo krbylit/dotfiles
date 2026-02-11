@@ -3,6 +3,7 @@ return {
 
   opts = {
     enabled = true, --- (boolean | fun():boolean) check if enabled
+    lazy = false,
     speed = 3, --- integer speed at wich animation goes
     width = 80, --- integer width of the beacon window
     -- winblend = 70, --- integer starting transparency of beacon window :h winblend

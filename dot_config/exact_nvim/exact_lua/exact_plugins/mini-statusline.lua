@@ -26,29 +26,37 @@ local function update_git_info()
     return
   end
 
-  -- Get repo root (only call once)
-  -- NOTE: Use shellescape for shell command, not pattern escape
-  local git_dir =
-    vim.fn.system("git -C " .. vim.fn.shellescape(current_dir) .. " rev-parse --show-toplevel 2>/dev/null")
-  if vim.v.shell_error == 0 then
-    git_cache.git_root = git_dir:gsub("\n", "")
-    git_cache.current_repo_name = vim.fn.fnamemodify(git_cache.git_root, ":t")
-
-    -- Get branch name
-    local branch = vim.fn.system("git -C " .. vim.fn.shellescape(current_dir) .. " branch --show-current 2>/dev/null")
-    if vim.v.shell_error == 0 then
-      git_cache.current_branch = branch:gsub("\n", "")
-    else
-      git_cache.current_branch = ""
-    end
-  else
-    -- Reset cache if not in a git repo
-    git_cache.current_repo_name = ""
-    git_cache.current_branch = ""
-    git_cache.git_root = ""
-  end
-
+  -- Update last_dir immediately to prevent multiple parallel requests
   git_cache.last_dir = current_dir
+
+  -- Get repo root asynchronously
+  vim.system({ "git", "-C", current_dir, "rev-parse", "--show-toplevel" }, { text = true }, function(result)
+    if result.code == 0 and result.stdout then
+      git_cache.git_root = result.stdout:gsub("\n", "")
+      git_cache.current_repo_name = vim.fn.fnamemodify(git_cache.git_root, ":t")
+
+      -- Get branch name asynchronously
+      vim.system({ "git", "-C", current_dir, "branch", "--show-current" }, { text = true }, function(branch_result)
+        if branch_result.code == 0 and branch_result.stdout then
+          git_cache.current_branch = branch_result.stdout:gsub("\n", "")
+        else
+          git_cache.current_branch = ""
+        end
+        -- Force statusline redraw after async update completes
+        vim.schedule(function()
+          vim.cmd("redrawstatus")
+        end)
+      end)
+    else
+      -- Reset cache if not in a git repo
+      git_cache.current_repo_name = ""
+      git_cache.current_branch = ""
+      git_cache.git_root = ""
+      vim.schedule(function()
+        vim.cmd("redrawstatus")
+      end)
+    end
+  end)
 end
 
 -- Function to get path relative to git root (using cached git_root)
@@ -90,6 +98,19 @@ vim.api.nvim_create_autocmd("VimLeavePre", {
     end
   end,
 })
+
+-- Function to get word count and token estimate
+local function get_word_count()
+  -- if vim.bo.filetype ~= "markdown" then
+  --   return ""
+  -- end
+
+  local counts = vim.fn.wordcount()
+  local words = counts.chars > 0 and counts.words or 0
+  local tokens = counts.chars > 0 and math.floor(counts.chars / 4) or 0
+
+  return string.format("W:%d~T:%d", words, tokens)
+end
 
 -- Custom section_filename to highlight the Git root directory and show branch
 local function custom_section_filename(args)
@@ -163,6 +184,7 @@ end
 
 return {
   "nvim-mini/mini.statusline",
+  lazy = false,
   version = false,
   -- cond = function()
   -- 	return vim.bo.filetype ~= "snacks_dashboard"
@@ -171,44 +193,48 @@ return {
     vim.api.nvim_set_hl(
       0,
       "MiniStatuslineBoldFileName",
-      { italic = true, bold = true, fg = colors.teal, bg = colors.bg }
+      { italic = true, bold = true, fg = colors.teal, bg = colors.bg_statusline }
     )
     vim.api.nvim_set_hl(
       0,
       "MiniStatuslineBoldRepoName",
-      { italic = false, bold = true, fg = colors.orange, bg = colors.bg }
+      { italic = false, bold = true, fg = colors.orange, bg = colors.bg_statusline }
     )
     vim.api.nvim_set_hl(
       0,
       "MiniStatuslineRepoIcon",
-      { italic = false, bold = false, fg = colors.orange, bg = colors.bg }
+      { italic = false, bold = false, fg = colors.orange, bg = colors.bg_statusline }
     )
     vim.api.nvim_set_hl(
       0,
       "MiniStatuslineBoldBranchName",
-      { italic = false, bold = true, fg = colors.cyan, bg = colors.bg }
+      { italic = false, bold = true, fg = colors.cyan, bg = colors.bg_statusline }
     )
     vim.api.nvim_set_hl(
       0,
       "MiniStatuslineBranchIcon",
-      { italic = false, bold = false, fg = colors.cyan, bg = colors.bg }
+      { italic = false, bold = false, fg = colors.cyan, bg = colors.bg_statusline }
     )
-    vim.api.nvim_set_hl(0, "MiniStatuslinePathName", { fg = colors.fg_dark, bg = colors.bg })
-    vim.api.nvim_set_hl(0, "MiniStatuslineRecording", { fg = colors.bg_dark1, bg = colors.red })
+    vim.api.nvim_set_hl(0, "MiniStatuslinePathName", { fg = colors.fg_dark, bg = colors.bg_statusline })
+    vim.api.nvim_set_hl(0, "MiniStatuslineRecording", { fg = colors.bg, bg = colors.red })
+    -- vim.api.nvim_set_hl(0, "MiniStatuslineWordCounts", { fg = colors.fg, bg = colors.bg_search })
+    -- vim.api.nvim_set_hl(0, "MiniStatuslineWordCounts", { fg = colors.fg, bg = colors.bg_visual })
+    vim.api.nvim_set_hl(0, "MiniStatuslineWordCounts", { fg = colors.blue, bg = colors.bg_visual })
     -- Mode indicator hl groups
-    vim.api.nvim_set_hl(0, "MiniStatuslineModeNormal", { fg = colors.bg_dark1, bg = colors.blue })
-    vim.api.nvim_set_hl(0, "MiniStatuslineModeInsert", { fg = colors.bg_dark1, bg = colors.green })
-    vim.api.nvim_set_hl(0, "MiniStatuslineModeVisual", { fg = colors.bg_dark1, bg = colors.purple })
-    vim.api.nvim_set_hl(0, "MiniStatuslineModeReplace", { fg = colors.bg_dark1, bg = colors.magenta2 })
-    vim.api.nvim_set_hl(0, "MiniStatuslineModeCommand", { fg = colors.bg_dark1, bg = colors.orange })
-    vim.api.nvim_set_hl(0, "MiniStatuslineModeOther", { fg = colors.bg_dark1, bg = colors.teal })
+    vim.api.nvim_set_hl(0, "MiniStatuslineModeNormal", { fg = colors.blue5, bg = colors.bg_search })
+    vim.api.nvim_set_hl(0, "MiniStatuslineModeInsert", { fg = colors.bg, bg = colors.teal })
+    vim.api.nvim_set_hl(0, "MiniStatuslineModeVisual", { fg = colors.bg, bg = colors.terminal.magenta })
+    vim.api.nvim_set_hl(0, "MiniStatuslineModeReplace", { fg = colors.bg, bg = colors.magenta2 })
+    vim.api.nvim_set_hl(0, "MiniStatuslineModeCommand", { fg = colors.bg, bg = colors.orange })
+    vim.api.nvim_set_hl(0, "MiniStatuslineModeOther", { fg = colors.bg, bg = colors.teal })
     -- General hl groups
-    vim.api.nvim_set_hl(0, "MiniStatuslineDevinfo", { fg = colors.fg, bg = colors.blue7 })
-    vim.api.nvim_set_hl(0, "MiniStatuslineFileinfo", { fg = colors.fg, bg = colors.blue7 })
+    -- vim.api.nvim_set_hl(0, "MiniStatuslineDevinfo", { fg = colors.fg, bg = colors.blue7 })
+    vim.api.nvim_set_hl(0, "MiniStatuslineDevinfo", { fg = colors.blue, bg = colors.bg_visual })
+    vim.api.nvim_set_hl(0, "MiniStatuslineFileinfo", { fg = colors.comment, bg = colors.bg_statusline })
     -- vim.api.nvim_set_hl(0, "MiniStatuslineInactive", { fg = colors.bg_dark1, bg = colors.teal })
     -- Nvim statusline hl groups
-    vim.api.nvim_set_hl(0, "StatusLine", { bg = colors.bg })
-    vim.api.nvim_set_hl(0, "StatusLineNC", { bg = colors.bg }) -- For inactive windows
+    vim.api.nvim_set_hl(0, "StatusLine", { bg = colors.bg_statusline }) -- For active windows
+    vim.api.nvim_set_hl(0, "StatusLineNC", { bg = colors.bg_statusline }) -- For inactive windows
     local statusline_content = nil
 
     if vim.env.IS_SSH == "1" then
@@ -223,6 +249,7 @@ return {
             options = { maxcount = 9999, timeout = 500 },
           })
           local mode_status = require("noice").api.status.mode.get()
+          local word_count = get_word_count()
 
           return MiniStatusline.combine_groups({
             { hl = mode_hl, strings = { mode } },
@@ -231,6 +258,7 @@ return {
             "%=", -- End left alignment
             { hl = "MiniStatuslineRecording", strings = { mode_status } },
             { hl = "MiniStatuslineFileinfo", strings = { fileinfo } },
+            { hl = "MiniStatuslineWordCounts", strings = { word_count } },
             { hl = mode_hl, strings = { search, location } },
           })
         end,
@@ -257,6 +285,7 @@ return {
             options = { maxcount = 9999, timeout = 500 },
           })
           local mode_status = require("noice").api.status.mode.get()
+          local word_count = get_word_count()
 
           if vim.bo.filetype == "snacks_dashboard" then
             return MiniStatusline.combine_groups({
@@ -271,6 +300,7 @@ return {
               "%=", -- End left alignment
               { hl = "MiniStatuslineRecording", strings = { mode_status } },
               { hl = "MiniStatuslineFileinfo", strings = { fileinfo } },
+              { hl = "MiniStatuslineWordCounts", strings = { word_count } },
               { hl = mode_hl, strings = { search, location } },
             })
           end
