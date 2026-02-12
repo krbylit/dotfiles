@@ -1,5 +1,29 @@
 #!/usr/bin/env bash
 
+# Setup Node.js with fnm (Fast Node Manager)
+# Ensure a default Node version is installed on all systems
+if command -v fnm &>/dev/null; then
+  if [ "${IS_SSH}" = "1" ]; then
+    # TODO: Consolidate all installer env vars into a single place for easier management
+    DEFAULT_NODE_VERSION="v18.20.8" # Change to a lighter version for remote machines if desired
+  else
+    DEFAULT_NODE_VERSION="v25.6.1" # Change to your preferred version
+  fi
+
+  # Install the default version if not already installed
+  if ! fnm list | grep -q "$DEFAULT_NODE_VERSION"; then
+    echo "Installing Node $DEFAULT_NODE_VERSION..."
+    fnm install "$DEFAULT_NODE_VERSION"
+  fi
+
+  # Set as default
+  echo "Setting Node $DEFAULT_NODE_VERSION as default..."
+  fnm default "$DEFAULT_NODE_VERSION"
+
+  echo "Node setup complete"
+  fnm list
+fi
+
 # Install Vi-Mongo
 # curl -LO https://github.com/kopecmaciej/vi-mongo/releases/download/v0.1.18/vi-mongo_Darwin_x86_64.tar.gz && tar -xzf vi-mongo_Darwin_x86_64.tar.gz && chmod +x vi-mongo && sudo mv vi-mongo /opt && rm vi-mongo_Darwin_x86_64.tar.gz
 

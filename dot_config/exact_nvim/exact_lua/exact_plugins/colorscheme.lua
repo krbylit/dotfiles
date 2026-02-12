@@ -171,7 +171,7 @@ return {
   {
     "catppuccin/nvim",
     name = "catppuccin",
-    lazy = false,
+    lazy = true,
     priority = 1000,
     opts = {
       flavour = "auto", -- latte, frappe, macchiato, mocha
@@ -317,7 +317,7 @@ return {
   -- },
   {
     "serhez/teide.nvim",
-    lazy = false,
+    lazy = true,
     priority = 1000,
     opts = {
       style = "dark", -- The theme comes in four styles, `darker`, `dark`, `dimmed`, and `light`

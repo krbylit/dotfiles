@@ -5,62 +5,174 @@
     {
       "context": "Global",
       "bindings": {
-        "ctrl+c": "global:quit",
-        "ctrl+d": "global:quit",
-        "ctrl+l": "global:clearScreen",
-        "ctrl+z": "global:suspend"
+        "ctrl+t": "app:toggleTodos",
+        "ctrl+o": "app:toggleTranscript",
+        "ctrl+r": "history:search",
+        "up": "history:previous",
+        "down": "history:next"
       }
     },
     {
-      "context": "History",
+      "context": "HistorySearch",
       "bindings": {
-        "ctrl+p": "history:previous",
-        "up": "history:previous",
-        "ctrl+n": "history:next",
-        "down": "history:next",
-        "ctrl+r": "history:search",
-        "escape": "history:clearSearch",
-        "ctrl+c": "history:clearSearch"
+        "ctrl+r": "historySearch:next",
+        "escape": "historySearch:accept",
+        "tab": "historySearch:accept",
+        "enter": "historySearch:execute"
       }
     },
     {
       "context": "Chat",
       "bindings": {
         "enter": "chat:submit",
-        "meta+enter": "chat:submit",
-        "shift+enter": "chat:newline",
         "escape": "chat:cancel",
-        "ctrl+u": "chat:clearInput",
-        "ctrl+e": "chat:externalEditor",
+        "ctrl+g": "chat:externalEditor",
+        "ctrl+s": "chat:stash",
         "shift+tab": "chat:cycleMode",
-        "ctrl+m": "chat:cycleMode",
-        "meta+t": "chat:toggleThinking",
-        "left": "chat:cursorLeft",
-        "ctrl+b": "chat:cursorLeft",
-        "right": "chat:cursorRight",
-        "ctrl+f": "chat:cursorRight",
-        "ctrl+a": "chat:cursorStart",
-        "home": "chat:cursorStart",
-        "ctrl+e": "chat:cursorEnd",
-        "end": "chat:cursorEnd",
-        "alt+b": "chat:wordLeft",
-        "meta+b": "chat:wordLeft",
-        "alt+f": "chat:wordRight",
-        "meta+f": "chat:wordRight",
-        "backspace": "chat:deleteBackward",
-        "ctrl+h": "chat:deleteBackward",
-        "delete": "chat:deleteForward",
-        "ctrl+d": "chat:deleteForward",
-        "ctrl+w": "chat:deleteWordBackward",
-        "alt+backspace": "chat:deleteWordBackward",
-        "meta+backspace": "chat:deleteWordBackward",
-        "alt+d": "chat:deleteWordForward",
-        "alt+delete": "chat:deleteWordForward",
-        "meta+d": "chat:deleteWordForward",
-        "meta+delete": "chat:deleteWordForward",
-        "ctrl+k": "chat:deleteToEnd",
-        "ctrl+y": "chat:yank",
-        "ctrl+t": "chat:transpose"
+        "meta+p": "chat:modelPicker",
+        "meta+t": "chat:thinkingToggle",
+        "ctrl+_": "chat:undo",
+        "ctrl+v": "chat:imagePaste"
+      }
+    },
+    {
+      "context": "Autocomplete",
+      "bindings": {
+        "tab": "autocomplete:accept",
+        "escape": "autocomplete:dismiss",
+        "up": "autocomplete:previous",
+        "down": "autocomplete:next"
+      }
+    },
+    {
+      "context": "Confirmation",
+      "bindings": {
+        "y": "confirm:yes",
+        "enter": "confirm:yes",
+        "n": "confirm:no",
+        "escape": "confirm:no",
+        "up": "confirm:previous",
+        "down": "confirm:next",
+        "tab": "confirm:nextField",
+        "shift+tab": "confirm:cycleMode",
+        "ctrl+e": "confirm:toggleExplanation"
+      }
+    },
+    {
+      "context": "Tabs",
+      "bindings": {
+        "tab": "tabs:next",
+        "right": "tabs:next",
+        "shift+tab": "tabs:previous",
+        "left": "tabs:previous"
+      }
+    },
+    {
+      "context": "Transcript",
+      "bindings": {
+        "ctrl+e": "transcript:toggleShowAll",
+        "escape": "transcript:exit"
+      }
+    },
+    {
+      "context": "Task",
+      "bindings": {
+        "ctrl+b": "task:background"
+      }
+    },
+    {
+      "context": "Help",
+      "bindings": {
+        "escape": "help:dismiss"
+      }
+    },
+    {
+      "context": "ThemePicker",
+      "bindings": {
+        "ctrl+t": "theme:toggleSyntaxHighlighting"
+      }
+    },
+    {
+      "context": "Attachments",
+      "bindings": {
+        "right": "attachments:next",
+        "left": "attachments:previous",
+        "backspace": "attachments:remove",
+        "delete": "attachments:remove",
+        "down": "attachments:exit",
+        "escape": "attachments:exit"
+      }
+    },
+    {
+      "context": "Footer",
+      "bindings": {
+        "right": "footer:next",
+        "left": "footer:previous",
+        "enter": "footer:openSelected",
+        "escape": "footer:clearSelection"
+      }
+    },
+    {
+      "context": "MessageSelector",
+      "bindings": {
+        "up": "messageSelector:up",
+        "k": "messageSelector:up",
+        "down": "messageSelector:down",
+        "j": "messageSelector:down",
+        "ctrl+up": "messageSelector:top",
+        "shift+up": "messageSelector:top",
+        "meta+up": "messageSelector:top",
+        "shift+k": "messageSelector:top",
+        "ctrl+down": "messageSelector:bottom",
+        "shift+down": "messageSelector:bottom",
+        "meta+down": "messageSelector:bottom",
+        "shift+j": "messageSelector:bottom",
+        "enter": "messageSelector:select"
+      }
+    },
+    {
+      "context": "DiffDialog",
+      "bindings": {
+        "escape": "diff:dismiss",
+        "left": "diff:previousSource",
+        "right": "diff:nextSource",
+        "up": "diff:previousFile",
+        "down": "diff:nextFile",
+        "enter": "diff:viewDetails"
+      }
+    },
+    {
+      "context": "ModelPicker",
+      "bindings": {
+        "left": "modelPicker:decreaseEffort",
+        "right": "modelPicker:increaseEffort"
+      }
+    },
+    {
+      "context": "Select",
+      "bindings": {
+        "down": "select:next",
+        "j": "select:next",
+        "ctrl+n": "select:next",
+        "up": "select:previous",
+        "k": "select:previous",
+        "ctrl+p": "select:previous",
+        "enter": "select:accept",
+        "escape": "select:cancel"
+      }
+    },
+    {
+      "context": "Plugin",
+      "bindings": {
+        "space": "plugin:toggle",
+        "i": "plugin:install"
+      }
+    },
+    {
+      "context": "Settings",
+      "bindings": {
+        "/": "settings:search",
+        "r": "settings:retry"
       }
     }
   ]

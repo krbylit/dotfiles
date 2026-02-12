@@ -1,0 +1,25 @@
+#!/bin/bash
+
+# Function to log messages with timestamps
+log() {
+    echo "$(date '+%Y-%m-%d %H:%M:%S') - $1"
+}
+
+log "Running brew bundle..."
+
+# Run brew bundle and capture stderr
+tmp_err=$(mktemp) # Create a temporary file for stderr
+if [ -z "$SSH_CONNECTION" ] && [ -z "$SSH_CLIENT" ] && [ -z "$SSH_TTY" ]; then
+    if ! brew bundle --cleanup --no-upgrade --file="$HOME/Brewfile" >"$tmp_err" 2>&1; then
+        log "brew bundle encountered errors:"
+        cat "$tmp_err"
+    fi
+fi
+# If on remote machine, install limited Brew packages designed for remote
+if [ -n "$SSH_CONNECTION" ] || [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
+    if ! brew bundle --cleanup --no-upgrade --file="$HOME/Brewfile_ssh" >"$tmp_err" 2>&1; then
+        log "brew bundle encountered errors:"
+        cat "$tmp_err"
+    fi
+fi
+rm -f "$tmp_err" # Clean up the temporary file

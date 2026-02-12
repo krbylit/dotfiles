@@ -20,8 +20,7 @@ return {
   },
   opts = {
     highlight = { enable = true },
-    -- NOTE: This may be what causes indentation in Python to revert to 4 spaces after a while in a session.
-    indent = { enable = true, disable = { "python" } },
+    indent = { enable = true },
     ensure_installed = {
       "awk",
       "bash",

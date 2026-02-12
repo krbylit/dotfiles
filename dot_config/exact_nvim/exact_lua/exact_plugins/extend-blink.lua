@@ -108,11 +108,11 @@ return {
       -- 	end
       -- 	return 0
       -- end,
-      compat = {
-        "avante_commands",
-        "avante_mentions",
-        "avante_files",
-      },
+      -- compat = {
+      --   "avante_commands",
+      --   "avante_mentions",
+      --   "avante_files",
+      -- },
       ---@type blink.cmp.SourceProviderConfig
       providers = {
         ripgrep = {
@@ -175,7 +175,10 @@ return {
                 -- If you have an idea for a default, please open an issue!
                 --
                 -- Not everything will work (obviously).
-                additional_rg_options = {},
+                additional_rg_options = {
+                  "--max-count=10", -- Stop after 10 matches per file
+                  "--max-depth=5", -- Limit directory depth
+                },
 
                 -- Absolute root paths where the rg command will not be executed.
                 -- Usually you want to exclude paths using gitignore files or
@@ -184,7 +187,14 @@ return {
                 -- to use ripgrep for those paths on the command line. If you need
                 -- to find out where the searches are executed, enable `debug` and
                 -- look at `:messages`.
-                ignore_paths = {},
+                ignore_paths = {
+                  "/node_modules/",
+                  "/.git/",
+                  "/dist/",
+                  "/build/",
+                  "/.venv/",
+                  "/target/",
+                },
               },
             },
           },

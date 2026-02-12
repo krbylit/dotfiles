@@ -18,10 +18,14 @@ local function save_logo(logo)
   if file then
     file:write(logo) -- Write the logo string to the file
     file:close() -- Close the file
-    local result = vim.fn.system({ "chmod", "777", file_path })
-    if vim.v.shell_error ~= 0 then
-      vim.notify("Failed to set permissions on " .. file_path .. ": " .. result, vim.log.levels.ERROR)
-    end
+    -- Async chmod operation (511 decimal = 0o777 octal)
+    vim.loop.fs_chmod(file_path, 511, function(err)
+      if err then
+        vim.schedule(function()
+          vim.notify("Failed to set permissions on " .. file_path .. ": " .. err, vim.log.levels.ERROR)
+        end)
+      end
+    end)
     return file_path
   else
     vim.notify("Failed to save logo to " .. file_path)

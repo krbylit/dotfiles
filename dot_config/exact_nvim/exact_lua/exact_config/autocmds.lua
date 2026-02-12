@@ -12,25 +12,6 @@
 -- })
 
 -- ================================================================
--- Plugin specific autocmds
--- ================================================================
--- The below configuration wll allow you to automatically apply changes on files under chezmoi source path.
---  e.g. ~/.local/share/chezmoi/*
-if vim.env.IS_SSH ~= "1" then
-  vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
-    pattern = { os.getenv("HOME") .. "/.local/share/chezmoi/*" },
-    callback = function(ev)
-      local bufnr = ev.buf
-      local edit_watch = function()
-        -- TODO: See if we can re-source nvim config after chezmoi apply
-        require("chezmoi.commands.__edit").watch(bufnr)
-      end
-      vim.schedule(edit_watch)
-    end,
-  })
-end
-
--- ================================================================
 -- Filetype specific autocmds
 -- ================================================================
 -- Reset all options when leaving snacks dashboard by requiring options module
@@ -88,17 +69,13 @@ end
 --     end,
 -- })
 
--- Auto comment options
-vim.api.nvim_create_autocmd("BufEnter", {
-  callback = function()
-    vim.opt.formatoptions:remove("c") -- Do not auto-wrap comments using textwidth
-    vim.opt.formatoptions:remove("r") -- Do not continue comment when pressing enter
-    vim.opt.formatoptions:remove("o") -- Do not continue comment when inserting a new line
-  end,
-})
+-- ================================================================
+-- FileType Keymaps - Grouped by Purpose
+-- ================================================================
+local ft_keymap_group = vim.api.nvim_create_augroup("FileTypeKeymaps", { clear = true })
 
--- Enable removing items from Quickfix list with `dd`
-function Remove_qf_item()
+-- Quickfix list manipulation functions
+local function remove_qf_item()
   local curqfidx = vim.fn.line(".")
   local qfall = vim.fn.getqflist()
   if #qfall == 0 then
@@ -106,17 +83,15 @@ function Remove_qf_item()
   end
   table.remove(qfall, curqfidx)
   vim.fn.setqflist(qfall, "r")
-  -- After removing, check if the list is empty
   if #qfall == 0 then
-    -- Optionally close quickfix window
     vim.cmd("cclose")
     return
   end
-  -- Reselect the appropriate line
   local new_idx = math.min(curqfidx, #qfall)
   vim.api.nvim_win_set_cursor(0, { new_idx, 0 })
 end
-function Remove_qf_range()
+
+local function remove_qf_range()
   local start_line = vim.fn.line("v")
   local end_line = vim.fn.line(".")
   if start_line > end_line then
@@ -126,55 +101,62 @@ function Remove_qf_range()
   if #qfall == 0 then
     return
   end
-  -- Remove from end to start to avoid shifting indices
   for i = end_line, start_line, -1 do
     table.remove(qfall, i)
   end
   vim.fn.setqflist(qfall, "r")
-  -- After removing, check if the list is empty
   if #qfall == 0 then
-    -- Optionally close quickfix window
     vim.cmd("cclose")
     return
   end
   local new_idx = math.min(start_line, #qfall)
   vim.api.nvim_win_set_cursor(0, { new_idx, 0 })
-  -- Exit visual mode after deleting
   vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Esc>", true, false, true), "n", true)
 end
 
+-- Quickfix keymaps
 vim.api.nvim_create_autocmd("FileType", {
+  group = ft_keymap_group,
   pattern = "qf",
   callback = function()
-    vim.keymap.set("n", "dd", Remove_qf_item, { buffer = true })
-    vim.keymap.set("v", "d", Remove_qf_range, { buffer = true })
+    vim.keymap.set("n", "dd", remove_qf_item, { buffer = true })
+    vim.keymap.set("v", "d", remove_qf_range, { buffer = true })
   end,
 })
 
--- Settings for terminal buffers
--- Use pattern term://* to only fire for terminal buffers (more efficient than checking buftype)
-vim.api.nvim_create_autocmd({ "TermOpen", "BufWinEnter" }, {
+-- ================================================================
+-- FileType UI/Display Settings - Grouped by Purpose
+-- ================================================================
+local ft_ui_group = vim.api.nvim_create_augroup("FileTypeUI", { clear = true })
+
+-- Help docs: vertical split on the right
+vim.api.nvim_create_autocmd("FileType", {
+  group = ft_ui_group,
+  pattern = "help",
+  callback = function()
+    vim.cmd("wincmd L | vertical resize 90")
+  end,
+})
+
+-- ================================================================
+-- Terminal Settings - Optimized Pattern
+-- ================================================================
+local terminal_group = vim.api.nvim_create_augroup("TerminalSettings", { clear = true })
+
+-- Terminal settings (only TermOpen - removed redundant BufWinEnter)
+vim.api.nvim_create_autocmd("TermOpen", {
+  group = terminal_group,
   pattern = "term://*",
   callback = function()
     vim.opt_local.scrollback = 100000
-    -- Force terminal to use Normal highlight group background instead of black
-    -- Use vim.schedule to ensure this runs after other plugins (like sidekick) set their options
-    vim.schedule(function()
-      vim.opt_local.winhighlight = "Normal:Normal,NormalNC:NormalNC"
-    end)
+    -- Force terminal to use Normal highlight group background
+    vim.opt_local.winhighlight = "Normal:Normal,NormalNC:NormalNC"
+
     if vim.bo.filetype == "sidekick_terminal" then
       vim.keymap.set({ "n", "i" }, "<C-v>", function()
         vim.cmd("PasteImage")
       end, { buffer = true })
     end
-  end,
-})
-
--- Open help docs in a vertical split on the right
-vim.api.nvim_create_autocmd("FileType", {
-  pattern = "help",
-  callback = function()
-    vim.cmd("wincmd L | vertical resize 90")
   end,
 })
 

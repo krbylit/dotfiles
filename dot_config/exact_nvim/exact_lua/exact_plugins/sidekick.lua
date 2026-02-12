@@ -324,32 +324,42 @@ return {
 
         -- Get directory name for subdirectory (use git repo root if in a git repo)
         local target_base_dir = vim.fn.getcwd()
-        local git_root = vim.fn.system("git rev-parse --show-toplevel 2>/dev/null"):gsub("%s+$", "")
-        if vim.v.shell_error == 0 and git_root ~= "" then
-          target_base_dir = git_root
-        end
-        local current_dir_name = vim.fs.basename(target_base_dir)
-        local target_dir = string.format("%s/%s", prompts_dir, current_dir_name)
 
-        -- Create subdirectory if it doesn't exist
-        vim.fn.mkdir(target_dir, "p")
+        -- Async git command to get repository root
+        vim.system({ "git", "rev-parse", "--show-toplevel" }, { text = true }, function(result)
+          -- Wrap entire callback in vim.schedule to escape fast event context
+          vim.schedule(function()
+            if result.code == 0 and result.stdout then
+              local git_root = result.stdout:gsub("%s+$", "")
+              if git_root ~= "" then
+                target_base_dir = git_root
+              end
+            end
 
-        -- Generate timestamp in YYYYMMDD-HHMMSS format
-        local timestamp = os.date("%Y-%m-%dT%H-%M-%S")
-        local new_filename = string.format("%s_prompt.md", timestamp)
-        local new_filepath = string.format("%s/%s", target_dir, new_filename)
+            local current_dir_name = vim.fs.basename(target_base_dir)
+            local target_dir = string.format("%s/%s", prompts_dir, current_dir_name)
 
-        -- Copy template to new file
-        local copy_cmd = string.format("cp '%s' '%s'", template_path, new_filepath)
-        local result = os.execute(copy_cmd)
+            -- Create subdirectory if it doesn't exist (now safe in scheduled context)
+            vim.fn.mkdir(target_dir, "p")
 
-        if result == 0 or result == true then
-          -- Open the new file in current nvim session
-          vim.cmd.edit(new_filepath)
-          vim.notify("Created new prompt: " .. new_filename, vim.log.levels.INFO)
-        else
-          vim.notify("Failed to create prompt file", vim.log.levels.ERROR)
-        end
+            -- Generate timestamp in YYYYMMDD-HHMMSS format
+            local timestamp = os.date("%Y-%m-%dT%H-%M-%S")
+            local new_filename = string.format("%s_prompt.md", timestamp)
+            local new_filepath = string.format("%s/%s", target_dir, new_filename)
+
+            -- Async file copy
+            vim.loop.fs_copyfile(template_path, new_filepath, function(err)
+              vim.schedule(function()
+                if err then
+                  vim.notify("Failed to create prompt file: " .. err, vim.log.levels.ERROR)
+                else
+                  vim.cmd.edit(new_filepath)
+                  vim.notify("Created new prompt: " .. new_filename, vim.log.levels.INFO)
+                end
+              end)
+            end)
+          end)
+        end)
       end,
       desc = "New Claude Prompt from Template",
     },

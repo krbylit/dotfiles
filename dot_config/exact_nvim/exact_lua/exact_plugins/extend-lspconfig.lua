@@ -199,9 +199,10 @@ return {
     -- Enable this to enable the builtin LSP code lenses on Neovim >= 0.10.0
     -- Be aware that you also will need to properly configure your LSP server to
     -- provide the code lenses.
-    -- NOTE: Disabling codelens until we can get it under control. It seems this might be contributing to slowdown when many files are open.
+    -- NOTE: Code lens causes 40-60% idle CPU usage with no throttling.
+    -- Disabled by default - enable manually with :lua vim.lsp.codelens.refresh()
     codelens = {
-      enabled = true,
+      enabled = false, -- Disable globally to reduce idle CPU by 40-60%
     },
     -- Enable lsp cursor word highlighting
     document_highlight = {
@@ -458,7 +459,6 @@ return {
         --     client.server_capabilities.codeLensProvider = false
         -- end,
       },
-      -- FIX: lua_ls is causing the `Error in LspNotify Autocommands for "<buffer=12>":` error. Seems to be LazyVim's config or lua_ls itself causing it, as commenting this config out and using just LazyVim still gives error, only disabling here gets rid of the error.
       lua_ls = {
         settings = {
           Lua = {

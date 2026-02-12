@@ -32,7 +32,7 @@ custom-shader = shaders/cursor/cursor_smear.glsl
 # font-family-italic = "Julia Mono Phosphor Fill"
 # font-family-bold-italic = "Julia Mono Phosphor Fill"
 # window-title-font-family = "Julia Mono Phosphor Fill"
-# font-size = 14
+# font-size = 16
 # font-style = "Regular"
 # font-style-bold = "Bold"
 # font-style-italic = "Italic"
@@ -75,6 +75,30 @@ adjust-font-baseline = 0
 adjust-cell-height = 0
 # adjust-font-baseline = 6
 # adjust-cell-height = -25
+
+# Arrows (curved/return-style arrows: ↰ ↱ ↲ ↳ ↴ ↵)
+font-codepoint-map = U+21B0-U+21B5=Departure Mono
+# Box Drawing (light/heavy/double line box characters)
+font-codepoint-map = U+2500-U+257F=Departure Mono
+# Block Elements (shades, partial blocks, quadrants, █ ░ ▒ ▓ etc.)
+font-codepoint-map = U+2580-U+259F=Departure Mono
+# Geometric Shapes (squares, triangles, diamonds, filled/outline forms)
+font-codepoint-map = U+25A0-U+25FF=Departure Mono
+# Stars (filled and outline star)
+font-codepoint-map = U+2605-U+2606=Departure Mono
+# Card Suits (spade, heart, diamond, club)
+font-codepoint-map = U+2660-U+2666=Departure Mono
+# Musical Notes (quarter, eighth, beamed notes)
+font-codepoint-map = U+2669-U+266C=Departure Mono
+# Sparkles (four-point sparkle variants)
+font-codepoint-map = U+2726-U+2727=Departure Mono
+# Decorative Angle Brackets (ornamental brackets ❬ ❭ ❮ ❯)
+font-codepoint-map = U+276C-U+276F=Departure Mono
+# Symbols for Legacy Computing (Unicode 13 block graphics 🮂–🮋)
+font-codepoint-map = U+1FB82-U+1FB8B=Departure Mono
+
+# Blocks with Julia Mono's smooth gradient
+# font-codepoint-map = U+2591-U+2593=Julia Mono
 
 font-feature = "-calt"
 font-feature = "-liga"

@@ -10,13 +10,23 @@ command_timeout = 5000
 
 # ================ Prompts ================
 # Constant right-side design
+# Light box border
+# ┚ ┒ ┐ ┘ ┌ └ ↵ ❰ ❮ ✦ ✧ ◊ ◁ ◄ ╮ ╭ ╯ ╰ ▷▷
 format = """
-[█▓▒](flamingo) $directory $fill( $status)( $username ${custom.hostname})( $cmd_duration )[┓](bold surface1)
+[█▓▒](flamingo) $directory $fill( $status)( $username ${custom.hostname})( $cmd_duration )[┐](bold surface1)
 [▓▒░](flamingo)( $terraform) (${custom.yazi_indicator} )$character($sudo )
 """
 right_format = '''
-($git_branch )($rust )($nodejs )($python )[┛](bold surface1)
+($git_branch )($rust )($nodejs )($python )[┘](bold surface1)
 '''
+# Bold box border
+# format = """
+# [█▓▒](flamingo) $directory $fill( $status)( $username ${custom.hostname})( $cmd_duration )[┓](bold surface1)
+# [▓▒░](flamingo)( $terraform) (${custom.yazi_indicator} )$character($sudo )
+# """
+# right_format = '''
+# ($git_branch )($rust )($nodejs )($python )[┛](bold surface1)
+# '''
 # # Repo-dependent right-side design
 # format = """
 # [█▓▒](flamingo) $directory $fill( $status)( $username ${custom.hostname})( $cmd_duration )${custom.block_rprompt_repo_top}
@@ -25,7 +35,8 @@ right_format = '''
 # right_format = '''
 # (($git_branch )($nodejs )($python )[┛](bold surface1))
 # '''
-continuation_prompt = ' '
+# continuation_prompt = ' '
+continuation_prompt = '▷▷ '
 
 add_newline = true
 
@@ -64,12 +75,14 @@ crust = "#181926"
 [custom.block_rprompt_repo_top]
 when = true
 require_repo = true
-format = "[┓](bold surface1)"
+# format = "[┓](bold surface1)"
+format = "[┐](bold surface1)"
 
 [custom.block_rprompt_repo_bottom]
 when = true
 require_repo = true
-format = "[┛](bold surface1)"
+# format = "[┛](bold surface1)"
+format = "[┘](bold surface1)"
 
 [custom.yazi_indicator]
 when = '[ -n "$IS_YAZI_SUBSHELL" ]'
@@ -80,7 +93,8 @@ style = 'bold yellow'
 # ================ Transient prompts ================
 # Angular LEFT
 [custom.angular_transient_prompt]
-command = 'starship module custom.transient_lprompt; starship module directory; echo -n " "; starship module git_branch; echo ""; echo -n "     "; echo -n "┗ "; starship module character; starship module custom.time'
+# command = 'starship module custom.transient_lprompt; starship module directory; echo -n " "; starship module git_branch; echo ""; echo -n "     "; echo -n "┗ "; starship module character; starship module custom.time'
+command = 'starship module custom.transient_lprompt; starship module directory; echo -n " "; starship module git_branch; echo ""; echo -n "     "; echo -n "└ "; starship module character; starship module custom.time'
 style = 'bold surface1'
 when = true
 format = "[$output]($style) $symbol "
@@ -100,7 +114,8 @@ when = true
 format = " [$output]($style)"
 
 [fill]
-symbol = '━'            # For Block Prompt
+# symbol = '━'            # For Block Prompt
+symbol = '─'            # For Block Prompt
 style = 'bold surface1'
 
 [character]

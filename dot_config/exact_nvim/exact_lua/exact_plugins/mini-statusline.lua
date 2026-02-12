@@ -9,54 +9,142 @@ local git_cache = {
   git_root = "",
   last_dir = "",
   is_exiting = false,
+  git_watcher = nil, -- fs_event watcher for .git/HEAD
+  update_timer = nil, -- debounce timer for update_git_info
 }
 
--- Function to update the repository name and branch based on the current buffer
+-- Stop watching git changes (cleanup)
+local function stop_git_watcher()
+  if git_cache.git_watcher then
+    git_cache.git_watcher:stop()
+    git_cache.git_watcher = nil
+  end
+end
+
+-- Start watching .git/HEAD for branch changes
+local function start_git_watcher(git_root)
+  -- Stop any existing watcher first
+  stop_git_watcher()
+
+  local git_head = git_root .. "/.git/HEAD"
+
+  -- Check if .git/HEAD exists (not a bare repo or worktree)
+  if vim.fn.filereadable(git_head) == 0 then
+    return
+  end
+
+  -- Create fs_event watcher
+  local watcher = vim.loop.new_fs_event()
+  local success = watcher:start(
+    git_head,
+    {},
+    vim.schedule_wrap(function(err, filename, events)
+      if err or git_cache.is_exiting then
+        return
+      end
+
+      if events.change then
+        -- Branch changed! Update cached branch name
+        vim.system(
+          { "git", "-C", git_root, "branch", "--show-current" },
+          { text = true },
+          vim.schedule_wrap(function(result)
+            if result.code == 0 and result.stdout then
+              git_cache.current_branch = result.stdout:gsub("\n", "")
+              vim.cmd("redrawstatus")
+            end
+          end)
+        )
+      end
+    end)
+  )
+
+  if success then
+    git_cache.git_watcher = watcher
+  end
+end
+
+-- Function to update git repository info when changing directories (debounced)
 local function update_git_info()
   -- Don't update during neovim exit
   if git_cache.is_exiting then
     return
   end
 
-  local current_dir_display = vim.fn.expand("%:p:h")
-  local current_dir = vim.loop.fs_realpath(current_dir_display) or current_dir_display
-
-  -- Only update if directory has changed
-  if current_dir == git_cache.last_dir then
-    return
+  -- Cancel existing timer if present
+  if git_cache.update_timer then
+    git_cache.update_timer:stop()
+    git_cache.update_timer:close()
+    git_cache.update_timer = nil
   end
 
-  -- Update last_dir immediately to prevent multiple parallel requests
-  git_cache.last_dir = current_dir
+  -- Debounce with 50ms delay to handle rapid buffer switches
+  git_cache.update_timer = vim.loop.new_timer()
+  git_cache.update_timer:start(
+    50,
+    0,
+    vim.schedule_wrap(function()
+      local current_dir_display = vim.fn.expand("%:p:h")
+      local current_dir = vim.loop.fs_realpath(current_dir_display) or current_dir_display
+
+      -- Only update if directory has changed
+      if current_dir == git_cache.last_dir then
+        if git_cache.update_timer then
+          git_cache.update_timer:close()
+          git_cache.update_timer = nil
+        end
+        return
+      end
+
+      git_cache.last_dir = current_dir
 
   -- Get repo root asynchronously
   vim.system({ "git", "-C", current_dir, "rev-parse", "--show-toplevel" }, { text = true }, function(result)
-    if result.code == 0 and result.stdout then
-      git_cache.git_root = result.stdout:gsub("\n", "")
-      git_cache.current_repo_name = vim.fn.fnamemodify(git_cache.git_root, ":t")
+    vim.schedule(function()
+      if result.code == 0 and result.stdout then
+        local new_git_root = result.stdout:gsub("\n", "")
 
-      -- Get branch name asynchronously
-      vim.system({ "git", "-C", current_dir, "branch", "--show-current" }, { text = true }, function(branch_result)
-        if branch_result.code == 0 and branch_result.stdout then
-          git_cache.current_branch = branch_result.stdout:gsub("\n", "")
-        else
-          git_cache.current_branch = ""
+        -- Check if we switched to a different repo
+        if new_git_root ~= git_cache.git_root then
+          -- Different repo - update cache and restart watcher
+          git_cache.git_root = new_git_root
+          git_cache.current_repo_name = vim.fn.fnamemodify(new_git_root, ":t")
+
+          -- Get initial branch name
+          vim.system({ "git", "-C", current_dir, "branch", "--show-current" }, { text = true }, function(branch_result)
+            vim.schedule(function()
+              if branch_result.code == 0 and branch_result.stdout then
+                git_cache.current_branch = branch_result.stdout:gsub("\n", "")
+              else
+                git_cache.current_branch = ""
+              end
+
+              -- Start watching new repo's .git/HEAD
+              start_git_watcher(new_git_root)
+
+              vim.cmd("redrawstatus")
+            end)
+          end)
         end
-        -- Force statusline redraw after async update completes
-        vim.schedule(function()
-          vim.cmd("redrawstatus")
-        end)
-      end)
-    else
-      -- Reset cache if not in a git repo
-      git_cache.current_repo_name = ""
-      git_cache.current_branch = ""
-      git_cache.git_root = ""
-      vim.schedule(function()
+        -- If same repo, watcher is already running - no action needed
+      else
+        -- Not in a git repo - stop watcher and clear cache
+        stop_git_watcher()
+        git_cache.current_repo_name = ""
+        git_cache.current_branch = ""
+        git_cache.git_root = ""
         vim.cmd("redrawstatus")
-      end)
-    end
+      end
+
+      -- Clean up timer
+      if git_cache.update_timer then
+        git_cache.update_timer:close()
+        git_cache.update_timer = nil
+      end
+    end)
   end)
+    end) -- End of vim.schedule_wrap
+  ) -- End of timer:start()
 end
 
 -- Function to get path relative to git root (using cached git_root)
@@ -73,26 +161,29 @@ local function get_relative_path()
   return full_path
 end
 
--- Autocmd to update the git info whenever a buffer is entered or switched
-local autocmd_id = vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
+-- Check for git repo changes on buffer enter (lightweight check)
+-- fs_event watcher handles branch changes WITHIN a repo
+local autocmd_id = vim.api.nvim_create_autocmd({ "BufEnter" }, {
   callback = function()
-    -- Use vim.schedule to avoid blocking UI, but check if we're exiting
     if not git_cache.is_exiting then
-      vim.schedule(function()
-        if not git_cache.is_exiting then
-          update_git_info()
-        end
-      end)
+      update_git_info()
     end
   end,
 })
 
--- Add autocmd to handle neovim exit
--- Intended to mitigate hanging on nvim exit
+-- Cleanup on exit
 vim.api.nvim_create_autocmd("VimLeavePre", {
   callback = function()
     git_cache.is_exiting = true
-    -- Clean up the buffer autocmd to prevent any scheduled callbacks
+    -- Stop git watcher
+    stop_git_watcher()
+    -- Stop update timer
+    if git_cache.update_timer then
+      git_cache.update_timer:stop()
+      git_cache.update_timer:close()
+      git_cache.update_timer = nil
+    end
+    -- Clean up the buffer autocmd
     if autocmd_id then
       pcall(vim.api.nvim_del_autocmd, autocmd_id)
     end

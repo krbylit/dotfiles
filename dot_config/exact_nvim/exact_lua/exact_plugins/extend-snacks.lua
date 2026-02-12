@@ -769,6 +769,13 @@ return {
       desc = "Smart Find Files",
     },
     {
+      "<leader>ft",
+      function()
+        Snacks.picker.files({ dirs = { "/tmp" }, hidden = true, supports_live = true })
+      end,
+      desc = "Find Files in /tmp",
+    },
+    {
       "<leader>fc",
       function()
         Snacks.picker.files({ cwd = vim.fn.expand("~/.local/share/chezmoi") })

@@ -12,7 +12,11 @@ vim.api.nvim_set_keymap("", " ", "<Nop>", { noremap = true, silent = true })
 vim.g.maplocalleader = " "
 -- Asynchronously set global for `$(chezmoi source-path)`
 vim.schedule(function()
-  vim.g.chezmoi_source_path = vim.fn.system("chezmoi source-path")
+  vim.system({ "chezmoi", "source-path" }, { text = true }, function(result)
+    if result.code == 0 and result.stdout then
+      vim.g.chezmoi_source_path = result.stdout:gsub("\n", "")
+    end
+  end)
 end)
 -- LazyVim root dir detection
 -- vim.g.root_spec = { { ".git" }, "lua", "lsp", "cwd" }
@@ -43,6 +47,13 @@ vim.opt.sessionoptions:remove("localoptions")
 -- opt.autochdir = true
 -- Add '-' to keyword so kebab case is considered a word (i.e. 'variable-name' is one word)
 vim.opt.iskeyword:append("-")
+
+-- Disable auto-comment behaviors globally (fallback for filetypes without after/ftplugin)
+-- after/ftplugin/<filetype>.lua files override built-in ftplugins for common languages
+vim.opt.formatoptions:remove("c") -- Don't auto-wrap comments using textwidth
+vim.opt.formatoptions:remove("r") -- Don't auto-insert comment leader on Enter in insert mode
+vim.opt.formatoptions:remove("o") -- Don't auto-insert comment leader on o/O in normal mode
+
 -- use bash for shell, fish is very slow in nvim
 -- opt.shell = "bash"
 if vim.env.IS_SSH ~= "1" then
@@ -79,6 +90,7 @@ opt.textwidth = 0
 opt.mousehide = true -- Hide mouse cursor while typing
 opt.winheight = 1 -- Minimum window height
 opt.winminheight = 1 -- Minimum window height
+opt.updatetime = 250 -- CursorHold event timing, LSP idle timing, diagnostics updates, etc.
 
 -- OSC 52 clipboard support for SSH (Ghostty terminal supports this)
 if vim.env.IS_SSH == "1" then
@@ -145,17 +157,17 @@ vim.api.nvim_create_autocmd("FileType", {
 local diagnostics_disabled_fts = {
   "markdown",
   "txt",
-  "json",
-  "sh",
-  "bash",
-  "zsh",
-  "fish",
+  -- "json",
+  -- "sh",
+  -- "bash",
+  -- "zsh",
+  -- "fish",
   "conf",
   "cfg",
   "ini",
-  "toml",
-  "yaml",
-  "yml",
+  -- "toml",
+  -- "yaml",
+  -- "yml",
   "env",
   "gitconfig",
 }
