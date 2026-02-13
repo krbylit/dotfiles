@@ -8,31 +8,36 @@ return {
     -- Ensure opts table exists
     opts = opts or {}
 
+    -- Function to set up markdown keymaps for a buffer
+    local function setup_markdown_keymaps(bufnr)
+      vim.keymap.set("n", "]]", function()
+        local current_line = vim.fn.getline(".")
+        local level = current_line:match("^(#+)")
+        if level then
+          local pattern = "^" .. string.rep("#", #level) .. "\\s"
+          vim.fn.search(pattern, "W")
+        else
+          vim.fn.search("^#\\{1,6\\}\\(\\s\\|$\\)", "W")
+        end
+      end, { buffer = bufnr, desc = "Next same-level heading" })
+
+      vim.keymap.set("n", "[[", function()
+        local current_line = vim.fn.getline(".")
+        local level = current_line:match("^(#+)")
+        if level then
+          local pattern = "^" .. string.rep("#", #level) .. "\\s"
+          vim.fn.search(pattern, "bW")
+        else
+          vim.fn.search("^#\\{1,6\\}\\(\\s\\|$\\)", "bW")
+        end
+      end, { buffer = bufnr, desc = "Previous same-level heading" })
+    end
+
     vim.api.nvim_create_autocmd("FileType", {
       pattern = { "markdown", "markdown.pandoc" },
       callback = function(ev)
         -- Set buffer-local keymaps for [[ and ]]
-        vim.keymap.set("n", "]]", function()
-          local current_line = vim.fn.getline(".")
-          local level = current_line:match("^(#+)")
-          if level then
-            local pattern = "^" .. string.rep("#", #level) .. "\\s"
-            vim.fn.search(pattern, "W")
-          else
-            vim.fn.search("^#\\+\\s", "W")
-          end
-        end, { buffer = ev.buf, desc = "Next same-level heading" })
-
-        vim.keymap.set("n", "[[", function()
-          local current_line = vim.fn.getline(".")
-          local level = current_line:match("^(#+)")
-          if level then
-            local pattern = "^" .. string.rep("#", #level) .. "\\s"
-            vim.fn.search(pattern, "bW")
-          else
-            vim.fn.search("^#\\+\\s", "bW")
-          end
-        end, { buffer = ev.buf, desc = "Previous same-level heading" })
+        setup_markdown_keymaps(ev.buf)
 
         -- Helper to create Markdown text objects only in markdown buffers
         local function markdown_textobjects()
@@ -125,6 +130,14 @@ return {
         ai.config.custom_textobjects = opts.custom_textobjects
       end,
     })
+
+    -- Manually trigger for current buffer if it's already markdown
+    -- This handles the case where nvim is opened directly to a markdown file
+    local current_ft = vim.bo.filetype
+    if current_ft == "markdown" or current_ft == "markdown.pandoc" then
+      setup_markdown_keymaps(vim.api.nvim_get_current_buf())
+    end
+
     return opts
   end,
 

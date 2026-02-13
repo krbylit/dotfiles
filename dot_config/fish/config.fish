@@ -14,5 +14,6 @@ if status is-interactive
     # atuin init fish | source # Disabling since we get history with fzf and this adds a lot to startup time.
     starship init fish | source
     zoxide init fish | source
+
     enable_transience
 end

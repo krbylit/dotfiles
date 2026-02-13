@@ -1,14 +1,19 @@
 # Adapted from https://alexwlchan.net/2023/fish-venv/
 function venv --description "Create and activate a new virtual environment"
     if test -n "$VIRTUAL_ENV"
-        deactivate
+        if type -q deactivate
+            deactivate
+        else
+            # Manually unset if deactivate function doesn't exist
+            set -e VIRTUAL_ENV
+        end
         return 0
     end
 
     set REPO_ROOT (git rev-parse --show-toplevel 2>/dev/null)
 
     if [ -d "$REPO_ROOT/.venv" ]
-        source "$REPO_ROOT/.venv/bin/activate.fish" &>/dev/null
+        source "$REPO_ROOT/.venv/bin/activate.fish" 2>/dev/null
     else
         echo "Creating virtual environment in "(pwd)"/.venv"
         # Can specify Python versions with e.g. `venv --python 3.13`

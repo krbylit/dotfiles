@@ -1,3 +1,18 @@
+-- Visual remote: flash jump, then start visual selection at target with text object
+local function visual_remote()
+  require("flash").jump({
+    -- action = function(match, state)
+    --   state:hide()
+    -- Jump to the match (match.pos is already 0-indexed for columns)
+    -- vim.api.nvim_win_set_cursor(match.win, { match.pos[1], match.pos[2] })
+    -- Enter visual mode at the jump target
+    -- vim.cmd("normal! v")
+    -- Note: User then types text object (e.g., 'iw', 'ap') to select at this location
+    -- end,
+  })
+  vim.cmd("normal! v")
+end
+
 return {
   {
     "folke/flash.nvim",
@@ -276,9 +291,10 @@ return {
         -- stylua: ignore
         keys = {
             { "s", mode = { "n", "x", "o" }, function() require("flash").jump() end, desc = "Flash" },
-            { "S", mode = { "n", "o", "x" }, function() require("flash").treesitter() end, desc = "Flash Treesitter" },
+            { "<C-Space>", mode = { "n", "o", "x" }, function() require("flash").treesitter() end, desc = "Flash Treesitter" },
             { "r", mode = "o", function() require("flash").remote() end, desc = "Remote Flash" },
             { "R", mode = { "o", "x" }, function() require("flash").treesitter_search() end, desc = "Treesitter Search" },
+            { "S", mode = "n", visual_remote, desc = "Visual Remote (flash jump, then select text object)" },
             -- { "<c-s>", mode = { "c" }, function() require("flash").toggle() end, desc = "Toggle Flash Search" },
         },
   },

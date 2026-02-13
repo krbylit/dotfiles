@@ -14,18 +14,18 @@ return {
 
   enabled = true,
   version = "*", -- recommended, use latest release instead of latest commit
-  lazy = true,
+  lazy = false,
   -- ft = "markdown",
   -- Replace the above line with this if you only want to load obsidian.nvim for markdown files in your vault:
-  event = {
-    -- If you want to use the home shortcut '~' here you need to call 'vim.fn.expand'.
-    -- E.g. "BufReadPre " .. vim.fn.expand "~" .. "/my-vault/*.md"
-    -- refer to `:h file-pattern` for more examples
-    "BufReadPre "
-      .. vim.fn.expand("~")
-      .. "/obsidian-vault/*.md",
-    "BufNewFile " .. vim.fn.expand("~") .. "/obsidian-vault/*.md",
-  },
+  -- event = {
+  --   -- If you want to use the home shortcut '~' here you need to call 'vim.fn.expand'.
+  --   -- E.g. "BufReadPre " .. vim.fn.expand "~" .. "/my-vault/*.md"
+  --   -- refer to `:h file-pattern` for more examples
+  --   "BufReadPre "
+  --     .. vim.fn.expand("~")
+  --     .. "/obsidian-vault/*.md",
+  --   "BufNewFile " .. vim.fn.expand("~") .. "/obsidian-vault/*.md",
+  -- },
   dependencies = {
     -- Required.
     "nvim-lua/plenary.nvim",
@@ -34,24 +34,231 @@ return {
   },
   keys = {
     -- Note navigation
-    { "gf", "<cmd>ObsidianFollowLink<cr>", desc = "Follow link", ft = "markdown" },
+    -- gf is configured in opts.mappings below to handle both Obsidian links and URLs
     { "<leader>ob", "<cmd>ObsidianBacklinks<cr>", desc = "Show backlinks", ft = "markdown" },
     { "<leader>ol", "<cmd>ObsidianLinks<cr>", desc = "Show links", ft = "markdown" },
 
     -- Note creation and search
-    { "<leader>on", "<cmd>ObsidianNew<cr>", desc = "New note", ft = "markdown" },
-    { "<leader>os", "<cmd>ObsidianSearch<cr>", desc = "Search notes", ft = "markdown" },
+    { "<leader>on", "<cmd>ObsidianNew<cr>", desc = "New note" },
+    { "<leader>os", "<cmd>ObsidianSearch<cr>", desc = "Search notes" },
     { "<leader>oq", "<cmd>ObsidianQuickSwitch<cr>", desc = "Quick switch note", ft = "markdown" },
 
     -- Daily notes
-    { "<leader>ot", "<cmd>ObsidianToday<cr>", desc = "Today's note", ft = "markdown" },
-    { "<leader>oy", "<cmd>ObsidianYesterday<cr>", desc = "Yesterday's note", ft = "markdown" },
-    { "<leader>om", "<cmd>ObsidianTomorrow<cr>", desc = "Tomorrow's note", ft = "markdown" },
+    { "<leader>ot", "<cmd>ObsidianToday<cr>", desc = "Today's note" },
+    { "<leader>oy", "<cmd>ObsidianYesterday<cr>", desc = "Yesterday's note" },
+    { "<leader>om", "<cmd>ObsidianTomorrow<cr>", desc = "Tomorrow's note" },
 
     -- Utilities
     { "<leader>oo", "<cmd>ObsidianOpen<cr>", desc = "Open in Obsidian app", ft = "markdown" },
     { "<leader>oc", "<cmd>ObsidianToggleCheckbox<cr>", desc = "Toggle checkbox", ft = "markdown" },
     { "<leader>oT", "<cmd>ObsidianTemplate<cr>", desc = "Insert template", ft = "markdown" },
+
+    -- Markdown editing helpers (localleader)
+    { "<localleader>t", "o- [ ] ", desc = "Add todo item", ft = "markdown", mode = "n" },
+    { "<localleader>b", "o- ", desc = "Add bullet point", ft = "markdown", mode = "n" },
+    { "<localleader>1", "o# ", desc = "Heading level 1", ft = "markdown", mode = "n" },
+    { "<localleader>2", "o## ", desc = "Heading level 2", ft = "markdown", mode = "n" },
+    { "<localleader>3", "o### ", desc = "Heading level 3", ft = "markdown", mode = "n" },
+    { "<localleader>4", "o#### ", desc = "Heading level 4", ft = "markdown", mode = "n" },
+    { "<localleader>c", "o```<CR>```<Esc>O", desc = "Add code block", ft = "markdown", mode = "n" },
+    { "<localleader>l", "a[]()<Esc>F[a", desc = "Insert link", ft = "markdown", mode = "n" },
+    {
+      "<localleader>h",
+      function()
+        local current_line = vim.fn.line(".")
+
+        -- Check if current line is a heading first
+        local heading_level = nil
+        local current_line_content = vim.fn.getline(".")
+        -- Match headings with or without text after # (accepts empty headings)
+        local current_level = current_line_content:match("^(#+)")
+        if current_level then
+          heading_level = #current_level
+        else
+          -- Search backwards for heading (using native search)
+          -- Pattern matches 1-6 # chars followed by space or end of line
+          local pos = vim.fn.searchpos("^#\\{1,6\\}\\(\\s\\|$\\)", "bnW")
+          if pos[1] > 0 then
+            local line_content = vim.fn.getline(pos[1])
+            local level = line_content:match("^(#+)")
+            heading_level = #level
+          end
+        end
+
+        -- Default to level 1 if no heading found
+        if not heading_level then
+          heading_level = 1
+        end
+
+        -- Find where to insert: before next heading/separator of same or higher level, or EOF
+        -- Search for headings OR section separators (---, ===)
+        local insert_line = vim.fn.line("$") -- Default to end of file
+        local saved_pos = vim.fn.getcurpos()
+        local search_start = current_line + 1
+        vim.fn.cursor(search_start, 1)
+
+        -- Search for headings (with or without text) OR section separators
+        local next_pos = vim.fn.search("^\\(#\\{1,6\\}\\(\\s\\|$\\)\\|---\\+\\s*$\\|===\\+\\s*$\\)", "W")
+        while next_pos > 0 do
+          -- Skip if we matched the line right after cursor (we want to insert within current section)
+          if next_pos == search_start then
+            local line_content = vim.fn.getline(next_pos)
+            local level = line_content:match("^(#+)")
+            -- Only skip if this heading is appropriate level (would be our boundary)
+            if
+              line_content:match("^---+%s*$")
+              or line_content:match("^===+%s*$")
+              or (level and #level <= heading_level)
+            then
+              -- This is a boundary right after cursor, insert before it
+              insert_line = next_pos - 1
+              break
+            end
+          end
+
+          local line_content = vim.fn.getline(next_pos)
+
+          -- Check if it's a section separator (treat as boundary)
+          if line_content:match("^---+%s*$") or line_content:match("^===+%s*$") then
+            insert_line = next_pos - 1
+            break
+          end
+
+          -- Check if it's a heading of appropriate level
+          local level = line_content:match("^(#+)")
+          if level and #level <= heading_level then
+            insert_line = next_pos - 1
+            break
+          end
+
+          vim.fn.cursor(next_pos + 1, 1)
+          next_pos = vim.fn.search("^\\(#\\{1,6\\}\\(\\s\\|$\\)\\|---\\+\\s*$\\|===\\+\\s*$\\)", "W")
+        end
+
+        vim.fn.setpos(".", saved_pos) -- restore cursor
+
+        -- Insert heading (with blank line before it if needed)
+        local heading_text = string.rep("#", heading_level) .. " "
+        local insert_line_content = vim.fn.getline(insert_line)
+
+        if insert_line_content:match("^%s*$") then
+          -- insert_line is already blank, just add heading without extra blank line
+          vim.fn.append(insert_line, heading_text)
+          vim.fn.cursor(insert_line + 1, #heading_text + 1)
+        else
+          -- insert_line has content, add blank line before heading
+          vim.fn.append(insert_line, { "", heading_text })
+          vim.fn.cursor(insert_line + 2, #heading_text + 1)
+        end
+
+        vim.cmd("startinsert!")
+      end,
+      desc = "Add heading (same level)",
+      ft = "markdown",
+      mode = "n",
+    },
+    {
+      "<localleader>s",
+      function()
+        local current_line = vim.fn.line(".")
+
+        -- Check if current line is a heading first
+        local heading_level = nil
+        local current_line_content = vim.fn.getline(".")
+        -- Match headings with or without text after # (accepts empty headings)
+        local current_level = current_line_content:match("^(#+)")
+        if current_level then
+          heading_level = #current_level
+        else
+          -- Search backwards for heading (using native search)
+          -- Pattern matches 1-6 # chars followed by space or end of line
+          local pos = vim.fn.searchpos("^#\\{1,6\\}\\(\\s\\|$\\)", "bnW")
+          if pos[1] > 0 then
+            local line_content = vim.fn.getline(pos[1])
+            local level = line_content:match("^(#+)")
+            heading_level = #level
+          end
+        end
+
+        -- Default to level 2 if no heading found (subheading of implicit level 1)
+        if not heading_level then
+          heading_level = 2
+        else
+          heading_level = heading_level + 1
+        end
+
+        -- Clamp to max level 6
+        if heading_level > 6 then
+          heading_level = 6
+        end
+
+        -- Find where to insert: before next heading/separator of equal or higher level, or EOF
+        -- Search for headings OR section separators (---, ===)
+        -- Stop at headings equal to or higher than what we're inserting (not just parent level)
+        local insert_line = vim.fn.line("$") -- Default to end of file
+        local saved_pos = vim.fn.getcurpos()
+        local search_start = current_line + 1
+        vim.fn.cursor(search_start, 1)
+
+        local next_pos = vim.fn.search("^\\(#\\+\\s\\|---\\+\\s*$\\|===\\+\\s*$\\)", "W")
+        while next_pos > 0 do
+          -- Skip if we matched the line right after cursor (we want to insert within current section)
+          if next_pos == search_start then
+            local line_content = vim.fn.getline(next_pos)
+            local level = line_content:match("^(#+)")
+            -- Only skip if this heading is appropriate level (would be our boundary)
+            if
+              line_content:match("^---+%s*$")
+              or line_content:match("^===+%s*$")
+              or (level and #level <= heading_level)
+            then
+              -- This is a boundary right after cursor, insert before it
+              insert_line = next_pos - 1
+              break
+            end
+          end
+
+          local line_content = vim.fn.getline(next_pos)
+
+          -- Check if it's a section separator (treat as boundary)
+          if line_content:match("^---+%s*$") or line_content:match("^===+%s*$") then
+            insert_line = next_pos - 1
+            break
+          end
+
+          -- Check if it's a heading of equal or higher level than what we're inserting
+          local level = line_content:match("^(#+)")
+          if level and #level <= heading_level then
+            insert_line = next_pos - 1
+            break
+          end
+
+          vim.fn.cursor(next_pos + 1, 1)
+          next_pos = vim.fn.search("^\\(#\\+\\s\\|---\\+\\s*$\\|===\\+\\s*$\\)", "W")
+        end
+
+        vim.fn.setpos(".", saved_pos) -- restore cursor
+
+        -- Insert heading (with blank line before it if needed)
+        local heading_text = string.rep("#", heading_level) .. " "
+        local insert_line_content = vim.fn.getline(insert_line)
+
+        if insert_line_content:match("^%s*$") then
+          -- insert_line is already blank, just add heading without extra blank line
+          vim.fn.append(insert_line, heading_text)
+          vim.fn.cursor(insert_line + 1, #heading_text + 1)
+        else
+          -- insert_line has content, add blank line before heading
+          vim.fn.append(insert_line, { "", heading_text })
+          vim.fn.cursor(insert_line + 2, #heading_text + 1)
+        end
+
+        vim.cmd("startinsert!")
+      end,
+      desc = "Add sub-heading (one level deeper)",
+      ft = "markdown",
+      mode = "n",
+    },
   },
   opts = {
     ui = {
@@ -143,7 +350,7 @@ return {
       -- Optional, default tags to add to each new daily note created.
       default_tags = { "daily-notes" },
       -- Optional, if you want to automatically insert a template from your template directory like 'daily.md'
-      template = nil,
+      template = "obsidian-daily-note.md",
     },
 
     -- Templates configuration
@@ -165,6 +372,12 @@ return {
         insert_link = "<C-l>",
       },
     },
+
+    -- Function to handle opening URLs when using gf on a link
+    follow_url_func = function(url)
+      -- Open the URL in the default browser
+      vim.fn.jobstart({ "open", url }, { detach = true })
+    end,
     mappings = {
       -- Overrides the 'gf' mapping to work on markdown/wiki links within your vault.
       ["gf"] = {

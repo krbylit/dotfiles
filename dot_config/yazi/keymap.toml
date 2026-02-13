@@ -350,6 +350,11 @@ run = "cd ~/.local/share/chezmoi/"
 desc = "Go to the chezmoi directory"
 
 [[mgr.prepend_keymap]]
+on = ["g", "o"]
+run = "cd ~/obsidian-vault/"
+desc = "Go to Obsidian vault"
+
+[[mgr.prepend_keymap]]
 on = ["s"]
 run = "plugin searchjump"
 desc = "searchjump mode"

@@ -17,15 +17,16 @@ return {
 
     -- Disable cursorline in markdown files
     -- NOTE: This also disables custom hls from statuscol
-    -- local augroup = vim.api.nvim_create_augroup("Markview", { clear = true })
-    -- vim.api.nvim_create_autocmd("FileType", {
-    --   group = augroup,
-    --   pattern = "markdown",
-    --   callback = function()
-    --     vim.opt_local.cursorline = false
-    --     vim.cmd("IlluminatePauseBuf")
-    --   end,
-    -- })
+    local augroup = vim.api.nvim_create_augroup("Markview", { clear = true })
+    vim.api.nvim_create_autocmd("FileType", {
+      group = augroup,
+      pattern = "markdown",
+      callback = function()
+        vim.opt_local.wrap = false -- Disable wrapping to avoid highlight issues
+        -- vim.opt_local.cursorline = false
+        -- vim.cmd("IlluminatePauseBuf")
+      end,
+    })
     Snacks.toggle({
       name = "Markview",
       get = function()
@@ -107,35 +108,42 @@ return {
         -- pad_char = " ",
         label_direction = "right",
       },
-      headings = vim.tbl_deep_extend("force", presets.headings.glow_center, {
+      headings = vim.tbl_deep_extend("force", presets.headings.glow, {
+        shift_width = 0,
         heading_1 = {
           corner_right = "",
-          padding_left = "░░░░▒▒▒▓▓█  ",
+          -- padding_left = "░░░░▒▒▒▓▓█  ",
+          padding_left = "█ ",
           padding_right = "  █▓▓▒▒▒░░░░",
         },
         heading_2 = {
           corner_right = "",
-          padding_left = "░░░░▒▒▒▓▓█  ",
+          -- padding_left = "░░░░▒▒▒▓▓█  ",
+          padding_left = "██ ",
           padding_right = "  █▓▓▒▒▒░░░░",
         },
         heading_3 = {
           corner_right = "",
-          padding_left = "░░░░▒▒▒▓▓█  ",
+          -- padding_left = "░░░░▒▒▒▓▓█  ",
+          padding_left = "███ ",
           padding_right = "  █▓▓▒▒▒░░░░",
         },
         heading_4 = {
           corner_right = "",
-          padding_left = "░░░░▒▒▒▓▓█  ",
+          -- padding_left = "░░░░▒▒▒▓▓█  ",
+          padding_left = "████ ",
           padding_right = "  █▓▓▒▒▒░░░░",
         },
         heading_5 = {
           corner_right = "",
-          padding_left = "░░░░▒▒▒▓▓█  ",
+          -- padding_left = "░░░░▒▒▒▓▓█  ",
+          padding_left = "█████ ",
           padding_right = "  █▓▓▒▒▒░░░░",
         },
         heading_6 = {
           corner_right = "",
-          padding_left = "░░░░▒▒▒▓▓█  ",
+          -- padding_left = "░░░░▒▒▒▓▓█  ",
+          padding_left = "██████ ",
           padding_right = "  █▓▓▒▒▒░░░░",
         },
       }),
