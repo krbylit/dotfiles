@@ -197,7 +197,16 @@ return {
     ---@type NoiceConfigViews
     views = {}, ---@see section on views
     ---@type NoiceRouteConfig[]
-    routes = {}, --- @see section on routes
+    routes = {
+      -- Filter out obsidian conceallevel warning (we handle it manually)
+      {
+        filter = {
+          event = "notify",
+          find = "conceallevel.*obsidian",
+        },
+        opts = { skip = true },
+      },
+    }, --- @see section on routes
     ---@type table<string, NoiceFilter>
     status = {}, --- @see section on statusline components
     ---@type NoiceFormatOptions

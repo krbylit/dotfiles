@@ -19,6 +19,9 @@ bind --mode default yy vi_copy_to_clipboard
 # bind --mode insert ctrl-s 'commandline -f repaint; ripgrep_live (commandline -b)'
 # bind --mode default ctrl-s 'commandline -f repaint; ripgrep_live (commandline -b)'
 # fzf-lua live grep
+
+bind --mode insert ctrl-i 'commandline -f repaint; set -l result (nvim -l "$XDG_DATA_HOME/nvim/lazy/fzf-lua/scripts/cli.lua" live_grep_native search=(commandline -b) "cwd=$CHEZMOI_SOURCE_PATH"); and commandline --current-token --replace -- (string escape -- $result)'
+bind --mode default ctrl-i 'commandline -f repaint; set -l result (nvim -l "$XDG_DATA_HOME/nvim/lazy/fzf-lua/scripts/cli.lua" live_grep_native search=(commandline -b) "cwd=$CHEZMOI_SOURCE_PATH"); and commandline --current-token --replace -- (string escape -- $result)'
 bind --mode insert ctrl-s 'commandline -f repaint; set -l result (nvim -l "$XDG_DATA_HOME/nvim/lazy/fzf-lua/scripts/cli.lua" live_grep_native search=(commandline -b)); and commandline --current-token --replace -- (string escape -- $result)'
 bind --mode default ctrl-s 'commandline -f repaint; set -l result (nvim -l "$XDG_DATA_HOME/nvim/lazy/fzf-lua/scripts/cli.lua" live_grep_native search=(commandline -b)); and commandline --current-token --replace -- (string escape -- $result)'
 # fzf-lua files search
