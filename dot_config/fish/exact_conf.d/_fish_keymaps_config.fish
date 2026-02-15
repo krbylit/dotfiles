@@ -22,8 +22,8 @@ bind --mode default yy vi_copy_to_clipboard
 bind --mode insert ctrl-t 'tv todo-comments; commandline -f repaint'
 bind --mode default ctrl-t 'tv todo-comments; commandline -f repaint'
 # Yazi
-bind --mode insert ctrl-a 'yazicd; commandline -f repaint'
-bind --mode default ctrl-a 'yazicd; commandline -f repaint'
+bind --mode insert ctrl-a 'yazicd; set fish_bind_mode insert'
+bind --mode default ctrl-a 'yazicd; set fish_bind_mode default'
 # fzf grep CHEZMOI_SOURCE_PATH
 bind --mode insert ctrl-i 'commandline -f repaint; set -l result (nvim -l "$XDG_DATA_HOME/nvim/lazy/fzf-lua/scripts/cli.lua" live_grep_native search=(commandline -b) "cwd=$CHEZMOI_SOURCE_PATH"); and commandline --current-token --replace -- (string escape -- $result)'
 bind --mode default ctrl-i 'commandline -f repaint; set -l result (nvim -l "$XDG_DATA_HOME/nvim/lazy/fzf-lua/scripts/cli.lua" live_grep_native search=(commandline -b) "cwd=$CHEZMOI_SOURCE_PATH"); and commandline --current-token --replace -- (string escape -- $result)'

@@ -93,7 +93,7 @@ require("fzf-lua").setup({
     no_ignore = true,
     follow = true, -- follow symlinks
     actions = {
-      ["enter"] = function(selected, opts)
+      ["ctrl-f"] = function(selected, opts)
         if not selected[1] then
           return
         end
@@ -107,6 +107,34 @@ require("fzf-lua").setup({
         -- Print to stdout (will be captured by Fish keybinding)
         io.write(paths_str)
         io.flush()
+        os.exit(0)
+      end,
+      ["ctrl-y"] = function(selected, opts)
+        if not selected[1] then
+          return
+        end
+        -- Copy selected file path(s) to clipboard
+        local paths = {}
+        for _, item in ipairs(selected) do
+          local file = require("fzf-lua").path.entry_to_file(item, opts)
+          table.insert(paths, file.path)
+        end
+        local paths_str = table.concat(paths, " ")
+        -- Copy to system clipboard
+        os.execute(string.format("printf '%%s' %s | pbcopy", vim.fn.shellescape(paths_str)))
+      end,
+      ["enter"] = function(selected, opts)
+        if not selected[1] then
+          return
+        end
+        -- Build list of file paths from all selected items
+        local files = {}
+        for _, item in ipairs(selected) do
+          local file = require("fzf-lua").path.entry_to_file(item, opts)
+          table.insert(files, vim.fn.shellescape(file.path))
+        end
+        -- Open all selected files in nvim (as tabs)
+        os.execute(string.format("nvim -p %s </dev/tty >/dev/tty", table.concat(files, " ")))
         os.exit(0)
       end,
       ["ctrl-o"] = function(selected, opts)
@@ -139,7 +167,7 @@ require("fzf-lua").setup({
     file_icons = false,
     git_icons = false,
     actions = {
-      ["enter"] = function(selected, opts)
+      ["ctrl-f"] = function(selected, opts)
         if not selected[1] then
           return
         end
@@ -155,6 +183,34 @@ require("fzf-lua").setup({
         io.flush()
         os.exit(0)
       end,
+      ["ctrl-y"] = function(selected, opts)
+        if not selected[1] then
+          return
+        end
+        -- Copy selected file path(s) to clipboard
+        local paths = {}
+        for _, item in ipairs(selected) do
+          local file = require("fzf-lua").path.entry_to_file(item, opts)
+          table.insert(paths, file.path)
+        end
+        local paths_str = table.concat(paths, " ")
+        -- Copy to system clipboard
+        os.execute(string.format("printf '%%s' %s | pbcopy", vim.fn.shellescape(paths_str)))
+      end,
+      ["enter"] = function(selected, opts)
+        if not selected[1] then
+          return
+        end
+        -- Build list of file paths from all selected items
+        local files = {}
+        for _, item in ipairs(selected) do
+          local file = require("fzf-lua").path.entry_to_file(item, opts)
+          table.insert(files, vim.fn.shellescape(file.path))
+        end
+        -- Open all selected files in nvim (as tabs)
+        os.execute(string.format("nvim -p %s </dev/tty >/dev/tty", table.concat(files, " ")))
+        os.exit(0)
+      end,
       ["ctrl-o"] = function(selected, opts)
         if not selected[1] then
           return
@@ -167,7 +223,7 @@ require("fzf-lua").setup({
         end
         -- Open all selected files in nvim (as tabs)
         os.execute(string.format("nvim -p %s </dev/tty >/dev/tty", table.concat(files, " ")))
-        vim.cmd.qall()
+        os.exit(0)
       end,
     },
   },
@@ -193,6 +249,19 @@ require("fzf-lua").setup({
         end,
         -- Default doesn't work because we exit nvim after yank
         -- ["ctrl-y"] = { fn = require("fzf-lua").actions.git_yank_commit, exec_silent = false },
+        ["ctrl-f"] = function(selected)
+          if not selected[1] then
+            return
+          end
+          -- Extract commit hash (first field before space/colon)
+          local commit_hash = selected[1]:match("^(%S+)")
+          if commit_hash then
+            -- Print to stdout (will be captured by Fish keybinding)
+            io.write(commit_hash)
+            io.flush()
+            os.exit(0)
+          end
+        end,
         ["ctrl-y"] = function(selected)
           if not selected[1] then
             return
@@ -202,7 +271,6 @@ require("fzf-lua").setup({
           if commit_hash then
             -- Copy to system clipboard using printf (more reliable than echo -n)
             os.execute(string.format("printf '%%s' %s | pbcopy", vim.fn.shellescape(commit_hash)))
-            print("Copied: " .. commit_hash)
           end
         end,
       },
