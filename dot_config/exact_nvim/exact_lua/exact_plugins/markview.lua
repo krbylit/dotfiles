@@ -54,7 +54,7 @@ return {
     require("markview.extras.checkboxes").setup({
       --- Default checkbox state(used when adding checkboxes).
       ---@type string
-      default = "X",
+      default = " ",
 
       --- Changes how checkboxes are removed.
       ---@type
@@ -69,7 +69,7 @@ return {
       --- when there are a lot of states.
       ---@type string[][]
       states = {
-        { " ", "/", "X" },
+        { " ", "/", "x", "-" },
         { "<", ">" },
         { "?", "!", "*" },
         { '"' },
@@ -96,7 +96,34 @@ return {
     -- check_rtp_message = false,
     -- },
     ---@diagnostic disable-next-line: missing-fields
-    markdown_inline = { checkboxes = presets.checkboxes.nerd },
+    markdown_inline = {
+      checkboxes = presets.checkboxes.nerd,
+      -- checkboxes = {
+      --     enable = true,
+      --     checked = { text = "󰗠", hl = "MarkviewCheckboxChecked", scope_hl = "MarkviewCheckboxChecked" },
+      --     unchecked = { text = "󰄰", hl = "MarkviewCheckboxUnchecked", scope_hl = "MarkviewCheckboxUnchecked" },
+      --     ["/"] = { text = "󱎖", hl = "MarkviewCheckboxPending" },
+      --     [">"] = { text = "", hl = "MarkviewCheckboxCancelled" },
+      --     ["<"] = { text = "󰃖", hl = "MarkviewCheckboxCancelled" },
+      --     ["-"] = { text = "󰍶", hl = "MarkviewCheckboxCancelled", scope_hl = "MarkviewCheckboxStriked" },
+      --     ["?"] = { text = "󰋗", hl = "MarkviewCheckboxPending" },
+      --     ["!"] = { text = "󰀦", hl = "MarkviewCheckboxUnchecked" },
+      --     ["*"] = { text = "󰓎", hl = "MarkviewCheckboxPending" },
+      --     ['"'] = { text = "󰸥", hl = "MarkviewCheckboxCancelled" },
+      --     ["l"] = { text = "󰆋", hl = "MarkviewCheckboxProgress" },
+      --     ["b"] = { text = "󰃀", hl = "MarkviewCheckboxProgress" },
+      --     ["i"] = { text = "󰰄", hl = "MarkviewCheckboxChecked" },
+      --     ["S"] = { text = "", hl = "MarkviewCheckboxChecked" },
+      --     ["I"] = { text = "󰛨", hl = "MarkviewCheckboxPending" },
+      --     ["p"] = { text = "", hl = "MarkviewCheckboxChecked" },
+      --     ["c"] = { text = "", hl = "MarkviewCheckboxUnchecked" },
+      --     ["f"] = { text = "󱠇", hl = "MarkviewCheckboxUnchecked" },
+      --     ["k"] = { text = "", hl = "MarkviewCheckboxPending" },
+      --     ["w"] = { text = "", hl = "MarkviewCheckboxProgress" },
+      --     ["u"] = { text = "󰔵", hl = "MarkviewCheckboxChecked" },
+      --     ["d"] = { text = "󰔳", hl = "MarkviewCheckboxUnchecked" },
+      -- },
+    },
     ---@diagnostic disable-next-line: missing-fields
     markdown = {
       ---@diagnostic disable-next-line: missing-fields

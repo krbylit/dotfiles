@@ -8,6 +8,36 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
     end)
   end,
 })
+-- FIX: Obsidian won't disable when in .claude
+-- vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
+--   group = augroup,
+--   pattern = "*/obsidian-vault/.claude/*",
+--   callback = function(ev)
+--     -- Disable obsidian for this buffer
+--     require("obsidian").setup({
+--       workspaces = {
+--         -- {
+--         --     name = "personal",
+--         --     path = "~/vaults/personal",
+--         -- },
+--         {
+--           name = "work",
+--           -- path = "~/.local/share/chezmoi/vaults/work",
+--           path = "~/obsidian-vault",
+--         },
+--       },
+--       ui = {
+--         enable = false,
+--       },
+--     })
+--
+--     -- Optionally unmap obsidian keybindings for this buffer
+--     -- local keymaps_to_unmap = { "gf", "<leader>ch", "<cr>" }
+--     -- for _, key in ipairs(keymaps_to_unmap) do
+--     --   pcall(vim.keymap.del, "n", key, { buffer = ev.buf })
+--     -- end
+--   end,
+-- })
 
 return {
   "epwalsh/obsidian.nvim",
@@ -54,6 +84,13 @@ return {
     { "<leader>oT", "<cmd>ObsidianTemplate<cr>", desc = "Insert template", ft = "markdown" },
 
     -- Markdown editing helpers (localleader)
+    {
+      "<localleader>i",
+      "<cmd>Checkbox interactive<cr>",
+      desc = "Change checkbox interactively",
+      ft = "markdown",
+      mode = "n",
+    },
     { "<localleader>t", "o- [ ] ", desc = "Add todo item", ft = "markdown", mode = "n" },
     { "<localleader>b", "o- ", desc = "Add bullet point", ft = "markdown", mode = "n" },
     { "<localleader>1", "o# ", desc = "Heading level 1", ft = "markdown", mode = "n" },
@@ -268,11 +305,19 @@ return {
       -- Define how various check-boxes are displayed
       checkboxes = {
         -- NOTE: the 'char' value has to be a single character, and the highlight groups are defined below.
-        [" "] = { char = "󰄱", hl_group = "ObsidianTodo" },
-        ["x"] = { char = "", hl_group = "ObsidianDone" },
-        [">"] = { char = "", hl_group = "ObsidianRightArrow" },
-        ["~"] = { char = "󰰱", hl_group = "ObsidianTilde" },
-        ["!"] = { char = "", hl_group = "ObsidianImportant" },
+        -- Styling provided by markview.nvim
+        [" "] = {},
+        ["/"] = {},
+        ["x"] = {},
+        ["-"] = {},
+        -- [">"] = { hl_group = "ObsidianRightArrow" },
+        -- ["~"] = { hl_group = "ObsidianTilde" },
+        -- ["!"] = { hl_group = "ObsidianImportant" },
+        -- [" "] = { char = "󰄱", hl_group = "ObsidianTodo" },
+        -- ["x"] = { char = "", hl_group = "ObsidianDone" },
+        -- [">"] = { char = "", hl_group = "ObsidianRightArrow" },
+        -- ["~"] = { char = "󰰱", hl_group = "ObsidianTilde" },
+        -- ["!"] = { char = "", hl_group = "ObsidianImportant" },
         -- Replace the above with this if you don't have a patched font:
         -- [" "] = { char = "☐", hl_group = "ObsidianTodo" },
         -- ["x"] = { char = "✔", hl_group = "ObsidianDone" },
@@ -280,8 +325,8 @@ return {
         -- You can also add more custom ones...
       },
       -- Use bullet marks for non-checkbox lists.
-      bullets = { char = "•", hl_group = "ObsidianBullet" },
-      external_link_icon = { char = "", hl_group = "ObsidianExtLinkIcon" },
+      bullets = {},
+      external_link_icon = {},
       -- Replace the above with this if you don't have a patched font:
       -- external_link_icon = { char = "", hl_group = "ObsidianExtLinkIcon" },
       reference_text = { hl_group = "ObsidianRefText" },

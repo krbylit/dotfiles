@@ -78,7 +78,17 @@ yabai -m config mouse_drop_action swap
 yabai -m config focus_follows_mouse off
 yabai -m config mouse_follows_focus off
 
-# Create and label spaces
+# Ensure correct number of spaces exist
+current_space_count=$(yabai -m query --spaces | jq 'length')
+target_space_count=$(echo $SPACES | wc -w | tr -d ' ')
+
+# Create missing spaces if needed
+while [ "$current_space_count" -lt "$target_space_count" ]; do
+	yabai -m space --create
+	current_space_count=$((current_space_count + 1))
+done
+
+# Label spaces
 i=1
 for space in $SPACES; do
 	yabai -m space $i --label "$space"
