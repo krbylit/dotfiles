@@ -1,3 +1,3 @@
-function m --description "Open tomorrow's daily note in Obsidian vault"
-    nvim +'ObsidianTomorrow'
+function r --description "Open next Monday's daily note in Obsidian vault"
+    nvim +'Obsidian monday'
 end
