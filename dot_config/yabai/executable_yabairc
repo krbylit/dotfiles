@@ -18,16 +18,16 @@ sudo yabai --load-sa
 # TOP_PADDING=$((BAR_HEIGHT + 6))
 PADDING=6
 
+# Display detection
+DISPLAY_COUNT=$(yabai -m query --displays | jq '. | length')
+DISPLAY_2=$((DISPLAY_COUNT > 1 ? 2 : 1))
+
 # Space names (in order)
 if [ "$DISPLAY_COUNT" -gt 1 ]; then
 	SPACES="term browser code dev misc comms ref debug util"
 else
 	SPACES="term browser code dev misc comms ref debug"
 fi
-
-# Display detection
-DISPLAY_COUNT=$(yabai -m query --displays | jq '. | length')
-DISPLAY_2=$((DISPLAY_COUNT > 1 ? 2 : 1))
 # Determine the layout based on the number of connected displays
 if [ "$DISPLAY_COUNT" -gt 1 ]; then
     DEFAULT_LAYOUT="bsp"

@@ -39,6 +39,22 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
 --   end,
 -- })
 
+-- Matched as plain substrings against both vault-relative paths (frontmatter.enabled)
+-- and absolute paths (enter_note). No leading slash so both contexts match.
+local obsidian_excluded_paths = {
+  "03_Resources/src_code",
+  "01_Projects/src/",
+}
+
+local function obsidian_path_excluded(fname)
+  for _, excluded in ipairs(obsidian_excluded_paths) do
+    if fname and fname:find(excluded, 1, true) then
+      return true
+    end
+  end
+  return false
+end
+
 return {
   "obsidian-nvim/obsidian.nvim",
 
@@ -304,6 +320,13 @@ return {
     -- Disable legacy commands (use new "Obsidian <action>" format instead)
     legacy_commands = false,
 
+    -- Disable frontmatter insertion for excluded paths
+    frontmatter = {
+      enabled = function(fname)
+        return not obsidian_path_excluded(fname)
+      end,
+    },
+
     -- Checkbox configuration
     checkbox = {
       enabled = true,
@@ -437,6 +460,9 @@ return {
     -- Callbacks for setting up buffer-local keymaps
     callbacks = {
       enter_note = function()
+        if obsidian_path_excluded(vim.api.nvim_buf_get_name(0)) then
+          return
+        end
         -- Buffer-local keymaps for obsidian notes
         -- gf to follow links
         vim.keymap.set("n", "gf", function()
