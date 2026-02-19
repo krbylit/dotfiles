@@ -99,6 +99,7 @@ return {
 
     -- Utilities
     { "<leader>oo", "<cmd>Obsidian open<cr>", desc = "Open in Obsidian app", ft = "markdown" },
+    { "<leader>op", "<cmd>Obsidian scratchpad<cr>", desc = "Open scratch pad" },
     { "<leader>ox", "<cmd>Obsidian toggle_checkbox<cr>", desc = "Toggle checkbox", ft = "markdown" },
     { "<leader>oT", "<cmd>Obsidian template<cr>", desc = "Insert template", ft = "markdown" },
 
@@ -321,6 +322,7 @@ return {
     legacy_commands = false,
 
     -- Disable frontmatter insertion for excluded paths
+    ---@type obsidian.config.FrontmatterOpts
     frontmatter = {
       enabled = function(fname)
         return not obsidian_path_excluded(fname)
@@ -328,6 +330,7 @@ return {
     },
 
     -- Checkbox configuration
+    ---@type obsidian.config.CheckboxOpts
     checkbox = {
       enabled = true,
       create_new = true,
@@ -338,38 +341,13 @@ return {
     ui = {
       -- NOTE: deprecated in newer obsidian.nvim
       enable = false, -- set to false to disable all additional syntax features
-      -- enable = true, -- set to false to disable all additional syntax features
-      -- update_debounce = 200, -- update delay after a text change (in milliseconds)
-      -- max_file_length = 5000, -- disable UI features for files with more than this many lines
-      -- -- Use bullet marks for non-checkbox lists.
-      -- bullets = {},
-      -- external_link_icon = {},
-      -- -- Replace the above with this if you don't have a patched font:
-      -- -- external_link_icon = { char = "", hl_group = "ObsidianExtLinkIcon" },
-      -- reference_text = { hl_group = "ObsidianRefText" },
-      -- highlight_text = { hl_group = "ObsidianHighlightText" },
-      -- tags = { hl_group = "ObsidianTag" },
-      -- block_ids = { hl_group = "ObsidianBlockID" },
-      -- hl_groups = {
-      --   -- The options are passed directly to `vim.api.nvim_set_hl()`. See `:help nvim_set_hl`.
-      --   ObsidianTodo = { bold = true, fg = "#f78c6c" },
-      --   ObsidianDone = { bold = true, fg = "#89ddff" },
-      --   ObsidianRightArrow = { bold = true, fg = "#f78c6c" },
-      --   ObsidianTilde = { bold = true, fg = "#ff5370" },
-      --   ObsidianImportant = { bold = true, fg = "#d73128" },
-      --   ObsidianBullet = { bold = true, fg = "#89ddff" },
-      --   ObsidianRefText = { underline = true, fg = "#c792ea" },
-      --   ObsidianExtLinkIcon = { fg = "#c792ea" },
-      --   ObsidianTag = { italic = true, fg = "#89ddff" },
-      --   ObsidianBlockID = { italic = true, fg = "#89ddff" },
-      --   ObsidianHighlightText = { bg = "#75662e" },
-      -- },
     },
+    ---@type obsidian.config.AttachmentsOpts
     attachments = {
       -- The default folder to place images in via `:ObsidianPasteImg`.
       -- If this is a relative path it will be interpreted as relative to the vault root.
       -- You can always override this per image by passing a full path to the command instead of just a filename.
-      folder = "assets/imgs", -- This is the default
+      folder = "05_Attachments/images", -- This is the default
     },
     workspaces = {
       -- {
@@ -378,20 +356,31 @@ return {
       -- },
       {
         name = "work",
-        -- path = "~/.local/share/chezmoi/vaults/work",
         path = "~/obsidian-vault",
       },
     },
 
-    -- Where to put new notes created with :ObsidianNew
-    notes_subdir = "07_Notes",
-    new_notes_location = "notes_subdir",
+    -- wiki_link_func = require("obsidian.builtin").wiki_link_id_prefix,
+    -- markdown_link_func = require("obsidian.builtin").markdown_link,
+    preferred_link_style = "wiki",
+    ---@type obsidian.config.CommentOpts
+    comment = {
+      enabled = true,
+    },
     completion = {
       -- Set to false to disable completion.
       nvim_cmp = true,
       -- Trigger completion at 2 chars.
       min_chars = 2,
     },
+    -- Where to put new notes created with :ObsidianNew
+    notes_subdir = "07_Notes",
+    new_notes_location = "notes_subdir",
+    ---@type obsidian.config.NoteOpts
+    note = {
+      -- template = "",
+    },
+    ---@type obsidian.config.DailyNotesOpts
     daily_notes = {
       -- Optional, if you keep daily notes in a separate directory.
       folder = "07_Notes/00_Daily",
@@ -403,9 +392,11 @@ return {
       default_tags = { "daily-notes" },
       -- Optional, if you want to automatically insert a template from your template directory like 'daily.md'
       template = "obsidian-daily-note.md",
+      workdays_only = false,
     },
 
     -- Templates configuration
+    ---@type obsidian.config.TemplateOpts
     templates = {
       folder = "06_Metadata/Templates",
       date_format = "%Y-%m-%d",
@@ -442,8 +433,14 @@ return {
           return string.format("%s %s", day_name, short_date)
         end,
       },
+      ---@type obsidian.config.CustomTemplateOpts
+      customizations = {},
     },
-
+    -- ---@type obsidian.config.BacklinkOpts
+    -- backlinks = {
+    --   parse_headers = true,
+    -- },
+    ---@type obsidian.config.PickerNoteMappingOpts
     picker = {
       -- Set your preferred picker. Can be one of 'telescope.nvim', 'fzf-lua', or 'mini.pick'.
       name = "fzf-lua",
@@ -458,6 +455,7 @@ return {
     },
 
     -- Callbacks for setting up buffer-local keymaps
+    ---@type obsidian.config.CallbackConfig
     callbacks = {
       enter_note = function()
         if obsidian_path_excluded(vim.api.nvim_buf_get_name(0)) then
@@ -479,6 +477,13 @@ return {
           return require("obsidian").util.smart_action()
         end, { buffer = true, expr = true, desc = "Smart action" })
       end,
+    },
+    ---@type obsidian.config.FooterOpts
+    footer = {
+      enabled = true,
+      format = "{{backlinks}} backlinks  {{properties}} properties  {{words}} words  {{chars}} chars",
+      hl_group = "Comment",
+      separator = string.rep("-", 80),
     },
 
     -- see below for full list of options 👇
@@ -508,6 +513,15 @@ return {
         -- Use the daily note function with offset
         local note = require("obsidian.daily").daily(days_until_monday, {})
         note:open()
+      end,
+    })
+
+    -- Register custom "scratchpad" subcommand that opens the scratch pad note
+    commands.register("scratchpad", {
+      nargs = 0,
+      func = function()
+        local note_path = tostring(Obsidian.workspace.path) .. "/00_Inbox/scratch_workspace/scratch-pad.md"
+        vim.cmd("edit " .. note_path)
       end,
     })
 

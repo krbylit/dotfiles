@@ -168,13 +168,21 @@ local diagnostics_disabled_fts = {
   -- "toml",
   -- "yaml",
   -- "yml",
-  "env",
   "gitconfig",
 }
 vim.api.nvim_create_autocmd("FileType", {
   pattern = diagnostics_disabled_fts,
   callback = function()
     -- Disable diagnostics only in current buffer.
+    vim.diagnostic.enable(false, { bufnr = 0 })
+  end,
+})
+
+-- Disable autoformat for .env files (detected as 'sh' filetype; lsp_format=fallback causes bashls to format them)
+vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
+  pattern = { ".env", "*.env", ".env.*", "*.env.*" },
+  callback = function()
+    vim.b.autoformat = false
     vim.diagnostic.enable(false, { bufnr = 0 })
   end,
 })

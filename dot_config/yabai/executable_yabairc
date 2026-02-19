@@ -179,6 +179,7 @@ COMMS_APPS=(
 
 REF_APPS=(
     # Notion
+    Obsidian
     "Notion Calendar"
     "LM Studio"
     Ollama

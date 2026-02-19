@@ -36,12 +36,10 @@ if vim.env.IS_SSH == "1" then
   table.insert(disabled, { "glacambre/firenvim", enabled = false })
   table.insert(disabled, { "isakbm/gitgraph.nvim", enabled = false })
   table.insert(disabled, { "OXY2DEV/helpview.nvim", enabled = false })
-  -- table.insert(disabled, { "OXY2DEV/markview.nvim", enabled = false })
   table.insert(disabled, { "nvim-mini/mini.map", enabled = false })
   -- table.insert(disabled, { "nvim-mini/mini.misc", enabled = false })
   -- table.insert(disabled, { "nvim-mini/mini.statusline", enabled = false })
   -- table.insert(disabled, { "nvim-mini/mini.tabline", enabled = false })
-  table.insert(disabled, { "epwalsh/obsidian.nvim", enabled = false })
   table.insert(disabled, { "nvchad/showkeys", enabled = false })
   table.insert(disabled, { "leath-dub/snipe.nvim", enabled = false })
   table.insert(disabled, { "luukvbaal/statuscol.nvim", enabled = false })
@@ -49,6 +47,8 @@ if vim.env.IS_SSH == "1" then
   table.insert(disabled, { "carlos-algms/agentic.nvim", enabled = false })
   table.insert(disabled, { "stevearc/overseer.nvim", enabled = false })
   table.insert(disabled, { "folke/sidekick.nvim", enabled = false })
+  table.insert(disabled, { "OXY2DEV/markview.nvim", enabled = false })
+  table.insert(disabled, { "obsidian-nvim/obsidian.nvim", enabled = false })
   -- table.insert(disabled, { "", enabled = false })
 end
 
