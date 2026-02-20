@@ -1,8 +1,8 @@
 -- QoL mini-plugins
 -- https://github.com/folke/snacks.nvim
 local function get_terminal_size()
-  local width = vim.api.nvim_get_option("columns") -- Get terminal width
-  local height = vim.api.nvim_get_option("lines") -- Get terminal height
+  local width = vim.api.nvim_get_option_value("columns", {}) -- Get terminal width
+  local height = vim.api.nvim_get_option_value("lines", {}) -- Get terminal height
   return width, height
 end
 local terminal_width, terminal_height = get_terminal_size()
@@ -666,7 +666,36 @@ return {
     },
     ---@type snacks.image.Config
     image = {
-      enabled = true,
+      enabled = vim.env.IS_SSH ~= "1",
+      -- ImageMagick conversion is required for everything except PNG
+      -- (defaults shown in docs; keeping explicit so it’s obvious)
+      formats = {
+        "png",
+        "jpg",
+        "jpeg",
+        "gif",
+        "bmp",
+        "webp",
+        "tiff",
+        "heic",
+        "avif",
+        "mp4",
+        "mov",
+        "avi",
+        "mkv",
+        "webm",
+        "pdf",
+        "icns",
+      },
+      convert = {
+        notify = false,
+        magick = {
+          default = { "{src}[0]", "-scale", "1920x1080>" },
+          vector = { "-density", 192, "{src}[{page}]" },
+          math = { "-density", 192, "{src}[{page}]", "-trim" },
+          pdf = { "-density", 192, "{src}[{page}]", "-background", "white", "-alpha", "remove", "-trim" },
+        },
+      },
       doc = {
         -- enable image viewer for documents
         -- a treesitter parser must be available for the enabled languages.
@@ -677,9 +706,9 @@ return {
         inline = true,
         -- render the image in a floating window
         -- only used if `opts.inline` is disabled
-        float = true,
-        max_width = 80,
-        max_height = 40,
+        -- float = true,
+        -- max_width = 80,
+        -- max_height = 40,
         -- Set to `true`, to conceal the image text when rendering inline.
         -- (experimental)
         ---@param lang string tree-sitter language
@@ -859,6 +888,111 @@ return {
         Snacks.explorer.open()
       end,
       desc = "Open Explorer",
+    },
+    -- Obsidian: find existing note or create new one, inserting wikilink at cursor
+    {
+      "<leader>oN",
+      function()
+        local buf = vim.api.nvim_get_current_buf()
+        local main_win = vim.api.nvim_get_current_win()
+
+        local Note = require("obsidian.note")
+        local Path = require("obsidian.path")
+
+        local function insert_link(note, open_vsplit)
+          local link = note:format_link()
+          -- Re-read cursor position at call time (picker may have moved focus).
+          -- Clamp col+1 to line length so inserting on an empty line (col=0)
+          -- doesn't produce an out-of-range start_col error.
+          local cur_row, cur_col = unpack(vim.api.nvim_win_get_cursor(main_win))
+          local line = vim.api.nvim_buf_get_lines(buf, cur_row - 1, cur_row, true)[1] or ""
+          local insert_col = math.min(cur_col + 1, #line)
+          vim.api.nvim_buf_set_text(buf, cur_row - 1, insert_col, cur_row - 1, insert_col, { link })
+          vim.api.nvim_win_set_cursor(main_win, { cur_row, insert_col + #link })
+          if open_vsplit then
+            note:open({ open_strategy = "vsplit", sync = true })
+          end
+        end
+
+        local function create_note(name)
+          if not name or name == "" then
+            return
+          end
+          local id = name:gsub("%s+", "-"):gsub("[^%w%-_]", "")
+          local note = Note.create({
+            id = id,
+            dir = Path.new(Obsidian.opts.notes_subdir),
+            verbatim = true,
+            aliases = { name },
+            should_write = true,
+          })
+          insert_link(note, true)
+        end
+
+        -- Replicate :Obsidian search exactly: use obsidian's own rg command
+        -- (--type=md, --type-add md:*.qmd, exclude patterns) via the snacks
+        -- low-level pick API with source="grep" and a custom cmd/args.
+        -- This is the same approach obsidian.nvim's _snacks.lua picker uses.
+        local obs_search = require("obsidian.search")
+        local grep_args = obs_search.build_grep_cmd()
+        local grep_cmd = table.remove(grep_args, 1)
+
+        Snacks.picker.pick({
+          source = "grep",
+          title = "Obsidian Search",
+          cwd = tostring(Obsidian.dir),
+          cmd = grep_cmd,
+          args = grep_args,
+          actions = {
+            -- Enter: insert wikilink + open note in vsplit
+            confirm = function(picker, item)
+              picker:close()
+              if not item then
+                return
+              end
+              local path = Snacks.picker.util.path(item)
+              if not path then
+                return
+              end
+              vim.api.nvim_set_current_win(main_win)
+              insert_link(Note.from_file(path), true)
+            end,
+            -- Ctrl-I: insert wikilink only, do not open
+            obsidian_insert_link = function(picker, item)
+              picker:close()
+              if not item then
+                return
+              end
+              local path = Snacks.picker.util.path(item)
+              if not path then
+                return
+              end
+              vim.api.nvim_set_current_win(main_win)
+              insert_link(Note.from_file(path), false)
+            end,
+            -- Ctrl-N: create new note from query text, insert wikilink + open vsplit
+            obsidian_create_note = function(picker, _)
+              local query = picker.input.filter.pattern or ""
+              picker:close()
+              vim.schedule(function()
+                vim.ui.input({ prompt = "New note title: ", default = query }, function(input)
+                  create_note(input)
+                end)
+              end)
+            end,
+          },
+          win = {
+            input = {
+              keys = {
+                ["<C-i>"] = { "obsidian_insert_link", mode = { "i", "n" }, desc = "Insert wikilink (no open)" },
+                ["<C-n>"] = { "obsidian_create_note", mode = { "i", "n" }, desc = "Create new note" },
+              },
+            },
+          },
+        })
+      end,
+      desc = "Find/create obsidian note + wikilink at cursor",
+      ft = "markdown",
     },
   },
 }

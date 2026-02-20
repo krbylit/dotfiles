@@ -1,0 +1,4 @@
+{{- $claudeMd := (joinPath .chezmoi.sourceDir .path.secrets "ctrld-configs/claude/CLAUDE.md") -}}
+{{- if (stat $claudeMd) -}}
+{{ $claudeMd }}
+{{- end -}}

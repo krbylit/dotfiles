@@ -167,6 +167,7 @@ return {
   opts = {
     -- Default settings for file-based buffers (markdown, etc.)
     default = {
+      verbose = false, -- suppress "Content is not an image." on non-image pastes
       -- dir_path = vim.fn.expand("~/.img-clip-assets"), -- Default directory for saved images
       dir_path = "/tmp", -- Default directory for saved images
       -- embed_image_as_base64 = false,
@@ -177,7 +178,76 @@ return {
       -- Compresses with 80% quality for smaller file sizes
       -- process_cmd = "magick - -resize '1024>' -quality 80 -",
     },
-    -- -- Filetype-specific overrides
+    filetypes = {
+      -- For markdown (Obsidian notes): save as file into vault attachments folder,
+      -- insert a relative path link. The Obsidian global is the loaded client.
+      markdown = {
+        embed_image_as_base64 = false,
+        -- dir_path must be RELATIVE to the current file when relative_to_current_file = true.
+        -- img-clip saves to (current_file_dir / dir_path / filename) and inserts that same
+        -- relative path as the link. An absolute dir_path causes img-clip to create the full
+        -- absolute path as nested subdirectories under the current file's directory.
+        dir_path = function()
+          local current_dir = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(0), ":h")
+
+          -- Vault subdirectories that should NOT use the shared attachments folder.
+          -- Matched as plain substrings against the current file's directory path.
+          local vault_attachment_excluded_dirs = {
+            "/src/",
+            "/src_code/",
+          }
+          -- Only use the vault attachments dir if the current file is inside the vault
+          -- and not in an excluded subdirectory.
+          if Obsidian then
+            local vault_path = tostring(Obsidian.workspace.path)
+            local in_vault = current_dir:find(vault_path, 1, true)
+            local excluded = false
+            for _, pattern in ipairs(vault_attachment_excluded_dirs) do
+              if current_dir:find(pattern, 1, true) then
+                excluded = true
+                break
+              end
+            end
+            if in_vault and not excluded then
+              local target = vault_path .. "/05_Attachments/images"
+              -- Compute relative path from current_dir to target
+              local function split(p)
+                local parts = {}
+                for part in p:gmatch("[^/]+") do
+                  table.insert(parts, part)
+                end
+                return parts
+              end
+              local src, dst = split(current_dir), split(target)
+              local common = 0
+              for i = 1, math.min(#src, #dst) do
+                if src[i] == dst[i] then
+                  common = i
+                else
+                  break
+                end
+              end
+              local rel = {}
+              for _ = common + 1, #src do
+                table.insert(rel, "..")
+              end
+              for i = common + 1, #dst do
+                table.insert(rel, dst[i])
+              end
+              return table.concat(rel, "/")
+            end
+          end
+
+          return "images" -- sibling directory next to the current file
+        end,
+        file_name = "%Y%m%d%H%M%S",
+        prompt_for_file_name = false,
+        relative_to_current_file = true,
+        url_encode_path = true,
+        template = "![img]($FILE_PATH)",
+      },
+    },
+    -- -- Filetype-specific overrides (old stub)
     -- filetypes = {
     --     -- For agentic buffers, use aggressive compression since
     --     -- large images can exceed Claude's token limits
@@ -189,14 +259,14 @@ return {
     -- },
   },
   keys = {
-    {
-      "<leader>i",
-      function()
-        vim.cmd("PasteImage")
-      end,
-      mode = { "n", "i" },
-      desc = "Paste image from clipboard",
-    },
+    -- {
+    --   "<leader>i",
+    --   function()
+    --     vim.cmd("PasteImage")
+    --   end,
+    --   mode = { "n", "i" },
+    --   desc = "Paste image from clipboard",
+    -- },
     -- {
     --   "<C-i>",
     --   function()

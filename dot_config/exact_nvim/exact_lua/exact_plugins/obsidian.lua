@@ -39,16 +39,32 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
 --   end,
 -- })
 
--- Matched as plain substrings against both vault-relative paths (frontmatter.enabled)
--- and absolute paths (enter_note). No leading slash so both contexts match.
+-- Matched as plain substrings against a normalized path that always has a leading "/".
+-- This means:
+--   Leading "/" in a pattern anchors to a path separator, so "/CLAUDE.md" matches
+--   only files named exactly CLAUDE.md and not e.g. NOT_CLAUDE.md.
+--   No leading "/" matches the substring anywhere in the path.
+--   Trailing "/" matches only directories (not a file with that name).
 local obsidian_excluded_paths = {
-  "03_Resources/src_code",
-  "01_Projects/src/",
+  "/src_code/",
+  "/src/",
+  ".claude/",
+  "/CLAUDE.md",
+  "/CLAUDE",
+  "/SKILLS.md",
+  "/AGENTS.md",
 }
 
 local function obsidian_path_excluded(fname)
+  if not fname then
+    return false
+  end
+  -- Normalize to always have a leading "/" so patterns with a leading "/"
+  -- (e.g. "/CLAUDE.md") match correctly against both absolute paths (which
+  -- already start with "/") and vault-relative paths (which don't).
+  local normalized = fname:match("^/") and fname or ("/" .. fname)
   for _, excluded in ipairs(obsidian_excluded_paths) do
-    if fname and fname:find(excluded, 1, true) then
+    if normalized:find(excluded, 1, true) then
       return true
     end
   end
@@ -119,6 +135,135 @@ return {
     { "<localleader>4", "o#### ", desc = "Heading level 4", ft = "markdown", mode = "n" },
     { "<localleader>c", "o```<CR>```<Esc>O", desc = "Add code block", ft = "markdown", mode = "n" },
     { "<localleader>l", "a[]()<Esc>F[a", desc = "Insert link", ft = "markdown", mode = "n" },
+    {
+      "<C-p>",
+      function()
+        local formats = {
+          "png",
+          "jpg",
+          "jpeg",
+          "gif",
+          "bmp",
+          "webp",
+          "tiff",
+          "heic",
+          "avif",
+          "mp4",
+          "mov",
+          "avi",
+          "mkv",
+          "webm",
+          "pdf",
+          "icns",
+        }
+
+        local function is_image_path(s)
+          if not s or s == "" then
+            return false
+          end
+          local ext = s:match("%.([^%.%s]+)%s*$")
+          if not ext then
+            return false
+          end
+          ext = ext:lower()
+          for _, fmt in ipairs(formats) do
+            if ext == fmt then
+              return true
+            end
+          end
+          return false
+        end
+
+        local function make_relative(img_path, current_file)
+          if not img_path:match("^/") then
+            return img_path -- already relative
+          end
+          local current_dir = vim.fn.fnamemodify(current_file, ":h")
+          local function split(path)
+            local parts = {}
+            for part in path:gmatch("[^/]+") do
+              table.insert(parts, part)
+            end
+            return parts
+          end
+          local src = split(current_dir)
+          local dst = split(img_path)
+          local common = 0
+          for i = 1, math.min(#src, #dst) do
+            if src[i] == dst[i] then
+              common = i
+            else
+              break
+            end
+          end
+          local rel = {}
+          for _ = common + 1, #src do
+            table.insert(rel, "..")
+          end
+          for i = common + 1, #dst do
+            table.insert(rel, dst[i])
+          end
+          return table.concat(rel, "/")
+        end
+
+        local function url_encode_path(path)
+          -- % must be encoded first to avoid double-encoding other substitutions
+          path = path:gsub("%%", "%%25")
+          path = path:gsub(" ", "%%20")
+          path = path:gsub("%(", "%%28")
+          path = path:gsub("%)", "%%29")
+          path = path:gsub("#", "%%23")
+          return path
+        end
+
+        local function insert_link(img_path)
+          img_path = vim.trim(img_path):gsub("^file://", "")
+          img_path = vim.fn.expand(img_path)
+          local rel = url_encode_path(make_relative(img_path, vim.api.nvim_buf_get_name(0)))
+          local link = string.format("![img](%s)", rel)
+          local row, col = unpack(vim.api.nvim_win_get_cursor(0))
+          local line = vim.api.nvim_buf_get_lines(0, row - 1, row, true)[1] or ""
+          local insert_col = math.min(col + 1, #line)
+          vim.api.nvim_buf_set_text(0, row - 1, insert_col, row - 1, insert_col, { link })
+          vim.api.nvim_win_set_cursor(0, { row, insert_col + #link })
+        end
+
+        -- + is system clipboard (cmd+c), * is primary selection; check both
+        local clip = vim.trim(vim.fn.getreg("+"))
+        if not is_image_path(clip) then
+          clip = vim.trim(vim.fn.getreg("*"))
+        end
+
+        -- Only auto-insert from clipboard if the path contains a slash (i.e. it
+        -- has an explicit directory component). A bare filename like
+        -- "20260218223540.png" falls through so the user can prepend the path.
+        if is_image_path(clip) and clip:find("/", 1, true) then
+          insert_link(clip)
+        else
+          -- Try img-clip for actual image data in clipboard (screenshots, copied images).
+          -- img-clip is configured per filetype in img-clip.lua to save to the obsidian
+          -- attachments folder and insert a relative markdown link.
+          local ok, img_clip = pcall(require, "img-clip")
+          if ok and img_clip.pasteImage() then
+            -- img-clip defers its insertion, so defer stopinsert to run after it
+            vim.schedule(function()
+              vim.cmd("stopinsert")
+            end)
+            return
+          end
+          -- No image data found; fall back to manual path input
+          vim.ui.input({ prompt = "Image path: " }, function(input)
+            if not input or input == "" then
+              return
+            end
+            insert_link(input)
+          end)
+        end
+      end,
+      desc = "Paste image link at cursor",
+      ft = "markdown",
+      mode = "n",
+    },
     {
       "<localleader>h",
       function()
@@ -327,6 +472,40 @@ return {
       enabled = function(fname)
         return not obsidian_path_excluded(fname)
       end,
+
+      -- Fields: id, aliases, tags, created (file birthtime, set once), updated (refreshed on save)
+      func = function(note)
+        local out = { id = note.id, aliases = note.aliases, tags = note.tags }
+
+        -- created: preserve if already set, otherwise use file birthtime
+        local existing_created = note:get_field("created")
+        if existing_created then
+          out.created = existing_created
+        else
+          local stat = note.path and (vim.uv or vim.loop).fs_stat(tostring(note.path))
+          if stat and stat.birthtime then
+            out.created = os.date("%Y-%m-%dT%H:%M:%S", stat.birthtime.sec)
+          else
+            out.created = os.date("%Y-%m-%dT%H:%M:%S")
+          end
+        end
+
+        -- updated: always set to current time on save
+        out.updated = os.date("%Y-%m-%dT%H:%M:%S")
+
+        -- preserve any other metadata fields already on the note
+        if note.metadata ~= nil and not vim.tbl_isempty(note.metadata) then
+          for k, v in pairs(note.metadata) do
+            if out[k] == nil then
+              out[k] = v
+            end
+          end
+        end
+
+        return out
+      end,
+
+      sort = { "id", "aliases", "tags", "created", "updated" },
     },
 
     -- Checkbox configuration

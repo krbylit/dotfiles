@@ -10,7 +10,7 @@ return {
 
     -- Function to set up markdown keymaps for a buffer
     local function setup_markdown_keymaps(bufnr)
-      vim.keymap.set("n", "]]", function()
+      vim.keymap.set("n", "]h", function()
         local current_line = vim.fn.getline(".")
         local level = current_line:match("^(#+)")
         if level then
@@ -21,7 +21,7 @@ return {
         end
       end, { buffer = bufnr, desc = "Next same-level heading" })
 
-      vim.keymap.set("n", "[[", function()
+      vim.keymap.set("n", "[h", function()
         local current_line = vim.fn.getline(".")
         local level = current_line:match("^(#+)")
         if level then
@@ -146,7 +146,7 @@ return {
   keys = {
     -- Navigate to next heading
     {
-      "]h",
+      "]]",
       function()
         vim.fn.search("^#\\+\\s", "W")
       end,
@@ -155,7 +155,7 @@ return {
     },
     -- Navigate to previous heading
     {
-      "[h",
+      "[[",
       function()
         vim.fn.search("^#\\+\\s", "bW")
       end,

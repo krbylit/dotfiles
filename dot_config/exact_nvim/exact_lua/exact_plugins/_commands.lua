@@ -15,10 +15,22 @@ local function add_todo(input)
   local workspace_path = Obsidian.workspace.path
   local todo_file = workspace_path / "07_Notes/01_TODOs/todos.md"
 
+  -- Check if file ends with newline so we don't create blank lines
+  local needs_newline = false
+  local check = io.open(tostring(todo_file), "r")
+  if check then
+    local size = check:seek("end")
+    if size and size > 0 then
+      check:seek("end", -1)
+      needs_newline = check:read(1) ~= "\n"
+    end
+    check:close()
+  end
+
   -- Append to file
   local file = io.open(tostring(todo_file), "a")
   if file then
-    file:write("\n- [ ] " .. input)
+    file:write((needs_newline and "\n" or "") .. "- [ ] " .. input .. "\n")
     file:close()
     vim.notify("TODO added: " .. input, vim.log.levels.INFO)
   else
