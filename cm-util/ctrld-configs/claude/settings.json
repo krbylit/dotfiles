@@ -10,10 +10,6 @@
     "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "0",
     "CLAUDE_CODE_DISABLE_FEEDBACK_SURVEY": "1"
   },
-  "attribution": {
-    "commit": "",
-    "pr": ""
-  },
   "respectGitignore": false,
   "permissions": {
     "allow": [
@@ -59,5 +55,18 @@
   "alwaysThinkingEnabled": true,
   "feedbackSurveyState": {
     "lastShownTime": 1754065732137
+  },
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${HOME}/.claude/first-prompt-evaluator.sh",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
   }
 }
