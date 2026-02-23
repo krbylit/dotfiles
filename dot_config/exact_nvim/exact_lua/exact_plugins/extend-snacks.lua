@@ -944,7 +944,7 @@ return {
           cmd = grep_cmd,
           args = grep_args,
           actions = {
-            -- Enter: insert wikilink + open note in vsplit
+            -- Enter: insert wikilink + load existing note buffer in background (no focus switch)
             confirm = function(picker, item)
               picker:close()
               if not item then
@@ -955,7 +955,10 @@ return {
                 return
               end
               vim.api.nvim_set_current_win(main_win)
-              insert_link(Note.from_file(path), true)
+              insert_link(Note.from_file(path), false)
+              -- Load buffer in background so it's accessible without stealing focus
+              local bufnr = vim.fn.bufadd(path)
+              vim.fn.bufload(bufnr)
             end,
             -- Ctrl-I: insert wikilink only, do not open
             obsidian_insert_link = function(picker, item)

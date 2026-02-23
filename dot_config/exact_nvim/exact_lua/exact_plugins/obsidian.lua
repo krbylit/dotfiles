@@ -640,6 +640,17 @@ return {
         if obsidian_path_excluded(vim.api.nvim_buf_get_name(0)) then
           return
         end
+
+        -- Enable markview hybrid mode for obsidian notes (if not already on)
+        local bufnr = vim.api.nvim_get_current_buf()
+        local ok, state_mod = pcall(require, "markview.state")
+        if ok then
+          local state = state_mod.get_buffer_state(bufnr, false)
+          if state and not state.hybrid_mode then
+            vim.cmd("Markview hybridToggle")
+          end
+        end
+
         -- Buffer-local keymaps for obsidian notes
         -- gf to follow links
         vim.keymap.set("n", "gf", function()
