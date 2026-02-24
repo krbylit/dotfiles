@@ -345,6 +345,16 @@ run = "plugin relative-motions 9"
 desc = "Move in relative steps"
 
 [[mgr.prepend_keymap]]
+on = ["g", "v"]
+run = "shell 'd=$(dirname \"$1\"); nvim -c \"cd $d\" \"$d\"' --block"
+desc = "Open nvim at current directory"
+
+[[mgr.prepend_keymap]]
+on = ["g", "s"]
+run = "cd ~/src"
+desc = "Go to source code directory"
+
+[[mgr.prepend_keymap]]
 on = ["g", "m"]
 run = "cd ~/.local/share/chezmoi/"
 desc = "Go to the chezmoi directory"

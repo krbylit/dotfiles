@@ -26,7 +26,10 @@
 -- The folding range provider creates LspNotify autocmds that try to access
 -- buffers during destruction, causing "Error in LspNotify Autocommands" error on quit.
 -- Solution: Remove these autocmds before buffers are destroyed
+local lsp_config_augroup = vim.api.nvim_create_augroup("LspConfig", { clear = true })
+
 vim.api.nvim_create_autocmd("VimLeavePre", {
+  group = lsp_config_augroup,
   callback = function()
     -- Get all autocmds and delete any LspNotify handlers
     -- These will try to access buffers during cleanup and cause errors
@@ -66,6 +69,7 @@ vim.api.nvim_create_autocmd("VimLeavePre", {
 
 -- Enable inline completions
 vim.api.nvim_create_autocmd("LspAttach", {
+  group = lsp_config_augroup,
   callback = function(args)
     local bufnr = args.buf
     local client = vim.lsp.get_client_by_id(args.data.client_id)

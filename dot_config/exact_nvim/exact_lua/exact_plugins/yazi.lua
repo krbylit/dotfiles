@@ -36,7 +36,7 @@ return {
     -- when yazi is closed with no file chosen, change the Neovim working
     -- directory to the directory that yazi was in before it was closed. Defaults
     -- to being off (`false`)
-    change_neovim_cwd_on_close = false,
+    change_neovim_cwd_on_close = true,
     -- - you can customize only some of the keymaps (not all of them)
     -- - you can opt out of all keymaps by setting `keymaps = false`
     keymaps = {

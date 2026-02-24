@@ -55,18 +55,5 @@
   "alwaysThinkingEnabled": true,
   "feedbackSurveyState": {
     "lastShownTime": 1754065732137
-  },
-  "hooks": {
-    "UserPromptSubmit": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "${HOME}/.claude/first-prompt-evaluator.sh",
-            "timeout": 10
-          }
-        ]
-      }
-    ]
   }
 }

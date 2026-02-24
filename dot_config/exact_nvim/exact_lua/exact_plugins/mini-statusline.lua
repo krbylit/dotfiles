@@ -1,4 +1,3 @@
--- TODO: implement truncation method for when window not big enough for file path
 local colors = require("tokyonight.colors").setup({ style = "night" })
 -- local colors = require("tokyonight").load({ style = "night" })
 
@@ -98,51 +97,55 @@ local function update_git_info()
 
       git_cache.last_dir = current_dir
 
-  -- Get repo root asynchronously
-  vim.system({ "git", "-C", current_dir, "rev-parse", "--show-toplevel" }, { text = true }, function(result)
-    vim.schedule(function()
-      if result.code == 0 and result.stdout then
-        local new_git_root = result.stdout:gsub("\n", "")
+      -- Get repo root asynchronously
+      vim.system({ "git", "-C", current_dir, "rev-parse", "--show-toplevel" }, { text = true }, function(result)
+        vim.schedule(function()
+          if result.code == 0 and result.stdout then
+            local new_git_root = result.stdout:gsub("\n", "")
 
-        -- Check if we switched to a different repo
-        if new_git_root ~= git_cache.git_root then
-          -- Different repo - update cache and restart watcher
-          git_cache.git_root = new_git_root
-          git_cache.current_repo_name = vim.fn.fnamemodify(new_git_root, ":t")
+            -- Check if we switched to a different repo
+            if new_git_root ~= git_cache.git_root then
+              -- Different repo - update cache and restart watcher
+              git_cache.git_root = new_git_root
+              git_cache.current_repo_name = vim.fn.fnamemodify(new_git_root, ":t")
 
-          -- Get initial branch name
-          vim.system({ "git", "-C", current_dir, "branch", "--show-current" }, { text = true }, function(branch_result)
-            vim.schedule(function()
-              if branch_result.code == 0 and branch_result.stdout then
-                git_cache.current_branch = branch_result.stdout:gsub("\n", "")
-              else
-                git_cache.current_branch = ""
-              end
+              -- Get initial branch name
+              vim.system(
+                { "git", "-C", current_dir, "branch", "--show-current" },
+                { text = true },
+                function(branch_result)
+                  vim.schedule(function()
+                    if branch_result.code == 0 and branch_result.stdout then
+                      git_cache.current_branch = branch_result.stdout:gsub("\n", "")
+                    else
+                      git_cache.current_branch = ""
+                    end
 
-              -- Start watching new repo's .git/HEAD
-              start_git_watcher(new_git_root)
+                    -- Start watching new repo's .git/HEAD
+                    start_git_watcher(new_git_root)
 
-              vim.cmd("redrawstatus")
-            end)
-          end)
-        end
-        -- If same repo, watcher is already running - no action needed
-      else
-        -- Not in a git repo - stop watcher and clear cache
-        stop_git_watcher()
-        git_cache.current_repo_name = ""
-        git_cache.current_branch = ""
-        git_cache.git_root = ""
-        vim.cmd("redrawstatus")
-      end
+                    vim.cmd("redrawstatus")
+                  end)
+                end
+              )
+            end
+          -- If same repo, watcher is already running - no action needed
+          else
+            -- Not in a git repo - stop watcher and clear cache
+            stop_git_watcher()
+            git_cache.current_repo_name = ""
+            git_cache.current_branch = ""
+            git_cache.git_root = ""
+            vim.cmd("redrawstatus")
+          end
 
-      -- Clean up timer
-      if git_cache.update_timer then
-        git_cache.update_timer:close()
-        git_cache.update_timer = nil
-      end
-    end)
-  end)
+          -- Clean up timer
+          if git_cache.update_timer then
+            git_cache.update_timer:close()
+            git_cache.update_timer = nil
+          end
+        end)
+      end)
     end) -- End of vim.schedule_wrap
   ) -- End of timer:start()
 end
@@ -216,37 +219,49 @@ local function custom_section_filename(args)
       table.insert(parts, part)
     end
 
-    -- Format repo and branch with icons
-    --    󰘬  󰳏    󰘬  󰊢      󰊤        
-    -- Branch
-    result = string.format(
-      "%%#MiniStatuslineBranchIcon#%s%%*",
-      "" -- Branch icon
-    )
-    result = result .. string.format("%%#MiniStatuslineBoldBranchName#%s%%*", git_cache.current_branch)
-    -- Repo
-    result = result .. string.format(
-      "%%#MiniStatuslineRepoIcon#%s%%*",
-      "" -- Repo icon
-    )
-    result = result .. string.format("%%#MiniStatuslineBoldRepoName#%s%%*", git_cache.current_repo_name)
-
-    -- Add the rest of the path if it exists
-    if #parts > 0 then
-      for i, part in ipairs(parts) do
-        if i == #parts then
-          -- Last part (filename) gets special highlighting
-          result = result
-            .. string.format(
-              "%%#MiniStatuslinePathName#/%s",
-              string.format("%%#MiniStatuslineBoldFileName#%s%%*", part)
-            )
-        else
-          -- Middle parts of the path
-          result = result .. string.format("%%#MiniStatuslinePathName#/%s%%*", part)
-        end
-      end
+    -- Extract filename (last part) and intermediate path dirs
+    local filename = #parts > 0 and parts[#parts] or nil
+    local path_parts = {}
+    for i = 1, #parts - 1 do
+      table.insert(path_parts, parts[i])
     end
+
+    -- Branch + repo prefix
+    result = string.format("%%#MiniStatuslineBranchIcon#%s%%*", "")
+      .. string.format("%%#MiniStatuslineBoldBranchName#%s%%*", git_cache.current_branch)
+      .. string.format("%%#MiniStatuslineRepoIcon#%s%%*", "")
+      .. string.format("%%#MiniStatuslineBoldRepoName#%s%%*", git_cache.current_repo_name)
+
+    -- Build path segment: optional /... prefix + intermediate dirs + filename
+    local function build_path(mid_parts, has_ellipsis)
+      local r = has_ellipsis and string.format("%%#MiniStatuslinePathName#/...%%*") or ""
+      for _, part in ipairs(mid_parts) do
+        r = r .. string.format("%%#MiniStatuslinePathName#/%s%%*", part)
+      end
+      if filename then
+        r = r
+          .. string.format(
+            "%%#MiniStatuslinePathName#/%s",
+            string.format("%%#MiniStatuslineBoldFileName#%s%%*", filename)
+          )
+      end
+      return r
+    end
+
+    -- Strip statusline highlight escapes to measure plain display width
+    local function plain_width(s)
+      return vim.fn.strdisplaywidth((s:gsub("%%#[^#]*#", ""):gsub("%%%*", "")))
+    end
+
+    -- Remove intermediate dirs from left (closest to repo root) until the whole
+    -- section fits within the available budget, or no intermediate dirs remain
+    local budget = math.max(30, vim.api.nvim_win_get_width(0) - 70)
+    local truncated = false
+    while #path_parts > 0 and plain_width(result .. build_path(path_parts, truncated)) > budget do
+      table.remove(path_parts, 1)
+      truncated = true
+    end
+    result = result .. build_path(path_parts, truncated)
   else
     -- Not in a git repo - show full path with home directory replaced
     local filepath = vim.fn.fnamemodify(vim.fn.expand("%:p"), ":~")

@@ -145,7 +145,9 @@ vim.g.lazyvim_python_lsp = "pyright"
 -- ================================================================
 -- WARN: May want to move all autocmds to autocmds.lua to decrease the chance of an autocmd being loaded more than once.
 -- Enable `csvview.nvim` for CSV files
+local filetype_options_augroup = vim.api.nvim_create_augroup("FileTypeOptions", { clear = true })
 vim.api.nvim_create_autocmd("FileType", {
+  group = filetype_options_augroup,
   pattern = "csv",
   callback = function()
     require("csvview").enable()
@@ -170,7 +172,9 @@ local diagnostics_disabled_fts = {
   -- "yml",
   "gitconfig",
 }
+local diagnostics_config_augroup = vim.api.nvim_create_augroup("DiagnosticsConfig", { clear = true })
 vim.api.nvim_create_autocmd("FileType", {
+  group = diagnostics_config_augroup,
   pattern = diagnostics_disabled_fts,
   callback = function()
     -- Disable diagnostics only in current buffer.
@@ -180,6 +184,7 @@ vim.api.nvim_create_autocmd("FileType", {
 
 -- Disable autoformat for .env files (detected as 'sh' filetype; lsp_format=fallback causes bashls to format them)
 vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
+  group = diagnostics_config_augroup,
   pattern = { ".env", "*.env", ".env.*", "*.env.*" },
   callback = function()
     vim.b.autoformat = false
@@ -206,6 +211,7 @@ diagnostics_disabled_patterns = vim.tbl_map(function(p)
 end, diagnostics_disabled_patterns)
 -- Disable diagnostics by other patterns
 vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
+  group = diagnostics_config_augroup,
   pattern = diagnostics_disabled_patterns,
   callback = function()
     -- Disable diagnostics only in current buffer.

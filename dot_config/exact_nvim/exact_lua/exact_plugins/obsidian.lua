@@ -1,13 +1,13 @@
-local augroup = vim.api.nvim_create_augroup("ObsidianMd", { clear = true })
-vim.api.nvim_create_autocmd({ "FileType" }, {
-  group = augroup,
-  pattern = { "markdown", "*.md" },
-  callback = function()
-    vim.schedule(function()
-      vim.opt_local.conceallevel = 2
-    end)
-  end,
-})
+-- local augroup = vim.api.nvim_create_augroup("ObsidianMd", { clear = true })
+-- vim.api.nvim_create_autocmd({ "FileType" }, {
+--   group = augroup,
+--   pattern = { "markdown", "*.md" },
+--   callback = function()
+--     vim.schedule(function()
+--       vim.opt_local.conceallevel = 2
+--     end)
+--   end,
+-- })
 -- FIX: Obsidian won't disable when in .claude
 -- vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
 --   group = augroup,
@@ -105,6 +105,7 @@ return {
     { "<leader>os", "<cmd>Obsidian search<cr>", desc = "Search note contents" },
     { "<leader>oq", "<cmd>Obsidian quick_switch<cr>", desc = "Quick switch note", ft = "markdown" },
     { "<leader>oc", ":Obsidian cnew ", desc = "New custom note" },
+    { "<leader>oS", ":Obsidian SprintTaskNew ", desc = "New custom note" },
 
     -- Daily notes
     { "<leader>ot", "<cmd>Obsidian today<cr>", desc = "Today's note" },
@@ -767,6 +768,55 @@ return {
         })
 
         -- Open the note
+        note:open({ sync = true })
+      end,
+    })
+
+    -- :Obsidian SprintTaskNew <note-id>
+    --   Creates a new sprint task note in 01_Projects/ using the sprint-task.md template
+    --   Example:
+    --   :Obsidian SprintTaskNew my-feature   → creates 01_Projects/my-feature.md with sprint-task template
+    commands.register("SprintTaskNew", {
+      nargs = 1,
+      func = function(data)
+        local Note = require("obsidian.note")
+        local Path = require("obsidian.path")
+        local input = data.args
+
+        if not input or input == "" then
+          vim.notify("Usage: :Obsidian SprintTaskNew <note-id>", vim.log.levels.ERROR)
+          return
+        end
+
+        input = input:match("^%s*(.-)%s*$")
+
+        local parts = vim.split(input, "/", { plain = true, trimempty = true })
+        local id = parts[#parts]
+        local subdir = nil
+
+        if #parts > 1 then
+          table.remove(parts, #parts)
+          subdir = table.concat(parts, "/")
+        end
+
+        id = id:gsub("%s+", "-"):gsub("[^%w%-_]", "")
+
+        local dir
+        if subdir then
+          dir = Path.new("01_Projects") / subdir
+        else
+          dir = Path.new("01_Projects")
+        end
+
+        local note = Note.create({
+          id = id,
+          dir = dir,
+          verbatim = true,
+          aliases = {},
+          should_write = true,
+          template = "sprint-task.md",
+        })
+
         note:open({ sync = true })
       end,
     })

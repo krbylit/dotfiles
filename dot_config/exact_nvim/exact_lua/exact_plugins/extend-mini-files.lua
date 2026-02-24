@@ -33,7 +33,9 @@ local files_set_cwd = function()
   end
 end
 -- autocmd used here since mini.files keymaps only available when menu is open
+local mini_files_augroup = vim.api.nvim_create_augroup("MiniFiles", { clear = true })
 vim.api.nvim_create_autocmd("User", {
+  group = mini_files_augroup,
   pattern = "MiniFilesBufferCreate",
   callback = function(args)
     local buf_id = args.data.buf_id

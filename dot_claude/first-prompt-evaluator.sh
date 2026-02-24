@@ -1,6 +1,22 @@
 #!/usr/bin/env bash
 # First Prompt Quality Evaluation Hook
 # Runs the Prompt Quality Evaluation Protocol on the FIRST user prompt only
+# To enable, put this in `.claude/settings.json`:
+# ```json
+#   "hooks": {
+#     "UserPromptSubmit": [
+#       {
+#         "hooks": [
+#           {
+#             "type": "command",
+#             "command": "${HOME}/.claude/first-prompt-evaluator.sh",
+#             "timeout": 10
+#           }
+#         ]
+#       }
+#     ]
+#   }
+# ```
 
 set -euo pipefail
 
