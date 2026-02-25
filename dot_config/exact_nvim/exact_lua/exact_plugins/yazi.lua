@@ -1,5 +1,5 @@
 if vim.env.IS_SSH == "1" then
-  return {}
+  return { "mikavilpas/yazi.nvim", enabled = false }
 end
 
 ---@type LazySpec

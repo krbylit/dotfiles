@@ -1,5 +1,5 @@
 if vim.env.IS_SSH == "1" then
-  return {}
+  return { "nvim-mini/mini.animate", enabled = false }
 end
 
 -- local is_not_single_window = function(win_id)

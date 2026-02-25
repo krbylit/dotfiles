@@ -1,5 +1,5 @@
 if vim.env.IS_SSH == "1" then
-  return {}
+  return { "pwntester/octo.nvim", enabled = false }
 end
 
 vim.api.nvim_create_autocmd("FileType", {

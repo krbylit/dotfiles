@@ -1,5 +1,5 @@
 if vim.env.IS_SSH == "1" then
-  return {}
+  return { "OXY2DEV/helpview.nvim", enabled = false }
 end
 
 -- Fancy formatting for :help files

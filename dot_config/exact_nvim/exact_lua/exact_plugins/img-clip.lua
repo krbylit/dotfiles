@@ -148,7 +148,7 @@ process_cmd:
 --]]
 
 if vim.env.IS_SSH == "1" then
-  return {}
+  return { "hakonharnes/img-clip.nvim", enabled = false }
 end
 
 return {

@@ -1,5 +1,5 @@
 if vim.env.IS_SSH == "1" then
-  return {}
+  return { "hedyhli/markdown-toc.nvim", enabled = false }
 end
 
 return {

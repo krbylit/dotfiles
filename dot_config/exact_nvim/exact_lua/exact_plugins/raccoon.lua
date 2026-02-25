@@ -1,5 +1,5 @@
 if vim.env.IS_SSH == "1" then
-  return {}
+  return { "bajor/nvim-raccoon", enabled = false }
 end
 
 return {

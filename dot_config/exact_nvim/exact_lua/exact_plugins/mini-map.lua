@@ -1,5 +1,5 @@
 if vim.env.IS_SSH == "1" then
-  return {}
+  return { "nvim-mini/mini.map", enabled = false }
 end
 
 return {

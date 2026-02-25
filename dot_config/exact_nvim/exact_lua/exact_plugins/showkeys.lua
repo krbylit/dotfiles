@@ -1,5 +1,5 @@
 if vim.env.IS_SSH == "1" then
-  return {}
+  return { "nvchad/showkeys", enabled = false }
 end
 
 -- Displays keystrokes on screen

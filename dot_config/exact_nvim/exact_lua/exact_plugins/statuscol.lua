@@ -1,5 +1,5 @@
 if vim.env.IS_SSH == "1" then
-  return {}
+  return { "luukvbaal/statuscol.nvim", enabled = false }
 end
 
 -- Taken from: https://github.com/mcauley-penney/nvim/blob/main/lua/plugins/statuscol.lua

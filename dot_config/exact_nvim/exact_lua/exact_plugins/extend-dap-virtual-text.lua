@@ -1,5 +1,5 @@
 if vim.env.IS_SSH == "1" then
-  return {}
+  return { "theHamsta/nvim-dap-virtual-text", enabled = false }
 end
 
 ---@diagnostic disable: missing-fields

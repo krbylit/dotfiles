@@ -1,5 +1,5 @@
 if vim.env.IS_SSH == "1" then
-  return {}
+  return { "HiPhish/rainbow-delimiters.nvim", enabled = false }
 end
 
 return {

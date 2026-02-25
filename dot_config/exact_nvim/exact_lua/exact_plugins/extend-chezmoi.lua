@@ -1,5 +1,5 @@
 if vim.env.IS_SSH == "1" then
-  return {}
+  return { "xvzc/chezmoi.nvim", enabled = false }
 end
 
 -- Plugin to help editing chezmoi managed config files

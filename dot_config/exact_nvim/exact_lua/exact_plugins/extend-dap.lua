@@ -1,5 +1,5 @@
 if vim.env.IS_SSH == "1" then
-  return {}
+  return { "mfussenegger/nvim-dap", enabled = false }
 end
 
 -- While debugging, change `K` hover to nvim-dap widget to show var evaluation.

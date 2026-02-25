@@ -1,5 +1,5 @@
 if vim.env.IS_SSH == "1" then
-  return {}
+  return { "obsidian-nvim/obsidian.nvim", enabled = false }
 end
 
 -- local augroup = vim.api.nvim_create_augroup("ObsidianMd", { clear = true })

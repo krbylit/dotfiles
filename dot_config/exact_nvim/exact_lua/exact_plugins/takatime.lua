@@ -1,5 +1,5 @@
 if vim.env.IS_SSH == "1" then
-  return {}
+  return { "Rtarun3606k/TakaTime", enabled = false }
 end
 
 return {
