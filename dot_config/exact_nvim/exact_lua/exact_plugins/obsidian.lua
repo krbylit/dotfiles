@@ -773,9 +773,9 @@ return {
     })
 
     -- :Obsidian SprintTaskNew <note-id>
-    --   Creates a new sprint task note in 01_Projects/ using the sprint-task.md template
+    --   Creates a new sprint task note in 01_Projects/ using the sprint-task-note.md template
     --   Example:
-    --   :Obsidian SprintTaskNew my-feature   → creates 01_Projects/my-feature.md with sprint-task template
+    --   :Obsidian SprintTaskNew my-feature   → creates 01_Projects/my-feature.md with sprint-task-note template
     commands.register("SprintTaskNew", {
       nargs = 1,
       func = function(data)
@@ -814,7 +814,7 @@ return {
           verbatim = true,
           aliases = {},
           should_write = true,
-          template = "sprint-task.md",
+          template = "sprint-task-note.md",
         })
 
         note:open({ sync = true })

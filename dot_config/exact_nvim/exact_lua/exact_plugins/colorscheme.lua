@@ -346,9 +346,30 @@ return {
 
       --- You can override specific highlights to use other groups or a hex color
       --- function will be called with a Highlights and ColorScheme table
-      ---@param highlights teide.Highlights
-      ---@param colors ColorScheme
-      on_highlights = function(highlights, colors) end,
+      on_highlights = function(highlights, colors)
+        -- Set window split border color
+        highlights.WinSeparator = {
+          fg = "#ed8796",
+          bg = "",
+          bold = false,
+        }
+
+        -- Fix for dim_inactive not affecting statuscolumn (tokyonight issue #326)
+        -- Clear backgrounds so they inherit from NormalNC in inactive windows
+        highlights.LineNr = { fg = colors.fg_gutter, bg = "none" }
+        highlights.CursorLineNr = { fg = colors.orange, bg = "none", bold = true }
+        highlights.SignColumn = { fg = colors.fg_gutter, bg = "none" }
+        highlights.FoldColumn = { bg = "none" }
+
+        -- Rainbow delimiters
+        highlights.RainbowDelimiterRed = { fg = colors.red }
+        highlights.RainbowDelimiterYellow = { fg = colors.yellow }
+        highlights.RainbowDelimiterBlue = { fg = colors.blue }
+        highlights.RainbowDelimiterOrange = { fg = colors.orange }
+        highlights.RainbowDelimiterGreen = { fg = colors.green }
+        highlights.RainbowDelimiterViolet = { fg = colors.purple }
+        highlights.RainbowDelimiterCyan = { fg = colors.cyan }
+      end,
 
       cache = true, -- When set to true, the theme will be cached for better performance
 
@@ -415,6 +436,23 @@ return {
         highlights.CursorLineNr = { fg = colors.orange, bg = "none", bold = true }
         highlights.SignColumn = { fg = colors.fg_gutter, bg = "none" }
         highlights.FoldColumn = { bg = "none" }
+
+        -- Markview heading palette (fg = buffer bg so block chars ░▒▓█ blend into background)
+        highlights.MarkviewPalette1Bg = { bg = colors.magenta, fg = colors.bg }
+        highlights.MarkviewPalette2Bg = { bg = colors.orange, fg = colors.bg }
+        highlights.MarkviewPalette3Bg = { bg = colors.yellow, fg = colors.bg }
+        highlights.MarkviewPalette4Bg = { bg = colors.green, fg = colors.bg }
+        highlights.MarkviewPalette5Bg = { bg = colors.cyan, fg = colors.bg }
+        highlights.MarkviewPalette6Bg = { bg = colors.purple, fg = colors.bg }
+
+        -- Rainbow delimiters
+        highlights.RainbowDelimiterRed = { fg = colors.red }
+        highlights.RainbowDelimiterYellow = { fg = colors.yellow }
+        highlights.RainbowDelimiterBlue = { fg = colors.blue }
+        highlights.RainbowDelimiterOrange = { fg = colors.orange }
+        highlights.RainbowDelimiterGreen = { fg = colors.green }
+        highlights.RainbowDelimiterViolet = { fg = colors.purple }
+        highlights.RainbowDelimiterCyan = { fg = colors.cyan }
       end,
       cache = true, -- When set to true, the theme will be cached for better performance
       ---@type table<string, boolean|{enabled:boolean}>

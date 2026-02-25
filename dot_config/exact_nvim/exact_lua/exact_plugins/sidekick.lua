@@ -102,25 +102,25 @@ return {
       },
       ---@type table<string, sidekick.cli.Config|{}>
       tools = {
-        aider = { cmd = { "aider" } },
-        amazon_q = { cmd = { "q" } },
+        -- aider = { cmd = { "aider" } },
+        -- amazon_q = { cmd = { "q" } },
         claude = { cmd = { "claude" } },
-        codex = { cmd = { "codex", "--enable", "web_search_request" } },
-        copilot = { cmd = { "copilot", "--banner" } },
-        crush = {
-          cmd = { "crush" },
-          -- crush uses <a-p> for its own functionality, so we override the default
-          keys = { prompt = { "<a-p>", "prompt" } },
-        },
-        cursor = { cmd = { "cursor-agent" } },
+        -- codex = { cmd = { "codex", "--enable", "web_search_request" } },
+        -- copilot = { cmd = { "copilot", "--banner" } },
+        -- crush = {
+        --   cmd = { "crush" },
+        --   -- crush uses <a-p> for its own functionality, so we override the default
+        --   keys = { prompt = { "<a-p>", "prompt" } },
+        -- },
+        -- cursor = { cmd = { "cursor-agent" } },
         gemini = { cmd = { "gemini" } },
-        grok = { cmd = { "grok" } },
-        opencode = {
-          cmd = { "opencode" },
-          -- HACK: https://github.com/sst/opencode/issues/445
-          env = { OPENCODE_THEME = "system" },
-        },
-        qwen = { cmd = { "qwen" } },
+        -- grok = { cmd = { "grok" } },
+        -- opencode = {
+        --   cmd = { "opencode" },
+        --   -- HACK: https://github.com/sst/opencode/issues/445
+        --   env = { OPENCODE_THEME = "system" },
+        -- },
+        -- qwen = { cmd = { "qwen" } },
       },
       --- Add custom context. See `lua/sidekick/context/init.lua`
       ---@type table<string, sidekick.context.Fn>

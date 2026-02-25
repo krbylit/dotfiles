@@ -4,7 +4,7 @@ return {
   lazy = false,
   dependencies = {
     -- NOTE: necessary here otherwise copilot shows up in LazyVim as disabled, possibly a LazyVim bug
-    { "zbirenbaum/copilot.lua", opts = {} },
+    { "zbirenbaum/copilot.lua", opts = { suggestion = { enabled = false }, panel = { enabled = false } } },
     { "saghen/blink.compat" },
     { "mikavilpas/blink-ripgrep.nvim" },
   },
@@ -223,11 +223,10 @@ return {
         },
         copilot = vim.env.IS_SSH ~= "1"
             and {
-              -- FIX: For some reason after update, using these fields here causes error and Copilot completions don't load (error says no Lua rocks module)
-              -- name = "copilot",
-              -- module = "blink-cmp-copilot",
-              kind = "Copilot",
-              score_offset = 999, -- Boost Copilot's score (adjust as needed) so it comes first
+              name = "copilot",
+              module = "blink-copilot",
+              score_offset = 100,
+              async = true,
             }
           or nil,
         -- avante_commands = {

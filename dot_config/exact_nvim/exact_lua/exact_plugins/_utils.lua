@@ -17,4 +17,7 @@ return {
   -- }),
 
   -- Manual toggle command: :lua require("utils.config-hot-reload").toggle()
+
+  -- Register palette viewer commands (:TokyonightColors, :CatppuccinColors, :TeideColors)
+  require("utils.colors.color-utils").setup(),
 }

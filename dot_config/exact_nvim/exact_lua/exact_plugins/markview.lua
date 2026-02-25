@@ -1,8 +1,6 @@
-local presets = require("markview.presets")
 return {
   "OXY2DEV/markview.nvim",
-
-  lazy = false, -- Recommended
+  -- lazy = false, -- Recommended
   ft = "markdown", -- If you decide to lazy-load anyway
   dependencies = {
     "nvim-treesitter/nvim-treesitter",
@@ -85,7 +83,7 @@ return {
     -- },
     ---@diagnostic disable-next-line: missing-fields
     markdown_inline = {
-      checkboxes = presets.checkboxes.nerd,
+      checkboxes = require("markview.presets").checkboxes.nerd,
       -- checkboxes = {
       --     enable = true,
       --     checked = { text = "󰗠", hl = "MarkviewCheckboxChecked", scope_hl = "MarkviewCheckboxChecked" },
@@ -112,8 +110,56 @@ return {
       --     ["d"] = { text = "󰔳", hl = "MarkviewCheckboxUnchecked" },
       -- },
     },
+    ---@type markview.config.markdown
     ---@diagnostic disable-next-line: missing-fields
     markdown = {
+      ---@type markview.config.markdown.list_items
+      list_items = {
+        enable = true,
+
+        --- Amount of spaces that defines an indent
+        --- level of the list item.
+        ---@type integer
+        indent_size = 2,
+
+        --- Amount of spaces to add per indent level
+        --- of the list item.
+        ---@type integer
+        shift_width = 2,
+
+        marker_minus = {
+          add_padding = true,
+
+          text = "",
+          hl = "MarkviewListItemMinus",
+        },
+        marker_plus = {
+          add_padding = true,
+
+          text = "",
+          hl = "MarkviewListItemPlus",
+        },
+        marker_star = {
+          add_padding = true,
+
+          text = "",
+          hl = "MarkviewListItemStar",
+        },
+
+        --- These items do NOT have a text or
+        --- a hl property!
+
+        --- n. Items
+        marker_dot = {
+          add_padding = true,
+        },
+
+        --- n) Items
+        marker_parenthesis = {
+          add_padding = true,
+        },
+      },
+      ---@type markview.config.markdown.code_blocks
       ---@diagnostic disable-next-line: missing-fields
       code_blocks = {
         enable = true,
@@ -123,46 +169,65 @@ return {
         -- pad_char = " ",
         label_direction = "right",
       },
-      headings = vim.tbl_deep_extend("force", presets.headings.glow, {
+      ---@type markview.config.markdown.headings
+      headings = vim.tbl_deep_extend("force", require("markview.presets").headings.glow, {
         shift_width = 0,
+        ---@type markview.config.markdown.headings.atx.label
+        ---@diagnostic disable-next-line: missing-fields
         heading_1 = {
           corner_right = "",
           -- padding_left = "░░░░▒▒▒▓▓█  ",
           padding_left = "█ ",
           padding_right = "  █▓▓▒▒▒░░░░",
+          hl = "MarkviewPalette1Bg",
         },
+        ---@type markview.config.markdown.headings.atx.label
+        ---@diagnostic disable-next-line: missing-fields
         heading_2 = {
           corner_right = "",
           -- padding_left = "░░░░▒▒▒▓▓█  ",
           padding_left = "██ ",
           padding_right = "  █▓▓▒▒▒░░░░",
+          hl = "MarkviewPalette2Bg",
         },
+        ---@type markview.config.markdown.headings.atx.label
+        ---@diagnostic disable-next-line: missing-fields
         heading_3 = {
           corner_right = "",
           -- padding_left = "░░░░▒▒▒▓▓█  ",
           padding_left = "███ ",
           padding_right = "  █▓▓▒▒▒░░░░",
+          hl = "MarkviewPalette3Bg",
         },
+        ---@type markview.config.markdown.headings.atx.label
+        ---@diagnostic disable-next-line: missing-fields
         heading_4 = {
           corner_right = "",
           -- padding_left = "░░░░▒▒▒▓▓█  ",
           padding_left = "████ ",
           padding_right = "  █▓▓▒▒▒░░░░",
+          hl = "MarkviewPalette4Bg",
         },
+        ---@type markview.config.markdown.headings.atx.label
+        ---@diagnostic disable-next-line: missing-fields
         heading_5 = {
           corner_right = "",
           -- padding_left = "░░░░▒▒▒▓▓█  ",
           padding_left = "█████ ",
           padding_right = "  █▓▓▒▒▒░░░░",
+          hl = "MarkviewPalette5Bg",
         },
+        ---@type markview.config.markdown.headings.atx.label
+        ---@diagnostic disable-next-line: missing-fields
         heading_6 = {
           corner_right = "",
           -- padding_left = "░░░░▒▒▒▓▓█  ",
           padding_left = "██████ ",
           padding_right = "  █▓▓▒▒▒░░░░",
+          hl = "MarkviewPalette6Bg",
         },
       }),
-      tables = presets.tables.rounded,
+      tables = require("markview.presets").tables.rounded,
       -- horizontal_rules = presets.horizontal_rules.dashed,
     },
   },

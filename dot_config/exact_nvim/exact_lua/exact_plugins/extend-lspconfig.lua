@@ -235,7 +235,7 @@ return {
         },
       },
       copilot = {
-        enabled = true,
+        enabled = false,
       },
       yamlls = {
         enabled = true,

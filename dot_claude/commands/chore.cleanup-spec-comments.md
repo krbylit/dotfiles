@@ -29,12 +29,11 @@ This command spawns a team of agents to clean up development process comments (s
    - Team description: "Parallel cleanup of spec-kit comment tags from codebase"
 
 2. **Identify Files to Clean**:
-   - Use Grep to find all non-test JavaScript files containing spec-kit tags:
+   - Use Grep to find all files containing spec-kit tags:
 
      ```
      # Search for tags with hyphens (FR-XXX, SC-XXX, TS-XXX)
      pattern: (FR|SC|TS)-\d+
-     glob: *.js
      output_mode: files_with_matches
      ```
 
@@ -42,7 +41,6 @@ This command spawns a team of agents to clean up development process comments (s
 
      ```
      pattern: \bT\d{3}\b
-     glob: *.js
      output_mode: files_with_matches
      ```
 
@@ -50,11 +48,9 @@ This command spawns a team of agents to clean up development process comments (s
 
      ```
      pattern: \bUS\d+\b
-     glob: *.js
      output_mode: files_with_matches
      ```
 
-   - Exclude test files (path contains `/tests/`)
    - Combine results into unique list of files
 
 3. **Create Tasks**:
@@ -240,11 +236,6 @@ The following patterns should be removed from comments:
 
 ### Edge Cases
 
-**Test Files**:
-
-- Do NOT modify files in `/tests/` directories
-- Test describe blocks can keep TXXX tags for test identification (e.g., `describe('T044: Two-Agency Case Merge')`)
-
 **Multiple Tags on One Line**:
 
 - Remove all tags: `// FR-016, FR-017, FR-018: Team assignment` → `// Team assignment`
@@ -291,12 +282,12 @@ Before marking task complete, verify:
 
 After all tasks complete:
 
-- ✅ Run Grep to verify no spec-kit tags remain in non-test files:
-  - `grep -r "FR-\d+" --include="*.js" --exclude-dir=tests`
-  - `grep -r "SC-\d+" --include="*.js" --exclude-dir=tests`
-  - `grep -r "TS-\d+" --include="*.js" --exclude-dir=tests`
-  - `grep -r "\bT\d{3}\b" --include="*.js" --exclude-dir=tests`
-  - `grep -r "\bUS\d+\b" --include="*.js" --exclude-dir=tests`
+- ✅ Run Grep to verify no spec-kit tags remain in files:
+  - `grep -r "FR-\d+" --include="*.js"`
+  - `grep -r "SC-\d+" --include="*.js"`
+  - `grep -r "TS-\d+" --include="*.js"`
+  - `grep -r "\bT\d{3}\b" --include="*.js"`
+  - `grep -r "\bUS\d+\b" --include="*.js"`
 - ✅ All tasks marked as completed
 - ✅ Team cleaned up
 
