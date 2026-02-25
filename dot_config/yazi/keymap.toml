@@ -381,11 +381,17 @@ on = "<C-s>"
 run = "plugin fzf-lua-live"
 desc = "Search text with fzf-lua live grep and navigate to file"
 
-# fzf-lua-files plugin for fzf-lua file search (mirrors Fish <C-f> binding)
+# fzf-lua-files plugin for fzf-lua file search (mirrors Fish <C-q> binding)
 [[mgr.prepend_keymap]]
-on = "<C-g>"
+on = "<C-q>"
 run = "plugin fzf-lua-files"
 desc = "Search files with fzf-lua and navigate to file"
+
+# fzf-lua-git plugin for fzf-lua commit search (mirrors Fish <C-g> binding)
+[[mgr.prepend_keymap]]
+on = "<C-g>"
+run = "plugin fzf-lua-git-commits"
+desc = "Search commits with fzf-lua"
 
 # popup-shell plugin for interactive fish shell
 [[mgr.prepend_keymap]]

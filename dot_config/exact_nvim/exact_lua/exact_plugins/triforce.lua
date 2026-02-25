@@ -1,5 +1,6 @@
 return {
   "gisketch/triforce.nvim",
+  enabled = vim.env.IS_SSH ~= "1",
   dependencies = { "nvzone/volt" },
   opts = {
     enabled = true, -- Enable/disable the entire plugin

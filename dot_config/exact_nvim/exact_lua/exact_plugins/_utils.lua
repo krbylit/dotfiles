@@ -20,4 +20,14 @@ return {
 
   -- Register palette viewer commands (:TokyonightColors, :CatppuccinColors, :TeideColors)
   require("utils.colors.color-utils").setup(),
+
+  -- Load global utilities (icons, tools, R() hot-reload)
+  require("utils.globals"),
+
+  -- Load Snacks debug utilities (_G.dd, _G.bt, vim.print)
+  -- Uses lazy references so Snacks doesn't need to exist yet
+  require("utils.debug.snacks-debug"),
+
+  -- Load NvimSnapshot diagnostic command
+  require("utils.debug.snapshot"),
 }

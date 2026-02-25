@@ -1,5 +1,6 @@
 return {
   "TheNoeTrevino/haunt.nvim",
+  enabled = vim.env.IS_SSH ~= "1",
   -- default config: change to your liking, or remove it to use defaults
   ---@class HauntConfig
   opts = {

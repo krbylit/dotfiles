@@ -1,6 +1,7 @@
 return {
   "folke/sidekick.nvim",
   ---@type sidekick.Config
+  enabled = vim.env.IS_SSH ~= "1",
   opts = {
     jump = {
       jumplist = true, -- add an entry to the jumplist

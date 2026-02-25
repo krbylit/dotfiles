@@ -4,7 +4,6 @@
 return {
   "leath-dub/snipe.nvim",
   lazy = true,
-
   enabled = false,
   keys = {
     {

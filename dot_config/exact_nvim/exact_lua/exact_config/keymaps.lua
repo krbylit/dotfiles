@@ -2,7 +2,7 @@
 
 local map = vim.keymap.set
 local wk = require("which-key")
-local MiniFiles = vim.env.IS_SSH ~= "1" and require("mini.files") or nil
+local MiniFiles = require("mini.files")
 
 -- Load plugin specific keymaps from `plugin-keymaps` module
 if vim.g.started_by_firenvim == true then
@@ -102,36 +102,6 @@ end)
 local function is_snacks_dashboard()
   return vim.bo.filetype == "snacks_dashboard"
 end
-wk.add({
-  mode = "n",
-  remap = false,
-  {
-    "<leader>m",
-    function()
-      if not MiniFiles.close() then
-        if is_snacks_dashboard() then
-          -- get current director
-          local cwd = vim.fn.getcwd()
-          -- Open in current directory
-          MiniFiles.open(cwd, false)
-        else
-          -- Open in current file's directory
-          MiniFiles.open(vim.api.nvim_buf_get_name(0))
-        end
-      end
-    end,
-    desc = "MiniFiles Explorer (file)",
-  },
-  {
-    "<leader>M",
-    function()
-      if not MiniFiles.close() then
-        MiniFiles.open(vim.cmd.pwd())
-      end
-    end,
-    desc = "MiniFiles Explorer (cwd)",
-  },
-})
 
 -- On SSH, map yazi keybindings to mini.files equivalents
 if vim.env.IS_SSH == "1" then
@@ -172,6 +142,37 @@ if vim.env.IS_SSH == "1" then
         end
       end,
       desc = "MiniFiles Explorer (toggle)",
+    },
+  })
+else
+  wk.add({
+    mode = "n",
+    remap = false,
+    {
+      "<leader>m",
+      function()
+        if not MiniFiles.close() then
+          if is_snacks_dashboard() then
+            -- get current director
+            local cwd = vim.fn.getcwd()
+            -- Open in current directory
+            MiniFiles.open(cwd, false)
+          else
+            -- Open in current file's directory
+            MiniFiles.open(vim.api.nvim_buf_get_name(0))
+          end
+        end
+      end,
+      desc = "MiniFiles Explorer (file)",
+    },
+    {
+      "<leader>M",
+      function()
+        if not MiniFiles.close() then
+          MiniFiles.open(vim.cmd.pwd())
+        end
+      end,
+      desc = "MiniFiles Explorer (cwd)",
     },
   })
 end

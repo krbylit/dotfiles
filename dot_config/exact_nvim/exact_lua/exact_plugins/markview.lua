@@ -1,6 +1,7 @@
 return {
   "OXY2DEV/markview.nvim",
   -- lazy = false, -- Recommended
+  enabled = vim.env.IS_SSH ~= "1",
   ft = "markdown", -- If you decide to lazy-load anyway
   dependencies = {
     "nvim-treesitter/nvim-treesitter",
@@ -83,7 +84,13 @@ return {
     -- },
     ---@diagnostic disable-next-line: missing-fields
     markdown_inline = {
-      checkboxes = require("markview.presets").checkboxes.nerd,
+      checkboxes = vim.tbl_deep_extend("force", require("markview.presets").checkboxes.nerd, {
+        default = {
+          text = "󰄰",
+          hl = "MarkviewCheckboxUnchecked",
+          scope_hl = "MarkviewCheckboxUnchecked",
+        },
+      }),
       -- checkboxes = {
       --     enable = true,
       --     checked = { text = "󰗠", hl = "MarkviewCheckboxChecked", scope_hl = "MarkviewCheckboxChecked" },

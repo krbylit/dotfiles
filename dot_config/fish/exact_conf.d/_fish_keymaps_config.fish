@@ -31,8 +31,8 @@ bind --mode default ctrl-i 'commandline -f repaint; set -l result (nvim -l "$XDG
 bind --mode insert ctrl-s 'commandline -f repaint; set -l result (nvim -l "$XDG_DATA_HOME/nvim/lazy/fzf-lua/scripts/cli.lua" live_grep_native search=(commandline -b)); and commandline --current-token --replace -- (string escape -- $result)'
 bind --mode default ctrl-s 'commandline -f repaint; set -l result (nvim -l "$XDG_DATA_HOME/nvim/lazy/fzf-lua/scripts/cli.lua" live_grep_native search=(commandline -b)); and commandline --current-token --replace -- (string escape -- $result)'
 # fzf files cwd
-bind --mode insert ctrl-f 'commandline -f repaint; set -l result (nvim -l "$XDG_DATA_HOME/nvim/lazy/fzf-lua/scripts/cli.lua" files); and commandline --current-token --replace -- (string escape -- $result)'
-bind --mode default ctrl-f 'commandline -f repaint; set -l result (nvim -l "$XDG_DATA_HOME/nvim/lazy/fzf-lua/scripts/cli.lua" files); and commandline --current-token --replace -- (string escape -- $result)'
+bind --mode insert ctrl-q 'commandline -f repaint; set -l result (nvim -l "$XDG_DATA_HOME/nvim/lazy/fzf-lua/scripts/cli.lua" files); and commandline --current-token --replace -- (string escape -- $result)'
+bind --mode default ctrl-q 'commandline -f repaint; set -l result (nvim -l "$XDG_DATA_HOME/nvim/lazy/fzf-lua/scripts/cli.lua" files); and commandline --current-token --replace -- (string escape -- $result)'
 # fzf files Obsidian vault
 bind --mode insert ctrl-o 'commandline -f repaint; set -l result (nvim -l "$XDG_DATA_HOME/nvim/lazy/fzf-lua/scripts/cli.lua" files "cwd=$OBSIDIAN_VAULT_PATH"); and commandline --current-token --replace -- (string escape -- $result)'
 bind --mode default ctrl-o 'commandline -f repaint; set -l result (nvim -l "$XDG_DATA_HOME/nvim/lazy/fzf-lua/scripts/cli.lua" files "cwd=$OBSIDIAN_VAULT_PATH"); and commandline --current-token --replace -- (string escape -- $result)'

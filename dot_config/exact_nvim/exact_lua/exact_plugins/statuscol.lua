@@ -2,6 +2,7 @@
 
 return {
   "luukvbaal/statuscol.nvim",
+  enabled = vim.env.IS_SSH ~= "1",
   lazy = false,
   config = function()
     local builtin = require("statuscol.builtin")

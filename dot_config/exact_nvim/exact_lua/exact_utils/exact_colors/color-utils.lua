@@ -68,4 +68,17 @@ function M.setup()
   end, { desc = "Show teide color palette" })
 end
 
+function M.blend(fg_hex, bg_hex, alpha)
+  local function hex_to_rgb(hex)
+    hex = hex:gsub("#", "")
+    return tonumber(hex:sub(1, 2), 16), tonumber(hex:sub(3, 4), 16), tonumber(hex:sub(5, 6), 16)
+  end
+  local fr, fg, fb = hex_to_rgb(fg_hex)
+  local br, bg_g, bb = hex_to_rgb(bg_hex)
+  local r = math.floor(br + (fr - br) * alpha + 0.5)
+  local g = math.floor(bg_g + (fg - bg_g) * alpha + 0.5)
+  local b = math.floor(bb + (fb - bb) * alpha + 0.5)
+  return string.format("#%02x%02x%02x", r, g, b)
+end
+
 return M

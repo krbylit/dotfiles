@@ -1,5 +1,6 @@
 return {
   "hedyhli/markdown-toc.nvim",
+  enabled = vim.env.IS_SSH ~= "1",
   ft = "markdown",
   cmd = { "Mtoc" },
   opts = {

@@ -1,6 +1,13 @@
 -- https://www.compart.com/en/unicode to search Unicode
 -- Taken from: https://github.com/mcauley-penney/nvim/blob/d1e11271246b55461a61c9f860e6843ff5a7a438/lua/globals.lua
 
+-- Hot reload function for individual modules
+-- Use: `:lua R("plugins.statuscol")`
+function R(name)
+  package.loaded[name] = nil
+  return require(name)
+end
+
 _G.tools = {
   ui = {
     icons = {

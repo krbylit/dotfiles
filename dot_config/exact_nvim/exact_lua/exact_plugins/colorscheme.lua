@@ -347,6 +347,8 @@ return {
       --- You can override specific highlights to use other groups or a hex color
       --- function will be called with a Highlights and ColorScheme table
       on_highlights = function(highlights, colors)
+        local blend = require("utils.colors.color-utils").blend
+
         -- Set window split border color
         highlights.WinSeparator = {
           fg = "#ed8796",
@@ -360,6 +362,16 @@ return {
         highlights.CursorLineNr = { fg = colors.orange, bg = "none", bold = true }
         highlights.SignColumn = { fg = colors.fg_gutter, bg = "none" }
         highlights.FoldColumn = { bg = "none" }
+
+        -- Markview heading palette (bg = subtle tint of fg blended into buffer bg)
+        local bg = tostring(colors.bg)
+        local a = 0.12
+        highlights.MarkviewPalette1Bg = { bg = blend(colors.git.change, bg, a), fg = colors.git.change }
+        highlights.MarkviewPalette2Bg = { bg = blend(colors.green1, bg, a), fg = colors.green1 }
+        highlights.MarkviewPalette3Bg = { bg = blend(colors.git.delete, bg, a), fg = colors.git.delete }
+        highlights.MarkviewPalette4Bg = { bg = blend("#f5e0dc", bg, a), fg = "#f5e0dc" }
+        highlights.MarkviewPalette5Bg = { bg = blend("#fab387", bg, a), fg = "#fab387" }
+        highlights.MarkviewPalette6Bg = { bg = blend(colors.purple, bg, a), fg = colors.purple }
 
         -- Rainbow delimiters
         highlights.RainbowDelimiterRed = { fg = colors.red }
@@ -423,6 +435,8 @@ return {
       --- You can override specific highlights to use other groups or a hex color
       --- function will be called with a Highlights and ColorScheme table
       on_highlights = function(highlights, colors)
+        local blend = require("utils.colors.color-utils").blend
+
         -- Set window split border color
         highlights.WinSeparator = {
           fg = "#ed8796",
@@ -437,13 +451,15 @@ return {
         highlights.SignColumn = { fg = colors.fg_gutter, bg = "none" }
         highlights.FoldColumn = { bg = "none" }
 
-        -- Markview heading palette (fg = buffer bg so block chars ░▒▓█ blend into background)
-        highlights.MarkviewPalette1Bg = { bg = colors.magenta, fg = colors.bg }
-        highlights.MarkviewPalette2Bg = { bg = colors.orange, fg = colors.bg }
-        highlights.MarkviewPalette3Bg = { bg = colors.yellow, fg = colors.bg }
-        highlights.MarkviewPalette4Bg = { bg = colors.green, fg = colors.bg }
-        highlights.MarkviewPalette5Bg = { bg = colors.cyan, fg = colors.bg }
-        highlights.MarkviewPalette6Bg = { bg = colors.purple, fg = colors.bg }
+        -- Markview heading palette (bg = subtle tint of fg blended into buffer bg)
+        local bg = tostring(colors.bg)
+        local a = 0.12
+        highlights.MarkviewPalette1Bg = { bg = blend(colors.git.change, bg, a), fg = colors.git.change }
+        highlights.MarkviewPalette2Bg = { bg = blend(colors.green1, bg, a), fg = colors.green1 }
+        highlights.MarkviewPalette3Bg = { bg = blend("#fab387", bg, a), fg = "#fab387" }
+        highlights.MarkviewPalette4Bg = { bg = blend("#f5e0dc", bg, a), fg = "#f5e0dc" }
+        highlights.MarkviewPalette5Bg = { bg = blend("#f38ba8", bg, a), fg = "#f38ba8" }
+        highlights.MarkviewPalette6Bg = { bg = blend(colors.purple, bg, a), fg = colors.purple }
 
         -- Rainbow delimiters
         highlights.RainbowDelimiterRed = { fg = colors.red }

@@ -1,5 +1,6 @@
 return {
   "hat0uma/csvview.nvim",
+  enabled = vim.env.IS_SSH ~= "1",
   lazy = true,
   ---@module "csvview"
   ---@type CsvView.Options

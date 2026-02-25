@@ -14,7 +14,7 @@ vim.g.maplocalleader = " "
 vim.schedule(function()
   vim.system({ "chezmoi", "source-path" }, { text = true }, function(result)
     if result.code == 0 and result.stdout then
-      vim.g.chezmoi_source_path = result.stdout:gsub("\n", "")
+      vim.g.chezmoi_source_path = vim.fn.fnamemodify(result.stdout:gsub("\n", ""), ":p")
     end
   end)
 end)
