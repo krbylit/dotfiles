@@ -1,6 +1,10 @@
+-- if vim.env.IS_SSH == "1" then
+--   return {}
+-- end
+
 return {
-  "vhyrro/luarocks.nvim",
-  lazy = false,
-  priority = 1000, -- Very high priority is required, luarocks.nvim should run as the first plugin in your config.
-  config = true,
+  -- "vhyrro/luarocks.nvim",
+  -- lazy = false,
+  -- priority = 1000, -- Very high priority is required, luarocks.nvim should run as the first plugin in your config.
+  -- config = true,
 }
