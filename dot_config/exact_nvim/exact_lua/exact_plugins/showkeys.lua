@@ -1,3 +1,7 @@
+if vim.env.IS_SSH == "1" then
+  return {}
+end
+
 -- Displays keystrokes on screen
 -- https://github.com/NvChad/showkeys
 ---@type LazySpec
@@ -5,7 +9,6 @@ return {
   "nvchad/showkeys",
   lazy = true,
   cmd = "ShowkeysToggle",
-  enabled = vim.env.IS_SSH ~= "1",
   opts = {
     timeout = 1,
     maxkeys = 5,

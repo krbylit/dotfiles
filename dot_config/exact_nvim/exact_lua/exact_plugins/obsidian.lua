@@ -1,3 +1,7 @@
+if vim.env.IS_SSH == "1" then
+  return {}
+end
+
 -- local augroup = vim.api.nvim_create_augroup("ObsidianMd", { clear = true })
 -- vim.api.nvim_create_autocmd({ "FileType" }, {
 --   group = augroup,
@@ -73,7 +77,6 @@ end
 
 return {
   "obsidian-nvim/obsidian.nvim",
-  enabled = vim.env.IS_SSH ~= "1",
   version = "*", -- recommended, use latest release instead of latest commit
   lazy = false,
   -- ft = "markdown",

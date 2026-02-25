@@ -1,7 +1,10 @@
+if vim.env.IS_SSH == "1" then
+  return {}
+end
+
 return {
   "OXY2DEV/markview.nvim",
   -- lazy = false, -- Recommended
-  enabled = vim.env.IS_SSH ~= "1",
   ft = "markdown", -- If you decide to lazy-load anyway
   dependencies = {
     "nvim-treesitter/nvim-treesitter",

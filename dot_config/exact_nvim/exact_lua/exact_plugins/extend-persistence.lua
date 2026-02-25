@@ -1,6 +1,9 @@
+if vim.env.IS_SSH == "1" then
+  return {}
+end
+
 return {
   "folke/persistence.nvim",
-  enabled = vim.env.IS_SSH ~= "1",
   event = "BufReadPre", -- this will only start session saving when an actual file was opened
   keys = {
     -- load the session for the current directory

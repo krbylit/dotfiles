@@ -1,9 +1,12 @@
+if vim.env.IS_SSH == "1" then
+  return {}
+end
+
 -- Highly configurable bookmarking plugin
 -- https://github.com/ThePrimeagen/harpoon/tree/harpoon2
 
 return {
   "ThePrimeagen/harpoon",
-  enabled = vim.env.IS_SSH ~= "1",
   branch = "harpoon2",
   dependencies = { "nvim-lua/plenary.nvim" },
   opts = function()

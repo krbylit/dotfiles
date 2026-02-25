@@ -1,9 +1,12 @@
+if vim.env.IS_SSH == "1" then
+  return {}
+end
+
 -- Plugin to help editing chezmoi managed config files
 -- https://github.com/xvzc/chezmoi.nvim
 
 return {
   "xvzc/chezmoi.nvim",
-  enabled = vim.env.IS_SSH ~= "1",
   -- Lazy-load only when editing chezmoi files
   event = {
     "BufReadPre " .. os.getenv("HOME") .. "/.local/share/chezmoi/*",

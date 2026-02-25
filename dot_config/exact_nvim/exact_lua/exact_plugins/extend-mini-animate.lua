@@ -1,3 +1,7 @@
+if vim.env.IS_SSH == "1" then
+  return {}
+end
+
 -- local is_not_single_window = function(win_id)
 --     -- local tabpage_id = vim.api.nvim_win_get_tabpage(win_id)
 --     -- return #vim.api.nvim_tabpage_list_wins(tabpage_id) > 1
@@ -6,7 +10,6 @@
 -- local animate = require("mini.animate")
 return {
   "nvim-mini/mini.animate",
-  enabled = vim.env.IS_SSH ~= "1",
   lazy = false,
   -- enabled = false,
   version = "*",

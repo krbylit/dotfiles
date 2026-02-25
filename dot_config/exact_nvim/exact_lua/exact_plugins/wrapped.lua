@@ -1,6 +1,9 @@
+if vim.env.IS_SSH == "1" then
+  return {}
+end
+
 return {
   "aikhe/wrapped.nvim",
-  enabled = vim.env.IS_SSH ~= "1",
   dependencies = { "nvzone/volt" },
   cmd = { "WrappedNvim" },
   opts = {

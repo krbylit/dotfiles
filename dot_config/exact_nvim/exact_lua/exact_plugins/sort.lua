@@ -1,6 +1,9 @@
+if vim.env.IS_SSH == "1" then
+  return {}
+end
+
 return {
   "sQVe/sort.nvim",
-  enabled = vim.env.IS_SSH ~= "1",
   opts = {
     -- List of delimiters, in descending order of priority, to automatically
     -- sort on.

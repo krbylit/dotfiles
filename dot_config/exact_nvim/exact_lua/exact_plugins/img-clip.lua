@@ -147,9 +147,12 @@ process_cmd:
 ═══════════════════════════════════════════════════════════════════════════════
 --]]
 
+if vim.env.IS_SSH == "1" then
+  return {}
+end
+
 return {
   "hakonharnes/img-clip.nvim",
-  enabled = vim.env.IS_SSH ~= "1",
   event = "VeryLazy",
   -- NOTE: This workaround is required to be able to paste base64 into `AgenticInput` filetypes (img-clip only allows pasting into Markdown)
   -- config = function(_, opts)

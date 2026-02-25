@@ -1,3 +1,7 @@
+if vim.env.IS_SSH == "1" then
+  return {}
+end
+
 vim.api.nvim_create_autocmd("FileType", {
   pattern = "octo",
   callback = function(ev)
@@ -14,7 +18,6 @@ vim.api.nvim_create_autocmd("FileType", {
 })
 return {
   "pwntester/octo.nvim",
-  enabled = vim.env.IS_SSH ~= "1",
   -- opts = {
   --     use_local_fs = false, -- use local files on right side of reviews
   --     enable_builtin = true, -- shows a list of builtin actions when no action is provided

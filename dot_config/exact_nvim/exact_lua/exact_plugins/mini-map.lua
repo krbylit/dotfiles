@@ -1,7 +1,10 @@
+if vim.env.IS_SSH == "1" then
+  return {}
+end
+
 return {
   "nvim-mini/mini.map",
   lazy = true,
-  enabled = vim.env.IS_SSH ~= "1",
   version = false,
   keys = {
     {

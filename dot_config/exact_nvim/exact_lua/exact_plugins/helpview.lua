@@ -1,10 +1,13 @@
+if vim.env.IS_SSH == "1" then
+  return {}
+end
+
 -- Fancy formatting for :help files
 -- https://github.com/OXY2DEV/helpview.nvim
 
 -- disabling for now b/c there's odd behavior with conceals and often have to toggle `conceallevel` to read full docs
 return {
   "OXY2DEV/helpview.nvim",
-  enabled = vim.env.IS_SSH ~= "1",
   lazy = false, -- Recommended
 
   -- In case you still want to lazy load
