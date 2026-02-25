@@ -29,7 +29,6 @@ if vim.env.IS_SSH == "1" then
   table.insert(disabled, { "mfussenegger/nvim-dap", enabled = false })
   table.insert(disabled, { "ThePrimeagen/harpoon", enabled = false })
   table.insert(disabled, { "nvim-mini/mini.animate", enabled = false })
-  table.insert(disabled, { "nvim-mini/mini.files", enabled = false })
   table.insert(disabled, { "folke/neoconf.nvim", enabled = false })
   table.insert(disabled, { "pwntester/octo.nvim", enabled = false })
   -- table.insert(disabled, { "folke/persistence.nvim", enabled = false })
@@ -49,6 +48,8 @@ if vim.env.IS_SSH == "1" then
   table.insert(disabled, { "folke/sidekick.nvim", enabled = false })
   table.insert(disabled, { "OXY2DEV/markview.nvim", enabled = false })
   table.insert(disabled, { "obsidian-nvim/obsidian.nvim", enabled = false })
+  table.insert(disabled, { "mikavilpas/yazi.nvim", enabled = false })
+  table.insert(disabled, { "HiPhish/rainbow-delimiters.nvim", enabled = false })
   -- table.insert(disabled, { "", enabled = false })
 end
 

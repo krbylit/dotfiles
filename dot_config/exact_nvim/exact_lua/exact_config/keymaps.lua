@@ -133,6 +133,49 @@ wk.add({
   },
 })
 
+-- On SSH, map yazi keybindings to mini.files equivalents
+if vim.env.IS_SSH == "1" then
+  wk.add({
+    mode = "n",
+    remap = false,
+    {
+      "<leader>E",
+      function()
+        if not MiniFiles.close() then
+          if is_snacks_dashboard() then
+            MiniFiles.open(vim.fn.getcwd(), false)
+          else
+            MiniFiles.open(vim.api.nvim_buf_get_name(0))
+          end
+        end
+      end,
+      desc = "MiniFiles Explorer (file)",
+    },
+    {
+      "<leader>cw",
+      function()
+        if not MiniFiles.close() then
+          MiniFiles.open(vim.cmd.pwd())
+        end
+      end,
+      desc = "MiniFiles Explorer (cwd)",
+    },
+    {
+      "<leader>e",
+      function()
+        if not MiniFiles.close() then
+          if is_snacks_dashboard() then
+            MiniFiles.open(vim.fn.getcwd(), false)
+          else
+            MiniFiles.open(vim.api.nvim_buf_get_name(0))
+          end
+        end
+      end,
+      desc = "MiniFiles Explorer (toggle)",
+    },
+  })
+end
+
 -- Marks maps
 -- Function to delete the mark on the current line
 local function delete_mark()

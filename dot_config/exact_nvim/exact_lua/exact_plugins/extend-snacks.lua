@@ -553,7 +553,7 @@ return {
       },
       ---@type snacks.indent.animate
       animate = {
-        enabled = vim.fn.has("nvim-0.10") == 1,
+        enabled = vim.fn.has("nvim-0.10") == 1 and vim.env.IS_SSH ~= "1",
         easing = "linear",
         duration = {
           step = 20, -- ms per step

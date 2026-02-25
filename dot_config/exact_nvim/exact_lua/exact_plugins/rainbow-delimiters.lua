@@ -1,5 +1,6 @@
 return {
   "HiPhish/rainbow-delimiters.nvim",
+  enabled = vim.env.IS_SSH ~= "1",
   config = function()
     ---@type rainbow_delimiters.config
     require("rainbow-delimiters.setup").setup({

@@ -1,6 +1,7 @@
 ---@type LazySpec
 return {
   "mikavilpas/yazi.nvim",
+  enabled = vim.env.IS_SSH ~= "1",
   lazy = true,
   event = "VeryLazy",
   dependencies = {

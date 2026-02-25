@@ -97,7 +97,8 @@ return {
     },
     ---@type blink.cmp.SourceConfig
     sources = {
-      default = { "lsp", "path", "snippets", "buffer", "copilot", "ripgrep" },
+      default = vim.env.IS_SSH ~= "1" and { "lsp", "path", "snippets", "buffer", "copilot", "ripgrep" }
+        or { "lsp", "path", "snippets", "buffer" },
       -- default = { "lsp", "path", "snippets", "buffer", "ripgrep" },
       -- default = { "lsp", "path", "snippets", "buffer", "copilot" },
       -- min_keyword_length = function(ctx)
