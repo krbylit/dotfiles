@@ -92,23 +92,28 @@ opt.winheight = 1 -- Minimum window height
 opt.winminheight = 1 -- Minimum window height
 opt.updatetime = 250 -- CursorHold event timing, LSP idle timing, diagnostics updates, etc.
 
--- OSC 52 clipboard support for SSH (Ghostty terminal supports this)
-if vim.env.IS_SSH == "1" then
-  vim.g.clipboard = {
-    name = "OSC 52",
-    copy = {
-      ["+"] = require("vim.ui.clipboard.osc52").copy("+"),
-      ["*"] = require("vim.ui.clipboard.osc52").copy("*"),
-    },
-    paste = {
-      ["+"] = require("vim.ui.clipboard.osc52").paste("+"),
-      ["*"] = require("vim.ui.clipboard.osc52").paste("*"),
-    },
-  }
+-- Sync with system clipboard locally; skip on SSH where there's no provider
+-- (the OSC 52 autocmd below handles copying to local clipboard over SSH)
+if vim.env.IS_SSH ~= "1" then
+  opt.clipboard = "unnamedplus"
 end
 
--- Sync with system clipboard (uses OSC 52 on SSH, system clipboard locally)
-opt.clipboard = "unnamedplus"
+-- OSC 52: push yanked text to local clipboard over SSH via Ghostty.
+-- We don't set vim.g.clipboard because Zellij doesn't support OSC 52 paste,
+-- which breaks normal yank/paste. Instead, we fire OSC 52 copy as a side-effect
+-- on yank, keeping Neovim's internal registers fully functional.
+if vim.env.IS_SSH == "1" then
+  local osc52_copy = require("vim.ui.clipboard.osc52").copy("+")
+  vim.api.nvim_create_autocmd("TextYankPost", {
+    group = vim.api.nvim_create_augroup("OSC52Yank", { clear = true }),
+    callback = function()
+      local event = vim.v.event
+      if event.operator == "y" then
+        osc52_copy(event.regcontents)
+      end
+    end,
+  })
+end
 
 -- Enable diagnostics by default
 vim.diagnostic.enable(true)
