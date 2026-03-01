@@ -107,7 +107,8 @@ return {
     { "<leader>os", "<cmd>Obsidian search<cr>", desc = "Search note contents" },
     { "<leader>oq", "<cmd>Obsidian quick_switch<cr>", desc = "Quick switch note", ft = "markdown" },
     { "<leader>oc", ":Obsidian cnew ", desc = "New custom note" },
-    { "<leader>oS", ":Obsidian SprintTaskNew ", desc = "New custom note" },
+    { "<leader>oS", ":Obsidian SprintTaskNew ", desc = "New sprint task" },
+    { "<leader>oi", "<cmd>Obsidian TodoDetail<cr>", desc = "Create TODO detail note", ft = "markdown" },
 
     -- Daily notes
     { "<leader>ot", "<cmd>Obsidian today<cr>", desc = "Today's note" },
@@ -122,22 +123,6 @@ return {
     { "<leader>ox", "<cmd>Obsidian toggle_checkbox<cr>", desc = "Toggle checkbox", ft = "markdown" },
     { "<leader>oT", "<cmd>Obsidian template<cr>", desc = "Insert template", ft = "markdown" },
 
-    -- Markdown editing helpers (localleader)
-    {
-      "<localleader>i",
-      "<cmd>Checkbox interactive<cr>",
-      desc = "Change checkbox interactively",
-      ft = "markdown",
-      mode = "n",
-    },
-    { "<localleader>t", "o- [ ] ", desc = "Add todo item", ft = "markdown", mode = "n" },
-    { "<localleader>b", "o- ", desc = "Add bullet point", ft = "markdown", mode = "n" },
-    { "<localleader>1", "o# ", desc = "Heading level 1", ft = "markdown", mode = "n" },
-    { "<localleader>2", "o## ", desc = "Heading level 2", ft = "markdown", mode = "n" },
-    { "<localleader>3", "o### ", desc = "Heading level 3", ft = "markdown", mode = "n" },
-    { "<localleader>4", "o#### ", desc = "Heading level 4", ft = "markdown", mode = "n" },
-    { "<localleader>c", "o```<CR>```<Esc>O", desc = "Add code block", ft = "markdown", mode = "n" },
-    { "<localleader>l", "a[]()<Esc>F[a", desc = "Insert link", ft = "markdown", mode = "n" },
     {
       "<C-p>",
       function()
@@ -264,203 +249,6 @@ return {
         end
       end,
       desc = "Paste image link at cursor",
-      ft = "markdown",
-      mode = "n",
-    },
-    {
-      "<localleader>h",
-      function()
-        local current_line = vim.fn.line(".")
-
-        -- Check if current line is a heading first
-        local heading_level = nil
-        local current_line_content = vim.fn.getline(".")
-        -- Match headings with or without text after # (accepts empty headings)
-        local current_level = current_line_content:match("^(#+)")
-        if current_level then
-          heading_level = #current_level
-        else
-          -- Search backwards for heading (using native search)
-          -- Pattern matches 1-6 # chars followed by space or end of line
-          local pos = vim.fn.searchpos("^#\\{1,6\\}\\(\\s\\|$\\)", "bnW")
-          if pos[1] > 0 then
-            local line_content = vim.fn.getline(pos[1])
-            local level = line_content:match("^(#+)")
-            heading_level = #level
-          end
-        end
-
-        -- Default to level 1 if no heading found
-        if not heading_level then
-          heading_level = 1
-        end
-
-        -- Find where to insert: before next heading/separator of same or higher level, or EOF
-        -- Search for headings OR section separators (---, ===)
-        local insert_line = vim.fn.line("$") -- Default to end of file
-        local saved_pos = vim.fn.getcurpos()
-        local search_start = current_line + 1
-        vim.fn.cursor(search_start, 1)
-
-        -- Search for headings (with or without text) OR section separators
-        local next_pos = vim.fn.search("^\\(#\\{1,6\\}\\(\\s\\|$\\)\\|---\\+\\s*$\\|===\\+\\s*$\\)", "W")
-        while next_pos > 0 do
-          -- Skip if we matched the line right after cursor (we want to insert within current section)
-          if next_pos == search_start then
-            local line_content = vim.fn.getline(next_pos)
-            local level = line_content:match("^(#+)")
-            -- Only skip if this heading is appropriate level (would be our boundary)
-            if
-              line_content:match("^---+%s*$")
-              or line_content:match("^===+%s*$")
-              or (level and #level <= heading_level)
-            then
-              -- This is a boundary right after cursor, insert before it
-              insert_line = next_pos - 1
-              break
-            end
-          end
-
-          local line_content = vim.fn.getline(next_pos)
-
-          -- Check if it's a section separator (treat as boundary)
-          if line_content:match("^---+%s*$") or line_content:match("^===+%s*$") then
-            insert_line = next_pos - 1
-            break
-          end
-
-          -- Check if it's a heading of appropriate level
-          local level = line_content:match("^(#+)")
-          if level and #level <= heading_level then
-            insert_line = next_pos - 1
-            break
-          end
-
-          vim.fn.cursor(next_pos + 1, 1)
-          next_pos = vim.fn.search("^\\(#\\{1,6\\}\\(\\s\\|$\\)\\|---\\+\\s*$\\|===\\+\\s*$\\)", "W")
-        end
-
-        vim.fn.setpos(".", saved_pos) -- restore cursor
-
-        -- Insert heading (with blank line before it if needed)
-        local heading_text = string.rep("#", heading_level) .. " "
-        local insert_line_content = vim.fn.getline(insert_line)
-
-        if insert_line_content:match("^%s*$") then
-          -- insert_line is already blank, just add heading without extra blank line
-          vim.fn.append(insert_line, heading_text)
-          vim.fn.cursor(insert_line + 1, #heading_text + 1)
-        else
-          -- insert_line has content, add blank line before heading
-          vim.fn.append(insert_line, { "", heading_text })
-          vim.fn.cursor(insert_line + 2, #heading_text + 1)
-        end
-
-        vim.cmd("startinsert!")
-      end,
-      desc = "Add heading (same level)",
-      ft = "markdown",
-      mode = "n",
-    },
-    {
-      "<localleader>s",
-      function()
-        local current_line = vim.fn.line(".")
-
-        -- Check if current line is a heading first
-        local heading_level = nil
-        local current_line_content = vim.fn.getline(".")
-        -- Match headings with or without text after # (accepts empty headings)
-        local current_level = current_line_content:match("^(#+)")
-        if current_level then
-          heading_level = #current_level
-        else
-          -- Search backwards for heading (using native search)
-          -- Pattern matches 1-6 # chars followed by space or end of line
-          local pos = vim.fn.searchpos("^#\\{1,6\\}\\(\\s\\|$\\)", "bnW")
-          if pos[1] > 0 then
-            local line_content = vim.fn.getline(pos[1])
-            local level = line_content:match("^(#+)")
-            heading_level = #level
-          end
-        end
-
-        -- Default to level 2 if no heading found (subheading of implicit level 1)
-        if not heading_level then
-          heading_level = 2
-        else
-          heading_level = heading_level + 1
-        end
-
-        -- Clamp to max level 6
-        if heading_level > 6 then
-          heading_level = 6
-        end
-
-        -- Find where to insert: before next heading/separator of equal or higher level, or EOF
-        -- Search for headings OR section separators (---, ===)
-        -- Stop at headings equal to or higher than what we're inserting (not just parent level)
-        local insert_line = vim.fn.line("$") -- Default to end of file
-        local saved_pos = vim.fn.getcurpos()
-        local search_start = current_line + 1
-        vim.fn.cursor(search_start, 1)
-
-        local next_pos = vim.fn.search("^\\(#\\+\\s\\|---\\+\\s*$\\|===\\+\\s*$\\)", "W")
-        while next_pos > 0 do
-          -- Skip if we matched the line right after cursor (we want to insert within current section)
-          if next_pos == search_start then
-            local line_content = vim.fn.getline(next_pos)
-            local level = line_content:match("^(#+)")
-            -- Only skip if this heading is appropriate level (would be our boundary)
-            if
-              line_content:match("^---+%s*$")
-              or line_content:match("^===+%s*$")
-              or (level and #level <= heading_level)
-            then
-              -- This is a boundary right after cursor, insert before it
-              insert_line = next_pos - 1
-              break
-            end
-          end
-
-          local line_content = vim.fn.getline(next_pos)
-
-          -- Check if it's a section separator (treat as boundary)
-          if line_content:match("^---+%s*$") or line_content:match("^===+%s*$") then
-            insert_line = next_pos - 1
-            break
-          end
-
-          -- Check if it's a heading of equal or higher level than what we're inserting
-          local level = line_content:match("^(#+)")
-          if level and #level <= heading_level then
-            insert_line = next_pos - 1
-            break
-          end
-
-          vim.fn.cursor(next_pos + 1, 1)
-          next_pos = vim.fn.search("^\\(#\\+\\s\\|---\\+\\s*$\\|===\\+\\s*$\\)", "W")
-        end
-
-        vim.fn.setpos(".", saved_pos) -- restore cursor
-
-        -- Insert heading (with blank line before it if needed)
-        local heading_text = string.rep("#", heading_level) .. " "
-        local insert_line_content = vim.fn.getline(insert_line)
-
-        if insert_line_content:match("^%s*$") then
-          -- insert_line is already blank, just add heading without extra blank line
-          vim.fn.append(insert_line, heading_text)
-          vim.fn.cursor(insert_line + 1, #heading_text + 1)
-        else
-          -- insert_line has content, add blank line before heading
-          vim.fn.append(insert_line, { "", heading_text })
-          vim.fn.cursor(insert_line + 2, #heading_text + 1)
-        end
-
-        vim.cmd("startinsert!")
-      end,
-      desc = "Add sub-heading (one level deeper)",
       ft = "markdown",
       mode = "n",
     },
@@ -820,6 +608,153 @@ return {
         })
 
         note:open({ sync = true })
+      end,
+    })
+
+    -- :Obsidian TodoDetail
+    --   Creates a detail note from the TODO item on the current line.
+    --   Parses the status character and text, creates a note in
+    --   07_Notes/01_TODOs/00_TODO_Details/ with status frontmatter,
+    --   prepends a wikilink on the original line, and opens the detail note.
+    commands.register("TodoDetail", {
+      nargs = 0,
+      func = function()
+        local line = vim.api.nvim_get_current_line()
+        local row = vim.api.nvim_win_get_cursor(0)[1]
+
+        -- Parse TODO line: "- [<char>] <text>" with optional leading whitespace
+        local indent, status_char, todo_text = line:match("^(%s*)%- %[(.)]%s+(.*)")
+        if not status_char then
+          vim.notify("Not a TODO line (expected '- [x] text')", vim.log.levels.WARN)
+          return
+        end
+
+        -- Map status character to semantic status string
+        local status_map = {
+          [" "] = "TODO",
+          ["/"] = "IN_PROGRESS",
+          ["x"] = "DONE",
+          ["-"] = "CANCELLED",
+          [">"] = "DEFERRED",
+          ["?"] = "QUESTION",
+          ["!"] = "IMPORTANT",
+          ["S"] = "SAVINGS",
+          ["l"] = "LOCATION",
+          ["w"] = "WIN",
+          ["*"] = "STAR",
+        }
+        local status = status_map[status_char] or "TODO"
+
+        -- Build note ID: date-slug
+        local date_str = os.date("%Y-%m-%d")
+        local slug = todo_text
+          :lower()
+          :gsub("[^%w%s%-]", "") -- strip non-alphanumeric (keep spaces and hyphens)
+          :gsub("%s+", "-") -- spaces to hyphens
+          :gsub("%-+", "-") -- collapse multiple hyphens
+          :gsub("^%-", "") -- strip leading hyphen
+          :gsub("%-$", "") -- strip trailing hyphen
+        -- Truncate slug to keep filename reasonable
+        if #slug > 60 then
+          slug = slug:sub(1, 60):gsub("%-$", "")
+        end
+        local note_id = date_str .. "-" .. slug
+
+        -- Build file path
+        local vault_path = tostring(Obsidian.workspace.path)
+        local detail_dir = vault_path .. "/07_Notes/01_TODOs/00_TODO_Details"
+        vim.fn.mkdir(detail_dir, "p")
+        local note_path = detail_dir .. "/" .. note_id .. ".md"
+
+        -- Check if file already exists
+        if vim.fn.filereadable(note_path) == 1 then
+          vim.notify("Detail note already exists: " .. note_id, vim.log.levels.WARN)
+          vim.cmd("vsplit " .. vim.fn.fnameescape(note_path))
+          return
+        end
+
+        -- Get source file path (relative to vault)
+        local source_file = vim.api.nvim_buf_get_name(0)
+        local vault_prefix = vault_path .. "/"
+        if source_file:sub(1, #vault_prefix) == vault_prefix then
+          source_file = source_file:sub(#vault_prefix + 1)
+        end
+
+        -- Read template and apply substitutions
+        local template_path = vault_path .. "/06_Metadata/Templates/todo-detail.md"
+        local template_content
+        local tf = io.open(template_path, "r")
+        if tf then
+          template_content = tf:read("*a")
+          tf:close()
+        end
+
+        -- Map status to priority
+        local priority_map = {
+          ["!"] = "P0", ["*"] = "P1", ["/"] = "P1",
+          ["f"] = "P2", [" "] = "P2", ["S"] = "P2",
+          ["w"] = "P3", ["l"] = "P3", [">"] = "P4",
+        }
+        local priority = priority_map[status_char] or "P2"
+
+        -- Escape a string for use as gsub replacement (% is special)
+        local function esc(s)
+          return s:gsub("%%", "%%%%")
+        end
+
+        local content
+        if template_content then
+          content = template_content
+            :gsub("{{id}}", esc(slug))
+            :gsub("{{title}}", esc(todo_text))
+            :gsub("{{status}}", status)
+            :gsub("{{priority}}", priority)
+            :gsub("{{doability}}", "unknown")
+            :gsub("{{spec_completeness}}", "underspecified")
+            :gsub("{{source_file}}", esc(source_file))
+            :gsub("{{source_line}}", esc(line))
+            :gsub("{{date}}", os.date("%Y-%m-%d"))
+            :gsub("{{time}}", os.date("%H:%M"))
+            :gsub("{{original_line}}", esc(line))
+        else
+          -- Fallback if template is missing
+          content = table.concat({
+            "---",
+            'id: "' .. slug .. '"',
+            'status: "' .. status .. '"',
+            'source_file: "' .. source_file .. '"',
+            'created: "' .. os.date("%Y-%m-%dT%H:%M:%S") .. '"',
+            "---",
+            "# " .. todo_text,
+            "",
+            "## Original TODO",
+            "",
+            line,
+            "",
+            "## Details",
+            "",
+            "",
+            "",
+            "## Notes",
+            "",
+          }, "\n")
+        end
+
+        local f = io.open(note_path, "w")
+        if not f then
+          vim.notify("Failed to create detail note: " .. note_path, vim.log.levels.ERROR)
+          return
+        end
+        f:write(content)
+        f:close()
+
+        -- Update the original line: change status to [>] and prepend wikilink
+        local wikilink = "[[00_TODO_Details/" .. note_id .. "|📋]]"
+        local new_line = indent .. "- [>] " .. wikilink .. " " .. todo_text
+        vim.api.nvim_buf_set_lines(0, row - 1, row, false, { new_line })
+
+        -- Open the detail note in a vertical split
+        vim.cmd("vsplit " .. vim.fn.fnameescape(note_path))
       end,
     })
   end,

@@ -4,6 +4,10 @@ commit_message.txt
 .gitmodules
 .aider*
 !.aiderignore
-.beads
 vaults
 specs
+
+# bv (beads viewer) local config and caches
+.bv/
+.perles
+.ralph-tui

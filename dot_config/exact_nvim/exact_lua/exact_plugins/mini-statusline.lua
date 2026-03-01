@@ -164,13 +164,46 @@ local function get_relative_path()
   return full_path
 end
 
+-- Cache for word count and token estimate (bufnr -> formatted string).
+-- Populated on BufEnter (cold start) and refreshed on BufWritePost.
+-- get_word_count() reads from this cache so the statusline redraw path
+-- never calls vim.fn.wordcount() directly.
+local word_count_cache = {}
+
+local function refresh_word_count(bufnr)
+  -- wordcount() operates on the current buffer; switch context if needed
+  local cur = vim.api.nvim_get_current_buf()
+  local counts
+  if bufnr == cur then
+    counts = vim.fn.wordcount()
+  else
+    -- For off-screen buffers we skip the update; BufEnter will seed on switch
+    return
+  end
+  local words = counts.chars > 0 and counts.words or 0
+  local tokens = counts.chars > 0 and math.floor(counts.chars / 4) or 0
+  word_count_cache[bufnr] = string.format("W:%d~T:%d", words, tokens)
+end
+
 -- Check for git repo changes on buffer enter (lightweight check)
--- fs_event watcher handles branch changes WITHIN a repo
+-- fs_event watcher handles branch changes WITHIN a repo.
+-- Also seeds the word count cache for buffers not yet counted.
 local autocmd_id = vim.api.nvim_create_autocmd({ "BufEnter" }, {
-  callback = function()
+  callback = function(ev)
     if not git_cache.is_exiting then
       update_git_info()
     end
+    -- Seed cache on first visit to this buffer
+    if word_count_cache[ev.buf] == nil then
+      refresh_word_count(ev.buf)
+    end
+  end,
+})
+
+-- Refresh word count cache when the buffer is saved
+vim.api.nvim_create_autocmd("BufWritePost", {
+  callback = function(ev)
+    refresh_word_count(ev.buf)
   end,
 })
 
@@ -193,17 +226,13 @@ vim.api.nvim_create_autocmd("VimLeavePre", {
   end,
 })
 
--- Function to get word count and token estimate
+-- Return the cached word/token count for the current buffer.
+-- The cache is populated on BufEnter and refreshed on BufWritePost.
 local function get_word_count()
   -- if vim.bo.filetype ~= "markdown" then
   --   return ""
   -- end
-
-  local counts = vim.fn.wordcount()
-  local words = counts.chars > 0 and counts.words or 0
-  local tokens = counts.chars > 0 and math.floor(counts.chars / 4) or 0
-
-  return string.format("W:%d~T:%d", words, tokens)
+  return word_count_cache[vim.api.nvim_get_current_buf()] or ""
 end
 
 -- Custom section_filename to highlight the Git root directory and show branch

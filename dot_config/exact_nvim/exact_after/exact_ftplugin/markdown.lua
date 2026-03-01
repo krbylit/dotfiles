@@ -163,6 +163,65 @@ local function insert_heading(mode)
   vim.cmd("startinsert!")
 end
 
+-- List continuation on Enter in insert mode.
+-- Supports: bullet (- / * / +), todo (- [ ] ), numbered (1.)
+-- On an empty list item, pressing Enter exits list mode instead.
+local cr = vim.api.nvim_replace_termcodes("<CR>", true, false, true)
+
+local function markdown_enter()
+  local line = vim.api.nvim_get_current_line()
+
+  -- Capture optional leading indent
+  local indent = line:match("^(%s*)") or ""
+
+  -- TODO list item: - [ ] or * [ ] or + [ ]
+  -- Must be checked before generic bullet to catch the checkbox syntax
+  local todo_match = line:match("^%s*[%-%*%+]%s%[.-%]%s")
+  if todo_match then
+    local content = line:match("^%s*[%-%*%+]%s%[.-%]%s(.*)$") or ""
+    if content == "" then
+      -- Empty item: clear marker and exit list mode
+      vim.api.nvim_set_current_line(indent)
+      return cr
+    end
+    return cr .. indent .. "- [ ] "
+  end
+
+  -- Bullet list item: - / * / +
+  local bullet_match = line:match("^%s*[%-%*%+]%s")
+  if bullet_match then
+    local marker = line:match("^%s*([%-%*%+])")
+    local content = line:match("^%s*[%-%*%+]%s(.*)$") or ""
+    if content == "" then
+      vim.api.nvim_set_current_line(indent)
+      return cr
+    end
+    return cr .. indent .. marker .. " "
+  end
+
+  -- Numbered list item: 1. or 1)
+  local num, sep = line:match("^%s*(%d+)([%.%)]%s)")
+  if num and sep then
+    local next_num = tostring(tonumber(num) + 1)
+    local sep_char = sep:match("^([%.%)])")
+    local content = line:match("^%s*%d+[%.%)]%s(.*)$") or ""
+    if content == "" then
+      vim.api.nvim_set_current_line(indent)
+      return cr
+    end
+    return cr .. indent .. next_num .. sep_char .. " "
+  end
+
+  -- Not a list line — default Enter
+  return cr
+end
+
+vim.keymap.set("i", "<CR>", markdown_enter, {
+  buffer = true,
+  expr = true,
+  desc = "Continue list on Enter",
+})
+
 vim.keymap.set("n", "<localleader>h", function()
   insert_heading("sibling")
 end, { desc = "Insert sibling heading (TS)", buffer = true })
@@ -170,3 +229,67 @@ end, { desc = "Insert sibling heading (TS)", buffer = true })
 vim.keymap.set("n", "<localleader>s", function()
   insert_heading("subheading")
 end, { desc = "Insert subheading (TS)", buffer = true })
+
+-- Markdown editing helpers — available in all .md files
+vim.keymap.set("n", "<localleader>t", "o- [ ] ", { desc = "Add todo item", buffer = true })
+vim.keymap.set("n", "<localleader>b", "o- ", { desc = "Add bullet point", buffer = true })
+vim.keymap.set("n", "<localleader>1", "o# ", { desc = "Heading level 1", buffer = true })
+vim.keymap.set("n", "<localleader>2", "o## ", { desc = "Heading level 2", buffer = true })
+vim.keymap.set("n", "<localleader>3", "o### ", { desc = "Heading level 3", buffer = true })
+vim.keymap.set("n", "<localleader>4", "o#### ", { desc = "Heading level 4", buffer = true })
+vim.keymap.set("n", "<localleader>c", "o```<CR>```<Esc>O", { desc = "Add code block", buffer = true })
+
+vim.keymap.set("n", "<localleader>l", function()
+  local clipboard = vim.fn.getreg("+")
+  local url = clipboard:match("^https?://") and clipboard or ""
+  if url ~= "" then
+    -- Clipboard has a URL: insert [](url) and position cursor inside []
+    vim.api.nvim_feedkeys("a[](" .. url .. ")<Esc>F[a", "n", false)
+  else
+    -- No URL: insert []() and position cursor inside []
+    vim.api.nvim_feedkeys("a[]()<Esc>F[a", "n", false)
+  end
+end, { desc = "Insert link", buffer = true })
+
+vim.keymap.set("v", "<localleader>l", function()
+  -- Exit visual mode first so '< and '> marks are set to the current selection
+  vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Esc>", true, false, true), "x", false)
+
+  local start_pos = vim.api.nvim_buf_get_mark(0, "<")
+  local end_pos = vim.api.nvim_buf_get_mark(0, ">")
+  local start_row = start_pos[1] - 1
+  local start_col = start_pos[2]
+  local end_row = end_pos[1] - 1
+  -- end_col from get_mark is 0-indexed and inclusive; buf_get_text needs exclusive end
+  local end_line = vim.api.nvim_buf_get_lines(0, end_row, end_row + 1, true)[1] or ""
+  local end_col = math.min(end_pos[2] + 1, #end_line)
+
+  local lines = vim.api.nvim_buf_get_text(0, start_row, start_col, end_row, end_col, {})
+  local selected_text = table.concat(lines, "\n")
+
+  local clipboard = vim.fn.getreg("+")
+  local url
+  if clipboard:match("^https?://") then
+    url = clipboard
+  else
+    url = vim.fn.input("URL: ")
+  end
+
+  if not url or url == "" then
+    return
+  end
+
+  local link = "[" .. selected_text .. "](" .. url .. ")"
+  vim.api.nvim_buf_set_text(0, start_row, start_col, end_row, end_col, { link })
+end, { desc = "Insert link (wrap selection)", buffer = true })
+
+-- Interactive checkbox: delegates to obsidian.nvim when available, no-ops otherwise.
+-- Outside the vault obsidian.nvim is loaded but the current buffer is not an obsidian
+-- note, so the Checkbox command may not exist — we guard with pcall.
+vim.keymap.set("n", "<localleader>i", function()
+  local ok, err = pcall(vim.cmd, "Checkbox interactive")
+  if not ok then
+    vim.notify("Checkbox interactive requires obsidian.nvim (not available here)", vim.log.levels.WARN)
+  end
+end, { desc = "Change checkbox interactively", buffer = true })
+

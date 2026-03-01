@@ -44,10 +44,11 @@ return {
         --- This is run when a new terminal is created, before starting it.
         --- Here you can change window options `terminal.opts`.
         ---@param terminal sidekick.cli.Terminal
-        config = function(terminal)
-          -- Force terminal to use Normal highlight group background
-          terminal.opts.wo.winhighlight = "Normal:Normal,NormalNC:NormalNC"
-        end,
+        -- NOTE: This was necessary to make sidekick.nvim terminal window respect colorscheme, doesn't seem to be required any longer
+        -- config = function(terminal)
+        --   -- Force terminal to use Normal highlight group background
+        --   terminal.opts.wo.winhighlight = "Normal:Normal,NormalNC:NormalNC"
+        -- end,
         wo = {}, ---@type vim.wo
         bo = {}, ---@type vim.bo
         layout = "right", ---@type "float"|"left"|"bottom"|"top"|"right"
@@ -108,8 +109,9 @@ return {
       tools = {
         -- aider = { cmd = { "aider" } },
         -- amazon_q = { cmd = { "q" } },
+        ralph_create_prd = { cmd = { "ralph-tui create-prd" } },
         claude = { cmd = { "claude" } },
-        -- codex = { cmd = { "codex", "--enable", "web_search_request" } },
+        codex = { cmd = { "codex", "--no-alt-screen" } },
         -- copilot = { cmd = { "copilot", "--banner" } },
         -- crush = {
         --   cmd = { "crush" },

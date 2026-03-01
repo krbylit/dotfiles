@@ -129,12 +129,18 @@ vim.api.nvim_create_autocmd("FileType", {
 -- ================================================================
 local ft_ui_group = vim.api.nvim_create_augroup("FileTypeUI", { clear = true })
 
--- Help docs: vertical split on the right
-vim.api.nvim_create_autocmd("FileType", {
+-- Help docs: vertical split on the right.
+-- BufWinEnter is used instead of FileType because FileType only fires once per
+-- buffer (when the filetype is first set). When a help buffer is reused in a new
+-- window (e.g. running :help on a previously-viewed topic), the filetype is
+-- already set so FileType does not fire again -- only BufWinEnter does.
+-- Guard against floating windows where wincmd L is not meaningful.
+vim.api.nvim_create_autocmd("BufWinEnter", {
   group = ft_ui_group,
-  pattern = "help",
   callback = function()
-    vim.cmd("wincmd L | vertical resize 90")
+    if vim.bo.buftype == "help" and vim.api.nvim_win_get_config(0).relative == "" then
+      vim.cmd("wincmd L | vertical resize 90")
+    end
   end,
 })
 
@@ -164,7 +170,8 @@ vim.api.nvim_create_autocmd("TermOpen", {
   callback = function()
     vim.opt_local.scrollback = 100000
     -- Force terminal to use Normal highlight group background
-    vim.opt_local.winhighlight = "Normal:Normal,NormalNC:NormalNC"
+    -- NOTE: This was necessary to make sidekick.nvim terminal window respect colorscheme, doesn't seem to be required any longer
+    -- vim.opt_local.winhighlight = "Normal:Normal,NormalNC:NormalNC"
 
     if vim.bo.filetype == "sidekick_terminal" then
       vim.keymap.set({ "n", "i" }, "<C-v>", function()
@@ -187,3 +194,4 @@ vim.api.nvim_create_autocmd("TermOpen", {
 --     vim.opt_local.cursorline = false
 --   end,
 -- })
+
