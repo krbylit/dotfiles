@@ -3,10 +3,17 @@
 if command -v uv &>/dev/null; then
     uv python install 3.13 --preview
 
-    # Read and install Python packages from .chezmoidata/uv.toml
-    {{ range .uv.tools -}}
-    uv tool install {{ .name }}{{- if .version -}}{{- if eq (toString .version | regexMatch "^[0-9]") true -}}=={{- else -}}@{{- end }}{{ .version }}{{- end }}
-    {{ end -}}
+    if [ "${IS_SSH}" != "1" ]; then
+        # Read and install Python packages from .chezmoidata/uv.toml
+        {{ range .uv.tools -}}
+        uv tool install {{ .name }}{{- if .version -}}{{- if eq (toString .version | regexMatch "^[0-9]") true -}}=={{- else -}}@{{- end }}{{ .version }}{{- end }}
+        {{ end -}}
+    else
+        # Install uv tools for remote SSH sessions
+        {{ range .uv.tools_ssh -}}
+        uv tool install {{ .name }}{{- if .version -}}{{- if eq (toString .version | regexMatch "^[0-9]") true -}}=={{- else -}}@{{- end }}{{ .version }}{{- end }}
+        {{ end -}}
+    fi
 
     # Update system-wide Python CLI tools
     uv tool upgrade --all

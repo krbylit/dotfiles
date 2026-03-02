@@ -1,0 +1,337 @@
+-- -- ================================================================
+-- -- Lag Detector
+-- -- ================================================================
+-- -- Detects and reports lag spikes in real-time during normal nvim usage
+-- -- Helps identify specific operations that cause sluggishness
+-- --
+-- -- Usage:
+-- --   :lua require("utils.debug.lag-detector").enable()  -- Start monitoring
+-- --   :lua require("utils.debug.lag-detector").disable() -- Stop monitoring
+-- --   :lua require("utils.debug.lag-detector").report()  -- Show summary
+-- --
+-- -- When lag is detected, you'll see notifications showing what caused it
+--
+-- local M = {}
+--
+-- local config = {
+--   enabled = false,
+--   lag_threshold_ms = 50, -- Report operations taking longer than this
+--   check_interval_ms = 100, -- How often to check event loop health
+--   notification_cooldown_ms = 2000, -- Min time between lag notifications
+-- }
+--
+-- local state = {
+--   last_notification = 0,
+--   lag_events = {},
+--   monitored_events = {},
+-- }
+--
+-- local log_file = "/tmp/nvim-lag-detector.log"
+--
+-- local function log_msg(msg)
+--   vim.fn.writefile(vim.split(msg, "\n"), log_file, "a")
+-- end
+--
+-- local function format_time(ms)
+--   if ms < 1 then
+--     return string.format("%.2fms", ms)
+--   elseif ms < 1000 then
+--     return string.format("%.1fms", ms)
+--   else
+--     return string.format("%.2fs", ms / 1000)
+--   end
+-- end
+--
+-- local function notify_lag(message)
+--   local now = vim.loop.hrtime() / 1000000
+--   if now - state.last_notification < config.notification_cooldown_ms then
+--     return -- Cooldown period
+--   end
+--
+--   state.last_notification = now
+--   vim.notify("🐌 LAG DETECTED: " .. message, vim.log.levels.WARN)
+--   log_msg(string.format("[%s] %s", os.date("%H:%M:%S"), message))
+-- end
+--
+-- local function track_event(event_name, callback)
+--   return function(...)
+--     if not config.enabled then
+--       return callback(...)
+--     end
+--
+--     local start_time = vim.loop.hrtime()
+--     local results = { callback(...) }
+--     local elapsed_ms = (vim.loop.hrtime() - start_time) / 1000000
+--
+--     if elapsed_ms >= config.lag_threshold_ms then
+--       table.insert(state.lag_events, {
+--         event = event_name,
+--         duration_ms = elapsed_ms,
+--         timestamp = os.date("%H:%M:%S"),
+--       })
+--
+--       notify_lag(string.format("%s took %s", event_name, format_time(elapsed_ms)))
+--     end
+--
+--     return unpack(results)
+--   end
+-- end
+--
+-- -- Monitor key autocmd events that often cause lag
+-- local function monitor_autocmds()
+--   local lag_prone_events = {
+--     "CursorMoved",
+--     "CursorMovedI",
+--     "TextChanged",
+--     "TextChangedI",
+--     "InsertEnter",
+--     "InsertLeave",
+--     "BufEnter",
+--     "BufWritePost",
+--     "FileType",
+--   }
+--
+--   local augroup = vim.api.nvim_create_augroup("LagDetector", { clear = true })
+--
+--   for _, event in ipairs(lag_prone_events) do
+--     vim.api.nvim_create_autocmd(event, {
+--       group = augroup,
+--       callback = function(ev)
+--         if not config.enabled then
+--           return
+--         end
+--
+--         local event_start = vim.loop.hrtime()
+--         local event_name = event
+--
+--         -- Measure time for all handlers of this event to complete
+--         vim.schedule(function()
+--           local elapsed_ms = (vim.loop.hrtime() - event_start) / 1000000
+--
+--           if elapsed_ms >= config.lag_threshold_ms then
+--             local handlers = vim.api.nvim_get_autocmds({ event = event_name })
+--
+--             table.insert(state.lag_events, {
+--               event = string.format("%s (%d handlers)", event_name, #handlers),
+--               duration_ms = elapsed_ms,
+--               timestamp = os.date("%H:%M:%S"),
+--             })
+--
+--             notify_lag(
+--               string.format(
+--                 "%s autocmd with %d handlers took %s",
+--                 event_name,
+--                 #handlers,
+--                 format_time(elapsed_ms)
+--               )
+--             )
+--           end
+--         end)
+--       end,
+--     })
+--   end
+-- end
+--
+-- -- Monitor LSP operations
+-- local original_lsp_request = nil
+-- local function monitor_lsp()
+--   if original_lsp_request then
+--     return -- Already monitoring
+--   end
+--
+--   original_lsp_request = vim.lsp.buf_request
+--   vim.lsp.buf_request = function(bufnr, method, params, handler)
+--     if not config.enabled then
+--       return original_lsp_request(bufnr, method, params, handler)
+--     end
+--
+--     local request_start = vim.loop.hrtime()
+--     local request_method = method
+--
+--     local wrapped_handler = function(err, result, ctx, config)
+--       local elapsed_ms = (vim.loop.hrtime() - request_start) / 1000000
+--
+--       if elapsed_ms >= config.lag_threshold_ms then
+--         table.insert(state.lag_events, {
+--           event = "LSP: " .. request_method,
+--           duration_ms = elapsed_ms,
+--           timestamp = os.date("%H:%M:%S"),
+--         })
+--
+--         notify_lag(string.format("LSP %s took %s", request_method, format_time(elapsed_ms)))
+--       end
+--
+--       if handler then
+--         return handler(err, result, ctx, config)
+--       end
+--     end
+--
+--     return original_lsp_request(bufnr, method, params, wrapped_handler)
+--   end
+-- end
+--
+-- -- Monitor rendering/redraw operations
+-- local function monitor_rendering()
+--   local augroup = vim.api.nvim_create_augroup("LagDetector_Rendering", { clear = true })
+--
+--   vim.api.nvim_create_autocmd({ "VimResized", "WinResized" }, {
+--     group = augroup,
+--     callback = function(ev)
+--       if not config.enabled then
+--         return
+--       end
+--
+--       local start_time = vim.loop.hrtime()
+--       vim.schedule(function()
+--         local elapsed_ms = (vim.loop.hrtime() - start_time) / 1000000
+--
+--         if elapsed_ms >= config.lag_threshold_ms then
+--           table.insert(state.lag_events, {
+--             event = "Resize/Redraw",
+--             duration_ms = elapsed_ms,
+--             timestamp = os.date("%H:%M:%S"),
+--           })
+--
+--           notify_lag(string.format("Window resize took %s", format_time(elapsed_ms)))
+--         end
+--       end)
+--     end,
+--   })
+-- end
+--
+-- -- Public API
+-- function M.enable()
+--   if config.enabled then
+--     vim.notify("Lag detector already enabled", vim.log.levels.INFO)
+--     return
+--   end
+--
+--   config.enabled = true
+--   state.lag_events = {}
+--
+--   -- Initialize log
+--   vim.fn.writefile(
+--     { "=== LAG DETECTOR SESSION " .. os.date("%Y-%m-%d %H:%M:%S") .. " ===" },
+--     log_file
+--   )
+--
+--   -- Start monitoring
+--   monitor_autocmds()
+--   monitor_lsp()
+--   monitor_rendering()
+--
+--   vim.notify(
+--     "🔍 Lag detector enabled (threshold: " .. config.lag_threshold_ms .. "ms)",
+--     vim.log.levels.INFO
+--   )
+-- end
+--
+-- function M.disable()
+--   if not config.enabled then
+--     vim.notify("Lag detector not enabled", vim.log.levels.INFO)
+--     return
+--   end
+--
+--   config.enabled = false
+--   vim.notify("Lag detector disabled", vim.log.levels.INFO)
+--
+--   if #state.lag_events > 0 then
+--     M.report()
+--   end
+-- end
+--
+-- function M.toggle()
+--   if config.enabled then
+--     M.disable()
+--   else
+--     M.enable()
+--   end
+-- end
+--
+-- function M.report()
+--   if #state.lag_events == 0 then
+--     vim.notify("No lag events detected", vim.log.levels.INFO)
+--     return
+--   end
+--
+--   local report = {}
+--   table.insert(report, "\n=== LAG DETECTOR REPORT ===")
+--   table.insert(report, string.format("Total lag events: %d\n", #state.lag_events))
+--
+--   -- Sort by duration
+--   table.sort(state.lag_events, function(a, b)
+--     return a.duration_ms > b.duration_ms
+--   end)
+--
+--   table.insert(report, "Top lag events:")
+--   for i, event in ipairs(state.lag_events) do
+--     if i > 20 then
+--       break
+--     end -- Top 20
+--     table.insert(
+--       report,
+--       string.format("  [%s] %s: %s", event.timestamp, event.event, format_time(event.duration_ms))
+--     )
+--   end
+--
+--   -- Aggregate by event type
+--   local by_type = {}
+--   for _, event in ipairs(state.lag_events) do
+--     by_type[event.event] = (by_type[event.event] or 0) + 1
+--   end
+--
+--   table.insert(report, "\nMost frequent lag sources:")
+--   local sorted_types = {}
+--   for event_type, count in pairs(by_type) do
+--     table.insert(sorted_types, { type = event_type, count = count })
+--   end
+--   table.sort(sorted_types, function(a, b)
+--     return a.count > b.count
+--   end)
+--
+--   for i, item in ipairs(sorted_types) do
+--     if i > 10 then
+--       break
+--     end
+--     table.insert(report, string.format("  %s: %d times", item.type, item.count))
+--   end
+--
+--   table.insert(report, "\n📄 Full log: " .. log_file)
+--
+--   local report_text = table.concat(report, "\n")
+--   print(report_text)
+--   log_msg(report_text)
+-- end
+--
+-- function M.set_threshold(ms)
+--   config.lag_threshold_ms = ms
+--   vim.notify("Lag threshold set to " .. ms .. "ms", vim.log.levels.INFO)
+-- end
+--
+-- function M.clear()
+--   state.lag_events = {}
+--   vim.notify("Lag events cleared", vim.log.levels.INFO)
+-- end
+--
+-- -- Create user commands
+-- vim.api.nvim_create_user_command("LagDetectorEnable", function()
+--   M.enable()
+-- end, { desc = "Enable lag detection" })
+--
+-- vim.api.nvim_create_user_command("LagDetectorDisable", function()
+--   M.disable()
+-- end, { desc = "Disable lag detection" })
+--
+-- vim.api.nvim_create_user_command("LagDetectorToggle", function()
+--   M.toggle()
+-- end, { desc = "Toggle lag detection" })
+--
+-- vim.api.nvim_create_user_command("LagDetectorReport", function()
+--   M.report()
+-- end, { desc = "Show lag detection report" })
+--
+-- vim.api.nvim_create_user_command("LagDetectorClear", function()
+--   M.clear()
+-- end, { desc = "Clear lag events" })
+--
+-- return M

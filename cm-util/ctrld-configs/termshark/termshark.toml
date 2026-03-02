@@ -1,0 +1,15 @@
+# FIX: termshark doesn't seem to be picking up this config
+[main]
+term = "xterm-ghostty"
+color-tsharks = ['/opt/homebrew/bin/tshark']
+conv-absolute-time = true
+conv-resolve-names = true
+conv-use-filter = false
+dark-mode = true
+last-used-tshark = '/opt/homebrew/bin/tshark'
+layout = 'altview2'
+packet-colors = true
+recent-filters = ['udp.stream eq 2']
+stream-view = 'ascii'
+theme-truecolor = 'dracula'
+validated-tsharks = ['/opt/homebrew/bin/tshark']

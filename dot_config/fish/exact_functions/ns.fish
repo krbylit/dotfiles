@@ -1,3 +1,4 @@
-function ns
-    nb open scratch.md
+function ns --description "Open scratchpad in Obsidian vault"
+    # nb open scratch.md
+    nvim +'Obsidian scratchpad'
 end

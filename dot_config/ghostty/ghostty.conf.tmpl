@@ -1,7 +1,8 @@
 # -------- THEME --------
 # theme = catppuccin-macchiato
 # theme = catppuccin-mocha
-theme = tokyonight
+# theme = tokyonight
+theme = tokyonight_moon
 # theme = GitHub Dark
 # theme = GitHub-Dark-Dimmed
 # theme = Kanagawa Wave
@@ -31,7 +32,7 @@ custom-shader = shaders/cursor/cursor_smear.glsl
 # font-family-italic = "Julia Mono Phosphor Fill"
 # font-family-bold-italic = "Julia Mono Phosphor Fill"
 # window-title-font-family = "Julia Mono Phosphor Fill"
-# font-size = 14
+# font-size = 16
 # font-style = "Regular"
 # font-style-bold = "Bold"
 # font-style-italic = "Italic"
@@ -74,6 +75,30 @@ adjust-font-baseline = 0
 adjust-cell-height = 0
 # adjust-font-baseline = 6
 # adjust-cell-height = -25
+
+# Arrows (curved/return-style arrows: ↰ ↱ ↲ ↳ ↴ ↵)
+font-codepoint-map = U+21B0-U+21B5=Departure Mono Phosphor Fill Updated
+# Box Drawing (light/heavy/double line box characters)
+font-codepoint-map = U+2500-U+257F=Departure Mono Phosphor Fill Updated
+# Block Elements (shades, partial blocks, quadrants, █ ░ ▒ ▓ etc.)
+font-codepoint-map = U+2580-U+259F=Departure Mono Phosphor Fill Updated
+# Geometric Shapes (squares, triangles, diamonds, filled/outline forms)
+font-codepoint-map = U+25A0-U+25FF=Departure Mono Phosphor Fill Updated
+# Stars (filled and outline star)
+font-codepoint-map = U+2605-U+2606=Departure Mono Phosphor Fill Updated
+# Card Suits (spade, heart, diamond, club)
+font-codepoint-map = U+2660-U+2666=Departure Mono Phosphor Fill Updated
+# Musical Notes (quarter, eighth, beamed notes)
+font-codepoint-map = U+2669-U+266C=Departure Mono Phosphor Fill Updated
+# Sparkles (four-point sparkle variants)
+font-codepoint-map = U+2726-U+2727=Departure Mono Phosphor Fill Updated
+# Decorative Angle Brackets (ornamental brackets ❬ ❭ ❮ ❯)
+font-codepoint-map = U+276C-U+276F=Departure Mono Phosphor Fill Updated
+# Symbols for Legacy Computing (Unicode 13 block graphics 🮂–🮋)
+font-codepoint-map = U+1FB82-U+1FB8B=Departure Mono Phosphor Fill Updated
+
+# Blocks with Julia Mono's smooth gradient
+# font-codepoint-map = U+2591-U+2593=Julia Mono
 
 font-feature = "-calt"
 font-feature = "-liga"
@@ -159,7 +184,7 @@ background-opacity = .9
 
 window-new-tab-position = end
 window-padding-balance = true
-window-padding-color = extend
+window-padding-color = background
 window-height = 40
 window-width = 120
 

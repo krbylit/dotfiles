@@ -3,6 +3,7 @@
 # find "${HOME}/.config/yabai" -type f -perm +111 -exec {} \;
 # Load scripting addition (requires root and SIP disabled)
 yabai -m signal --add event=dock_did_restart action="sudo yabai --load-sa"
+sudo yabai --load-sa
 # Restart and apply rules on display add/remove
 yabai -m signal --add event=display_added action="osascript -e 'tell application "System Events" to set visible of (every process whose visible is false and background only is false) to true'; sleep .25; env -u TERMINFO sudo -n /opt/homebrew/bin/yabai --load-sa; yabai --stop-service; sleep .25; yabai --start-service; sleep 2; yabai -m rule --apply"
 yabai -m signal --add event=display_removed action="osascript -e 'tell application "System Events" to set visible of (every process whose visible is false and background only is false) to true'; sleep .25; env -u TERMINFO sudo -n /opt/homebrew/bin/yabai --load-sa; yabai --stop-service; sleep .25; yabai --start-service; sleep 2; yabai -m rule --apply"
@@ -17,12 +18,16 @@ sudo yabai --load-sa
 # TOP_PADDING=$((BAR_HEIGHT + 6))
 PADDING=6
 
-# Space names (in order)
-SPACES="term browser code dev misc comms ref debug util"
-
 # Display detection
 DISPLAY_COUNT=$(yabai -m query --displays | jq '. | length')
 DISPLAY_2=$((DISPLAY_COUNT > 1 ? 2 : 1))
+
+# Space names (in order)
+if [ "$DISPLAY_COUNT" -gt 1 ]; then
+	SPACES="term browser code dev misc comms ref debug util"
+else
+	SPACES="term browser code dev misc comms ref debug"
+fi
 # Determine the layout based on the number of connected displays
 if [ "$DISPLAY_COUNT" -gt 1 ]; then
     DEFAULT_LAYOUT="bsp"
@@ -33,7 +38,11 @@ fi
 # Main display spaces
 MAIN_SPACES="term browser code dev misc"
 # Secondary display spaces
-SEC_SPACES="comms ref debug util"
+if [ "$DISPLAY_COUNT" -gt 1 ]; then
+	SEC_SPACES="comms ref debug util"
+else
+	SEC_SPACES="comms ref debug"
+fi
 
 # General Configurations
 # yabai -m config external_bar "${BAR_HEIGHT}":0
@@ -53,7 +62,7 @@ yabai -m config window_opacity_duration 0.15
 
 # Layout Configurations
 # Set default layout
-yabai -m config layout bsp
+yabai -m config layout $DEFAULT_LAYOUT
 yabai -m config split_type auto
 
 yabai -m config top_padding 6
@@ -70,20 +79,30 @@ yabai -m config mouse_drop_action swap
 yabai -m config focus_follows_mouse off
 yabai -m config mouse_follows_focus off
 
-# Create and label spaces
+# Ensure correct number of spaces exist
+current_space_count=$(yabai -m query --spaces | jq 'length')
+target_space_count=$(echo $SPACES | wc -w | tr -d ' ')
+
+# Create missing spaces if needed
+while [ "$current_space_count" -lt "$target_space_count" ]; do
+	yabai -m space --create
+	current_space_count=$((current_space_count + 1))
+done
+
+# Label spaces
 i=1
 for space in $SPACES; do
-	yabai -m space $i --label $space
+	yabai -m space $i --label "$space"
 	i=$((i + 1))
 done
 
 # Assign spaces to displays
 for space in $MAIN_SPACES; do
-	yabai -m space $space --display 1
+	yabai -m space "$space" --display 1
 done
 
 for space in $SEC_SPACES; do
-	yabai -m space $space --display $DISPLAY_2
+	yabai -m space "$space" --display $DISPLAY_2
 done
 
 # # Rules for Excluded Applications
@@ -160,6 +179,7 @@ COMMS_APPS=(
 
 REF_APPS=(
     # Notion
+    Obsidian
     "Notion Calendar"
     "LM Studio"
     Ollama
@@ -169,10 +189,10 @@ DEBUG_APPS=(
 	"Google Chrome"
     Claude
     ChatGPT
-	kitty
 )
 
 UTIL_APPS=(
+	kitty
     Calendar
 	Figma
 	1Password
@@ -199,7 +219,12 @@ assign_to_space comms "${COMMS_APPS[@]}"
 assign_to_space ref "${REF_APPS[@]}"
 assign_to_space misc "${MISC_APPS[@]}"
 assign_to_space debug "${DEBUG_APPS[@]}"
-assign_to_space util "${UTIL_APPS[@]}"
+# Assign util apps - to 'ref' on single display, 'util' on multi-display
+if [ "$DISPLAY_COUNT" -gt 1 ]; then
+	assign_to_space util "${UTIL_APPS[@]}"
+else
+	assign_to_space ref "${UTIL_APPS[@]}"
+fi
 
 # Space-Specific Configurations
 yabai -m config --space term layout stack window_gap $PADDING window_opacity off top_padding 0 bottom_padding 0 left_padding 0 right_padding 0
@@ -210,7 +235,10 @@ yabai -m config --space comms layout $DEFAULT_LAYOUT
 yabai -m config --space ref layout $DEFAULT_LAYOUT
 yabai -m config --space misc layout $DEFAULT_LAYOUT
 yabai -m config --space debug layout $DEFAULT_LAYOUT
-yabai -m config --space util layout $DEFAULT_LAYOUT
+# Only configure util space if it exists (multi-display)
+if [ "$DISPLAY_COUNT" -gt 1 ]; then
+	yabai -m config --space util layout $DEFAULT_LAYOUT
+fi
 
 # Signals for `YabaiIndicator`
 yabai -m signal --add event=mission_control_exit action='echo "refresh" | nc -U /tmp/yabai-indicator.socket'

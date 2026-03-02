@@ -8,15 +8,15 @@
 # Lazy loading and plugin management with Znap
 # https://github.com/marlonrichert/zsh-snap
 [[ -r ~/.zsh/plugins/znap/znap.zsh ]] ||
-    git clone --depth 1 -- \
-        https://github.com/marlonrichert/zsh-snap.git ~/.zsh/plugins/znap
-source ~/.zsh/plugins/znap/znap.zsh  # Start Znap
+  git clone --depth 1 -- \
+    https://github.com/marlonrichert/zsh-snap.git ~/.zsh/plugins/znap
+source ~/.zsh/plugins/znap/znap.zsh # Start Znap
 
 # export PATH="/usr/local/opt/libpq/bin:$PATH" # PSQL tools library
-export PATH="/usr/local/bin:$PATH" # Homebrew on Intel silicon
-export PATH="/opt/homebrew/bin:$PATH" # Homebrew on Apple silicon
-export PATH="/opt/homebrew:$PATH" # Homebrew on Apple silicon
-export PATH="$HOME/.cargo/bin:$PATH" # Homebrew on Apple silicon
+export PATH="/usr/local/bin:$PATH"                  # Homebrew on Intel silicon
+export PATH="/opt/homebrew/bin:$PATH"               # Homebrew on Apple silicon
+export PATH="/opt/homebrew:$PATH"                   # Homebrew on Apple silicon
+export PATH="$HOME/.cargo/bin:$PATH"                # Homebrew on Apple silicon
 export PATH="$HOME/.local/share/bob/nvim-bin:$PATH" # Homebrew on Apple silicon
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="/nix/var/nix/profiles/default/bin:$PATH"
@@ -138,7 +138,7 @@ bindkey "^ " autosuggest-accept
 # Run commands
 # ----------------------------------------------------------------
 # Set up lazy load of nvm (which causes much slower initial prompt). nvm won't be sourced until `nvm` command invoked or completion (2nd line) is run for `nvm`
-znap function _nvm nvm '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" && [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"'  # This loads nvm
+znap function _nvm nvm '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" && [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"' # This loads nvm
 # compctl -K _nvm nvm
 # Use more modern `compdef` instead of `compctl` to define autocompletions for `nvm`
 compdef _nvm nvm
@@ -195,24 +195,24 @@ preexec() {
 alias rg='batgrep -S'
 # SSH kitten
 ksh() {
-    # This works
-    # kitten ssh -t "$@" bash --rcfile /tmp/ssh-kitten-config/.bashrc
-    # This seems to work as well
-    kitten ssh -t "$@" 'if which zsh >/dev/null 2>&1; then exec zsh; else exec bash --rcfile /tmp/ssh-kitten-config/ssh-dotfiles/.bashrc; fi'
+  # This works
+  # kitten ssh -t "$@" bash --rcfile /tmp/ssh-kitten-config/.bashrc
+  # This seems to work as well
+  kitten ssh -t "$@" 'if which zsh >/dev/null 2>&1; then exec zsh; else exec bash --rcfile /tmp/ssh-kitten-config/ssh-dotfiles/.bashrc; fi'
 }
 # `yazi` file manager alias to change cwd on exit of yazi
 # also disables cursor trail while in yazi
 function y() {
-	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")"
-    # Disable cursor trail while in yazi, requires remote_control to be allowed in kitty
-    kitten @ load-config --override cursor_trail=0
-	yazi "$@" --cwd-file="$tmp"
-	if cwd="$(command cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
-		builtin cd -- "$cwd"
-	fi
-	rm -f -- "$tmp"
-    # Enable again on exit
-    kitten @ load-config --override cursor_trail=3
+  local tmp="$(mktemp -t "yazi-cwd.XXXXXX")"
+  # Disable cursor trail while in yazi, requires remote_control to be allowed in kitty
+  kitten @ load-config --override cursor_trail=0
+  yazi "$@" --cwd-file="$tmp"
+  if cwd="$(command cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
+    builtin cd -- "$cwd"
+  fi
+  rm -f -- "$tmp"
+  # Enable again on exit
+  kitten @ load-config --override cursor_trail=3
 }
 # Git add and commit
 # Usage: `commit "<commit message>"`

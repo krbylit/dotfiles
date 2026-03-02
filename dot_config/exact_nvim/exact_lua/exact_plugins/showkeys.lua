@@ -1,0 +1,26 @@
+if vim.env.IS_SSH == "1" then
+  return { "nvchad/showkeys", enabled = false }
+end
+
+-- Displays keystrokes on screen
+-- https://github.com/NvChad/showkeys
+---@type LazySpec
+return {
+  "nvchad/showkeys",
+  lazy = true,
+  cmd = "ShowkeysToggle",
+  opts = {
+    timeout = 1,
+    maxkeys = 5,
+    show_count = false,
+    -- bottom-left, bottom-right, bottom-center, top-left, top-right, top-center
+    position = "bottom-right",
+  },
+  keys = {
+    {
+      "<leader>uk",
+      "<cmd>ShowkeysToggle<CR>",
+      desc = "Toggle ShowKeys",
+    },
+  },
+}

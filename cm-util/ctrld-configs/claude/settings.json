@@ -1,11 +1,16 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "respectGitignore": false,
   "cleanupPeriodDays": 90,
   "env": {
     "DISABLE_NON_ESSENTIAL_MODEL_CALLS": "1",
-    "BASH_MAX_TIMEOUT_MS": "600000"
+    "BASH_MAX_TIMEOUT_MS": "600000",
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1",
+    "ENABLE_TOOL_SEARCH": "true",
+    "CLAUDE_CODE_ADDITIONAL_DIRECTORIES_CLAUDE_MD": "1",
+    "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "0",
+    "CLAUDE_CODE_DISABLE_FEEDBACK_SURVEY": "1"
   },
-  "includeCoAuthoredBy": false,
   "permissions": {
     "allow": [
       "Bash",
@@ -21,8 +26,11 @@
       "WebSearch",
       "Write"
     ],
-    "deny": []
+    "deny": [
+      "Bash(git push*)"
+    ]
   },
+  "model": "opus",
   "enableAllProjectMcpServers": true,
   "enabledMcpjsonServers": [
     "beads",
@@ -36,12 +44,50 @@
     "github",
     "software-planning-tool"
   ],
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/post-commit-reflect.sh",
+            "timeout": 5
+          }
+        ]
+      }
+    ]
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "input=$(cat); cwd=$(echo \"$input\" | jq -r '.workspace.current_dir'); model=$(echo \"$input\" | jq -r '.model.display_name'); remaining=$(echo \"$input\" | jq -r '.context_window.remaining_percentage // empty'); git_branch=$(cd \"$cwd\" 2>/dev/null && git -c core.fileMode=false symbolic-ref --short HEAD 2>/dev/null); dir_name=$(basename \"$cwd\"); parent_path=$(dirname \"$cwd\"); printf '\\033[2m%s/\\033[0m\\033[36m%s\\033[0m' \"$parent_path\" \"$dir_name\"; [ -n \"$git_branch\" ] && printf ' \\033[35m%s\\033[0m' \"$git_branch\"; printf ' \\033[34m%s\\033[0m' \"$model\"; [ -n \"$remaining\" ] && printf ' \\033[32m%s%%\\033[0m' \"$remaining\"; echo"
+  },
   "enabledPlugins": {
     "beads@beads-marketplace": true,
-    "typescript-lsp@claude-plugins-official": true
+    "typescript-lsp@claude-plugins-official": true,
+    "lua-lsp@claude-plugins-official": true,
+    "pyright-lsp@claude-plugins-official": true,
+    "rust-analyzer-lsp@claude-plugins-official": true,
+    "Notion@claude-plugins-official": true,
+    "claude-md-management@claude-plugins-official": true,
+    "github@claude-plugins-official": true,
+    "frontend-design@claude-plugins-official": true,
+    "code-review@claude-plugins-official": true,
+    "context7@claude-plugins-official": true,
+    "superpowers@claude-plugins-official": true,
+    "feature-dev@claude-plugins-official": true,
+    "code-simplifier@claude-plugins-official": true,
+    "playwright@claude-plugins-official": true,
+    "serena@claude-plugins-official": true,
+    "pr-review-toolkit@claude-plugins-official": true,
+    "claude-code-setup@claude-plugins-official": true,
+    "slack@claude-plugins-official": true,
+    "skill-creator@claude-plugins-official": true
   },
   "alwaysThinkingEnabled": true,
+  "skipDangerousModePermissionPrompt": true,
   "feedbackSurveyState": {
     "lastShownTime": 1754065732137
-  }
+  },
+  "effortLevel": "medium"
 }

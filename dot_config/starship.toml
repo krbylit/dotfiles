@@ -8,15 +8,31 @@
 # Set for git timeout error received in chezmoi dir (though may be due to using tethered connection)
 command_timeout = 5000
 
+# █▓▒
+# ▓▒░
+#
+# ░▒▓
+# ▒▓█
+
 # ================ Prompts ================
 # Constant right-side design
+# Light box border
+# ┚ ┒ ┐ ┘ ┌ └ ↵ ❰ ❮ ✦ ✧ ◊ ◁ ◄ ╮ ╭ ╯ ╰ ▷▷
 format = """
-[█▓▒](flamingo) $directory $fill( $status)( $username ${custom.hostname})( $cmd_duration )[┓](bold surface1)
-[▓▒░](flamingo)( $terraform) (${custom.yazi_indicator} )$character($sudo )
+[░▒▓](teal) $directory $fill( $status)( $username ${custom.hostname})( $cmd_duration )[┐](bold comment)
+[▒▓█](teal)( $terraform) (${custom.yazi_indicator} )$character($sudo )
 """
 right_format = '''
-($git_branch )($nodejs )($python )[┛](bold surface1)
+($git_branch )($rust )($nodejs )($python )[┘](bold comment)
 '''
+# Bold box border
+# format = """
+# [█▓▒](flamingo) $directory $fill( $status)( $username ${custom.hostname})( $cmd_duration )[┓](bold surface1)
+# [▓▒░](flamingo)( $terraform) (${custom.yazi_indicator} )$character($sudo )
+# """
+# right_format = '''
+# ($git_branch )($rust )($nodejs )($python )[┛](bold surface1)
+# '''
 # # Repo-dependent right-side design
 # format = """
 # [█▓▒](flamingo) $directory $fill( $status)( $username ${custom.hostname})( $cmd_duration )${custom.block_rprompt_repo_top}
@@ -25,11 +41,50 @@ right_format = '''
 # right_format = '''
 # (($git_branch )($nodejs )($python )[┛](bold surface1))
 # '''
-continuation_prompt = ' '
+# continuation_prompt = ' '
+continuation_prompt = '▷▷ '
 
 add_newline = true
 
-palette = "catp"
+# palette = "catp"
+palette = "tokyonight"
+
+[palettes.tokyonight]
+bg = "#24283b"
+bg_dark = "#1f2335"
+bg_dark1 = "#1b1e2d"
+bg_highlight = "#292e42"
+blue = "#7aa2f7"
+blue0 = "#3d59a1"
+blue1 = "#2ac3de"
+blue2 = "#0db9d7"
+blue5 = "#89ddff"
+blue6 = "#b4f9f8"
+blue7 = "#394b70"
+comment = "#565f89"
+cyan = "#7dcfff"
+dark3 = "#545c7e"
+dark5 = "#737aa2"
+fg = "#c0caf5"
+fg_dark = "#a9b1d6"
+fg_gutter = "#3b4261"
+green = "#9ece6a"
+green1 = "#73daca"
+green2 = "#41a6b5"
+magenta = "#bb9af7"
+magenta2 = "#ff007c"
+orange = "#ff9e64"
+purple = "#9d7cd8"
+red = "#f7768e"
+red1 = "#db4b4b"
+teal = "#1abc9c"
+terminal_black = "#414868"
+yellow = "#e0af68"
+flamingo = "#f0c6c6"
+peach = "#f5a97f"
+maroon = "#ee99a0"
+pink = "#f5bde6"
+
 [palettes.catp]
 rosewater = "#f4dbd6"
 flamingo = "#f0c6c6"
@@ -44,9 +99,11 @@ green = "#a6da95"
 green2 = "#a6d189"
 dark_green = "#40a02b"
 teal = "#8bd5ca"
+teal2 = "#1abc9c"
 sky = "#91d7e3"
 sapphire = "#7dc4e4"
 blue = "#8aadf4"
+blue0 = "#3d59a1"
 lavender = "#b7bdf8"
 text = "#cad3f5"
 subtext1 = "#b8c0e0"
@@ -64,12 +121,14 @@ crust = "#181926"
 [custom.block_rprompt_repo_top]
 when = true
 require_repo = true
-format = "[┓](bold surface1)"
+# format = "[┓](bold surface1)"
+format = "[┐](bold surface1)"
 
 [custom.block_rprompt_repo_bottom]
 when = true
 require_repo = true
-format = "[┛](bold surface1)"
+# format = "[┛](bold surface1)"
+format = "[┘](bold surface1)"
 
 [custom.yazi_indicator]
 when = '[ -n "$IS_YAZI_SUBSHELL" ]'
@@ -80,36 +139,56 @@ style = 'bold yellow'
 # ================ Transient prompts ================
 # Angular LEFT
 [custom.angular_transient_prompt]
-command = 'starship module custom.transient_lprompt; starship module directory; echo -n " "; starship module git_branch; echo ""; echo -n "     "; echo -n "┗ "; starship module character; starship module custom.time'
-style = 'bold surface1'
+# command = 'starship module custom.transient_lprompt; starship module directory; echo -n " "; starship module git_branch; echo ""; echo -n "     "; echo -n "┗ "; starship module character; starship module custom.time'
+command = 'starship module custom.transient_lprompt; starship module directory; echo -n " "; starship module git_branch; echo ""; starship module custom.transient_lprompt; starship module custom.transient_lprompt_angle; starship module character; starship module custom.time'
+style = 'bold comment'
 when = true
 format = "[$output]($style) $symbol "
 symbol = "[](green)"
 
+[custom.transient_lprompt_angle]
+command = "echo -n '└ '"
+style = 'bold comment'
+when = true
+format = "[$output]($style) "
+
+# ▓▒░
+# ░▒▓
 [custom.transient_lprompt]
-command = "echo -n '█▓▒░'"
+command = "echo -n '░▒▓'"
 style = 'yellow'
 when = true
 format = "[$output]($style) "
 
+# ░▒▓█
+# █▓▒░
 # RIGHT
 [custom.transient_rprompt]
-command = "echo -n '░▒▓█'"
+command = "echo -n '█▓▒░'"
 style = 'yellow'
 when = true
 format = " [$output]($style)"
 
 [fill]
-symbol = '━'            # For Block Prompt
-style = 'bold surface1'
+# symbol = '━'            # For Block Prompt
+symbol = '─'           # For Block Prompt
+style = 'bold comment'
 
 [character]
-success_symbol = "[](bold dark_green)"
-vimcmd_symbol = "[](bold green2)"
-vimcmd_visual_symbol = "[](bold lavendar)"
+# success_symbol = "[](bold dark_green)"
+# vimcmd_symbol = "[](bold green2)"
+# vimcmd_visual_symbol = "[](bold lavendar)"
+# vimcmd_replace_symbol = "[](bold red)"
+# vimcmd_replace_one_symbol = "[](bold red)"
+# error_symbol = "[](bold dark_red)"
+success_symbol = "[](bold green)"
+vimcmd_symbol = "[](bold blue)"
+vimcmd_visual_symbol = "[](bold magenta)"
 vimcmd_replace_symbol = "[](bold red)"
 vimcmd_replace_one_symbol = "[](bold red)"
-error_symbol = "[](bold dark_red)"
+# error_symbol = "[](bold red)"
+error_symbol = "[╳](bold red)"
+# ╳ ε Δ
 
 [username]
 disabled = false
@@ -121,13 +200,13 @@ format = '[ $user]($style)'
 [custom.hostname]
 command = "sh -c '[ -n \"$CUSTOM_HOSTNAME\" ] && echo \"$CUSTOM_HOSTNAME\" || hostname'"
 when = true
-style = 'bold peach dimmed'
+style = 'bold orange dimmed'
 format = '[ $output]($style)'
 
 [hostname]
 ssh_only = false
 ssh_symbol = ''
-style = 'bold peach dimmed'
+style = 'bold orange dimmed'
 format = '[($ssh_symbol ) $hostname]($style)'
 
 [directory]
@@ -138,7 +217,7 @@ truncation_length = 0
 before_repo_root_style = "flamingo dimmed"
 truncate_to_repo = false
 style = "peach"
-repo_root_style = "bold mauve"
+repo_root_style = "bold magenta"
 repo_root_format = "[]($style) [$before_root_path]($before_repo_root_style)[$repo_root]($repo_root_style)[$path]($style)( [$read_only]($read_only_style))"
 format = "[ $path]($style)( [$read_only]($read_only_style))"
 
@@ -168,14 +247,23 @@ style = 'yellow'
 format = '[\[$status - $common_meaning\]]($style)'
 
 [nodejs]
-style = 'bold green2'
+style = 'bold green1'
+not_capable_style = 'bold red'
 symbol = ''
-format = '[$symbol ($version)]($style)($engines_version)(not_capable_style)'
+format = '[$symbol ($version)]($style)[(  ($engines_version))](not_capable_style)'
 
 [python]
 style = "bold pink"
 symbol = ''
-format = '[$symbol $pyenv_prefix($version)(  $virtualenv)]($style)'
+format = '[$symbol $pyenv_prefix($version)(  $virtualenv)]($style)'
+
+#    
+[rust]
+symbol = ''
+# versions available 'raw', 'major', 'minor', 'patch'
+version_format = 'v${raw}'
+style = 'bold orange'
+format = '[$symbol $version]($style)'
 
 [container]
 disabled = true
@@ -187,7 +275,7 @@ format = '[$symbol \[$name\]]($style)'
 disabled = false
 min_time = 0
 show_milliseconds = true
-style = "green dimmed"
+style = "green1 dimmed"
 format = "[ $duration]($style)"
 
 [terraform]
@@ -207,7 +295,7 @@ use_12hr = false
 # Used in our transient prompt
 [custom.time]
 command = "date +'%H:%M:%S'"
-style = "green2"
+style = "yellow dimmed"
 format = "[ $output]($style)"
 when = true
 # style = "inverted"

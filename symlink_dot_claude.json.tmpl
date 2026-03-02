@@ -1,0 +1,5 @@
+{{- $myGitConfig := (joinPath .chezmoi.sourceDir .path.secrets "ctrld-configs/claude/.claude.json") -}}
+{{- if (stat $myGitConfig) -}}
+{{ $myGitConfig }}
+{{- end -}}
+

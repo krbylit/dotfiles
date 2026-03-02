@@ -42,10 +42,15 @@ require("yaziline"):setup({
   -- █▓▒░
   separator_open = "░▒▓",
   separator_close = "▓▒░",
-  separator_open_thin = "",
-  separator_close_thin = "",
+  -- separator_open_thin = "",
+  -- separator_close_thin = "",
   separator_head = "",
   separator_tail = "",
+  -- ► ◄ ⟨ ⟩ ▟ ▙ █
+  separator_open_thin = "⟨◄",
+  separator_close_thin = "►⟩",
+  -- separator_head = "█",
+  -- separator_tail = "█",
   select_symbol = "",
   yank_symbol = "󰆐",
 

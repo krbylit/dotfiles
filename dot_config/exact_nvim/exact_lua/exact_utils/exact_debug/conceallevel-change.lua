@@ -1,0 +1,131 @@
+-- -- ================================================================
+-- -- DEBUG: Track conceallevel changes in markdown files
+-- -- ================================================================
+-- -- This autocmd helps debug when and what is changing conceallevel settings
+-- local function track_conceallevel_changes()
+--   local augroup = vim.api.nvim_create_augroup("DebugConceallevelChanges", { clear = true })
+--
+--   -- Store conceallevel per window (since it's window-local)
+--   local window_conceallevel = {}
+--
+--   local function get_conceallevel(winid)
+--     -- conceallevel is window-local, not buffer-local
+--     winid = winid or vim.api.nvim_get_current_win()
+--     return vim.api.nvim_get_option_value("conceallevel", { win = winid })
+--   end
+--
+--   -- Track changes on various events
+--   vim.api.nvim_create_autocmd({
+--     "BufEnter",
+--     "BufWinEnter",
+--     "BufLeave",
+--     "BufReadPost",
+--     "FileType",
+--     "WinEnter",
+--     "CursorMoved",
+--     "CursorHold",
+--   }, {
+--     group = augroup,
+--     pattern = "*",
+--     callback = function(ev)
+--       local bufnr = ev.buf
+--       local winid = vim.api.nvim_get_current_win()
+--       local filetype = vim.bo[bufnr].filetype
+--
+--       -- Only track markdown files
+--       if filetype ~= "markdown" then
+--         return
+--       end
+--
+--       local current = get_conceallevel(winid)
+--       local bufname = vim.api.nvim_buf_get_name(bufnr)
+--
+--       -- Initialize tracking for new windows
+--       if not window_conceallevel[winid] then
+--         window_conceallevel[winid] = current
+--         vim.notify(
+--           string.format(
+--             "[CONCEALLEVEL DEBUG] %s - Initial: %d (file: %s, win: %d)",
+--             ev.event,
+--             current,
+--             vim.fn.fnamemodify(bufname, ":t"),
+--             winid
+--           ),
+--           vim.log.levels.INFO
+--         )
+--         return
+--       end
+--
+--       -- Check if conceallevel changed
+--       local old = window_conceallevel[winid]
+--       if old ~= current then
+--         -- Get stack trace and filter for relevant lines
+--         local stack = debug.traceback("", 2)
+--         local relevant_lines = {}
+--         for line in stack:gmatch("[^\n]+") do
+--           if line:match("nvim/") or line:match("plugins/") or line:match("obsidian") or line:match("render") then
+--             table.insert(relevant_lines, "    " .. line)
+--           end
+--         end
+--         local filtered_stack = #relevant_lines > 0 and table.concat(relevant_lines, "\n") or "    (no relevant frames)"
+--
+--         vim.notify(
+--           string.format(
+--             "[CONCEALLEVEL DEBUG] %s - Changed from %d to %d\n  File: %s (win: %d)\n  Stack:\n%s",
+--             ev.event,
+--             old,
+--             current,
+--             vim.fn.fnamemodify(bufname, ":t"),
+--             winid,
+--             filtered_stack
+--           ),
+--           current == 2 and vim.log.levels.INFO or vim.log.levels.WARN
+--         )
+--         window_conceallevel[winid] = current
+--       end
+--     end,
+--   })
+--
+--   -- Also poll for changes every 200ms to catch async changes
+--   local timer = vim.uv.new_timer()
+--   timer:start(
+--     200,
+--     200,
+--     vim.schedule_wrap(function()
+--       local winid = vim.api.nvim_get_current_win()
+--       local bufnr = vim.api.nvim_win_get_buf(winid)
+--       local filetype = vim.bo[bufnr].filetype
+--
+--       if filetype ~= "markdown" then
+--         return
+--       end
+--
+--       local current = get_conceallevel(winid)
+--       local tracked = window_conceallevel[winid]
+--
+--       if tracked and tracked ~= current then
+--         local bufname = vim.api.nvim_buf_get_name(bufnr)
+--         vim.notify(
+--           string.format(
+--             "[CONCEALLEVEL DEBUG] POLL - Async change detected from %d to %d\n  File: %s (win: %d)",
+--             tracked,
+--             current,
+--             vim.fn.fnamemodify(bufname, ":t"),
+--             winid
+--           ),
+--           current == 2 and vim.log.levels.INFO or vim.log.levels.WARN
+--         )
+--         window_conceallevel[winid] = current
+--       end
+--     end)
+--   )
+--
+--   -- Command to stop the timer
+--   vim.api.nvim_create_user_command("ConceallevelDebugStop", function()
+--     timer:stop()
+--     vim.notify("[CONCEALLEVEL DEBUG] Stopped polling timer", vim.log.levels.INFO)
+--   end, {})
+-- end
+--
+-- -- Enable debugging - comment this line to disable
+-- track_conceallevel_changes()

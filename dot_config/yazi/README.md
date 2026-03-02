@@ -4,6 +4,10 @@
 
 [Yazi](https://yazi-rs.github.io/) is a blazing fast terminal file manager written in Rust, featuring async I/O, rich previews, and extensive plugin support. This configuration includes custom keybindings, themes, plugins, and shell integration for a vim-like file navigation experience.
 
+> [!WARNING] Updating yazi breaks our current config
+> Highest compatible version is v25.5.31, next up v25.12.29 will break it. Even after plugin updates
+> (and manual changes to those since they're not fully up-to-date with new API), we don't get previews and a lot of config is lost.
+
 ## Table of Contents
 
 - [Overview](#overview)
@@ -309,7 +313,7 @@ Configured actions by file type:
 Most plugins can be installed via Yazi package manager:
 
 ```bash
-ya pack -a <author/plugin-name>
+ya pkg add <author/plugin-name>
 ```
 
 **Note**: Due to symlinked plugin directory, some plugins may need manual cloning:

@@ -5,6 +5,8 @@ set -gx PATH \
     $HOME/.local/bin \
     $HOME/.local/share/bob/nvim-bin \
     $HOME/go/bin \
+    $HOME/.cache/.bun/bin \
+    $HOME/.local/share/pnpm \
     /opt \
     /opt/homebrew/sbin \
     /opt/homebrew/bin \
