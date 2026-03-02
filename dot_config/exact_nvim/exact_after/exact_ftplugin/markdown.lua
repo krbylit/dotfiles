@@ -184,7 +184,7 @@ local function markdown_enter()
       vim.api.nvim_set_current_line(indent)
       return cr
     end
-    return cr .. indent .. "- [ ] "
+    return cr .. "- [ ] "
   end
 
   -- Bullet list item: - / * / +
@@ -196,7 +196,7 @@ local function markdown_enter()
       vim.api.nvim_set_current_line(indent)
       return cr
     end
-    return cr .. indent .. marker .. " "
+    return cr .. marker .. " "
   end
 
   -- Numbered list item: 1. or 1)
@@ -292,4 +292,3 @@ vim.keymap.set("n", "<localleader>i", function()
     vim.notify("Checkbox interactive requires obsidian.nvim (not available here)", vim.log.levels.WARN)
   end
 end, { desc = "Change checkbox interactively", buffer = true })
-

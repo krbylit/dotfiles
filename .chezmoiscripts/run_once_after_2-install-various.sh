@@ -1,5 +1,23 @@
 #!/usr/bin/env bash
 
+# Ensure Homebrew is in PATH
+if [ -x /opt/homebrew/bin/brew ]; then
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+elif [ -x /usr/local/bin/brew ]; then
+  eval "$(/usr/local/bin/brew shellenv)"
+elif [ -x /home/linuxbrew/.linuxbrew/bin/brew ]; then
+  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+fi
+
+# Ensure CC is set for Cargo and other build tools
+if ! command -v cc &>/dev/null; then
+  if command -v gcc &>/dev/null; then
+    export CC=gcc
+  elif command -v clang &>/dev/null; then
+    export CC=clang
+  fi
+fi
+
 # Setup Node.js with fnm (Fast Node Manager)
 # Ensure a default Node version is installed on all systems
 if command -v fnm &>/dev/null; then
@@ -20,6 +38,9 @@ if command -v fnm &>/dev/null; then
   echo "Setting Node $DEFAULT_NODE_VERSION as default..."
   fnm default "$DEFAULT_NODE_VERSION"
 
+  # Initialize fnm for the current shell session so node/npm are available
+  eval "$(fnm env --shell bash)"
+
   echo "Node setup complete"
   fnm list
 fi
@@ -34,11 +55,11 @@ if [ "${IS_SSH}" != "1" ]; then
   fi
 fi
 
-if [ "${IS_SSH}" != "1" ]; then
-  if ! command -v cursor-agent &>/dev/null; then
-    curl https://cursor.com/install -fsS | bash
-  fi
-fi
+# if [ "${IS_SSH}" != "1" ]; then
+#   if ! command -v cursor-agent &>/dev/null; then
+#     curl https://cursor.com/install -fsS | bash
+#   fi
+# fi
 
 # Install Rust. brew install doesn't seem to play nice
 if ! command -v rustup &>/dev/null; then
@@ -71,15 +92,15 @@ fi
 # fi
 
 # Install aider chat
-if [ "${IS_SSH}" != "1" ]; then
-  if ! command -v aider &>/dev/null; then
-    uv tool install aider-install
-    # NOTE: need to source config again as this wasn't immediately available in PATH
-    source ~/.config/fish/config.fish
-    aider-install
-    uv tool install --force --python python3.12 aider-chat@latest
-  fi
-fi
+# if [ "${IS_SSH}" != "1" ]; then
+#   if ! command -v aider &>/dev/null; then
+#     uv tool install aider-install
+#     # NOTE: need to source config again as this wasn't immediately available in PATH
+#     source ~/.config/fish/config.fish
+#     aider-install
+#     uv tool install --force --python python3.12 aider-chat@latest
+#   fi
+# fi
 
 if [ "${IS_SSH}" != "1" ]; then
   if ! command -v specify &>/dev/null; then
@@ -231,12 +252,6 @@ if [ "${IS_SSH}" == "1" ]; then
   fi
 fi
 
-if ! command -v zellij &>/dev/null; then
-  if command -v cargo &>/dev/null; then
-    cargo install --locked zellij
-  fi
-fi
-
 if ! command -v ugdb &>/dev/null; then
   if command -v cargo &>/dev/null; then
     cargo install ugdb
@@ -247,6 +262,16 @@ if [ "${IS_SSH}" != "1" ]; then
   if ! command -v ziina &>/dev/null; then
     go install github.com/ziinaio/zmate@latest
   fi
+fi
+
+if [[ "$(uname)" != "Darwin" ]]; then
+  cp "$HOME/.local/share/chezmoi/cm-util/pkg-backups/home/.local/bin/yazi-linux/ya" "$HOME/.local/bin/ya"
+  cp "$HOME/.local/share/chezmoi/cm-util/pkg-backups/home/.local/bin/yazi-linux/yazi" "$HOME/.local/bin/yazi"
+fi
+
+if [[ "$(uname)" = "Darwin" ]]; then
+  cp "$HOME/.local/share/chezmoi/cm-util/pkg-backups/home/.local/bin/ya" "$HOME/.local/bin/ya"
+  cp "$HOME/.local/share/chezmoi/cm-util/pkg-backups/home/.local/bin/yazi" "$HOME/.local/bin/yazi"
 fi
 
 # Install our gitleaks pre-commit hook

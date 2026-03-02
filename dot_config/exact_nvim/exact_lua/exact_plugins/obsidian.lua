@@ -79,6 +79,15 @@ return {
   "obsidian-nvim/obsidian.nvim",
   version = "*", -- recommended, use latest release instead of latest commit
   lazy = false,
+  enabled = function()
+    local path = vim.fn.expand("~/obsidian-vault")
+    local stat = vim.uv.fs_stat(path)
+    if stat and stat.type == "directory" then
+      return true
+    else
+      return false
+    end
+  end,
   -- ft = "markdown",
   -- Replace the above line with this if you only want to load obsidian.nvim for markdown files in your vault:
   -- event = {
@@ -691,9 +700,15 @@ return {
 
         -- Map status to priority
         local priority_map = {
-          ["!"] = "P0", ["*"] = "P1", ["/"] = "P1",
-          ["f"] = "P2", [" "] = "P2", ["S"] = "P2",
-          ["w"] = "P3", ["l"] = "P3", [">"] = "P4",
+          ["!"] = "P0",
+          ["*"] = "P1",
+          ["/"] = "P1",
+          ["f"] = "P2",
+          [" "] = "P2",
+          ["S"] = "P2",
+          ["w"] = "P3",
+          ["l"] = "P3",
+          [">"] = "P4",
         }
         local priority = priority_map[status_char] or "P2"
 

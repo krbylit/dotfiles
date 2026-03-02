@@ -284,12 +284,12 @@ local function custom_section_filename(args)
 
     -- Remove intermediate dirs from left (closest to repo root) until the whole
     -- section fits within the available budget, or no intermediate dirs remain
-    local budget = math.max(30, vim.api.nvim_win_get_width(0) - 70)
     local truncated = false
-    while #path_parts > 0 and plain_width(result .. build_path(path_parts, truncated)) > budget do
-      table.remove(path_parts, 1)
-      truncated = true
-    end
+    -- local budget = math.max(30, vim.api.nvim_win_get_width(0) - 70)
+    -- while #path_parts > 0 and plain_width(result .. build_path(path_parts, truncated)) > budget do
+    --   table.remove(path_parts, 1)
+    --   truncated = true
+    -- end
     result = result .. build_path(path_parts, truncated)
   else
     -- Not in a git repo - show full path with home directory replaced
