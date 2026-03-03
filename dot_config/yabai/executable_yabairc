@@ -81,7 +81,7 @@ yabai -m config mouse_follows_focus off
 
 # Ensure correct number of spaces exist
 current_space_count=$(yabai -m query --spaces | jq 'length')
-target_space_count=$(echo $SPACES | wc -w | tr -d ' ')
+target_space_count=$(echo "$SPACES" | wc -w | tr -d ' ')
 
 # Create missing spaces if needed
 while [ "$current_space_count" -lt "$target_space_count" ]; do
@@ -159,6 +159,7 @@ DEV_APPS=(
 	GitHub
 	"MongoDB Compass"
 	Docker
+    OrbStack
 	"Docker Desktop"
 	Cyberduck
     Numbers

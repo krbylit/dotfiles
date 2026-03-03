@@ -10,6 +10,14 @@ return {
 
     -- Function to set up markdown keymaps for a buffer
     local function setup_markdown_keymaps(bufnr)
+      vim.keymap.set("n", "]]", function()
+        vim.fn.search("^#\\+\\s", "W")
+      end, { buffer = bufnr, desc = "Next markdown heading" })
+
+      vim.keymap.set("n", "[[", function()
+        vim.fn.search("^#\\+\\s", "bW")
+      end, { buffer = bufnr, desc = "Previous markdown heading" })
+
       vim.keymap.set("n", "]h", function()
         local current_line = vim.fn.getline(".")
         local level = current_line:match("^(#+)")
@@ -140,28 +148,4 @@ return {
 
     return opts
   end,
-
-  -- Add keymaps for navigating to next/prev heading
-  -- The `ft` field ensures these only load in markdown buffers
-  keys = {
-    -- Navigate to next heading
-    {
-      "]]",
-      function()
-        vim.fn.search("^#\\+\\s", "W")
-      end,
-      desc = "Next markdown heading",
-      ft = { "markdown", "markdown.pandoc" },
-    },
-    -- Navigate to previous heading
-    {
-      "[[",
-      function()
-        vim.fn.search("^#\\+\\s", "bW")
-      end,
-      desc = "Previous markdown heading",
-      ft = { "markdown", "markdown.pandoc" },
-    },
-    -- Note: [[ and ]] are set as buffer-local keymaps in the FileType autocmd above
-  },
 }
