@@ -406,12 +406,12 @@ desc = "Open fish shell in popup"
 
 # install `ya pack -a Lil-Dank/lazygit`
 [[mgr.prepend_keymap]]
-on = ["g", "l"]
+on = [",", "g"]
 run = "plugin lazygit"
 desc = "run lazygit"
 
 [[mgr.prepend_keymap]]
-on = ["g", "a"]
+on = [",", "l"]
 run = "plugin lazydocker"
 desc = "run lazydocker"
 

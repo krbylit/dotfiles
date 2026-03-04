@@ -89,5 +89,31 @@ return {
     -- More details: https://github.com/mikavilpas/yazi.nvim/issues/802
     -- vim.g.loaded_netrw = 1
     vim.g.loaded_netrwPlugin = 1
+
+    -- Fix: Suppress Neovim's default OSC 11 response for yazi terminal buffers.
+    -- When yazi runs inside Neovim's terminal, it sends an OSC 11 query to detect
+    -- terminal background color. Neovim's default TermRequest handler responds
+    -- asynchronously (via Lua event loop), but yazi's DA1 response arrives first
+    -- (synchronously from libvterm). The late OSC 11 response leaks into yazi's
+    -- input stream — the 'r' in 'rgb:' triggers the rename keybinding.
+    -- See: https://github.com/sxyazi/yazi/issues/2446
+    local aus = vim.api.nvim_get_autocmds({ event = "TermRequest", group = "nvim.terminal" })
+    for _, au in ipairs(aus) do
+      if au.desc and au.desc:match("OSC foreground/background") then
+        local original_cb = au.callback
+        vim.api.nvim_del_autocmd(au.id)
+        vim.api.nvim_create_autocmd("TermRequest", {
+          group = au.group,
+          desc = au.desc,
+          callback = function(args)
+            if vim.bo[args.buf].filetype == "yazi" then
+              return
+            end
+            return original_cb(args)
+          end,
+        })
+        break
+      end
+    end
   end,
 }

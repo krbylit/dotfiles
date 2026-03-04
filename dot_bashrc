@@ -17,12 +17,12 @@ if [ -n "$TERM" ] && tput setaf 1 &>/dev/null; then
   else
     USER_PROMPT="\[$(tput setaf 4)\]\u\[$(tput setaf 2)\]@\[$(tput setaf 4)\]\h"
   fi
-  PS1="${DIR_PROMPT} ${GIT_PROMPT}\n${USER_PROMPT} \[$(tput setaf 2)\]\$ \[$(tput sgr0)\]"
+  PS1="${DIR_PROMPT} ${GIT_PROMPT}\n${USER_PROMPT}\n\[$(tput setaf 2)\]\$ \[$(tput sgr0)\]"
 else
   DIR_PROMPT="\w"
   GIT_PROMPT="\$(git symbolic-ref --short HEAD 2>/dev/null)"
   USER_PROMPT="\u@\h"
-  PS1="${DIR_PROMPT} ${GIT_PROMPT}\n${USER_PROMPT} \$ "
+  PS1="${DIR_PROMPT} ${GIT_PROMPT}\n${USER_PROMPT}\n\$ "
 fi
 
 export DOCKER_BUILDKIT=1
