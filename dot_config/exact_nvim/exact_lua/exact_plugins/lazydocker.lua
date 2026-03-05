@@ -1,22 +1,18 @@
-return {
-  "crnvl96/lazydocker.nvim",
-  opts = function(_, opts)
-    vim.keymap.set(
-      { "n", "t" },
-      "<leader>ld",
-      "<Cmd>lua require('lazydocker').toggle({ engine = 'docker' })<CR>",
-      { desc = "LazyDocker (docker)" }
-    )
-    opts = vim.tbl_deep_extend("force", opts or {}, {
-      window = {
-        settings = {
-          width = 1, -- Percentage of screen width (0 to 1)
-          height = 1, -- Percentage of screen height (0 to 1)
-          border = "rounded", -- See ':h nvim_open_win' border options
-          relative = "editor", -- See ':h nvim_open_win' relative options
-        },
-      },
-    })
-    return opts
-  end,
-}
+-- LazyDocker via Snacks terminal toggle
+-- Toggles a fullscreen float running lazydocker inside zellij via the ldz
+-- fish function. Session named lazydocker-<dir>-<pathHash> so reattaching
+-- from the same directory reuses the existing session.
+vim.keymap.set({ "n", "t" }, "<leader>ld", function()
+  Snacks.terminal.toggle("ldz", {
+    win = {
+      position = "float",
+      height = 0,
+      width = 0,
+      border = "rounded",
+    },
+    interactive = true,
+    auto_close = true,
+  })
+end, { desc = "LazyDocker (zellij)" })
+
+return {}

@@ -325,7 +325,7 @@
               {
                 "type": "basic",
                 "from": {
-                  "key_code": "c",
+                  "key_code": "f",
                   "modifiers": {
                     "mandatory": ["option"],
                     "optional": ["any"]
@@ -346,7 +346,7 @@
               {
                 "type": "basic",
                 "from": {
-                  "key_code": "x",
+                  "key_code": "s",
                   "modifiers": {
                     "mandatory": ["option"],
                     "optional": ["any"]

@@ -358,6 +358,10 @@ return {
             "**/build/**",
             "**/target/**",
             "**/__pycache__/**",
+            "**/.next/**",
+            "**/.turbo/**",
+            "**/.pnpm-store/**",
+            "**/.worktrees/**",
           },
         },
         zoxide = {
@@ -388,6 +392,10 @@ return {
             "**/target/**",
             "**/__pycache__/**",
             "package-lock.json",
+            "**/.next/**",
+            "**/.turbo/**",
+            "**/.pnpm-store/**",
+            "**/.worktrees/**",
           },
           formatters = {
             file = {
