@@ -1,0 +1,22 @@
+# django — imported from Ghostty
+base: dark
+palette:
+  black: "#000000"
+  red: "#fd6209"
+  green: "#41a83e"
+  yellow: "#ffe862"
+  blue: "#245032"
+  magenta: "#f8f8f8"
+  cyan: "#9df39f"
+  white: "#ffffff"
+  bright_black: "#323232"
+  bright_red: "#ff943b"
+  bright_green: "#73da70"
+  bright_yellow: "#ffff94"
+  bright_blue: "#568264"
+  bright_magenta: "#ffffff"
+  bright_cyan: "#cfffd1"
+  bright_white: "#ffffff"
+  foreground: "#f8f8f8"
+  background: "#0b2f20"
+  selection: "#245032"

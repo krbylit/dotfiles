@@ -1,0 +1,22 @@
+# paraiso-dark — imported from Ghostty
+base: dark
+palette:
+  black: "#2f1e2e"
+  red: "#ef6155"
+  green: "#48b685"
+  yellow: "#fec418"
+  blue: "#06b6ef"
+  magenta: "#815ba4"
+  cyan: "#5bc4bf"
+  white: "#a39e9b"
+  bright_black: "#776e71"
+  bright_red: "#ef6155"
+  bright_green: "#48b685"
+  bright_yellow: "#fec418"
+  bright_blue: "#06b6ef"
+  bright_magenta: "#815ba4"
+  bright_cyan: "#5bc4bf"
+  bright_white: "#e7e9db"
+  foreground: "#a39e9b"
+  background: "#2f1e2e"
+  selection: "#4f424c"

@@ -1,0 +1,22 @@
+# cyberpunkscarletprotocol — imported from Ghostty
+base: dark
+palette:
+  black: "#101116"
+  red: "#ea3356"
+  green: "#64d98c"
+  yellow: "#faf968"
+  blue: "#306fb1"
+  magenta: "#ba3ec1"
+  cyan: "#59c2c6"
+  white: "#c7c7c7"
+  bright_black: "#686868"
+  bright_red: "#ed776d"
+  bright_green: "#8df77a"
+  bright_yellow: "#fefc7f"
+  bright_blue: "#6a71f6"
+  bright_magenta: "#ae40e4"
+  bright_cyan: "#8efafd"
+  bright_white: "#ffffff"
+  foreground: "#d13554"
+  background: "#101116"
+  selection: "#c7ddfc"

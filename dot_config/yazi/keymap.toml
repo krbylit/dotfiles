@@ -370,6 +370,11 @@ run = "cd ~/obsidian-vault/"
 desc = "Go to Obsidian vault"
 
 [[mgr.prepend_keymap]]
+on = ["g", "p"]
+run = "cd ~/obsidian-vault/01_Projects"
+desc = "Go to Obsidian Projects"
+
+[[mgr.prepend_keymap]]
 on = ["s"]
 run = "plugin searchjump"
 desc = "searchjump mode"

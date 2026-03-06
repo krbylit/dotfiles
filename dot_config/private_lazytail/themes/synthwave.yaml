@@ -1,0 +1,22 @@
+# synthwave — imported from Ghostty
+base: dark
+palette:
+  black: "#000000"
+  red: "#f6188f"
+  green: "#1ebb2b"
+  yellow: "#fdf834"
+  blue: "#2186ec"
+  magenta: "#f85a21"
+  cyan: "#12c3e2"
+  white: "#ffffff"
+  bright_black: "#000000"
+  bright_red: "#f841a0"
+  bright_green: "#25c141"
+  bright_yellow: "#fdf454"
+  bright_blue: "#2f9ded"
+  bright_magenta: "#f97137"
+  bright_cyan: "#19cde6"
+  bright_white: "#ffffff"
+  foreground: "#dad9c7"
+  background: "#000000"
+  selection: "#19cde6"
