@@ -379,7 +379,7 @@ return {
         ---@type snacks.picker.grep.Config
         grep = {
           args = { "-P" }, -- Enable PCRE2
-          hidden = false,
+          hidden = true,
           ignored = false,
           -- Exclude dirs from text search
           exclude = {

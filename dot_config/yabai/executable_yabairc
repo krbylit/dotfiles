@@ -188,6 +188,7 @@ REF_APPS=(
 
 DEBUG_APPS=(
 	"Google Chrome"
+	"Google Chrome for Testing"
     Claude
     ChatGPT
 )
@@ -260,6 +261,10 @@ yabai -m rule --add label="About This Mac" app="System Information" title="About
 # Don't manage 1Pass pop-ups
 yabai -m rule --add label="1Password Quick Access" app="^1Password$" title="^Quick Access — 1Password$" space=mouse
 yabai -m rule --add label="ChatGPT popup" app="^ChatGPT$" title!="^ChatGPT$" space=mouse
+yabai -m rule --add label="Tuna" app="^Tuna$" title!="^Tuna$" manage=off
+
+# Minimize "Google Chrome for Testing" windows and prevent focus stealing (Playwright uses CDP, not pixels)
+yabai -m signal --add event=window_created app="^Google Chrome for Testing$" action='id=$(yabai -m query --windows --window last | jq -re ".id"); yabai -m window "$id" --minimize; yabai -m query --windows --window recent | jq -re ".id" | xargs -I{} yabai -m window --focus {}'
 # FIXME: Currently seems there's no great way to differentiate popup from main Claude window. May have to do it through scripting and checking float, sticky, level values, or window size.
 # yabai -m rule --add label="Claude popup" app="Claude" space=mouse
 
