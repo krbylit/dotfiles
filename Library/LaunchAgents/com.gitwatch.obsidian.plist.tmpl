@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.gitwatch.obsidian</string>
+    <key>ProgramArguments</key>
+    <array>
+        <string>/opt/homebrew/bin/gitwatch</string>
+        <string>-r</string>
+        <string>origin</string>
+        <string>-R</string>
+        <string>-s</string>
+        <string>5</string>
+        <string>-m</string>
+        <string>vault auto-sync %d</string>
+        <string>{{ .chezmoi.homeDir }}/obsidian-vault</string>
+    </array>
+    <key>RunAtLoad</key>
+    <true/>
+    <key>KeepAlive</key>
+    <true/>
+    <key>StandardOutPath</key>
+    <string>/tmp/gitwatch-obsidian.log</string>
+    <key>StandardErrorPath</key>
+    <string>/tmp/gitwatch-obsidian.err</string>
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>PATH</key>
+        <string>/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin</string>
+    </dict>
+</dict>
+</plist>

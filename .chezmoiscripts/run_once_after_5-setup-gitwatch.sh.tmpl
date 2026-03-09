@@ -1,0 +1,48 @@
+#!/bin/bash
+
+# Setup gitwatch service for auto-syncing Obsidian vault
+
+VAULT_DIR="$HOME/obsidian-vault"
+
+# Only proceed if the vault directory exists and is a git repo
+if [ ! -d "$VAULT_DIR/.git" ]; then
+    echo "gitwatch: $VAULT_DIR is not a git repo, skipping service setup"
+    exit 0
+fi
+
+{{ if eq .chezmoi.os "darwin" -}}
+PLIST="$HOME/Library/LaunchAgents/com.gitwatch.obsidian.plist"
+
+# Unload first if already loaded (ignore errors)
+launchctl bootout gui/$(id -u) "$PLIST" 2>/dev/null || true
+
+# Load the agent
+launchctl bootstrap gui/$(id -u) "$PLIST"
+echo "gitwatch: LaunchAgent loaded for obsidian-vault"
+
+PULL_PLIST="$HOME/Library/LaunchAgents/com.obsidian-vault.pull.plist"
+launchctl bootout gui/$(id -u) "$PULL_PLIST" 2>/dev/null || true
+launchctl bootstrap gui/$(id -u) "$PULL_PLIST"
+echo "gitwatch: periodic pull LaunchAgent loaded for obsidian-vault"
+
+{{ else if eq .chezmoi.os "linux" -}}
+# Ensure inotify-tools is installed (gitwatch dependency on Linux)
+if ! command -v inotifywait &>/dev/null; then
+    if command -v apt-get &>/dev/null; then
+        sudo apt-get install -y inotify-tools
+    elif command -v dnf &>/dev/null; then
+        sudo dnf install -y inotify-tools
+    elif command -v pacman &>/dev/null; then
+        sudo pacman -S --noconfirm inotify-tools
+    else
+        echo "gitwatch: Cannot install inotify-tools, unknown package manager"
+        exit 1
+    fi
+fi
+
+systemctl --user daemon-reload
+systemctl --user enable --now gitwatch-obsidian.service
+systemctl --user enable --now obsidian-vault-pull.timer
+echo "gitwatch: systemd services enabled for obsidian-vault"
+
+{{ end -}}

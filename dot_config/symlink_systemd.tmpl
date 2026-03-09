@@ -1,0 +1,4 @@
+{{- $systemdConf := (joinPath .chezmoi.sourceDir .path.secrets ".config/systemd") -}}
+{{- if (stat $systemdConf) -}}
+{{ $systemdConf }}
+{{- end -}}

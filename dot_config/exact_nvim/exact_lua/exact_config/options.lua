@@ -102,7 +102,7 @@ end
 -- We don't set vim.g.clipboard because Zellij doesn't support OSC 52 paste,
 -- which breaks normal yank/paste. Instead, we fire OSC 52 copy as a side-effect
 -- on yank, keeping Neovim's internal registers fully functional.
-if vim.env.IS_SSH == "1" then
+if vim.env.IS_SSH == "1" or vim.env.HOMELAB == "1" then
   local osc52_copy = require("vim.ui.clipboard.osc52").copy("+")
   vim.api.nvim_create_autocmd("TextYankPost", {
     group = vim.api.nvim_create_augroup("OSC52Yank", { clear = true }),
