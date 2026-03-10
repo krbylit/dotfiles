@@ -11,4 +11,5 @@ set -gx PATH \
     /opt/homebrew/sbin \
     /opt/homebrew/bin \
     /nix/var/nix/profiles/default/bin \
+    /Applications/Obsidian.app/Contents/MacOS \
     $PATH

@@ -4,6 +4,33 @@
 --
 -- Neovim plugin uses: ~/.config/nvim/lua/plugins/extend-fzf-lua.lua
 
+local exclude = {
+  "**/.git/**",
+  "**/.venv/**",
+  "**/venv/**",
+  "**/virtual_env/**",
+  "**/node_modules/**",
+  "**/dist/**",
+  "**/build/**",
+  "**/target/**",
+  "**/__pycache__/**",
+  "package-lock.json",
+  "**/.next/**",
+  "**/.turbo/**",
+  "**/.pnpm-store/**",
+  "**/.worktrees/**",
+}
+
+local rg_exclude = ""
+for _, v in ipairs(exclude) do
+  rg_exclude = rg_exclude .. string.format(" -g '!%s'", v)
+end
+
+local fd_exclude = ""
+for _, v in ipairs(exclude) do
+  fd_exclude = fd_exclude .. string.format(" --exclude '%s'", v)
+end
+
 require("fzf-lua").setup({
   { "cli" }, -- inherit cli profile
 
@@ -77,8 +104,8 @@ require("fzf-lua").setup({
   },
   -- Files picker configuration
   files = {
-    rg_opts = [[--color=always --files --hidden --follow --pcre2 -g "!**/.git/**" -g "!**/node_modules/**" -g "!**/target/**" -g "!**/.venv/**" -g "!**/virtual-env/**" -g "!**/dist/**" -g "!**/build/**"]],
-    fd_opts = [[--color=always --type f --hidden --follow --exclude .git --exclude .venv --exclude virtual-env --exclude node_modules --exclude target --exclude dist --exclude build]],
+    rg_opts = [[--color=always --files --hidden --follow --pcre2]] .. rg_exclude,
+    fd_opts = [[--color=always --type f --hidden --follow]] .. fd_exclude,
     -- NOTE: using this removes colors from output list
     -- formatter = "path.filename_first", -- VS Code style: filename first, then path
     cwd_prompt = false,
@@ -156,7 +183,8 @@ require("fzf-lua").setup({
 
   -- Live grep configuration
   grep = {
-    rg_opts = "--column --line-number --no-heading --color=always --smart-case --max-columns=4096 --pcre2 --glob=!**/node_modules/** --glob=!**/.git/** --glob=!**/target/** --glob=!**/.venv/** --glob=!**/virtual_env/** --glob=!**/dist/** --glob=!**/build/** --glob=!**/package-lock.json",
+    rg_opts = "--column --line-number --no-heading --color=always --smart-case --max-columns=4096 --pcre2"
+      .. rg_exclude,
     rg_glob = true,
     glob_flag = "--iglob",
     glob_separator = "%s%-%-",

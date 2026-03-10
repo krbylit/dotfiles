@@ -1,0 +1,82 @@
+[metadata]
+name = "obsidian-todos"
+description = "Search and manage Obsidian todo items from todos.md and today's daily note"
+requirements = ["rg", "bat", "sed"]
+
+[source]
+command = [
+  "sh -c 'rg -n --color=always \"^\\s*- \\[ \\]\" \"$OBSIDIAN_TODOS_FILE\" \"$OBSIDIAN_DAILY_NOTES_PATH/$(date +%Y-%m-%d).md\" 2>/dev/null'",
+  "sh -c 'rg -n --color=always \"^\\s*- \\[\" \"$OBSIDIAN_TODOS_FILE\" \"$OBSIDIAN_DAILY_NOTES_PATH/$(date +%Y-%m-%d).md\" 2>/dev/null'",
+]
+ansi = true
+output = "{strip_ansi|split:\\::..2}"
+
+[preview]
+command = "bat -n --color=always --highlight-line '{strip_ansi|split:\\::1}' '{strip_ansi|split:\\::0}'"
+env = { BAT_THEME = "ansi" }
+offset = "{strip_ansi|split:\\::1}"
+
+[ui]
+preview_panel = { header = "{strip_ansi|split:\\::..2}" }
+
+[keybindings]
+enter = "actions:mark_done"
+f1 = "actions:edit"
+f2 = "actions:mark_pending"
+f3 = "actions:mark_cancelled"
+f4 = "actions:mark_forwarded"
+f5 = "actions:mark_question"
+f6 = "actions:mark_important"
+f7 = "actions:add_todo"
+f8 = "actions:add_daily"
+f9 = "actions:delete"
+
+[actions.mark_done]
+description = "Mark as done [x]"
+command = "sh -c 'sed -i \"\" \"$2s/- \\[.\\]/- [x]/\" \"$1\"' -- '{strip_ansi|split:\\::0}' '{strip_ansi|split:\\::1}'"
+mode = "fork"
+
+[actions.edit]
+description = "Open in editor at line"
+command = "sh -c '${EDITOR:-vim} \"+$2\" \"$1\"' -- '{strip_ansi|split:\\::0}' '{strip_ansi|split:\\::1}'"
+mode = "execute"
+
+[actions.mark_pending]
+description = "Mark as in-progress [/]"
+command = "sh -c 'sed -i \"\" \"$2s/- \\[.\\]/- [\\/]/\" \"$1\"' -- '{strip_ansi|split:\\::0}' '{strip_ansi|split:\\::1}'"
+mode = "fork"
+
+[actions.mark_cancelled]
+description = "Mark as cancelled [-]"
+command = "sh -c 'sed -i \"\" \"$2s/- \\[.\\]/- [-]/\" \"$1\"' -- '{strip_ansi|split:\\::0}' '{strip_ansi|split:\\::1}'"
+mode = "fork"
+
+[actions.mark_forwarded]
+description = "Mark as forwarded [>]"
+command = "sh -c 'sed -i \"\" \"$2s/- \\[.\\]/- [>]/\" \"$1\"' -- '{strip_ansi|split:\\::0}' '{strip_ansi|split:\\::1}'"
+mode = "fork"
+
+[actions.mark_question]
+description = "Mark as question [?]"
+command = "sh -c 'sed -i \"\" \"$2s/- \\[.\\]/- [?]/\" \"$1\"' -- '{strip_ansi|split:\\::0}' '{strip_ansi|split:\\::1}'"
+mode = "fork"
+
+[actions.mark_important]
+description = "Mark as important [!]"
+command = "sh -c 'sed -i \"\" \"$2s/- \\[.\\]/- [!]/\" \"$1\"' -- '{strip_ansi|split:\\::0}' '{strip_ansi|split:\\::1}'"
+mode = "fork"
+
+[actions.add_todo]
+description = "Add new todo to todos.md"
+command = "sh -c '${EDITOR:-vim} \"+normal Go- [ ] \" \"$OBSIDIAN_TODOS_FILE\"'"
+mode = "execute"
+
+[actions.add_daily]
+description = "Add new todo to today's daily note Tasks section"
+command = "sh -c 'FILE=\"$OBSIDIAN_DAILY_NOTES_PATH/$(date +%Y-%m-%d).md\" && LINE=$(grep -n \"^## Tasks\" \"$FILE\" | head -1 | cut -d: -f1) && ${EDITOR:-vim} \"+normal ${LINE}Go- [ ] \" \"$FILE\"'"
+mode = "execute"
+
+[actions.delete]
+description = "Delete the selected todo line"
+command = "sh -c 'sed -i \"\" \"$2d\" \"$1\"' -- '{strip_ansi|split:\\::0}' '{strip_ansi|split:\\::1}'"
+mode = "fork"

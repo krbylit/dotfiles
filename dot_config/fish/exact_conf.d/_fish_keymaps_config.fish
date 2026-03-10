@@ -19,8 +19,8 @@ bind ctrl-w backward-kill-word
 bind --mode default yy vi_copy_to_clipboard
 
 # # Television
-bind --mode insert ctrl-t 'tv todo-comments; commandline -f repaint'
-bind --mode default ctrl-t 'tv todo-comments; commandline -f repaint'
+bind --mode insert ctrl-t 'tv obsidian-todos; commandline -f repaint'
+bind --mode default ctrl-t 'tv obsidian-todos; commandline -f repaint'
 # Yazi
 bind --mode insert ctrl-a 'yazicd; set fish_bind_mode insert; commandline -f repaint'
 bind --mode default ctrl-a 'yazicd; set fish_bind_mode default; commandline -f repaint'

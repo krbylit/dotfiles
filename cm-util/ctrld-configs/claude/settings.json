@@ -30,6 +30,7 @@
       "Bash(git push*)"
     ]
   },
+  "model": "sonnet",
   "enableAllProjectMcpServers": true,
   "enabledMcpjsonServers": [
     "beads",
