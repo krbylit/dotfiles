@@ -1,26 +1,108 @@
 #!/usr/bin/env bash
 
+have() {
+  command -v "$1" &>/dev/null
+}
+
+SCRIPT_NAME="$(basename "$0")"
+ERROR_LOG="$(mktemp "/tmp/${SCRIPT_NAME}.XXXXXX.err")"
+exec 3>&2
+exec 2> >(tee -a "$ERROR_LOG" >&3)
+
+SUDO_KEEPALIVE_PID=""
+
+cleanup() {
+  if [ -n "$SUDO_KEEPALIVE_PID" ]; then
+    kill "$SUDO_KEEPALIVE_PID" 2>/dev/null || true
+  fi
+
+  if [ -s "$ERROR_LOG" ]; then
+    echo
+    echo "Error summary for $SCRIPT_NAME:"
+    sed 's/^/  /' "$ERROR_LOG"
+  fi
+
+  rm -f "$ERROR_LOG"
+}
+
+trap cleanup EXIT
+
+prime_sudo() {
+  if [ "$(uname)" != "Linux" ]; then
+    return 0
+  fi
+
+  if [ "$(id -u)" -eq 0 ]; then
+    return 0
+  fi
+
+  if ! have sudo; then
+    echo "sudo is unavailable; cannot prepare root-owned install directories automatically."
+    return 1
+  fi
+
+  echo "Requesting sudo once for Linux bootstrap prerequisites..."
+  sudo -v 2>&3 || return 1
+
+  if [ -z "$SUDO_KEEPALIVE_PID" ]; then
+    while true; do
+      sudo -n true
+      sleep 30
+    done >/dev/null 2>&1 &
+    SUDO_KEEPALIVE_PID=$!
+  fi
+
+  return 0
+}
+
+ensure_owned_dir() {
+  dir_path="$1"
+  owner_name="${2:-$(id -un)}"
+  group_name="${3:-$(id -gn)}"
+  dir_mode="${4:-0755}"
+
+  if [ -d "$dir_path" ] && [ -w "$dir_path" ]; then
+    return 0
+  fi
+
+  prime_sudo || return 1
+  sudo mkdir -p -m "$dir_mode" "$dir_path"
+  sudo chown -R "$owner_name:$group_name" "$dir_path"
+}
+
+load_brew_env() {
+  if [ -x /opt/homebrew/bin/brew ]; then
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+  elif [ -x /usr/local/bin/brew ]; then
+    eval "$(/usr/local/bin/brew shellenv)"
+  elif [ -x /home/linuxbrew/.linuxbrew/bin/brew ]; then
+    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+  fi
+}
+
+load_cargo_env() {
+  if [ -f "$HOME/.cargo/env" ]; then
+    # rustup writes PATH updates here for the current shell session
+    . "$HOME/.cargo/env"
+  fi
+}
+
 # Ensure Homebrew is in PATH
-if [ -x /opt/homebrew/bin/brew ]; then
-  eval "$(/opt/homebrew/bin/brew shellenv)"
-elif [ -x /usr/local/bin/brew ]; then
-  eval "$(/usr/local/bin/brew shellenv)"
-elif [ -x /home/linuxbrew/.linuxbrew/bin/brew ]; then
-  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-fi
+load_brew_env
+load_cargo_env
 
 # Ensure CC is set for Cargo and other build tools
-if ! command -v cc &>/dev/null; then
-  if command -v gcc &>/dev/null; then
+if ! have cc; then
+  if have gcc; then
     export CC=gcc
-  elif command -v clang &>/dev/null; then
+  elif have clang; then
     export CC=clang
   fi
 fi
 
 # Setup Node.js with fnm (Fast Node Manager)
 # Ensure a default Node version is installed on all systems
-if command -v fnm &>/dev/null; then
+if have fnm; then
   if [ "${IS_SSH}" = "1" ]; then
     # TODO: Consolidate all installer env vars into a single place for easier management
     DEFAULT_NODE_VERSION="v18.20.8" # Change to a lighter version for remote machines if desired
@@ -62,13 +144,17 @@ fi
 # fi
 
 # Install Rust. brew install doesn't seem to play nice
-if ! command -v rustup &>/dev/null; then
-  curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+if ! have rustup; then
+  curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 fi
+load_cargo_env
 
 # Install nix. Needed for nil-ls in nvim
-if ! command -v nix &>/dev/null; then
-  curl -L https://nixos.org/nix/install | sh
+if ! have nix; then
+  if [ "$(uname)" = "Linux" ]; then
+    ensure_owned_dir /nix || echo "Failed to prepare /nix automatically."
+  fi
+  curl -L https://nixos.org/nix/install | sh -s -- --no-daemon
 fi
 
 # # Install sbarlua, required for our sketchybar config
@@ -76,12 +162,18 @@ fi
 
 # Install Ghostty ascii animation (`ghostty_animation`)
 if [ "${IS_SSH}" != "1" ]; then
-  if ! command -v ghostty_animation &>/dev/null; then
-    cd ~/Downloads
-    git clone https://github.com/lukeshere/ghostty-animation-command
-    cd ghostty-animation-command
+  if ! have ghostty_animation && have cargo; then
+    mkdir -p ~/Downloads
+    cd ~/Downloads || exit 1
+    if [ ! -d ghostty-animation-command/.git ]; then
+      git clone https://github.com/lukeshere/ghostty-animation-command
+    fi
+    cd ghostty-animation-command || exit 1
     cargo build
-    mv target/debug/ghostty_animation /usr/local/bin
+    if [ -f target/debug/ghostty_animation ]; then
+      mkdir -p "$HOME/.local/bin"
+      mv target/debug/ghostty_animation "$HOME/.local/bin"
+    fi
   fi
 fi
 
@@ -103,163 +195,171 @@ fi
 # fi
 
 if [ "${IS_SSH}" != "1" ]; then
-  if ! command -v specify &>/dev/null; then
+  if ! have specify && have uv; then
     uv tool install specify-cli --from git+https://github.com/github/spec-kit.git
   fi
 fi
 
 if [ "${IS_SSH}" != "1" ]; then
-  if ! command -v claude-code-acp &>/dev/null; then
+  if ! have claude-code-acp && have npm; then
     npm install -g @zed-industries/claude-code-acp
   fi
 fi
 
-if ! command -v typescript-language-server &>/dev/null; then
+if ! have typescript-language-server && have npm; then
   npm install -g typescript typescript-language-server
 fi
 
 if [ "${IS_SSH}" != "1" ]; then
-  if ! command -v claude &>/dev/null; then
+  if ! have claude && have npm; then
     npm install -g @anthropic-ai/claude-code
   fi
 fi
 
 if [ "${IS_SSH}" != "1" ]; then
-  if ! command -v reddix &>/dev/null; then
+  if ! have reddix; then
     curl --proto '=https' --tlsv1.2 -LsSf https://github.com/ck-zhang/reddix/releases/latest/download/reddix-installer.sh | sh
   fi
 fi
 
 if [ "${IS_SSH}" != "1" ]; then
-  if ! command -v csvi &>/dev/null; then
+  if ! have csvi && have go; then
     go install github.com/hymkor/csvi/cmd/csvi@latest
   fi
 fi
 
 if [ "${IS_SSH}" != "1" ]; then
-  if ! command -v pomo &>/dev/null; then
+  if ! have pomo && have go; then
     go install github.com/Bahaaio/pomo@latest
   fi
 fi
 
 if [ "${IS_SSH}" != "1" ]; then
-  if ! command -v trex &>/dev/null; then
+  if ! have trex && have go; then
     go install github.com/samyakbardiya/trex@latest
   fi
 fi
 
 if [ "${IS_SSH}" != "1" ]; then
-  if ! command -v e2c &>/dev/null; then
+  if ! have e2c && have go; then
     go install github.com/nlamirault/e2c/cmd/e2c@latest
   fi
 fi
 
 if [ "${IS_SSH}" != "1" ]; then
-  if ! command -v tclock &>/dev/null; then
+  if ! have tclock && have cargo; then
     cargo install wiki-tui
   fi
 fi
 
 if [ "${IS_SSH}" != "1" ]; then
-  if ! command -v tclock &>/dev/null; then
+  if ! have tclock && have cargo; then
     cargo install clock-tui
   fi
 fi
 
 if [ "${IS_SSH}" != "1" ]; then
-  if ! command -v filessh &>/dev/null; then
+  if ! have filessh && have cargo; then
     cargo install --locked filessh
   fi
 fi
 
 if [ "${IS_SSH}" != "1" ]; then
-  if ! command -v trip &>/dev/null; then
+  if ! have trip && have cargo; then
     # TUI for network monitoring
     cargo install trippy --locked
   fi
 fi
 
 if [ "${IS_SSH}" != "1" ]; then
-  if ! command -v rustnet &>/dev/null; then
+  if ! have rustnet && have cargo; then
     # TUI for network monitoring
     cargo install rustnet-monitor
   fi
 fi
 
 if [ "${IS_SSH}" != "1" ]; then
-  if ! command -v gittype &>/dev/null; then
+  if ! have gittype && have cargo; then
     cargo install gittype
   fi
 fi
 
 if [ "${IS_SSH}" != "1" ]; then
-  if ! command -v glues &>/dev/null; then
+  if ! have glues && have cargo; then
     cargo install glues
   fi
 fi
 
 # Terminal local network file sharing TUI
 if [ "${IS_SSH}" != "1" ]; then
-  if ! command -v jocalsend &>/dev/null; then
+  if ! have jocalsend && have cargo; then
     cargo install jocalsend
   fi
 fi
 
 if [ "${IS_SSH}" != "1" ]; then
-  if ! command -v regname &>/dev/null; then
+  if ! have regname && have cargo; then
     cargo install --locked --git https://github.com/linkdd/regname
   fi
 fi
 
 if [ "${IS_SSH}" != "1" ]; then
-  if ! command -v hygg &>/dev/null; then
+  if ! have hygg && have cargo; then
     cargo install --locked hygg
   fi
 fi
 
 if [ "${IS_SSH}" != "1" ]; then
-  if command -v gh &>/dev/null; then
-    gh extension install dlvhdr/gh-dash
-    gh extension install dlvhdr/gh-enhance
+  if have gh; then
+    if gh auth status >/dev/null 2>&1; then
+      if ! gh extension list | awk '{print $1}' | grep -qx "dlvhdr/gh-dash"; then
+        gh extension install dlvhdr/gh-dash
+      fi
+      if ! gh extension list | awk '{print $1}' | grep -qx "dlvhdr/gh-enhance"; then
+        gh extension install dlvhdr/gh-enhance
+      fi
+    else
+      echo "Skipping gh extension install because gh is not authenticated."
+    fi
   fi
 fi
 
 if [ "${IS_SSH}" != "1" ]; then
-  if ! command -v nerdlog &>/dev/null; then
+  if ! have nerdlog && have go; then
     go install github.com/dimonomid/nerdlog/cmd/nerdlog@master
   fi
 fi
 
 if [ "${IS_SSH}" != "1" ]; then
-  if ! command -v tuios &>/dev/null; then
+  if ! have tuios && have go; then
     go install github.com/Gaurav-Gosain/tuios/cmd/tuios@latest
   fi
 fi
 
 if [ "${IS_SSH}" != "1" ]; then
-  if ! command -v stormy &>/dev/null; then
-    if command -v go &>/dev/null; then
+  if ! have stormy; then
+    if have go; then
       go install github.com/ashish0kumar/stormy@latest
     fi
   fi
 fi
 
 if [ "${IS_SSH}" == "1" ]; then
-  if ! command -v systemd-manager-tui &>/dev/null; then
-    if command -v cargo &>/dev/null; then
+  if ! have systemd-manager-tui; then
+    if have cargo; then
       cargo install --locked systemd-manager-tui
     fi
   fi
 fi
 
-if ! command -v ugdb &>/dev/null; then
-  if command -v cargo &>/dev/null; then
+if ! have ugdb; then
+  if have cargo; then
     cargo install ugdb
   fi
 fi
 
 if [ "${IS_SSH}" != "1" ]; then
-  if ! command -v ziina &>/dev/null; then
+  if ! have ziina && have go; then
     go install github.com/ziinaio/zmate@latest
   fi
 fi
@@ -276,8 +376,11 @@ fi
 
 # Install our gitleaks pre-commit hook
 if [ "${IS_SSH}" != "1" ]; then
-  cd $HOME/.local/share/chezmoi && pre-commit autoupdate
-  cd $HOME/.local/share/chezmoi && pre-commit install
+  if have pre-commit; then
+    cd "$HOME/.local/share/chezmoi" || exit 1
+    pre-commit autoupdate
+    pre-commit install
+  fi
 fi
 
 # NOTE: handling this with submodule setup script now
@@ -285,7 +388,7 @@ fi
 # cp $(chezmoi source-path)/secrets/dot_gitmodules $(chezmoi source-path)/.gitmodules
 
 # Update fisher plugins
-if command -v fish &>/dev/null; then
+if have fish; then
   fish -c "fisher update"
 fi
 
