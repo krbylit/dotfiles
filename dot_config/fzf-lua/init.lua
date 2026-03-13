@@ -31,6 +31,50 @@ for _, v in ipairs(exclude) do
   fd_exclude = fd_exclude .. string.format(" --exclude '%s'", v)
 end
 
+local function selected_paths(selected, opts)
+  local paths = {}
+  for _, item in ipairs(selected) do
+    local file = require("fzf-lua").path.entry_to_file(item, opts)
+    table.insert(paths, file.path)
+  end
+  return paths
+end
+
+local function copy_paths(selected, opts)
+  if not selected[1] then
+    return
+  end
+  local paths_str = table.concat(selected_paths(selected, opts), " ")
+  os.execute(string.format("printf '%%s' %s | pbcopy", vim.fn.shellescape(paths_str)))
+end
+
+local function print_paths(selected, opts)
+  if not selected[1] then
+    return
+  end
+  io.write(table.concat(selected_paths(selected, opts), " "))
+  io.flush()
+  os.exit(0)
+end
+
+local function open_paths(selected, opts)
+  if not selected[1] then
+    return
+  end
+  local files = {}
+  for _, path in ipairs(selected_paths(selected, opts)) do
+    table.insert(files, vim.fn.shellescape(path))
+  end
+  local open_cmd
+  if vim.env.NVIM and vim.fn.executable("nvr") == 1 then
+    open_cmd = string.format("nvr --servername %s -p %s >/dev/tty", vim.fn.shellescape(vim.env.NVIM), table.concat(files, " "))
+  else
+    open_cmd = string.format("nvim -p %s </dev/tty >/dev/tty", table.concat(files, " "))
+  end
+  os.execute(open_cmd)
+  os.exit(0)
+end
+
 require("fzf-lua").setup({
   { "cli" }, -- inherit cli profile
 
@@ -120,64 +164,10 @@ require("fzf-lua").setup({
     no_ignore = true,
     follow = true, -- follow symlinks
     actions = {
-      ["ctrl-f"] = function(selected, opts)
-        if not selected[1] then
-          return
-        end
-        -- Print selected file path(s) to stdout for shell insertion
-        local paths = {}
-        for _, item in ipairs(selected) do
-          local file = require("fzf-lua").path.entry_to_file(item, opts)
-          table.insert(paths, file.path)
-        end
-        local paths_str = table.concat(paths, " ")
-        -- Print to stdout (will be captured by Fish keybinding)
-        io.write(paths_str)
-        io.flush()
-        os.exit(0)
-      end,
-      ["ctrl-y"] = function(selected, opts)
-        if not selected[1] then
-          return
-        end
-        -- Copy selected file path(s) to clipboard
-        local paths = {}
-        for _, item in ipairs(selected) do
-          local file = require("fzf-lua").path.entry_to_file(item, opts)
-          table.insert(paths, file.path)
-        end
-        local paths_str = table.concat(paths, " ")
-        -- Copy to system clipboard
-        os.execute(string.format("printf '%%s' %s | pbcopy", vim.fn.shellescape(paths_str)))
-      end,
-      ["enter"] = function(selected, opts)
-        if not selected[1] then
-          return
-        end
-        -- Build list of file paths from all selected items
-        local files = {}
-        for _, item in ipairs(selected) do
-          local file = require("fzf-lua").path.entry_to_file(item, opts)
-          table.insert(files, vim.fn.shellescape(file.path))
-        end
-        -- Open all selected files in nvim (as tabs)
-        os.execute(string.format("nvim -p %s </dev/tty >/dev/tty", table.concat(files, " ")))
-        os.exit(0)
-      end,
-      ["ctrl-o"] = function(selected, opts)
-        if not selected[1] then
-          return
-        end
-        -- Build list of file paths from all selected items
-        local files = {}
-        for _, item in ipairs(selected) do
-          local file = require("fzf-lua").path.entry_to_file(item, opts)
-          table.insert(files, vim.fn.shellescape(file.path))
-        end
-        -- Open all selected files in nvim (as tabs)
-        os.execute(string.format("nvim -p %s </dev/tty >/dev/tty", table.concat(files, " ")))
-        os.exit(0)
-      end,
+      ["ctrl-f"] = print_paths,
+      ["ctrl-y"] = copy_paths,
+      ["enter"] = open_paths,
+      ["ctrl-o"] = open_paths,
     },
   },
 
@@ -195,64 +185,10 @@ require("fzf-lua").setup({
     file_icons = false,
     git_icons = false,
     actions = {
-      ["ctrl-f"] = function(selected, opts)
-        if not selected[1] then
-          return
-        end
-        -- Print selected file path(s) to stdout for shell insertion
-        local paths = {}
-        for _, item in ipairs(selected) do
-          local file = require("fzf-lua").path.entry_to_file(item, opts)
-          table.insert(paths, file.path)
-        end
-        local paths_str = table.concat(paths, " ")
-        -- Print to stdout (will be captured by Fish keybinding)
-        io.write(paths_str)
-        io.flush()
-        os.exit(0)
-      end,
-      ["ctrl-y"] = function(selected, opts)
-        if not selected[1] then
-          return
-        end
-        -- Copy selected file path(s) to clipboard
-        local paths = {}
-        for _, item in ipairs(selected) do
-          local file = require("fzf-lua").path.entry_to_file(item, opts)
-          table.insert(paths, file.path)
-        end
-        local paths_str = table.concat(paths, " ")
-        -- Copy to system clipboard
-        os.execute(string.format("printf '%%s' %s | pbcopy", vim.fn.shellescape(paths_str)))
-      end,
-      ["enter"] = function(selected, opts)
-        if not selected[1] then
-          return
-        end
-        -- Build list of file paths from all selected items
-        local files = {}
-        for _, item in ipairs(selected) do
-          local file = require("fzf-lua").path.entry_to_file(item, opts)
-          table.insert(files, vim.fn.shellescape(file.path))
-        end
-        -- Open all selected files in nvim (as tabs)
-        os.execute(string.format("nvim -p %s </dev/tty >/dev/tty", table.concat(files, " ")))
-        os.exit(0)
-      end,
-      ["ctrl-o"] = function(selected, opts)
-        if not selected[1] then
-          return
-        end
-        -- Build list of file paths from all selected items
-        local files = {}
-        for _, item in ipairs(selected) do
-          local file = require("fzf-lua").path.entry_to_file(item, opts)
-          table.insert(files, vim.fn.shellescape(file.path))
-        end
-        -- Open all selected files in nvim (as tabs)
-        os.execute(string.format("nvim -p %s </dev/tty >/dev/tty", table.concat(files, " ")))
-        os.exit(0)
-      end,
+      ["ctrl-f"] = print_paths,
+      ["ctrl-y"] = copy_paths,
+      ["enter"] = open_paths,
+      ["ctrl-o"] = open_paths,
     },
   },
 

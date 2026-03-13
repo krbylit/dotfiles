@@ -4,9 +4,11 @@ description = "Search and manage Obsidian todo items from todos.md and today's d
 requirements = ["rg", "bat", "sed"]
 
 [source]
+# Multi-source: cycles through Pending, All, and Done todos (use ctrl-s or ctrl-h to toggle)
 command = [
-  "sh -c 'rg -n --color=always \"^\\s*- \\[ \\]\" \"$OBSIDIAN_TODOS_FILE\" \"$OBSIDIAN_DAILY_NOTES_PATH/$(date +%Y-%m-%d).md\" 2>/dev/null'",
-  "sh -c 'rg -n --color=always \"^\\s*- \\[\" \"$OBSIDIAN_TODOS_FILE\" \"$OBSIDIAN_DAILY_NOTES_PATH/$(date +%Y-%m-%d).md\" 2>/dev/null'",
+  "sh -c 'rg -n --color=always \"^\\s*- \\[ \\]\" \"$OBSIDIAN_TODOS_FILE\" \"$OBSIDIAN_DAILY_NOTES_PATH/$(date +%Y-%m-%d).md\" 2>/dev/null | tail -r'",
+  "sh -c 'rg -n --color=always \"^\\s*- \\[\" \"$OBSIDIAN_TODOS_FILE\" \"$OBSIDIAN_DAILY_NOTES_PATH/$(date +%Y-%m-%d).md\" 2>/dev/null | tail -r'",
+  "sh -c 'rg -n --color=always \"^\\s*- \\[x\\]\" \"$OBSIDIAN_TODOS_FILE\" \"$OBSIDIAN_DAILY_NOTES_PATH/$(date +%Y-%m-%d).md\" 2>/dev/null | tail -r'",
 ]
 ansi = true
 output = "{strip_ansi|split:\\::..2}"
@@ -21,6 +23,7 @@ preview_panel = { header = "{strip_ansi|split:\\::..2}" }
 
 [keybindings]
 enter = "actions:mark_done"
+ctrl-s = "cycle_sources"
 f1 = "actions:edit"
 f2 = "actions:mark_pending"
 f3 = "actions:mark_cancelled"
@@ -68,13 +71,13 @@ mode = "fork"
 
 [actions.add_todo]
 description = "Add new todo to todos.md"
-command = "sh -c '${EDITOR:-vim} \"+normal Go- [ ] \" \"$OBSIDIAN_TODOS_FILE\"'"
-mode = "execute"
+command = "sh -c 'todo=$(echo \"\" | fzf --print-query --header=\"New Todo:\" --height=3 | head -1); [ -n \"$todo\" ] && echo \"- [ ] $todo\" >> \"$OBSIDIAN_TODOS_FILE\"'"
+mode = "fork"
 
 [actions.add_daily]
 description = "Add new todo to today's daily note Tasks section"
-command = "sh -c 'FILE=\"$OBSIDIAN_DAILY_NOTES_PATH/$(date +%Y-%m-%d).md\" && LINE=$(grep -n \"^## Tasks\" \"$FILE\" | head -1 | cut -d: -f1) && ${EDITOR:-vim} \"+normal ${LINE}Go- [ ] \" \"$FILE\"'"
-mode = "execute"
+command = "sh -c 'FILE=\"$OBSIDIAN_DAILY_NOTES_PATH/$(date +%Y-%m-%d).md\"; [ ! -f \"$FILE\" ] && printf \"# %s\\n\\n## Tasks\\n\" \"$(date +%Y-%m-%d)\" > \"$FILE\"; grep -q \"^## Tasks\" \"$FILE\" || printf \"\\n## Tasks\\n\" >> \"$FILE\"; todo=$(echo \"\" | fzf --print-query --header=\"Daily Todo:\" --height=3 | head -1); [ -n \"$todo\" ] && perl -i -0777 -pe \"BEGIN { \\$t = shift } s/(## Tasks(?:(?!^#).)*?)\\n(\\s*(?=#|\\z))/\\$1\\n- [ ] \\$t\\n\\$2/ms\" \"$todo\" \"$FILE\"'"
+mode = "fork"
 
 [actions.delete]
 description = "Delete the selected todo line"

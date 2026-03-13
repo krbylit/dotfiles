@@ -178,6 +178,19 @@ vim.api.nvim_create_autocmd("TermOpen", {
         vim.cmd("PasteImage")
       end, { buffer = true })
     end
+
+    -- Plain builtin `:terminal` buffers do not inherit Snacks terminal keymaps.
+    -- Give them a local `<C-q>` escape hatch so they don't fall through to the
+    -- global normal-mode `<C-q>` buffer-delete mapping.
+    if vim.bo.filetype == "" then
+      vim.keymap.set("t", "<C-q>", function()
+        vim.cmd.stopinsert()
+      end, { buffer = true, desc = "Terminal: enter normal mode" })
+
+      vim.keymap.set("n", "<C-q>", function()
+        vim.cmd.startinsert()
+      end, { buffer = true, desc = "Terminal: return to terminal mode" })
+    end
   end,
 })
 
@@ -194,4 +207,3 @@ vim.api.nvim_create_autocmd("TermOpen", {
 --     vim.opt_local.cursorline = false
 --   end,
 -- })
-
