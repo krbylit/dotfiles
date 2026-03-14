@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# ~/.local/bin/claude-alert
+
+payload="$(cat)"
+title="$(printf '%s' "$payload" | jq -r '.title // "Claude Code"')"
+msg="$(printf '%s' "$payload" | jq -r '.message // .last_assistant_message // "Claude needs attention"')"
+
+printf '\a'
+osascript -e 'beep'
+osascript -e "display notification \"${msg//\"/\\\"}\" with title \"${title//\"/\\\"}\""
