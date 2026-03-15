@@ -6,3 +6,4 @@ abbr -a ca cursor-agent
 abbr -a cm chezmoi
 abbr -a tf terraform
 abbr -a rt ralph-tui
+abbr -a prl perles --config $HOME/.config/perles/config.yaml

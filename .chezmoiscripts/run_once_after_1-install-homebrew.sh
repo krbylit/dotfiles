@@ -13,17 +13,21 @@ exec 2> >(tee -a "$ERROR_LOG" >&3)
 SUDO_KEEPALIVE_PID=""
 
 cleanup() {
+  exit_status=$?
+
   if [ -n "$SUDO_KEEPALIVE_PID" ]; then
     kill "$SUDO_KEEPALIVE_PID" 2>/dev/null || true
   fi
 
-  if [ -s "$ERROR_LOG" ]; then
+  if [ "$exit_status" -ne 0 ] && [ -s "$ERROR_LOG" ]; then
     echo
     echo "Error summary for $SCRIPT_NAME:"
     sed 's/^/  /' "$ERROR_LOG"
   fi
 
   rm -f "$ERROR_LOG"
+
+  return "$exit_status"
 }
 
 trap cleanup EXIT

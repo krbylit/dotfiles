@@ -33,7 +33,6 @@ set -gx fisher_path "$XDG_CONFIG_HOME/fish/fisher"
 # set -gx fish_function_path $fish_function_path "$XDG_CONFIG_HOME/fish/fisher/functions"
 # set -gx fish_complete_path $fish_function_path "$XDG_CONFIG_HOME/fish/fisher/completions"
 
-set -gx BEADS_DOLT_SHARED_SERVER 1
 # Program configs
 set -gx DOCKER_BUILDKIT 1
 

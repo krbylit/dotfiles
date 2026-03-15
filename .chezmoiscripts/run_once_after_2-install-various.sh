@@ -4,6 +4,39 @@ have() {
   command -v "$1" &>/dev/null
 }
 
+log() {
+  echo "$(date '+%Y-%m-%d %H:%M:%S') - $1"
+}
+
+is_linux() {
+  [ "$(uname)" = "Linux" ]
+}
+
+has_sudo_ticket() {
+  if ! is_linux; then
+    return 1
+  fi
+
+  if [ "$(id -u)" -eq 0 ]; then
+    return 0
+  fi
+
+  have sudo && sudo -n true >/dev/null 2>&1
+}
+
+running_under_chezmoi() {
+  parent_comm="$(ps -o comm= -p "$PPID" 2>/dev/null | awk '{$1=$1; print}')"
+  parent_args="$(ps -o args= -p "$PPID" 2>/dev/null | awk '{$1=$1; print}')"
+
+  case "$parent_comm $parent_args" in
+  *chezmoi*)
+    return 0
+    ;;
+  esac
+
+  return 1
+}
+
 SCRIPT_NAME="$(basename "$0")"
 ERROR_LOG="$(mktemp "/tmp/${SCRIPT_NAME}.XXXXXX.err")"
 exec 3>&2
@@ -12,23 +45,27 @@ exec 2> >(tee -a "$ERROR_LOG" >&3)
 SUDO_KEEPALIVE_PID=""
 
 cleanup() {
+  exit_status=$?
+
   if [ -n "$SUDO_KEEPALIVE_PID" ]; then
     kill "$SUDO_KEEPALIVE_PID" 2>/dev/null || true
   fi
 
-  if [ -s "$ERROR_LOG" ]; then
+  if [ "$exit_status" -ne 0 ] && [ -s "$ERROR_LOG" ]; then
     echo
     echo "Error summary for $SCRIPT_NAME:"
     sed 's/^/  /' "$ERROR_LOG"
   fi
 
   rm -f "$ERROR_LOG"
+
+  return "$exit_status"
 }
 
 trap cleanup EXIT
 
 prime_sudo() {
-  if [ "$(uname)" != "Linux" ]; then
+  if ! is_linux; then
     return 0
   fi
 
@@ -70,6 +107,15 @@ ensure_owned_dir() {
   sudo chown -R "$owner_name:$group_name" "$dir_path"
 }
 
+prepare_local_build_dirs() {
+  export XDG_CACHE_HOME="${XDG_CACHE_HOME:-$HOME/.cache}"
+  export TMPDIR="${TMPDIR:-$XDG_CACHE_HOME/chezmoi/tmp}"
+  export CARGO_TARGET_DIR="${CARGO_TARGET_DIR:-$XDG_CACHE_HOME/cargo-install}"
+  export CARGO_BUILD_JOBS="${CARGO_BUILD_JOBS:-1}"
+
+  mkdir -p "$TMPDIR" "$CARGO_TARGET_DIR" "$HOME/.local/bin"
+}
+
 load_brew_env() {
   if [ -x /opt/homebrew/bin/brew ]; then
     eval "$(/opt/homebrew/bin/brew shellenv)"
@@ -90,6 +136,7 @@ load_cargo_env() {
 # Ensure Homebrew is in PATH
 load_brew_env
 load_cargo_env
+prepare_local_build_dirs
 
 # Ensure CC is set for Cargo and other build tools
 if ! have cc; then
@@ -151,10 +198,17 @@ load_cargo_env
 
 # Install nix. Needed for nil-ls in nvim
 if ! have nix; then
-  if [ "$(uname)" = "Linux" ]; then
-    ensure_owned_dir /nix || echo "Failed to prepare /nix automatically."
+  if is_linux && [ ! -d /nix ] && ! has_sudo_ticket; then
+    log "Skipping Nix install on Linux because /nix requires sudo and no cached sudo ticket is available."
+  else
+    if is_linux; then
+      ensure_owned_dir /nix || {
+        log "Failed to prepare /nix automatically."
+        exit 1
+      }
+    fi
+    curl -L https://nixos.org/nix/install | sh -s -- --no-daemon
   fi
-  curl -L https://nixos.org/nix/install | sh -s -- --no-daemon
 fi
 
 # # Install sbarlua, required for our sketchybar config
@@ -352,10 +406,14 @@ if [ "${IS_SSH}" == "1" ]; then
   fi
 fi
 
-if ! have ugdb; then
-  if have cargo; then
-    cargo install ugdb
+if [ "${IS_SSH}" != "1" ]; then
+  if ! have ugdb; then
+    if have cargo; then
+      cargo install ugdb
+    fi
   fi
+else
+  log "Skipping ugdb install on SSH hosts to keep remote bootstrap lighter."
 fi
 
 if [ "${IS_SSH}" != "1" ]; then
@@ -389,7 +447,11 @@ fi
 
 # Update fisher plugins
 if have fish; then
-  fish -c "fisher update"
+  if running_under_chezmoi; then
+    log "Skipping fisher update during chezmoi apply to avoid chezmoi lock contention."
+  else
+    fish -c "fisher update"
+  fi
 fi
 
 # FIX: Something is up with `bob` (maybe just local install). Can't find/use/install "stable" release.
