@@ -1,0 +1,483 @@
+schemaVersion = 1
+
+[actionPreferences]
+objectOverrides = []
+version = 1
+
+    [[actionPreferences.typeRankings]]
+    typeID = 'com.tuna.type.text-snippet'
+
+        [[actionPreferences.typeRankings.actions]]
+        actionKey = 'Define'
+        catalogIdentifier = 'Tuna.BasicActionsCatalog'
+
+        [[actionPreferences.typeRankings.actions]]
+        actionKey = 'Paste'
+        catalogIdentifier = 'TunaCore.CommonActionsCatalog'
+
+        [[actionPreferences.typeRankings.actions]]
+        actionKey = 'Paste as Plain Text'
+        catalogIdentifier = 'TunaCore.CommonActionsCatalog'
+
+        [[actionPreferences.typeRankings.actions]]
+        actionKey = 'Copy to Clipboard'
+        catalogIdentifier = 'TunaCore.CommonActionsCatalog'
+
+        [[actionPreferences.typeRankings.actions]]
+        actionKey = 'Type Text'
+        catalogIdentifier = 'TunaCore.CommonActionsCatalog'
+
+        [[actionPreferences.typeRankings.actions]]
+        actionKey = 'Speak Text (Say)'
+        catalogIdentifier = 'TunaCore.CommonActionsCatalog'
+
+[catalogConfiguration]
+scriptsDirectories = []
+
+    [[catalogConfiguration.customFolders]]
+    depthRawValue = 1
+    entryType = 'directory'
+    id = '8A838FDA-6508-420F-8ADB-4651D0D02755'
+    path = '/Applications/Firefox.app'
+
+    [[catalogConfiguration.folderDepthOverrides]]
+    catalogIdentifier = 'TunaCore.AllApplicationsCatalog'
+    depthRawValue = 0
+
+[extensions]
+enabledIdentifiers = [ 'com.brnbw.tuna.plugins.github', 'com.brnbw.tuna.plugins.notion', 'com.brnbw.tuna.plugins.obsidian' ]
+
+[hotkeys.app.activate]
+carbonKeyCode = 49
+carbonModifiers = 256
+
+[hotkeys.app.leaderMode]
+carbonKeyCode = 47
+carbonModifiers = 256
+
+[[hotkeys.custom]]
+id = '04F39905-DFBC-4477-9AA4-06D1A9EE7C16'
+presentation = 'auto'
+
+    [hotkeys.custom.command]
+    actionIdentifier = 'TunaCore.CommonActionsCatalog.Open'
+    subjectIdentifier = 'TunaCore.AllApplicationsCatalog.Firefox'
+
+[[hotkeys.custom]]
+id = '11881CC6-49E6-4853-9660-154A9C4382A1'
+presentation = 'auto'
+
+    [hotkeys.custom.command]
+    actionIdentifier = 'TunaCore.CommonActionsCatalog.Open'
+    subjectIdentifier = 'TunaCore.AllApplicationsCatalog.Ghostty'
+
+[[hotkeys.custom]]
+id = '1CA7662E-D667-44A7-A656-2377E4879E2D'
+presentation = 'auto'
+
+    [hotkeys.custom.command]
+    actionIdentifier = 'TunaCore.CommonActionsCatalog.Open'
+    subjectIdentifier = 'TunaCore.AllApplicationsCatalog.kitty'
+
+    [hotkeys.custom.shortcut]
+    carbonKeyCode = 16
+    carbonModifiers = 4608
+
+[[hotkeys.custom]]
+id = '217D9423-F1D6-49AC-A9DE-F4AB080B5428'
+presentation = 'auto'
+
+    [hotkeys.custom.command]
+    actionIdentifier = 'TunaCore.CommonActionsCatalog.Open'
+    subjectIdentifier = 'TunaCore.AllApplicationsCatalog.Obsidian'
+
+[[hotkeys.custom]]
+id = '2B908A99-68DF-4812-884D-4BA3D43EF1F1'
+presentation = 'auto'
+
+    [hotkeys.custom.command]
+    actionIdentifier = 'TunaCore.CommonActionsCatalog.Open'
+    subjectIdentifier = 'TunaCore.AllApplicationsCatalog.Notion'
+
+[[hotkeys.custom]]
+id = '34FD2A6A-C78D-4929-8053-B7BAE05BC9D0'
+presentation = 'auto'
+
+    [hotkeys.custom.command]
+    actionIdentifier = 'TunaCore.CommonActionsCatalog.Open'
+    subjectIdentifier = 'TunaCore.AllApplicationsCatalog.ChatGPT'
+
+[[hotkeys.custom]]
+id = '49FD92DD-9CF0-4D4C-86CA-A86BCB002D47'
+presentation = 'auto'
+
+    [hotkeys.custom.command]
+    actionIdentifier = 'TunaCore.CommonActionsCatalog.Open'
+    subjectIdentifier = 'TunaCore.AllApplicationsCatalog.MongoDB Compass'
+
+[[hotkeys.custom]]
+id = '51EE717F-07F3-438E-9C4A-750F2DD493C3'
+presentation = 'auto'
+
+    [hotkeys.custom.command]
+    actionIdentifier = 'TunaCore.CommonActionsCatalog.Open'
+    subjectIdentifier = 'TunaCore.SystemApplicationsCatalog.Finder'
+
+[[hotkeys.custom]]
+id = '6059F306-0486-4470-A46D-0DCC8BC3164C'
+presentation = 'auto'
+
+    [hotkeys.custom.command]
+    actionIdentifier = 'TunaCore.CommonActionsCatalog.Open'
+    subjectIdentifier = 'TunaCore.AllApplicationsCatalog.Claude'
+
+[[hotkeys.custom]]
+id = '6482ECDC-72A3-40C9-AB8B-7575D0E2C841'
+presentation = 'auto'
+
+    [hotkeys.custom.command]
+    actionIdentifier = 'TunaCore.CommonActionsCatalog.Open'
+    subjectIdentifier = 'TunaCore.AllApplicationsCatalog.Microsoft Outlook'
+
+[[hotkeys.custom]]
+id = 'B7C3CDBB-085B-4AE9-8E5A-10F8119022B5'
+presentation = 'auto'
+
+    [hotkeys.custom.command]
+    actionIdentifier = 'TunaCore.CommonActionsCatalog.Open'
+    subjectIdentifier = 'TunaCore.AllApplicationsCatalog.Postman'
+
+[[hotkeys.custom]]
+id = 'B907A25F-80D1-400A-8F9F-DC28ED089D60'
+presentation = 'auto'
+
+    [hotkeys.custom.command]
+    actionIdentifier = 'TunaCore.CommonActionsCatalog.Open'
+    subjectIdentifier = 'TunaCore.AllApplicationsCatalog.Microsoft Edge'
+
+[[hotkeys.custom]]
+id = 'C7AD203C-11E7-4164-B976-0F9C03959C16'
+presentation = 'auto'
+
+    [hotkeys.custom.command]
+    actionIdentifier = 'TunaCore.CommonActionsCatalog.Open'
+    subjectIdentifier = 'TunaCore.SystemApplicationsCatalog.Calendar'
+
+[[hotkeys.custom]]
+id = 'C9F2E408-FB67-41EC-AD9C-C9191560BFE0'
+presentation = 'auto'
+
+    [hotkeys.custom.command]
+    actionIdentifier = 'TunaCore.CommonActionsCatalog.Open'
+    subjectIdentifier = 'TunaCore.AllApplicationsCatalog.1Password'
+
+[[hotkeys.custom]]
+id = 'DA6FD3F7-7F27-4E39-BDAD-B7A1AD2E03C0'
+presentation = 'auto'
+
+    [hotkeys.custom.command]
+    actionIdentifier = 'TunaCore.CommonActionsCatalog.Open'
+    subjectIdentifier = 'TunaCore.AllApplicationsCatalog.zoom.us'
+
+[[hotkeys.custom]]
+id = 'E50B94B8-3322-4E4A-83FA-7729FC1719F9'
+presentation = 'auto'
+
+    [hotkeys.custom.command]
+    actionIdentifier = 'TunaCore.CommonActionsCatalog.Open'
+    subjectIdentifier = 'TunaCore.AllApplicationsCatalog.Google Chrome'
+
+[[hotkeys.custom]]
+id = 'ED9DDE09-44FA-4AA0-A9A8-E0F5DCA580ED'
+presentation = 'auto'
+
+    [hotkeys.custom.command]
+    actionIdentifier = 'TunaCore.CommonActionsCatalog.Open'
+    subjectIdentifier = 'TunaCore.AllApplicationsCatalog.Visual Studio Code'
+
+[[hotkeys.custom]]
+id = 'FEEA6732-5767-4818-9309-6D6924EAD34E'
+presentation = 'auto'
+
+    [hotkeys.custom.command]
+    actionIdentifier = 'TunaCore.CommonActionsCatalog.Open'
+    subjectIdentifier = 'TunaCore.AllApplicationsCatalog.Slack'
+
+[[leaderMode.bindings]]
+iconPath = '/System/Library/CoreServices/Finder.app'
+key = 'f'
+label = 'Finder'
+
+    [[leaderMode.bindings.children]]
+    key = 'k'
+    label = 'Desktop'
+    url = 'tuna://run/path.%252FUsers%252Fkirbylittle%252FDesktop/Open'
+
+    [[leaderMode.bindings.children]]
+    iconPath = 'chevron.compact.left.chevron.compact.right'
+    key = 's'
+    label = 'src'
+    url = 'tuna://run/path.%252FUsers%252Fkirbylittle%252Fsrc/Open'
+
+    [[leaderMode.bindings.children]]
+    iconPath = 'folder.fill.badge.gearshape'
+    key = 'm'
+    label = 'chezmoi'
+    url = 'tuna://run/path.%252FUsers%252Fkirbylittle%252F.local%252Fshare%252Fchezmoi/Open'
+
+    [[leaderMode.bindings.children]]
+    iconPath = 'square.and.pencil'
+    key = 'o'
+    label = 'obsidian-vault'
+    url = 'tuna://run/path.%252FUsers%252Fkirbylittle%252Fobsidian-vault/Open'
+
+    [[leaderMode.bindings.children]]
+    iconPath = 'folder.fill.badge.gearshape'
+    key = 'c'
+    label = '.config'
+    url = 'tuna://run/path.%252FUsers%252Fkirbylittle%252F.config/Open'
+
+    [[leaderMode.bindings.children]]
+    key = 'h'
+    label = 'Home'
+    url = 'tuna://run/path.%252FUsers%252Fkirbylittle/Open'
+
+    [[leaderMode.bindings.children]]
+    key = 'd'
+    label = 'Download'
+    url = 'tuna://run/path.%252FUsers%252Fkirbylittle%252FDownloads/Open'
+
+[[leaderMode.bindings]]
+iconPath = 'rectangle.portrait.and.arrow.right'
+key = 'g'
+label = 'Go'
+
+    [[leaderMode.bindings.children]]
+    iconPath = 'scribble'
+    key = 't'
+    label = 'Thread'
+
+        [[leaderMode.bindings.children.children]]
+        key = 'd'
+        label = 'Demo'
+        url = 'tuna://run/url.https:%252Fthread-demo.htilabs.org/Open%20URL'
+
+        [[leaderMode.bindings.children.children]]
+        key = 'v'
+        label = 'Dev'
+        url = 'tuna://run/url.https:%252Fthread-dev.htilabs.org/Open%20URL'
+
+        [[leaderMode.bindings.children.children]]
+        key = 'l'
+        label = 'Local'
+        url = 'tuna://run/url.http:%252F%252Flocalhost:3000%252F/Open%20URL'
+
+        [[leaderMode.bindings.children.children]]
+        key = 'p'
+        label = 'Prod'
+        url = 'tuna://run/url.https:%252Fthread.htilabs.org/Open%20URL'
+
+        [[leaderMode.bindings.children.children]]
+        key = 't'
+        label = 'Test'
+        url = 'tuna://run/url.https:%252Fthread-test.htilabs.org/Open%20URL'
+
+    [[leaderMode.bindings.children]]
+    iconPath = 'person.line.dotted.person.fill'
+    key = 'p'
+    label = 'PAVE'
+
+        [[leaderMode.bindings.children.children]]
+        key = 'l'
+        label = 'Local'
+        url = 'tuna://run/url.http:%252F%252Flocalhost:8091%252F/Open%20URL'
+
+        [[leaderMode.bindings.children.children]]
+        key = 't'
+        label = 'Test'
+        url = 'tuna://run/url.https:%252F%252Fpave-test.htilabs.org%252F/Open%20URL'
+
+        [[leaderMode.bindings.children.children]]
+        key = 'd'
+        label = 'Train'
+        url = 'tuna://run/url.https:%252F%252Fpave-train.htilabs.org%252F/Open%20URL'
+
+        [[leaderMode.bindings.children.children]]
+        key = 'p'
+        label = 'Prod'
+        url = 'tuna://run/url.https:%252F%252Fpave.htilabs.org%252F/Open%20URL'
+
+    [[leaderMode.bindings.children]]
+    iconPath = 'inset.filled.rectangle.and.person.filled'
+    key = 'l'
+    label = 'LEADS'
+
+        [[leaderMode.bindings.children.children]]
+        key = 'l'
+        label = 'Local'
+        url = 'tuna://run/url.http:%252F%252Flocalhost:3000%252F/Open%20URL'
+
+        [[leaderMode.bindings.children.children]]
+        key = 't'
+        label = 'Test'
+        url = 'tuna://run/url.https:%252F%252Fleads-test.htilabs.org%252F/Open%20URL'
+
+        [[leaderMode.bindings.children.children]]
+        key = 'd'
+        label = 'Demo'
+        url = 'tuna://run/url.https:%252F%252Fleads-demo.htilabs.org%252F/Open%20URL'
+
+        [[leaderMode.bindings.children.children]]
+        key = 'p'
+        label = 'Prod'
+        url = 'tuna://run/url.https:%252F%252Fleads.htilabs.org%252F/Open%20URL'
+
+        [[leaderMode.bindings.children.children]]
+        key = 'b'
+        label = 'Beta'
+        url = 'tuna://run/url.https:%252F%252Fleads-beta.htilabs.org%252F/Open%20URL'
+
+    [[leaderMode.bindings.children]]
+    iconPath = '/Applications/GitHub Desktop.app'
+    key = 'g'
+    label = 'GitHub'
+
+        [[leaderMode.bindings.children.children]]
+        key = 'h'
+        label = 'HTI Labs'
+        url = 'tuna://run/url.https:%252Fgithub.com%252Fhtilabstech/Open%20URL'
+
+        [[leaderMode.bindings.children.children]]
+        key = 'd'
+        label = 'dotfile-private'
+        url = 'tuna://run/url.https:%252Fgithub.com%252Fkrbylit%252Fdotfiles-private/Open%20URL'
+
+        [[leaderMode.bindings.children.children]]
+        key = 'p'
+        label = 'PAVE'
+        url = 'tuna://run/url.https:%252Fgithub.com%252Fhtilabstech%252Fscreening-tools/Open%20URL'
+
+        [[leaderMode.bindings.children.children]]
+        key = 'e'
+        label = 'SWIFT'
+        url = 'tuna://run/url.https:%252Fgithub.com%252Fhtilabstech%252Fexpansion/Open%20URL'
+
+        [[leaderMode.bindings.children.children]]
+        key = 'c'
+        label = 'platform-common'
+        url = 'tuna://run/url.https:%252Fgithub.com%252Fhtilabstech%252Fplatform-common/Open%20URL'
+
+        [[leaderMode.bindings.children.children]]
+        key = 'm'
+        label = 'My repos'
+        url = 'tuna://run/url.https:%252Fgithub.com%252Fkrbylit%253Ftab=repositories/Open%20URL'
+
+        [[leaderMode.bindings.children.children]]
+        key = 't'
+        label = 'Thread'
+        url = 'tuna://run/url.https:%252Fgithub.com%252Fhtilabstech%252Fthread/Open%20URL'
+
+        [[leaderMode.bindings.children.children]]
+        key = 'a'
+        label = 'Auth'
+        url = 'tuna://run/url.https:%252Fgithub.com%252Fhtilabstech%252Fauth/Open%20URL'
+
+        [[leaderMode.bindings.children.children]]
+        key = 'f'
+        label = 'Platform'
+        url = 'tuna://run/url.https:%252Fgithub.com%252Fhtilabstech%252Fplatform/Open%20URL'
+
+        [[leaderMode.bindings.children.children]]
+        key = 'g'
+        label = 'api-gateway'
+        url = 'tuna://run/url.https:%252Fgithub.com%252Fhtilabstech%252Fapi-gateway/Open%20URL'
+
+        [[leaderMode.bindings.children.children]]
+        key = 's'
+        label = 'Scrapers'
+        url = 'tuna://run/url.https:%252Fgithub.com%252Fhtilabstech%252Fscrapers/Open%20URL'
+
+        [[leaderMode.bindings.children.children]]
+        key = 'l'
+        label = 'LEADS'
+
+            [[leaderMode.bindings.children.children.children]]
+            key = 'l'
+            label = 'LEADS'
+            url = 'tuna://run/url.https:%252Fgithub.com%252Fhtilabstech%252Fleads/Open%20URL'
+
+            [[leaderMode.bindings.children.children.children]]
+            key = 'q'
+            label = 'leads-queries'
+            url = 'tuna://run/url.https:%252Fgithub.com%252Fhtilabstech%252Fleads-queries/Open%20URL'
+
+            [[leaderMode.bindings.children.children.children]]
+            key = 'c'
+            label = 'leads-commands'
+            url = 'tuna://run/url.https:%252Fgithub.com%252Fhtilabstech%252Fleads-commands/Open%20URL'
+
+            [[leaderMode.bindings.children.children.children]]
+            key = 's'
+            label = 'leads-schemas'
+            url = 'tuna://run/url.https:%252Fgithub.com%252Fhtilabstech%252Fleads-schemas/Open%20URL'
+
+        [[leaderMode.bindings.children.children]]
+        key = 'i'
+        label = 'Infra'
+
+            [[leaderMode.bindings.children.children.children]]
+            key = 'p'
+            label = 'pave-deployments'
+            url = 'tuna://run/url.https:%252Fgithub.com%252Fhtilabstech%252Fpave-deployments/Open%20URL'
+
+            [[leaderMode.bindings.children.children.children]]
+            key = 'r'
+            label = 'repo-template-infra'
+            url = 'tuna://run/url.https:%252Fgithub.com%252Fhtilabstech%252Frepo-template-infra/Open%20URL'
+
+            [[leaderMode.bindings.children.children.children]]
+            key = 'a'
+            label = 'auth-deployments'
+            url = 'tuna://run/url.https:%252Fgithub.com%252Fhtilabstech%252Fauth-deployments/Open%20URL'
+
+            [[leaderMode.bindings.children.children.children]]
+            key = 'f'
+            label = 'platform-deployments'
+            url = 'tuna://run/url.https:%252Fgithub.com%252Fhtilabstech%252Fplatform-deployments/Open%20URL'
+
+            [[leaderMode.bindings.children.children.children]]
+            key = 't'
+            label = 'thread-deployments'
+            url = 'tuna://run/url.https:%252Fgithub.com%252Fhtilabstech%252Fthread-deployments/Open%20URL'
+
+            [[leaderMode.bindings.children.children.children]]
+            key = 'l'
+            label = 'leads-deployments'
+            url = 'tuna://run/url.https:%252Fgithub.com%252Fhtilabstech%252Fleads-deployments/Open%20URL'
+
+            [[leaderMode.bindings.children.children.children]]
+            key = 'g'
+            label = 'api-gateway-deployments'
+            url = 'tuna://run/url.https:%252Fgithub.com%252Fhtilabstech%252Fapi-gateway-deployments/Open%20URL'
+
+            [[leaderMode.bindings.children.children.children]]
+            key = 'e'
+            label = 'event-store-deployments'
+            url = 'tuna://run/url.https:%252Fgithub.com%252Fhtilabstech%252Fevent-store-deployments/Open%20URL'
+
+            [[leaderMode.bindings.children.children.children]]
+            key = 'n'
+            label = 'neo4j-deployments'
+            url = 'tuna://run/url.https:%252Fgithub.com%252Fhtilabstech%252Fneo4j-deployments/Open%20URL'
+
+[settings]
+backspaceBehavior = 'deleteCharacters'
+leaderModeCheatsheetDelayMS = 0
+screenPreference = 'activeWindow'
+themeIdentifier = 'com.brnbw.tuna.themes.default'
+
+[[catalogSettings]]
+catalogIdentifier = 'com.brnbw.tuna.themes.default'
+
+    [catalogSettings.values]
+    ThemeTint = 'custom:00C6FC'

@@ -3,6 +3,26 @@
 
 payload="$(cat)"
 title="$(printf '%s' "$payload" | jq -r '.title // "Claude Code"')"
+notification_type="$(printf '%s' "$payload" | jq -r '.notification_type // empty')"
+
+case "$notification_type" in
+permission_prompt)
+    notification_label="Permission required"
+    default_sound="$HOME/.local/share/chezmoi/cm-util/pkg-backups/sounds/CRcv.aif"
+    ;;
+idle_prompt)
+    notification_label="Idle"
+    default_sound="$HOME/.local/share/chezmoi/cm-util/pkg-backups/sounds/CSnd.aif"
+    ;;
+*)
+    notification_label="Input required"
+    default_sound="$HOME/.local/share/chezmoi/cm-util/pkg-backups/sounds/CRcv.aif"
+    ;;
+esac
+
+if [[ -n "$notification_label" ]]; then
+    title="${title} [${notification_label}]"
+fi
 
 # Build message: repoName::branch or dirname
 git_root="$(git rev-parse --show-toplevel 2>/dev/null)"
@@ -15,7 +35,14 @@ else
     msg="$(basename "$PWD")"
 fi
 
-sound="$HOME/.local/share/chezmoi/cm-util/pkg-backups/sounds/CSnd.aif"
+if [[ "$notification_type" == "permission_prompt" ]]; then
+    sound="${CLAUDE_ALERT_PERMISSION_SOUND:-$default_sound}"
+elif [[ "$notification_type" == "idle_prompt" ]]; then
+    sound="${CLAUDE_ALERT_IDLE_SOUND:-$default_sound}"
+else
+    sound="${CLAUDE_ALERT_SOUND:-$default_sound}"
+fi
+
 played_sound=false
 if [[ -f "$sound" ]]; then
     afplay "$sound" &

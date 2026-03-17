@@ -165,8 +165,21 @@ end
 
 -- List continuation on Enter in insert mode.
 -- Supports: bullet (- / * / +), todo (- [ ] ), numbered (1.)
--- On an empty list item, pressing Enter exits list mode instead.
+-- On an empty list item, pressing Enter removes the marker and inserts a newline.
 local cr = vim.api.nvim_replace_termcodes("<CR>", true, false, true)
+local bs = vim.api.nvim_replace_termcodes("<BS>", true, false, true)
+
+local function delete_chars(count)
+  return string.rep(bs, count)
+end
+
+local function jump_heading(flags)
+  local views = vim.fn.winsaveview()
+  local found = vim.fn.search("^#\\+\\s", flags)
+  if found == 0 then
+    vim.fn.winrestview(views)
+  end
+end
 
 local function markdown_enter()
   local line = vim.api.nvim_get_current_line()
@@ -180,9 +193,8 @@ local function markdown_enter()
   if todo_match then
     local content = line:match("^%s*[%-%*%+]%s%[.-%]%s(.*)$") or ""
     if content == "" then
-      -- Empty item: clear marker and exit list mode
-      vim.api.nvim_set_current_line(indent)
-      return cr
+      -- Empty item: remove the checkbox marker and create a plain newline.
+      return delete_chars(#todo_match - #indent) .. cr
     end
     return cr .. "- [ ] "
   end
@@ -193,8 +205,7 @@ local function markdown_enter()
     local marker = line:match("^%s*([%-%*%+])")
     local content = line:match("^%s*[%-%*%+]%s(.*)$") or ""
     if content == "" then
-      vim.api.nvim_set_current_line(indent)
-      return cr
+      return delete_chars(#bullet_match - #indent) .. cr
     end
     return cr .. marker .. " "
   end
@@ -206,8 +217,8 @@ local function markdown_enter()
     local sep_char = sep:match("^([%.%)])")
     local content = line:match("^%s*%d+[%.%)]%s(.*)$") or ""
     if content == "" then
-      vim.api.nvim_set_current_line(indent)
-      return cr
+      local list_prefix = line:match("^%s*%d+[%.%)]%s") or ""
+      return delete_chars(#list_prefix - #indent) .. cr
     end
     return cr .. indent .. next_num .. sep_char .. " "
   end
@@ -229,6 +240,14 @@ end, { desc = "Insert sibling heading (TS)", buffer = true })
 vim.keymap.set("n", "<localleader>s", function()
   insert_heading("subheading")
 end, { desc = "Insert subheading (TS)", buffer = true })
+
+vim.keymap.set("n", "]]", function()
+  jump_heading("W")
+end, { desc = "Next markdown heading", buffer = true, nowait = true, silent = true })
+
+vim.keymap.set("n", "[[", function()
+  jump_heading("bW")
+end, { desc = "Previous markdown heading", buffer = true, nowait = true, silent = true })
 
 -- Markdown editing helpers — available in all .md files
 vim.keymap.set("n", "<localleader>t", "o- [ ] ", { desc = "Add todo item", buffer = true })

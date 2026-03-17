@@ -5,42 +5,38 @@
 
 # Auto-refresh when database changes
 auto_refresh: true
-
 # UI settings
 ui:
   show_counts: true # Show issue counts in column headers
   show_status_bar: true # Show status bar at bottom
   # markdown_style: dark  # Markdown rendering style: "dark" (default) or "light"
   vim_mode: true # Enable vim keybindings in text input areas (orchestration mode)
-
   # Keybinding overrides (optional)
   # keybindings:
   #   search: "ctrl+space"    # Default: ctrl+space
   #   dashboard: "ctrl+o"     # Default: ctrl+o
-
 # Theme configuration
 # Use a preset theme or customize individual colors
-theme:
-  catppuccin-mocha
-  # default
-  # Use a preset (run 'perles themes' to see available presets):
-  # preset: catppuccin-mocha
-  #
-  # Available presets:
-  #   default           - Default perles theme
-  #   catppuccin-mocha  - Warm, cozy dark theme
-  #   catppuccin-latte  - Warm, cozy light theme
-  #   dracula           - Dark theme with vibrant colors
-  #   nord              - Arctic, north-bluish palette
-  #   high-contrast     - High contrast for accessibility
-  #
-  # Override specific colors (works with or without preset):
-  # colors:
-  #   text.primary: "#FFFFFF"
-  #   status.error: "#FF0000"
-  #   priority.critical: "#FF5555"
-  #
-  # See all available color tokens with 'perles themes --help' or docs
+theme: catppuccin-mocha
+# default
+# Use a preset (run 'perles themes' to see available presets):
+# preset: catppuccin-mocha
+#
+# Available presets:
+#   default           - Default perles theme
+#   catppuccin-mocha  - Warm, cozy dark theme
+#   catppuccin-latte  - Warm, cozy light theme
+#   dracula           - Dark theme with vibrant colors
+#   nord              - Arctic, north-bluish palette
+#   high-contrast     - High contrast for accessibility
+#
+# Override specific colors (works with or without preset):
+# colors:
+#   text.primary: "#FFFFFF"
+#   status.error: "#FF0000"
+#   priority.critical: "#FF5555"
+#
+# See all available color tokens with 'perles themes --help' or docs
 
 # Board views - each view is a named collection of columns
 # Cycle through views with Shift+J (next) and Shift+K (previous)
@@ -48,47 +44,22 @@ views:
   - name: Default
     columns:
       - name: Blocked
-        type: bql
-        query: "status = open and blocked = true"
+        query: status = open and blocked = true
         color: "#FF8787"
-
       - name: Ready
-        type: bql
-        query: "status = open and ready = true"
+        query: status = open and ready = true
         color: "#73F59F"
-
       - name: In Progress
-        type: bql
-        query: "status = in_progress"
+        query: status = in_progress
         color: "#54A0FF"
-
       - name: Closed
-        type: bql
-        query: "status = closed"
+        query: status = closed
         color: "#BBBBBB"
-
-  - name: Bugs Only
+  - name: Epics
     columns:
-      - name: Open Bugs
-        type: bql
-        query: "type = bug and status = open"
-        color: "#EF4444"
-      - name: In Progress
-        type: bql
-        query: "type = bug and status = in_progress"
-        color: "#F59E0B"
-      - name: Fixed
-        type: bql
-        query: "type = bug and status = closed"
-        color: "#10B981"
-
-  # - name: Work
-  #   columns:
-  #     - name: Current
-  #       type: tree
-  #       issue_id: bd-123
-  #       tree_mode: child
-  #       color: "#EF4444"
+      - name: Epics
+        query: status = open and type in (epic,feature)
+        color: "#E879F9"
 # View options:
 #   name: Display name for the view (required)
 #   columns: List of columns for this view (required)
@@ -116,27 +87,21 @@ views:
 orchestration:
   # AI client provider for the coordinator: "claude" (default), "amp", "codex", "opencode", or "cursor"
   coordinator_client: claude
-
   # AI client provider for the workers: "claude" (default), "amp", "codex", "opencode", or "cursor"
   worker_client: claude
-
   # Claude-specific settings (only used when client: claude)
   claude:
     model: opus # sonnet (default), opus, or haiku
-
   # Codex-specific settings (only used when client: codex)
   codex:
     model: gpt-5.2-codex # gpt-5.2-codex (default)
-
   # Amp-specific settings (only used when client: amp)
   amp:
     model: opus # opus (default) or sonnet
     mode: smart # free, rush, or smart (default)
-
   # OpenCode-specific settings (only used when client: opencode)
   opencode:
     model: anthropic/claude-opus-4-5 # anthropic/claude-opus-4-5 (default)
-
   # Cursor-specific settings (only used when client: cursor)
   # cursor:
   #   model: composer-1  # Model selection (uses Cursor's default if empty)
@@ -174,23 +139,18 @@ orchestration:
       # Plays when a workflow completes successfully
       workflow_complete:
         enabled: true
-
       # Plays when a review is approved
       review_verdict_approve:
         enabled: true
-
       # Plays when a review is denied
       review_verdict_deny:
         enabled: true
-
       # Plays when a worker runs out of context
       worker_out_of_context:
         enabled: true
-
       # Plays when the coordinator runs out of context
       coordinator_out_of_context:
         enabled: true
-
       # Plays for general user notifications
       user_notification:
         enabled: true
