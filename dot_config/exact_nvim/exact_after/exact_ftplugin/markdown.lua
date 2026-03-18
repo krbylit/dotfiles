@@ -163,16 +163,6 @@ local function insert_heading(mode)
   vim.cmd("startinsert!")
 end
 
--- List continuation on Enter in insert mode.
--- Supports: bullet (- / * / +), todo (- [ ] ), numbered (1.)
--- On an empty list item, pressing Enter removes the marker and inserts a newline.
-local cr = vim.api.nvim_replace_termcodes("<CR>", true, false, true)
-local bs = vim.api.nvim_replace_termcodes("<BS>", true, false, true)
-
-local function delete_chars(count)
-  return string.rep(bs, count)
-end
-
 local function jump_heading(flags)
   local views = vim.fn.winsaveview()
   local found = vim.fn.search("^#\\+\\s", flags)
@@ -181,55 +171,76 @@ local function jump_heading(flags)
   end
 end
 
+-- List continuation on Enter in insert mode.
+-- Supports: bullet (- / * / +), todo (- [ ] ), numbered (1.)
+-- On an empty list item, pressing Enter removes the marker and inserts a newline.
 local function markdown_enter()
   local line = vim.api.nvim_get_current_line()
+  local col = vim.fn.col(".")
+  local before_cursor = line:sub(1, col - 1)
+  local after_cursor = line:sub(col)
 
   -- Capture optional leading indent
   local indent = line:match("^(%s*)") or ""
 
-  -- TODO list item: - [ ] or * [ ] or + [ ]
-  -- Must be checked before generic bullet to catch the checkbox syntax
-  local todo_match = line:match("^%s*[%-%*%+]%s%[.-%]%s")
-  if todo_match then
-    local content = line:match("^%s*[%-%*%+]%s%[.-%]%s(.*)$") or ""
-    if content == "" then
-      -- Empty item: remove the checkbox marker and create a plain newline.
-      return delete_chars(#todo_match - #indent) .. cr
-    end
-    return cr .. "- [ ] "
+  -- Helper to send keys
+  local function send(keys)
+    vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(keys, true, false, true), "n", true)
   end
 
-  -- Bullet list item: - / * / +
-  local bullet_match = line:match("^%s*[%-%*%+]%s")
-  if bullet_match then
-    local marker = line:match("^%s*([%-%*%+])")
-    local content = line:match("^%s*[%-%*%+]%s(.*)$") or ""
-    if content == "" then
-      return delete_chars(#bullet_match - #indent) .. cr
+  -- 1. TODO list item: - [ ] or * [ ] or + [ ] etc.
+  -- Matches any checkbox state like [ ], [x], [?], [!], etc.
+  -- NOTE: No capture groups here — match() returns the full match (including
+  -- indent) so that #todo_full gives the correct offset into before_cursor.
+  local todo_full = before_cursor:match("^%s*[%-%*%+]%s%[[^%]]*%]%s?")
+
+  if todo_full then
+    local content_after_marker = before_cursor:sub(#todo_full + 1)
+    if content_after_marker:match("^%s*$") and after_cursor:match("^%s*$") then
+      -- Empty item: clear the marker and leave a blank line at current indent
+      send("<C-u>" .. indent .. "<CR>")
+      return
     end
-    return cr .. marker .. " "
+    -- Continue todo: insert newline + indent + same bullet type + empty checkbox
+    local marker_type = before_cursor:match("^%s*([%-%*%+])")
+    send("<CR>" .. indent .. marker_type .. " [ ] ")
+    return
   end
 
-  -- Numbered list item: 1. or 1)
-  local num, sep = line:match("^%s*(%d+)([%.%)]%s)")
+  -- 2. Bullet list item: - / * / +
+  -- NOTE: No capture groups — same reason as above.
+  local bullet_full = before_cursor:match("^%s*[%-%*%+]%s")
+  if bullet_full then
+    local marker = bullet_full:match("[%-%*%+]")
+    local content_after_marker = before_cursor:sub(#bullet_full + 1)
+    if content_after_marker:match("^%s*$") and after_cursor:match("^%s*$") then
+      send("<C-u>" .. indent .. "<CR>")
+      return
+    end
+    send("<CR>" .. indent .. marker .. " ")
+    return
+  end
+
+  -- 3. Numbered list item: 1. or 1)
+  local num, sep = before_cursor:match("^%s*(%d+)([%.%)]%s)")
   if num and sep then
-    local next_num = tostring(tonumber(num) + 1)
-    local sep_char = sep:match("^([%.%)])")
-    local content = line:match("^%s*%d+[%.%)]%s(.*)$") or ""
-    if content == "" then
-      local list_prefix = line:match("^%s*%d+[%.%)]%s") or ""
-      return delete_chars(#list_prefix - #indent) .. cr
+    local full_marker = before_cursor:match("^%s*%d+[%.%)]%s")
+    local content_after_marker = before_cursor:sub(#full_marker + 1)
+    if content_after_marker:match("^%s*$") and after_cursor:match("^%s*$") then
+      send("<C-u>" .. indent .. "<CR>")
+      return
     end
-    return cr .. indent .. next_num .. sep_char .. " "
+    local next_num = tostring(tonumber(num) + 1)
+    send("<CR>" .. indent .. next_num .. sep)
+    return
   end
 
   -- Not a list line — default Enter
-  return cr
+  send("<CR>")
 end
 
 vim.keymap.set("i", "<CR>", markdown_enter, {
   buffer = true,
-  expr = true,
   desc = "Continue list on Enter",
 })
 
