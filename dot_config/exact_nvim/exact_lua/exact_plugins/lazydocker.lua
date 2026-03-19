@@ -2,7 +2,7 @@
 -- Toggles a fullscreen float running lazydocker inside zellij via the ldz
 -- fish function. Session named lazydocker-<dir>-<pathHash> so reattaching
 -- from the same directory reuses the existing session.
-vim.keymap.set({ "n", "t" }, "<leader>ld", function()
+vim.keymap.set({ "n", "t" }, "<leader>dd", function()
   Snacks.terminal.toggle("ldz", {
     win = {
       position = "float",

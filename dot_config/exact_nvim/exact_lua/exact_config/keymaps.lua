@@ -64,7 +64,7 @@ wk.add({
 -- ================================================================
 -- UTILITY
 -- ================================================================
-wk.add({ "<leader>ll", "<cmd>Lazy<cr>", desc = "Lazy", mode = { "n" } })
+-- wk.add({ "<leader>ll", "<cmd>Lazy<cr>", desc = "Lazy", mode = { "n" } })
 wk.add({ "<leader>xc", "<cmd>call setqflist([])<cr>", desc = "Clear Quickfix", remap = false, mode = "n" })
 -- Smart `dd`. Does not override last yank register if deleting an empty line.
 local dd = function()
