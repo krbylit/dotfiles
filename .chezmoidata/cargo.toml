@@ -1,0 +1,47 @@
+[cargo]
+packages = [
+    # Shell & terminal multiplexer
+    { name = "zellij" },
+
+    # Cargo dev tools
+    { name = "cargo-audit" },
+    { name = "cargo-deny" },
+    { name = "cargo-insta" },
+    { name = "cargo-vet" },
+
+    # TUI apps
+    { name = "basalt-tui", binary = "basalt" },
+    { name = "clock-cli", binary = "clock" },
+    { name = "clock-tui", binary = "tclock" },
+    { name = "glues" },
+    { name = "hygg", locked = true },
+    { name = "jocalsend" },
+    { name = "kanha" },
+    { name = "killport-tui", binary = "kp", git = "https://github.com/last1chosen/killport-tui" },
+    { name = "needle-cli", binary = "needle" },
+    { name = "ports-cli", binary = "ports" },
+    { name = "termchat" },
+    { name = "terminal-toys" },
+    { name = "theattyr" },
+    { name = "toktop" },
+    { name = "tracker", git = "https://github.com/ShenMian/tracker" },
+    { name = "wiki-tui" },
+
+    # Network & monitoring
+    { name = "filessh", locked = true },
+    { name = "oha" },
+    { name = "rustnet-monitor", binary = "rustnet" },
+    { name = "ssh-list", ssh = true },
+    { name = "trippy", binary = "trip", locked = true },
+
+    # Code tools
+    { name = "csvlint" },
+    { name = "gittype" },
+    { name = "mdbook" },
+    { name = "regname", locked = true, git = "https://github.com/linkdd/regname" },
+    { name = "rustlings" },
+
+    # Linux-only
+    { name = "systemd-manager-tui", locked = true, ssh_only = true },
+    { name = "ugdb" },
+]

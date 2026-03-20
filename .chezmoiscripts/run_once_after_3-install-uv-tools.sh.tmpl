@@ -30,14 +30,16 @@ if command -v uv &>/dev/null; then
     uv python install 3.13 --preview
 
     if [ "${IS_SSH}" != "1" ]; then
-        # Read and install Python packages from .chezmoidata/uv.toml
+        # Desktop: install all packages
         {{ range .uv.tools -}}
-        uv tool install {{ .name }}{{- if .version -}}{{- if eq (toString .version | regexMatch "^[0-9]") true -}}=={{- else -}}@{{- end }}{{ .version }}{{- end }}
+        uv tool install {{ .name }}{{- if hasKey . "version" -}}{{- if eq (toString .version | regexMatch "^[0-9]") true -}}=={{- else -}}@{{- end }}{{ .version }}{{- end }}
         {{ end -}}
     else
-        # Install uv tools for remote SSH sessions
-        {{ range .uv.tools_ssh -}}
-        uv tool install {{ .name }}{{- if .version -}}{{- if eq (toString .version | regexMatch "^[0-9]") true -}}=={{- else -}}@{{- end }}{{ .version }}{{- end }}
+        # SSH: install only packages with ssh = true
+        {{ range .uv.tools -}}
+        {{ if and (hasKey . "ssh") .ssh -}}
+        uv tool install {{ .name }}{{- if hasKey . "version" -}}{{- if eq (toString .version | regexMatch "^[0-9]") true -}}=={{- else -}}@{{- end }}{{ .version }}{{- end }}
+        {{ end -}}
         {{ end -}}
     fi
 

@@ -11,3 +11,17 @@ secrets
 docs
 specs
 scripts
+
+# Platform-specific ignores
+{{ if ne .chezmoi.os "darwin" }}
+# macOS-only configs — ignore on Linux
+.config/karabiner
+.config/skhd
+.config/yabai
+.hammerspoon
+{{ end }}
+
+{{ if ne .chezmoi.os "linux" }}
+# Linux-only configs — ignore on macOS
+.config/hypr
+{{ end }}

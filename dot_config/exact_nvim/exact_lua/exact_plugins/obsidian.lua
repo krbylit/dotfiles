@@ -341,7 +341,7 @@ return {
 
     -- wiki_link_func = require("obsidian.builtin").wiki_link_id_prefix,
     -- markdown_link_func = require("obsidian.builtin").markdown_link,
-    preferred_link_style = "wiki",
+    link = { style = "wiki" },
     ---@type obsidian.config.CommentOpts
     comment = {
       enabled = true,

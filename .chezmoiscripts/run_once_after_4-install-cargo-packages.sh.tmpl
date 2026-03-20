@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+
+SCRIPT_NAME="$(basename "$0")"
+ERROR_LOG="$(mktemp "/tmp/${SCRIPT_NAME}.XXXXXX.err")"
+exec 3>&2
+exec 2> >(tee -a "$ERROR_LOG" >&3)
+
+cleanup() {
+  if [ -s "$ERROR_LOG" ]; then
+    echo
+    echo "Error summary for $SCRIPT_NAME:"
+    sed 's/^/  /' "$ERROR_LOG"
+  fi
+  rm -f "$ERROR_LOG"
+}
+
+trap cleanup EXIT
+
+have() {
+  command -v "$1" &>/dev/null
+}
+
+if [ -f "$HOME/.cargo/env" ]; then
+  . "$HOME/.cargo/env"
+fi
+
+if ! have cargo; then
+  echo "cargo not found, skipping cargo package installs"
+  exit 0
+fi
+
+{{ range .cargo.packages -}}
+{{ $sshOnly := and (hasKey . "ssh_only") .ssh_only -}}
+{{ $ssh := and (hasKey . "ssh") .ssh -}}
+{{ $binary := .name }}{{ if hasKey . "binary" }}{{ $binary = .binary }}{{ end -}}
+{{ $locked := and (hasKey . "locked") .locked -}}
+{{ if $sshOnly -}}
+if [ "${IS_SSH}" = "1" ] && ! have {{ $binary }}; then
+{{ else if $ssh -}}
+if ! have {{ $binary }}; then
+{{ else -}}
+if [ "${IS_SSH}" != "1" ] && ! have {{ $binary }}; then
+{{ end -}}
+  cargo install{{ if $locked }} --locked{{ end }}{{ if hasKey . "git" }} --git {{ .git }}{{ else }} {{ .name }}{{ end }}
+fi
+{{ end -}}

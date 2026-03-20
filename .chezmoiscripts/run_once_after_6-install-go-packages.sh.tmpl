@@ -1,0 +1,50 @@
+#!/usr/bin/env bash
+
+SCRIPT_NAME="$(basename "$0")"
+ERROR_LOG="$(mktemp "/tmp/${SCRIPT_NAME}.XXXXXX.err")"
+exec 3>&2
+exec 2> >(tee -a "$ERROR_LOG" >&3)
+
+cleanup() {
+  if [ -s "$ERROR_LOG" ]; then
+    echo
+    echo "Error summary for $SCRIPT_NAME:"
+    sed 's/^/  /' "$ERROR_LOG"
+  fi
+  rm -f "$ERROR_LOG"
+}
+
+trap cleanup EXIT
+
+have() {
+  command -v "$1" &>/dev/null
+}
+
+# Ensure Homebrew is in PATH for go
+if [ -x /opt/homebrew/bin/brew ]; then
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+elif [ -x /usr/local/bin/brew ]; then
+  eval "$(/usr/local/bin/brew shellenv)"
+elif [ -x /home/linuxbrew/.linuxbrew/bin/brew ]; then
+  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+fi
+
+if ! have go; then
+  echo "go not found, skipping go package installs"
+  exit 0
+fi
+
+{{ range .go.packages -}}
+{{ $sshOnly := and (hasKey . "ssh_only") .ssh_only -}}
+{{ $ssh := and (hasKey . "ssh") .ssh -}}
+{{ $version := "latest" }}{{ if hasKey . "version" }}{{ $version = .version }}{{ end -}}
+{{ if $sshOnly -}}
+if [ "${IS_SSH}" = "1" ] && ! have {{ .name }}; then
+{{ else if $ssh -}}
+if ! have {{ .name }}; then
+{{ else -}}
+if [ "${IS_SSH}" != "1" ] && ! have {{ .name }}; then
+{{ end -}}
+  go install {{ .path }}@{{ $version }}
+fi
+{{ end -}}

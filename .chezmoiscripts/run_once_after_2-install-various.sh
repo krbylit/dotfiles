@@ -177,8 +177,8 @@ fi
 # Install Vi-Mongo
 # curl -LO https://github.com/kopecmaciej/vi-mongo/releases/download/v0.1.18/vi-mongo_Darwin_x86_64.tar.gz && tar -xzf vi-mongo_Darwin_x86_64.tar.gz && chmod +x vi-mongo && sudo mv vi-mongo /opt && rm vi-mongo_Darwin_x86_64.tar.gz
 
-# Install Hammerspoon and VimMode
-if [ "${IS_SSH}" != "1" ]; then
+# Install Hammerspoon and VimMode (macOS only)
+if [ "$(uname)" = "Darwin" ] && [ "${IS_SSH}" != "1" ]; then
   if [ ! -d "$HOME/.hammerspoon/Spoons/VimMode.spoon" ]; then
     curl -s https://raw.githubusercontent.com/dbalatero/VimMode.spoon/master/bin/installer | bash
   fi
@@ -248,6 +248,9 @@ fi
 #   fi
 # fi
 
+# Cargo, npm, and go packages are now managed declaratively via
+# .chezmoidata/{cargo,npm,go}.toml and installed by scripts 4, 5, 6.
+
 if [ "${IS_SSH}" != "1" ]; then
   if ! have specify && have uv; then
     uv tool install specify-cli --from git+https://github.com/github/spec-kit.git
@@ -255,111 +258,8 @@ if [ "${IS_SSH}" != "1" ]; then
 fi
 
 if [ "${IS_SSH}" != "1" ]; then
-  if ! have claude-code-acp && have npm; then
-    npm install -g @zed-industries/claude-code-acp
-  fi
-fi
-
-if ! have typescript-language-server && have npm; then
-  npm install -g typescript typescript-language-server
-fi
-
-if [ "${IS_SSH}" != "1" ]; then
-  if ! have claude && have npm; then
-    npm install -g @anthropic-ai/claude-code
-  fi
-fi
-
-if [ "${IS_SSH}" != "1" ]; then
   if ! have reddix; then
     curl --proto '=https' --tlsv1.2 -LsSf https://github.com/ck-zhang/reddix/releases/latest/download/reddix-installer.sh | sh
-  fi
-fi
-
-if [ "${IS_SSH}" != "1" ]; then
-  if ! have csvi && have go; then
-    go install github.com/hymkor/csvi/cmd/csvi@latest
-  fi
-fi
-
-if [ "${IS_SSH}" != "1" ]; then
-  if ! have pomo && have go; then
-    go install github.com/Bahaaio/pomo@latest
-  fi
-fi
-
-if [ "${IS_SSH}" != "1" ]; then
-  if ! have trex && have go; then
-    go install github.com/samyakbardiya/trex@latest
-  fi
-fi
-
-if [ "${IS_SSH}" != "1" ]; then
-  if ! have e2c && have go; then
-    go install github.com/nlamirault/e2c/cmd/e2c@latest
-  fi
-fi
-
-if [ "${IS_SSH}" != "1" ]; then
-  if ! have tclock && have cargo; then
-    cargo install wiki-tui
-  fi
-fi
-
-if [ "${IS_SSH}" != "1" ]; then
-  if ! have tclock && have cargo; then
-    cargo install clock-tui
-  fi
-fi
-
-if [ "${IS_SSH}" != "1" ]; then
-  if ! have filessh && have cargo; then
-    cargo install --locked filessh
-  fi
-fi
-
-if [ "${IS_SSH}" != "1" ]; then
-  if ! have trip && have cargo; then
-    # TUI for network monitoring
-    cargo install trippy --locked
-  fi
-fi
-
-if [ "${IS_SSH}" != "1" ]; then
-  if ! have rustnet && have cargo; then
-    # TUI for network monitoring
-    cargo install rustnet-monitor
-  fi
-fi
-
-if [ "${IS_SSH}" != "1" ]; then
-  if ! have gittype && have cargo; then
-    cargo install gittype
-  fi
-fi
-
-if [ "${IS_SSH}" != "1" ]; then
-  if ! have glues && have cargo; then
-    cargo install glues
-  fi
-fi
-
-# Terminal local network file sharing TUI
-if [ "${IS_SSH}" != "1" ]; then
-  if ! have jocalsend && have cargo; then
-    cargo install jocalsend
-  fi
-fi
-
-if [ "${IS_SSH}" != "1" ]; then
-  if ! have regname && have cargo; then
-    cargo install --locked --git https://github.com/linkdd/regname
-  fi
-fi
-
-if [ "${IS_SSH}" != "1" ]; then
-  if ! have hygg && have cargo; then
-    cargo install --locked hygg
   fi
 fi
 
@@ -375,50 +275,6 @@ if [ "${IS_SSH}" != "1" ]; then
     else
       echo "Skipping gh extension install because gh is not authenticated."
     fi
-  fi
-fi
-
-if [ "${IS_SSH}" != "1" ]; then
-  if ! have nerdlog && have go; then
-    go install github.com/dimonomid/nerdlog/cmd/nerdlog@master
-  fi
-fi
-
-if [ "${IS_SSH}" != "1" ]; then
-  if ! have tuios && have go; then
-    go install github.com/Gaurav-Gosain/tuios/cmd/tuios@latest
-  fi
-fi
-
-if [ "${IS_SSH}" != "1" ]; then
-  if ! have stormy; then
-    if have go; then
-      go install github.com/ashish0kumar/stormy@latest
-    fi
-  fi
-fi
-
-if [ "${IS_SSH}" == "1" ]; then
-  if ! have systemd-manager-tui; then
-    if have cargo; then
-      cargo install --locked systemd-manager-tui
-    fi
-  fi
-fi
-
-if [ "${IS_SSH}" != "1" ]; then
-  if ! have ugdb; then
-    if have cargo; then
-      cargo install ugdb
-    fi
-  fi
-else
-  log "Skipping ugdb install on SSH hosts to keep remote bootstrap lighter."
-fi
-
-if [ "${IS_SSH}" != "1" ]; then
-  if ! have ziina && have go; then
-    go install github.com/ziinaio/zmate@latest
   fi
 fi
 

@@ -5,8 +5,13 @@ local opt = vim.opt
 vim.api.nvim_set_hl(0, "WinSeparator", { fg = "#ed8796", bg = "" })
 
 -- Global options for VS Code and console use
-vim.env.PATH = "/opt/homebrew/bin:" .. (vim.env.PATH or "")
-vim.g.python3_host_prog = "/opt/homebrew/bin/python3"
+-- Add Homebrew to PATH (platform-specific location)
+local homebrew_prefix = vim.fn.has("mac") == 1 and "/opt/homebrew" or "/home/linuxbrew/.linuxbrew"
+if vim.fn.isdirectory(homebrew_prefix) == 1 then
+  vim.env.PATH = homebrew_prefix .. "/bin:" .. (vim.env.PATH or "")
+end
+-- Find python3 dynamically
+vim.g.python3_host_prog = vim.fn.exepath("python3")
 vim.g.mapleader = "," -- Set leader key to comma
 vim.api.nvim_set_keymap("", " ", "<Nop>", { noremap = true, silent = true })
 vim.g.maplocalleader = " "

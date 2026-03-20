@@ -110,31 +110,80 @@ if ! command -v brew &>/dev/null; then
   fi
 
   if ! load_brew_env && ! command -v brew &>/dev/null; then
-    log "Homebrew is still unavailable after the install attempt. Skipping brew bundle."
-    exit 1
+    if [ "$(uname)" = "Darwin" ]; then
+      log "Homebrew is still unavailable after the install attempt. Skipping brew bundle."
+      exit 1
+    else
+      log "Homebrew install did not succeed on Linux. Continuing to nix-based install."
+    fi
   fi
 else
   log "Homebrew is already installed."
 fi
 
-# Run brew bundle and capture stderr
-log "Running brew bundle..."
-tmp_err=$(mktemp) # Create a temporary file for stderr
-if [ -z "$SSH_CONNECTION" ] && [ -z "$SSH_CLIENT" ] && [ -z "$SSH_TTY" ]; then
-  if ! brew bundle --no-upgrade --file="$HOME/Brewfile" 2>"$tmp_err"; then
-    log "brew bundle encountered errors:"
-    tee -a "$ERROR_LOG" >&3 <"$tmp_err"
+if [ "$(uname)" = "Darwin" ]; then
+  # macOS: install packages via Homebrew bundle
+  log "Running brew bundle..."
+  tmp_err=$(mktemp)
+  if [ -z "$SSH_CONNECTION" ] && [ -z "$SSH_CLIENT" ] && [ -z "$SSH_TTY" ]; then
+    if ! brew bundle --no-upgrade --file="$HOME/Brewfile" 2>"$tmp_err"; then
+      log "brew bundle encountered errors:"
+      tee -a "$ERROR_LOG" >&3 <"$tmp_err"
+    else
+      log "brew bundle completed successfully without errors."
+    fi
+  fi
+  if [ -n "$SSH_CONNECTION" ] || [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
+    if ! brew bundle --no-upgrade --file="$HOME/Brewfile_ssh" 2>"$tmp_err"; then
+      log "brew bundle encountered errors:"
+      tee -a "$ERROR_LOG" >&3 <"$tmp_err"
+    else
+      log "brew bundle completed successfully without errors."
+    fi
+  fi
+  rm -f "$tmp_err"
+
+elif [ "$(uname)" = "Linux" ]; then
+  # Linux: install packages via Nix flake
+  load_nix_env() {
+    if [ -f "$HOME/.nix-profile/etc/profile.d/nix.sh" ]; then
+      . "$HOME/.nix-profile/etc/profile.d/nix.sh"
+    elif [ -f "/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh" ]; then
+      . "/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh"
+    fi
+  }
+
+  load_nix_env
+
+  if ! command -v nix &>/dev/null; then
+    log "Installing Nix..."
+    ensure_owned_dir /nix || {
+      log "Failed to prepare /nix directory. Cannot install Nix."
+      exit 1
+    }
+    curl -L https://nixos.org/nix/install | sh -s -- --no-daemon
+    load_nix_env
+  fi
+
+  if ! command -v nix &>/dev/null; then
+    log "Nix is still unavailable after install attempt. Skipping nix package install."
+    exit 1
+  fi
+
+  # Ensure flakes are enabled (chezmoi should have already placed nix.conf,
+  # but guard against first-run edge cases)
+  mkdir -p "$HOME/.config/nix"
+  if ! grep -q "experimental-features.*flakes" "$HOME/.config/nix/nix.conf" 2>/dev/null; then
+    echo "experimental-features = nix-command flakes" >>"$HOME/.config/nix/nix.conf"
+  fi
+
+  CHEZMOI_SOURCE="$(chezmoi source-path 2>/dev/null || echo "$HOME/.local/share/chezmoi")"
+
+  if [ -f "$CHEZMOI_SOURCE/flake.nix" ]; then
+    log "Installing packages via nix profile from flake..."
+    nix profile install "path:$CHEZMOI_SOURCE"
+    log "Nix profile install completed."
   else
-    log "brew bundle completed successfully without errors."
+    log "No flake.nix found at $CHEZMOI_SOURCE. Skipping nix package install."
   fi
 fi
-# If on remote machine, install limited Brew packages designed for remote
-if [ -n "$SSH_CONNECTION" ] || [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
-  if ! brew bundle --no-upgrade --file="$HOME/Brewfile_ssh" 2>"$tmp_err"; then
-    log "brew bundle encountered errors:"
-    tee -a "$ERROR_LOG" >&3 <"$tmp_err"
-  else
-    log "brew bundle completed successfully without errors."
-  fi
-fi
-rm -f "$tmp_err" # Clean up the temporary file

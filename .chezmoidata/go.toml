@@ -1,0 +1,11 @@
+[go]
+packages = [
+    { name = "csvi", path = "github.com/hymkor/csvi/cmd/csvi" },
+    { name = "pomo", path = "github.com/Bahaaio/pomo" },
+    { name = "trex", path = "github.com/samyakbardiya/trex" },
+    { name = "e2c", path = "github.com/nlamirault/e2c/cmd/e2c" },
+    { name = "nerdlog", path = "github.com/dimonomid/nerdlog/cmd/nerdlog", version = "master" },
+    { name = "tuios", path = "github.com/Gaurav-Gosain/tuios/cmd/tuios" },
+    { name = "stormy", path = "github.com/ashish0kumar/stormy" },
+    { name = "ziina", path = "github.com/ziinaio/zmate" },
+]

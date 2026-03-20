@@ -4,5 +4,5 @@ function __fzf_copy_paths --argument-names mode selection_file
         return 1
     end
 
-    printf '%s' (string join ' ' $paths) | pbcopy
+    printf '%s' (string join ' ' $paths) | __clipboard_copy
 end

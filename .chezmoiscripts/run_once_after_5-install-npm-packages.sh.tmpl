@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+
+SCRIPT_NAME="$(basename "$0")"
+ERROR_LOG="$(mktemp "/tmp/${SCRIPT_NAME}.XXXXXX.err")"
+exec 3>&2
+exec 2> >(tee -a "$ERROR_LOG" >&3)
+
+cleanup() {
+  if [ -s "$ERROR_LOG" ]; then
+    echo
+    echo "Error summary for $SCRIPT_NAME:"
+    sed 's/^/  /' "$ERROR_LOG"
+  fi
+  rm -f "$ERROR_LOG"
+}
+
+trap cleanup EXIT
+
+have() {
+  command -v "$1" &>/dev/null
+}
+
+# Add bun global bin to PATH for this script
+export PATH="$HOME/.cache/.bun/bin:$PATH"
+
+if ! have bun; then
+  echo "bun not found, skipping global package installs"
+  exit 0
+fi
+
+{{ range .npm.packages -}}
+{{ $ssh := and (hasKey . "ssh") .ssh -}}
+{{ $binary := .name }}{{ if hasKey . "binary" }}{{ $binary = .binary }}{{ end -}}
+{{ if $ssh -}}
+if ! have {{ $binary }}; then
+{{ else -}}
+if [ "${IS_SSH}" != "1" ] && ! have {{ $binary }}; then
+{{ end -}}
+  bun install -g {{ .name }}
+fi
+{{ end -}}

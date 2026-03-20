@@ -4,6 +4,19 @@
 --
 -- Neovim plugin uses: ~/.config/nvim/lua/plugins/extend-fzf-lua.lua
 
+local function clipboard_cmd()
+  if vim.fn.executable("pbcopy") == 1 then
+    return "pbcopy"
+  elseif vim.fn.executable("xclip") == 1 then
+    return "xclip -selection clipboard"
+  elseif vim.fn.executable("xsel") == 1 then
+    return "xsel --clipboard --input"
+  elseif vim.fn.executable("wl-copy") == 1 then
+    return "wl-copy"
+  end
+  return nil
+end
+
 local exclude = {
   "**/.git/**",
   "**/.venv/**",
@@ -45,7 +58,8 @@ local function copy_paths(selected, opts)
     return
   end
   local paths_str = table.concat(selected_paths(selected, opts), " ")
-  os.execute(string.format("printf '%%s' %s | pbcopy", vim.fn.shellescape(paths_str)))
+  local clip = clipboard_cmd() or "cat > /dev/null"
+  os.execute(string.format("printf '%%s' %s | %s", vim.fn.shellescape(paths_str), clip))
 end
 
 local function print_paths(selected, opts)
@@ -233,8 +247,8 @@ require("fzf-lua").setup({
           -- Extract commit hash (first field before space/colon)
           local commit_hash = selected[1]:match("^(%S+)")
           if commit_hash then
-            -- Copy to system clipboard using printf (more reliable than echo -n)
-            os.execute(string.format("printf '%%s' %s | pbcopy", vim.fn.shellescape(commit_hash)))
+            local clip = clipboard_cmd() or "cat > /dev/null"
+            os.execute(string.format("printf '%%s' %s | %s", vim.fn.shellescape(commit_hash), clip))
           end
         end,
       },

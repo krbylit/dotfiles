@@ -1,0 +1,7 @@
+[npm]
+packages = [
+    { name = "@zed-industries/claude-code-acp", binary = "claude-code-acp" },
+    { name = "typescript", binary = "tsc", ssh = true },
+    { name = "typescript-language-server", ssh = true },
+    { name = "@anthropic-ai/claude-code", binary = "claude" },
+]
