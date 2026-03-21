@@ -196,20 +196,7 @@ if ! have rustup; then
 fi
 load_cargo_env
 
-# Install nix. Needed for nil-ls in nvim
-if ! have nix; then
-  if is_linux && [ ! -d /nix ] && ! has_sudo_ticket; then
-    log "Skipping Nix install on Linux because /nix requires sudo and no cached sudo ticket is available."
-  else
-    if is_linux; then
-      ensure_owned_dir /nix || {
-        log "Failed to prepare /nix automatically."
-        exit 1
-      }
-    fi
-    curl -L https://nixos.org/nix/install | sh -s -- --no-daemon
-  fi
-fi
+# Nix is installed by script 0-install-nix.sh
 
 # # Install sbarlua, required for our sketchybar config
 # git clone https://github.com/FelixKratz/SbarLua.git /tmp/SbarLua && cd /tmp/SbarLua/ && make install && rm -rf /tmp/SbarLua/
@@ -278,15 +265,8 @@ if [ "${IS_SSH}" != "1" ]; then
   fi
 fi
 
-if [[ "$(uname)" != "Darwin" ]]; then
-  cp "$HOME/.local/share/chezmoi/cm-util/pkg-backups/home/.local/bin/yazi-linux/ya" "$HOME/.local/bin/ya"
-  cp "$HOME/.local/share/chezmoi/cm-util/pkg-backups/home/.local/bin/yazi-linux/yazi" "$HOME/.local/bin/yazi"
-fi
-
-if [[ "$(uname)" = "Darwin" ]]; then
-  cp "$HOME/.local/share/chezmoi/cm-util/pkg-backups/home/.local/bin/ya" "$HOME/.local/bin/ya"
-  cp "$HOME/.local/share/chezmoi/cm-util/pkg-backups/home/.local/bin/yazi" "$HOME/.local/bin/yazi"
-fi
+# yazi/ya binaries are now managed as chezmoi symlink templates
+# in dot_local/bin/symlink_yazi.tmpl and symlink_ya.tmpl
 
 # Install our gitleaks pre-commit hook
 if [ "${IS_SSH}" != "1" ]; then

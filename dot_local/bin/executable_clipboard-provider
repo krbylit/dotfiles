@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+# clipboard-provider — unified clipboard copy (macOS, Linux local, Linux SSH)
+#
+# Accepts text as $1 (for lazygit's {{text}} placeholder) or via stdin.
+# Strategy:
+#   macOS        → pbcopy
+#   Linux + X11  → xclip
+#   Linux + SSH  → OSC 52 escape sequence
+#
+# Used by lazygit's copyToClipboardCmd and other tools that need clipboard access.
+
+set -euo pipefail
+
+# Accept text as argument (lazygit {{text}}) or stdin (pipe usage)
+if [ $# -gt 0 ]; then
+    input="$*"
+else
+    input=$(cat)
+fi
+
+# macOS: use pbcopy
+if [ "$(uname)" = "Darwin" ]; then
+    printf '%s' "$input" | pbcopy
+    exit 0
+fi
+
+# Linux with a display server: use xclip
+if [ -n "${DISPLAY:-}" ] || [ -n "${WAYLAND_DISPLAY:-}" ]; then
+    if command -v xclip >/dev/null 2>&1; then
+        printf '%s' "$input" | xclip -selection clipboard
+        exit 0
+    fi
+fi
+
+# Fallback: OSC 52 escape sequence
+# Works over SSH when the terminal emulator supports it (Ghostty, iTerm2, etc.)
+# Write to /dev/tty to bypass any pipe/redirection and reach the actual terminal.
+encoded=$(printf '%s' "$input" | base64 | tr -d '\n')
+printf '\033]52;c;%s\a' "$encoded" >/dev/tty

@@ -36,6 +36,11 @@ if ! command -v brew &>/dev/null; then
     exit 0
 fi
 
+if [ "$(uname)" != "Darwin" ]; then
+    log "Skipping brew bundle on Linux. Packages are managed by Nix."
+    exit 0
+fi
+
 log "Running brew bundle..."
 
 # Run brew bundle and capture stderr

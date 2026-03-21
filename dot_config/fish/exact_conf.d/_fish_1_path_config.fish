@@ -7,6 +7,7 @@ set -gx PATH \
     $HOME/go/bin \
     $HOME/.cache/.bun/bin \
     $HOME/.local/share/pnpm \
+    $HOME/.nix-profile/bin \
     /nix/var/nix/profiles/default/bin \
     $PATH
 

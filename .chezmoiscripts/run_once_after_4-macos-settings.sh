@@ -16,3 +16,11 @@ defaults write -g NSServicesMinimumItemCountForContextSubmenu -int 5
 # Increase key repeat rate
 defaults write -g InitialKeyRepeat -int 25
 defaults write -g KeyRepeat -int 1
+
+# Install fonts from chezmoi source into macOS font directory
+FONT_SRC="$(chezmoi source-path)/cm-util/pkg-backups/fonts"
+FONT_DST="$HOME/Library/Fonts"
+if [[ -d "$FONT_SRC" ]]; then
+    mkdir -p "$FONT_DST"
+    cp -n "$FONT_SRC"/*.otf "$FONT_SRC"/*.ttf "$FONT_DST/" 2>/dev/null
+fi

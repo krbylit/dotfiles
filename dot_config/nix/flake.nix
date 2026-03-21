@@ -45,7 +45,12 @@
 
               # ── Text Processing & Search ──────────────────────────────
               bat
-              bat-extras # batgrep, batman, batpipe, etc.
+              bat-extras.batdiff
+              bat-extras.batgrep
+              bat-extras.batman
+              bat-extras.batpipe
+              bat-extras.batwatch
+              bat-extras.prettybat
               ripgrep
               jq
               jql # JSON query language
@@ -65,7 +70,7 @@
 
               # ── Languages & Build Tools ───────────────────────────────
               go
-              lua
+              (pkgs.lib.setPrio 10 lua)
               luajit
               luarocks
               cmake
@@ -142,6 +147,9 @@
               qpdf
               vhs # terminal GIF recorder
               glow # terminal markdown viewer
+
+              # ── Clipboard ─────────────────────────────────────────────
+              xclip # X11 clipboard (also works under Xwayland)
 
               # ── Misc CLI ──────────────────────────────────────────────
               chezmoi
