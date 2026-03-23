@@ -203,7 +203,7 @@ local function markdown_enter()
     end
     -- Continue todo: insert newline + indent + same bullet type + empty checkbox
     local marker_type = before_cursor:match("^%s*([%-%*%+])")
-    send("<CR>" .. indent .. marker_type .. " [ ] ")
+    send("<CR><C-u>" .. indent .. marker_type .. " [ ] ")
     return
   end
 
@@ -217,7 +217,7 @@ local function markdown_enter()
       send("<C-u>" .. indent .. "<CR>")
       return
     end
-    send("<CR>" .. indent .. marker .. " ")
+    send("<CR><C-u>" .. indent .. marker .. " ")
     return
   end
 
@@ -231,7 +231,7 @@ local function markdown_enter()
       return
     end
     local next_num = tostring(tonumber(num) + 1)
-    send("<CR>" .. indent .. next_num .. sep)
+    send("<CR><C-u>" .. indent .. next_num .. sep)
     return
   end
 

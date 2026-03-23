@@ -101,8 +101,8 @@ return {
     },
     ---@type blink.cmp.SourceConfig
     sources = {
-      default = vim.env.IS_SSH ~= "1" and { "lsp", "path", "snippets", "buffer", "copilot", "ripgrep" }
-        or { "lsp", "path", "snippets", "buffer" },
+      default = vim.env.IS_SSH ~= "1" and { "lsp", "path", "snippets", "buffer", "copilot", "ripgrep", "dadbod" }
+        or { "lsp", "path", "snippets", "buffer", "dadbod" },
       -- default = { "lsp", "path", "snippets", "buffer", "ripgrep" },
       -- default = { "lsp", "path", "snippets", "buffer", "copilot" },
       -- min_keyword_length = function(ctx)
@@ -232,6 +232,10 @@ return {
           score_offset = 100,
           async = true,
         } or nil,
+        dadbod = {
+          name = "Dadbod",
+          module = "blink.compat.source",
+        },
         -- avante_commands = {
         --     name = "avante_commands",
         --     module = "blink.compat.source",
