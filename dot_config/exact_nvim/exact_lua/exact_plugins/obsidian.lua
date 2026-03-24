@@ -75,6 +75,25 @@ local function obsidian_path_excluded(fname)
   return false
 end
 
+local function refresh_snacks_inline_images(bufnr, enabled)
+  local ok, image = pcall(require, "snacks.image")
+  if not ok then
+    return false
+  end
+
+  image.config.doc.inline = enabled
+  image.placement.clean(bufnr)
+  pcall(vim.api.nvim_del_augroup_by_name, "snacks.image.inline." .. bufnr)
+  pcall(vim.api.nvim_del_augroup_by_name, "snacks.image.doc." .. bufnr)
+  vim.b[bufnr].snacks_image_attached = false
+
+  if enabled then
+    image.doc.attach(bufnr)
+  end
+
+  return true
+end
+
 return {
   "obsidian-nvim/obsidian.nvim",
   version = "*", -- recommended, use latest release instead of latest commit
@@ -461,6 +480,25 @@ return {
         vim.keymap.set("n", "<leader>ch", function()
           return require("obsidian").util.toggle_checkbox()
         end, { buffer = true, desc = "Toggle checkbox" })
+
+        -- <leader>oh to toggle inline images with Snacks/which-key state
+        if Snacks and Snacks.toggle then
+          local toggle = Snacks.toggle.get("obsidian_inline_images")
+          if not toggle then
+            toggle = Snacks.toggle({
+              id = "obsidian_inline_images",
+              name = "Inline Images",
+              get = function()
+                local ok, image = pcall(require, "snacks.image")
+                return ok and image.config.doc.inline ~= false
+              end,
+              set = function(state)
+                refresh_snacks_inline_images(vim.api.nvim_get_current_buf(), state)
+              end,
+            })
+          end
+          toggle:map("<leader>oh", { buffer = true })
+        end
 
         -- <cr> for smart action
         vim.keymap.set("n", "<cr>", function()
