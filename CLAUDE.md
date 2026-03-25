@@ -34,3 +34,5 @@
 ## Recent Changes
 
 - 001-comprehensive-docs: Added Markdown (GitHub-flavored), Mermaid for diagrams + Documentation tools (markdown linters: markdownlint-cli), diagram generation (mermaid-cli for pre-rendering diagrams), repository analysis tools (tree, ripgrep for codebase surveying)
+
+@AGENTS_BEADS.md

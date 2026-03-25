@@ -1,7 +1,7 @@
 {
   "database": "dolt",
-  "jsonl_export": "issues.jsonl",
   "backend": "dolt",
   "dolt_mode": "server",
-  "dolt_database": "beads_chezmoi"
+  "dolt_database": "chezmoi",
+  "project_id": "cab8b1e0-d2df-4d3f-ab50-34ed12bd2490"
 }

@@ -5,8 +5,14 @@ vim.opt_local.formatoptions:remove("o")
 -- -- Auto-insert a real newline when typing past 120 chars
 -- vim.opt_local.textwidth = 120
 -- vim.opt_local.formatoptions:append("t")
--- Don't wrap so we get nice code blocks from markview.nvim
-vim.opt_local.wrap = false
+-- Default wrap to off for markdown, but preserve the user's last wrap toggle
+-- for this buffer during the current Neovim session.
+local ok, wrap = pcall(vim.api.nvim_buf_get_var, 0, "buffer_wrap_persist")
+if not ok then
+  wrap = false
+  vim.api.nvim_buf_set_var(0, "buffer_wrap_persist", wrap)
+end
+vim.opt_local.wrap = wrap
 -- Folding suggested for obsidian.nvim: https://github.com/obsidian-nvim/obsidian.nvim/wiki/Folding
 vim.wo.foldexpr = "v:lua.vim.treesitter.foldexpr()"
 vim.wo.foldmethod = "expr"

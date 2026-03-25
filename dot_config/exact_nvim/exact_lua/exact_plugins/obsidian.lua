@@ -75,17 +75,63 @@ local function obsidian_path_excluded(fname)
   return false
 end
 
+local function close_snacks_inline_images(bufnr)
+  local ok, image = pcall(require, "snacks.image")
+  if not ok then
+    return false
+  end
+
+  image.placement.clean(bufnr)
+  pcall(vim.api.nvim_del_augroup_by_name, "snacks.image.inline." .. bufnr)
+  pcall(vim.api.nvim_del_augroup_by_name, "snacks.image.doc." .. bufnr)
+  vim.b[bufnr].snacks_image_attached = false
+
+  return true
+end
+
+local function ensure_snacks_inline_image_patch()
+  local ok_inline, inline = pcall(require, "snacks.image.inline")
+  if ok_inline and not inline._obsidian_inline_toggle_patch then
+    local original_update = inline.update
+    inline.update = function(self)
+      if vim.b[self.buf].obsidian_inline_images_enabled == false then
+        for id, img in pairs(self.imgs) do
+          img:close()
+          self.imgs[id] = nil
+        end
+        self.idx = {}
+        return
+      end
+
+      return original_update(self)
+    end
+    inline._obsidian_inline_toggle_patch = true
+  end
+
+  local ok_doc, doc = pcall(require, "snacks.image.doc")
+  if ok_doc and not doc._obsidian_inline_toggle_patch then
+    local original_attach = doc._attach
+    doc._attach = function(buf)
+      if vim.b[buf].obsidian_inline_images_enabled == false then
+        close_snacks_inline_images(buf)
+        return
+      end
+
+      return original_attach(buf)
+    end
+    doc._obsidian_inline_toggle_patch = true
+  end
+end
+
 local function refresh_snacks_inline_images(bufnr, enabled)
   local ok, image = pcall(require, "snacks.image")
   if not ok then
     return false
   end
 
-  image.config.doc.inline = enabled
-  image.placement.clean(bufnr)
-  pcall(vim.api.nvim_del_augroup_by_name, "snacks.image.inline." .. bufnr)
-  pcall(vim.api.nvim_del_augroup_by_name, "snacks.image.doc." .. bufnr)
-  vim.b[bufnr].snacks_image_attached = false
+  vim.b[bufnr].obsidian_inline_images_enabled = enabled
+  ensure_snacks_inline_image_patch()
+  close_snacks_inline_images(bufnr)
 
   if enabled then
     image.doc.attach(bufnr)
@@ -489,8 +535,7 @@ return {
               id = "obsidian_inline_images",
               name = "Inline Images",
               get = function()
-                local ok, image = pcall(require, "snacks.image")
-                return ok and image.config.doc.inline ~= false
+                return vim.b[vim.api.nvim_get_current_buf()].obsidian_inline_images_enabled ~= false
               end,
               set = function(state)
                 refresh_snacks_inline_images(vim.api.nvim_get_current_buf(), state)

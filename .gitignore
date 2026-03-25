@@ -12,7 +12,26 @@ specs
 .perles
 .ralph-tui
 .gemini
-.beads
+# .beads
 .claude
 .codex
 firebase-debug.log
+
+# # Dolt database files (added by bd init)
+.dolt/
+*.db
+
+.beads/dolt*
+.beads/dolt-monitor.pid.lock
+.beads/push-state.json
+.beads/metadata.json
+.beads/locks
+.perles
+.beads-credential-key
+.runtime/
+
+# Gas Town (added by gt)
+# .claude/
+.logs/
+state.json
+

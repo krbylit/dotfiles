@@ -144,17 +144,24 @@ vim.api.nvim_create_autocmd("BufWinEnter", {
   end,
 })
 
--- Markdown: disable wrap in every window showing a markdown buffer.
--- `wrap` is window-local, so FileType autocmds only cover the initial window.
--- BufWinEnter fires for every window (splits, floats, etc.) and reliably
--- overrides the global `wrap = true` set in options.lua.
+-- `wrap` is window-local, so remember the current value per buffer and
+-- reapply it whenever that buffer is shown again in this Neovim session.
 vim.api.nvim_create_autocmd("BufWinEnter", {
   group = ft_ui_group,
-  pattern = "*.md",
-  callback = function()
-    vim.opt_local.wrap = false
+  callback = function(args)
+    local ok, wrap = pcall(vim.api.nvim_buf_get_var, args.buf, "buffer_wrap_persist")
+    if ok then
+      vim.opt_local.wrap = wrap
+    end
     -- vim.opt_local.cursorline = false
     -- vim.cmd("IlluminatePauseBuf")
+  end,
+})
+
+vim.api.nvim_create_autocmd({ "BufLeave", "WinLeave" }, {
+  group = ft_ui_group,
+  callback = function(args)
+    vim.api.nvim_buf_set_var(args.buf, "buffer_wrap_persist", vim.wo.wrap)
   end,
 })
 
