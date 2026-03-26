@@ -9,7 +9,7 @@ vim.opt_local.formatoptions:remove("o")
 -- for this buffer during the current Neovim session.
 local ok, wrap = pcall(vim.api.nvim_buf_get_var, 0, "buffer_wrap_persist")
 if not ok then
-  wrap = false
+  wrap = true
   vim.api.nvim_buf_set_var(0, "buffer_wrap_persist", wrap)
 end
 vim.opt_local.wrap = wrap

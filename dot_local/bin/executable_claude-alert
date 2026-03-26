@@ -4,6 +4,48 @@
 payload="$(cat)"
 title="$(printf '%s' "$payload" | jq -r '.title // "Claude Code"')"
 notification_type="$(printf '%s' "$payload" | jq -r '.notification_type // empty')"
+body="$(printf '%s' "$payload" | jq -r '.message // .body // .content // .subtitle // .text // empty')"
+
+normalize_one_line() {
+    printf '%s' "$1" | tr '\n' ' ' | sed -E 's/[[:space:]]+/ /g; s/^ //; s/ $//'
+}
+
+should_ignore_notification() {
+    local cwd body_one_line body_lc
+    cwd="${CLAUDE_ALERT_CWD:-$PWD}"
+    body_one_line="$(normalize_one_line "$body")"
+    body_lc="$(printf '%s' "$body_one_line" | tr '[:upper:]' '[:lower:]')"
+
+    case "$cwd" in
+    "$HOME/gt/deacon" | "$HOME/gt/deacon/dogs" | "$HOME/gt/deacon/dogs"/* | "$HOME/gt"/*/witness | "$HOME/gt"/*/refinery | "$HOME/gt/unknown")
+        return 0
+        ;;
+    esac
+
+    case "$body_lc" in
+    boot)
+        return 0
+        ;;
+    esac
+
+    if [[ -n "${CLAUDE_ALERT_IGNORE_BODY_REGEX:-}" ]] && [[ "$body_one_line" =~ ${CLAUDE_ALERT_IGNORE_BODY_REGEX} ]]; then
+        return 0
+    fi
+
+    if [[ -n "${CLAUDE_ALERT_IGNORE_TITLE_REGEX:-}" ]] && [[ "$title" =~ ${CLAUDE_ALERT_IGNORE_TITLE_REGEX} ]]; then
+        return 0
+    fi
+
+    if [[ -n "${CLAUDE_ALERT_IGNORE_CWD_REGEX:-}" ]] && [[ "$cwd" =~ ${CLAUDE_ALERT_IGNORE_CWD_REGEX} ]]; then
+        return 0
+    fi
+
+    return 1
+}
+
+if should_ignore_notification; then
+    exit 0
+fi
 
 case "$notification_type" in
 permission_prompt)
