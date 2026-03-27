@@ -796,8 +796,10 @@ return {
         local priority = priority_map[status_char] or "P2"
 
         -- Escape a string for use as gsub replacement (% is special)
+        -- Wrap in parens to discard gsub's second return value (count),
+        -- which otherwise leaks as the n parameter to the outer gsub.
         local function esc(s)
-          return s:gsub("%%", "%%%%")
+          return (s:gsub("%%", "%%%%"))
         end
 
         local content
