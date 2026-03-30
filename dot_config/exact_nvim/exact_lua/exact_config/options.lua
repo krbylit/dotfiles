@@ -116,6 +116,9 @@ vim.api.nvim_create_autocmd("ColorScheme", {
 })
 
 opt.mousehide = true -- Hide mouse cursor while typing
+if vim.uv.os_uname().sysname == "Linux" then
+  opt.mouse = "" -- Disable mouse support completely in on Linux
+end
 opt.winheight = 1 -- Minimum window height
 opt.winminheight = 1 -- Minimum window height
 opt.updatetime = 250 -- CursorHold event timing, LSP idle timing, diagnostics updates, etc.

@@ -9,6 +9,9 @@ vim.keymap.set({ "n", "t" }, "<leader>dd", function()
       height = 0,
       width = 0,
       border = "rounded",
+      keys = {
+        hide = { "<c-/>", function(self) self:hide() end, mode = "t", desc = "Toggle lazydocker closed" },
+      },
     },
     interactive = true,
     auto_close = true,

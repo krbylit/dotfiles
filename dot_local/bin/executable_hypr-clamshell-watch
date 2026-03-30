@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+"$HOME/.local/bin/hypr-clamshell-sync"
+
+if [[ -z "${HYPRLAND_INSTANCE_SIGNATURE:-}" ]] || ! command -v socat >/dev/null 2>&1; then
+  exit 0
+fi
+
+socket_path="${XDG_RUNTIME_DIR}/hypr/${HYPRLAND_INSTANCE_SIGNATURE}/.socket2.sock"
+
+if [[ ! -S "${socket_path}" ]]; then
+  exit 0
+fi
+
+socat -u "UNIX-CONNECT:${socket_path}" - | while IFS= read -r event; do
+  case "${event}" in
+    monitoradded*|monitorremoved*)
+      "$HOME/.local/bin/hypr-clamshell-sync"
+      ;;
+  esac
+done

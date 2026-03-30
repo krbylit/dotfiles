@@ -19,9 +19,13 @@ scripts
 .config/skhd
 .config/yabai
 .hammerspoon
+Library
+Applications
 {{ end }}
 
 {{ if ne .chezmoi.os "linux" }}
 # Linux-only configs — ignore on macOS
 .config/hypr
+.config/waybar
+.config/kanata
 {{ end }}

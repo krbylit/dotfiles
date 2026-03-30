@@ -31,7 +31,7 @@ jobs:
 
     steps:
       - name: Checkout Public Main Branch
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           ref: main # Fetch only the main branch
           token: ${{ secrets.GH_PAT }}

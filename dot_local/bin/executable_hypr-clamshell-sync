@@ -1,0 +1,47 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+if ! command -v hyprctl >/dev/null 2>&1 || ! command -v jq >/dev/null 2>&1; then
+  exit 0
+fi
+
+read_lid_state() {
+  local lid_state_file
+  lid_state_file="$(find /proc/acpi/button/lid -mindepth 2 -maxdepth 2 -name state 2>/dev/null | head -n1 || true)"
+
+  if [[ -z "${lid_state_file}" ]]; then
+    return 1
+  fi
+
+  awk '{print tolower($2)}' "${lid_state_file}"
+}
+
+all_monitors_json="$(hyprctl -j monitors all 2>/dev/null || hyprctl -j monitors 2>/dev/null || printf '[]')"
+active_monitors_json="$(hyprctl -j monitors 2>/dev/null || printf '[]')"
+
+internal_monitor="$(
+  jq -r '.[] | select(.name | test("^eDP(-[0-9]+)?$")) | .name' <<<"${all_monitors_json}" | head -n1
+)"
+
+if [[ -z "${internal_monitor}" ]]; then
+  exit 0
+fi
+
+if ! lid_state="$(read_lid_state)"; then
+  exit 0
+fi
+
+external_active_count="$(
+  jq --arg internal "${internal_monitor}" '[.[] | select(.name != $internal)] | length' <<<"${active_monitors_json}"
+)"
+
+internal_active="$(
+  jq --arg internal "${internal_monitor}" 'any(.[]; .name == $internal)' <<<"${active_monitors_json}"
+)"
+
+if [[ "${lid_state}" == "closed" && "${external_active_count}" -gt 0 && "${internal_active}" == "true" ]]; then
+  hyprctl keyword monitor "${internal_monitor}, disable" >/dev/null
+elif [[ "${internal_active}" != "true" ]]; then
+  hyprctl keyword monitor "${internal_monitor}, preferred, auto, 2" >/dev/null
+fi

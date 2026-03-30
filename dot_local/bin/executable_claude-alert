@@ -1,6 +1,12 @@
 #!/usr/bin/env bash
 # ~/.local/bin/claude-alert
 
+# Only run on macOS for now
+# FIX: linux alerts never close automatically, must be clicked
+if [[ "$(uname)" != "Darwin" ]]; then
+    exit 0
+fi
+
 payload="$(cat)"
 title="$(printf '%s' "$payload" | jq -r '.title // "Claude Code"')"
 notification_type="$(printf '%s' "$payload" | jq -r '.notification_type // empty')"

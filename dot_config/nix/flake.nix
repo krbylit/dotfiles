@@ -151,6 +151,9 @@
               # ── Clipboard ─────────────────────────────────────────────
               xclip # X11 clipboard (also works under Xwayland)
 
+              # ── Input Remapping ─────────────────────────────────────────
+              kanata # keyboard remapper (Linux equivalent of Karabiner)
+
               # ── Misc CLI ──────────────────────────────────────────────
               chezmoi
               aichat # LLM CLI

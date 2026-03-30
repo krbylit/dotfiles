@@ -584,7 +584,7 @@ return {
         end
 
         -- Use the daily note function with offset
-        local note = require("obsidian.daily").daily(days_until_monday, {})
+        local note = require("obsidian.daily").daily({ offset = days_until_monday })
         note:open()
       end,
     })

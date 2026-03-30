@@ -1,5 +1,5 @@
 // Block-style cursor smear - cell-snapped trail with inverted background colors
-// Physics derived from smear-cursor.nvim (overdamped spring)
+// Physics derived from smear-cursor.nvim (overdamped spring): https://github.com/sphamba/smear-cursor.nvim
 //
 // ══════════════════════════════════════════════════════════════════════
 // PARAMETERS — adjust these to tune the smear behavior

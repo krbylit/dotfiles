@@ -8,4 +8,6 @@ packages = [
     { name = "tuios", path = "github.com/Gaurav-Gosain/tuios/cmd/tuios" },
     { name = "stormy", path = "github.com/ashish0kumar/stormy" },
     { name = "ziina", path = "github.com/ziinaio/zmate" },
+    { name = "gitslice", path = "github.com/05sanjaykumar/gitslice@latest" },
+
 ]

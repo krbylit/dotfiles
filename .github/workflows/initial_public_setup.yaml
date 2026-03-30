@@ -28,9 +28,10 @@ jobs:
 
     steps:
       - name: Checkout Public Repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 1
+          token: ${{ secrets.GH_PAT }}
 
       - name: Setup Git
         run: |

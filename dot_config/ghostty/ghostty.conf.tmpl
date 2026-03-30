@@ -18,7 +18,9 @@ theme = tokyonight_moon
 
 # custom-shader = shaders/cursor/cursor_smear_fade.glsl
 # custom-shader = shaders/cursor/cursor_smear.glsl
+
 custom-shader = shaders/cursor/smear_cursor_blocks.glsl
+# custom-shader = shaders/water-color/variegated-wash-bg.glsl
 # custom-shader = shaders/cursor/cursor_frozen.glsl
 # custom-shader = shaders/cursor/cursor_blaze.glsl
 # custom-shader = shaders/retro-terminal.glsl
@@ -67,7 +69,15 @@ font-family-bold-italic = "Departure Mono Phosphor Fill Updated"
 window-title-font-family = "Departure Mono Phosphor Fill"
 # 16.5pt = 33px on retina display = multiple of 11 recommended by Departure docs for pixel-perfect rendering
 # Other pixel-perfect option is 11pt
+{{- if eq .chezmoi.os "darwin" }}
 font-size = 16.5
+{{- else if eq .chezmoi.os "linux" }}
+# 8.25 pixel perfect on AW monitor at 2x scale
+# 12.375 pixel perfect on AW monitor at 2x scale
+font-size = 12.375
+# 24.75 pixel perfect on AW monitor at 1x scale
+# font-size = 24.75
+{{- end }}
 font-style = "Regular"
 font-style-bold = "Regular"
 font-style-italic = "Regular"
@@ -175,7 +185,7 @@ desktop-notifications = true
 mouse-hide-while-typing = true
 selection-invert-fg-bg = true
 cursor-invert-fg-bg = true
-cursor-style = bar
+cursor-style = block
 cursor-style-blink = true
 adjust-cursor-thickness = 2
 adjust-box-thickness =
@@ -183,8 +193,8 @@ adjust-underline-thickness = 1
 
 # unfocused-split-opacity = 0.9
 # unfocused-split-fill = "#f7768e"
-background-blur-radius = 80
-background-opacity = .9
+# background-blur-radius = 80
+# background-opacity = .9
 
 window-new-tab-position = end
 window-padding-balance = true
@@ -194,11 +204,17 @@ window-width = 120
 
 quick-terminal-position = top
 quick-terminal-size = 75%,75%
-# quick-terminal-screen = main
+{{- if eq .chezmoi.os "darwin" }}
 quick-terminal-screen = mouse
 # quick-terminal-screen = macos-menu-bar
-quick-terminal-animation-duration = 0.1
 quick-terminal-autohide = false
+{{- else if eq .chezmoi.os "linux" }}
+quick-terminal-screen = main
+quick-terminal-autohide = false
+gtk-quick-terminal-layer = overlay
+# gtk-quick-terminal-namespace =
+{{- end }}
+quick-terminal-animation-duration = 0.1
 quick-terminal-space-behavior = move
 
 # official, blueprint, chalkboard, microchip, glass, holographic, paper, retro, xray, custom-style
