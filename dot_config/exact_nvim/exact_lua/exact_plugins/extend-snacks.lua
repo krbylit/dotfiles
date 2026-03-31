@@ -67,6 +67,20 @@ local terminal_toys_cmds = {
 local random_terminal_toys_cmd = terminal_toys_cmds[math.random(#terminal_toys_cmds)]
 
 local picker = require("snacks.picker")
+local root_terminal
+
+local function toggle_root_terminal()
+  local cwd = LazyVim.root()
+
+  if root_terminal and root_terminal:buf_valid() then
+    root_terminal:toggle()
+    return
+  end
+
+  root_terminal = Snacks.terminal.open(nil, {
+    cwd = cwd,
+  })
+end
 
 ---@diagnostic disable: missing-fields
 return {
@@ -825,6 +839,18 @@ return {
     },
   },
   keys = {
+    {
+      "<c-/>",
+      toggle_root_terminal,
+      mode = { "n", "t" },
+      desc = "Terminal (Root Dir)",
+    },
+    {
+      "<c-_>",
+      toggle_root_terminal,
+      mode = { "n", "t" },
+      desc = "which_key_ignore",
+    },
     {
       "<leader><space>",
       function()
