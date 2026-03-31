@@ -4,6 +4,7 @@ end
 
 return {
   "bajor/nvim-raccoon",
+  enabled = false,
   dependencies = { "nvim-lua/plenary.nvim" },
   config = function()
     require("raccoon").setup()

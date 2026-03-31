@@ -1,0 +1,75 @@
+;; Kanata keyboard remapper configuration
+;; Linux equivalent of Karabiner-Elements (macOS)
+;; Profile: HHKB (vendor_id: 1278, product_id: 33)
+;;
+;; Modifier philosophy (matches macOS skhd/Karabiner setup):
+;;   Alt       = Window management primary modifier (Hyprland)
+;;   Super     = App launching / utilities
+;;   Ctrl      = Terminal / standard shortcuts
+;;   Right Alt = Navigation layer (hjkl → arrows)
+
+(defcfg
+  ;; Let keys not listed in defsrc pass through normally
+  process-unmapped-keys yes
+  ;; Milliseconds of inactivity before tap-hold decides "hold"
+  ;; danger-enable-cmd yes  ;; uncomment if shell commands are needed in mappings
+)
+
+;; Only keys we're remapping — everything else passes through
+(defsrc
+  lctl  ralt  h  j  k  l
+)
+
+(defalias
+  ;; ── HHKB: Left Control (physical caps lock position) ──────────
+  ;; Tap → Escape | Hold → Control
+  ;; This is the single most important remap for vim workflow.
+  ;; Mirrors Karabiner rule: "Ctrl to Esc and Ctrl (HHKB)"
+  lctl-esc (tap-hold 200 200 esc lctl)
+
+  ;; ── Right Alt → Navigation layer ──────────────────────────────
+  ;; Hold Right Alt + hjkl → arrow keys (system-wide)
+  ;; Mirrors Karabiner rule: "Right Option + hjkl → arrows (terminal)"
+  ;; Also provides Shift+arrows for text selection: RAlt+Shift+hjkl
+  ;; Note: Consumes Right Alt as a modifier. Use Left Alt for Alt+key combos.
+  nav (layer-toggle navigation)
+)
+
+(deflayer default
+  @lctl-esc  @nav  h  j  k  l
+)
+
+;; Navigation layer: hjkl → arrow keys
+;; Shift passthrough works naturally — RAlt+Shift+H = Shift+Left (text selection)
+;; Ctrl passthrough also works — RAlt+Ctrl+H = Ctrl+Left (word navigation)
+(deflayer navigation
+  _  _  left  down  up  right
+)
+
+;; ── NOTES ──────────────────────────────────────────────────────
+;;
+;; Karabiner features NOT ported (and why):
+;;
+;; 1. Ctrl+hjkl → arrows (non-terminal apps only)
+;;    Reason: Kanata can't distinguish apps. Would break Ctrl+H (backspace),
+;;    Ctrl+J (newline), Ctrl+L (clear) in terminal. Use RAlt+hjkl instead.
+;;
+;; 2. Ctrl+W → delete previous word (non-Ghostty)
+;;    Reason: Would break Ctrl+W (close tab) in browsers/GUI apps on Linux.
+;;    Terminal already has Ctrl+W for word deletion.
+;;
+;; 3. Alt+F → Cmd+Tab / Alt+S → Cmd+Shift+Tab (app switcher)
+;;    Reason: On Linux, Alt+Tab is native. Hyprland keybindings handle this.
+;;    Alt+F and Alt+S are used for Hyprland layout switching instead.
+;;
+;; 4. Cmd+Q double-tap, Cmd+H disable
+;;    Reason: macOS-specific behaviors that don't exist on Linux.
+;;
+;; 5. Double-tap Right Shift → Caps Lock
+;;    Reason: Kanata's tap-dance adds latency to ALL Right Shift usage
+;;    (including Shift+letter for capitals). Trade-off not worth it.
+;;    Alternative: Use Super+CapsLock or a Hyprland keybind if needed.
+;;
+;; 6. Ctrl→Alt / CapsLock→Ctrl/Esc (Mac keyboard profile)
+;;    Reason: Only needed for Mac's built-in keyboard. HHKB already has
+;;    Control in the correct position (where Caps Lock is on standard KBs).

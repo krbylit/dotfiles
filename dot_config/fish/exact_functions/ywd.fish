@@ -1,4 +1,3 @@
-function ywd --wraps='pwd | pbcopy' --description 'alias ywd pwd | pbcopy'
-    pwd | pbcopy $argv
-
+function ywd --description 'Copy working directory to clipboard'
+    pwd | __clipboard_copy
 end

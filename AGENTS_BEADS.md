@@ -7,12 +7,36 @@ This project uses **bd** (beads) for issue tracking. Run `bd onboard` to get sta
 ```bash
 bd ready              # Find available work
 bd show <id>          # View issue details
-bd update <id> --status in_progress  # Claim work
+bd update <id> --claim  # Claim work atomically
 bd close <id>         # Complete work
-bd sync               # Sync with git
+bd dolt push          # Push beads data to remote
 ```
 
-<!-- BEGIN BEADS INTEGRATION -->
+## Non-Interactive Shell Commands
+
+**ALWAYS use non-interactive flags** with file operations to avoid hanging on confirmation prompts.
+
+Shell commands like `cp`, `mv`, and `rm` may be aliased to include `-i` (interactive) mode on some systems, causing the agent to hang indefinitely waiting for y/n input.
+
+**Use these forms instead:**
+```bash
+# Force overwrite without prompting
+cp -f source dest           # NOT: cp source dest
+mv -f source dest           # NOT: mv source dest
+rm -f file                  # NOT: rm file
+
+# For recursive operations
+rm -rf directory            # NOT: rm -r directory
+cp -rf source dest          # NOT: cp -r source dest
+```
+
+**Other commands that may prompt:**
+- `scp` - use `-o BatchMode=yes` for non-interactive
+- `ssh` - use `-o BatchMode=yes` to fail instead of prompting
+- `apt-get` - use `-y` flag
+- `brew` - use `HOMEBREW_NO_AUTO_UPDATE=1` env var
+
+<!-- BEGIN BEADS INTEGRATION profile:full hash:d4f96305 -->
 ## Issue Tracking with bd (beads)
 
 **IMPORTANT**: This project uses **bd (beads)** for ALL issue tracking. Do NOT use markdown TODOs, task lists, or other tracking methods.
@@ -20,7 +44,7 @@ bd sync               # Sync with git
 ### Why bd?
 
 - Dependency-aware: Track blockers and relationships between issues
-- Git-friendly: Auto-syncs to JSONL for version control
+- Git-friendly: Dolt-powered version control with native sync
 - Agent-optimized: JSON output, ready work detection, discovered-from links
 - Prevents duplicate tracking systems and confusion
 
@@ -42,7 +66,7 @@ bd create "Issue title" --description="What this issue is about" -p 1 --deps dis
 **Claim and update:**
 
 ```bash
-bd update bd-42 --status in_progress --json
+bd update <id> --claim --json
 bd update bd-42 --priority 1 --json
 ```
 
@@ -71,7 +95,7 @@ bd close bd-42 --reason "Completed" --json
 ### Workflow for AI Agents
 
 1. **Check ready work**: `bd ready` shows unblocked issues
-2. **Claim your task**: `bd update <id> --status in_progress`
+2. **Claim your task atomically**: `bd update <id> --claim`
 3. **Work on it**: Implement, test, document
 4. **Discover new work?** Create linked issue:
    - `bd create "Found bug" --description="Details about what was found" -p 1 --deps discovered-from:<parent-id>`
@@ -79,10 +103,10 @@ bd close bd-42 --reason "Completed" --json
 
 ### Auto-Sync
 
-bd automatically syncs with git:
+bd automatically syncs via Dolt:
 
-- Exports to `.beads/issues.jsonl` after changes (5s debounce)
-- Imports from JSONL when newer (e.g., after `git pull`)
+- Each write auto-commits to Dolt history
+- Use `bd dolt push`/`bd dolt pull` for remote sync
 - No manual export/import needed!
 
 ### Important Rules
@@ -97,8 +121,6 @@ bd automatically syncs with git:
 
 For more details, see README.md and docs/QUICKSTART.md.
 
-<!-- END BEADS INTEGRATION -->
-
 ## Landing the Plane (Session Completion)
 
 **When ending a work session**, you MUST complete ALL steps below. Work is NOT complete until `git push` succeeds.
@@ -111,7 +133,7 @@ For more details, see README.md and docs/QUICKSTART.md.
 4. **PUSH TO REMOTE** - This is MANDATORY:
    ```bash
    git pull --rebase
-   bd sync
+   bd dolt push
    git push
    git status  # MUST show "up to date with origin"
    ```
@@ -124,3 +146,5 @@ For more details, see README.md and docs/QUICKSTART.md.
 - NEVER stop before pushing - that leaves work stranded locally
 - NEVER say "ready to push when you are" - YOU must push
 - If push fails, resolve and retry until it succeeds
+
+<!-- END BEADS INTEGRATION -->

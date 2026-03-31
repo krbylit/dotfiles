@@ -5,8 +5,13 @@ local opt = vim.opt
 vim.api.nvim_set_hl(0, "WinSeparator", { fg = "#ed8796", bg = "" })
 
 -- Global options for VS Code and console use
-vim.env.PATH = "/opt/homebrew/bin:" .. (vim.env.PATH or "")
-vim.g.python3_host_prog = "/opt/homebrew/bin/python3"
+-- Add Homebrew to PATH (platform-specific location)
+local homebrew_prefix = vim.fn.has("mac") == 1 and "/opt/homebrew" or "/home/linuxbrew/.linuxbrew"
+if vim.fn.isdirectory(homebrew_prefix) == 1 then
+  vim.env.PATH = homebrew_prefix .. "/bin:" .. (vim.env.PATH or "")
+end
+-- Find python3 dynamically
+vim.g.python3_host_prog = vim.fn.exepath("python3")
 vim.g.mapleader = "," -- Set leader key to comma
 vim.api.nvim_set_keymap("", " ", "<Nop>", { noremap = true, silent = true })
 vim.g.maplocalleader = " "
@@ -87,7 +92,33 @@ opt.wrapmargin = 0
 opt.textwidth = 0
 -- opt.showbreak = "	" -- Show a symbol for a line break
 -- opt.textwidth = 80 -- Maximum width of text. Actually changes text in the buffer NOTE: disabling because it causes messes
+-- Cursor: always block, blinks in insert mode, color changes per mode.
+-- Per-mode highlight groups let the TUI emit OSC 12 natively — no manual
+-- escape sequences needed. Neovim also resets on exit automatically.
+opt.guicursor = table.concat({
+  "n-c-sm:block-Cursor",
+  "i-ci:block-iCursor-blinkon500-blinkoff500-blinkwait700",
+  "v-V:block-vCursor",
+  "r-cr:block-rCursor",
+  "o:block-oCursor",
+}, ",")
+
+-- Per-mode cursor highlight colors (tokyonight night palette)
+vim.api.nvim_create_autocmd("ColorScheme", {
+  group = vim.api.nvim_create_augroup("CursorModeColors", { clear = true }),
+  callback = function()
+    vim.api.nvim_set_hl(0, "Cursor", { reverse = true }) -- invert under cursor (normal)
+    vim.api.nvim_set_hl(0, "iCursor", { bg = "#1abc9c" }) -- teal (insert)
+    vim.api.nvim_set_hl(0, "vCursor", { bg = "#bb9af7" }) -- magenta (visual)
+    vim.api.nvim_set_hl(0, "rCursor", { bg = "#ff007c" }) -- magenta2 (replace)
+    vim.api.nvim_set_hl(0, "oCursor", { bg = "#ff9e64" }) -- orange (operator)
+  end,
+})
+
 opt.mousehide = true -- Hide mouse cursor while typing
+if vim.uv.os_uname().sysname == "Linux" then
+  opt.mouse = "" -- Disable mouse support completely in on Linux
+end
 opt.winheight = 1 -- Minimum window height
 opt.winminheight = 1 -- Minimum window height
 opt.updatetime = 250 -- CursorHold event timing, LSP idle timing, diagnostics updates, etc.
@@ -102,7 +133,7 @@ end
 -- We don't set vim.g.clipboard because Zellij doesn't support OSC 52 paste,
 -- which breaks normal yank/paste. Instead, we fire OSC 52 copy as a side-effect
 -- on yank, keeping Neovim's internal registers fully functional.
-if vim.env.IS_SSH == "1" then
+if vim.env.IS_SSH == "1" or vim.env.HOMELAB == "1" then
   local osc52_copy = require("vim.ui.clipboard.osc52").copy("+")
   vim.api.nvim_create_autocmd("TextYankPost", {
     group = vim.api.nvim_create_augroup("OSC52Yank", { clear = true }),

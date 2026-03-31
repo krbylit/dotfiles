@@ -75,10 +75,84 @@ local function obsidian_path_excluded(fname)
   return false
 end
 
+local function close_snacks_inline_images(bufnr)
+  local ok, image = pcall(require, "snacks.image")
+  if not ok then
+    return false
+  end
+
+  image.placement.clean(bufnr)
+  pcall(vim.api.nvim_del_augroup_by_name, "snacks.image.inline." .. bufnr)
+  pcall(vim.api.nvim_del_augroup_by_name, "snacks.image.doc." .. bufnr)
+  vim.b[bufnr].snacks_image_attached = false
+
+  return true
+end
+
+local function ensure_snacks_inline_image_patch()
+  local ok_inline, inline = pcall(require, "snacks.image.inline")
+  if ok_inline and not inline._obsidian_inline_toggle_patch then
+    local original_update = inline.update
+    inline.update = function(self)
+      if vim.b[self.buf].obsidian_inline_images_enabled == false then
+        for id, img in pairs(self.imgs) do
+          img:close()
+          self.imgs[id] = nil
+        end
+        self.idx = {}
+        return
+      end
+
+      return original_update(self)
+    end
+    inline._obsidian_inline_toggle_patch = true
+  end
+
+  local ok_doc, doc = pcall(require, "snacks.image.doc")
+  if ok_doc and not doc._obsidian_inline_toggle_patch then
+    local original_attach = doc._attach
+    doc._attach = function(buf)
+      if vim.b[buf].obsidian_inline_images_enabled == false then
+        close_snacks_inline_images(buf)
+        return
+      end
+
+      return original_attach(buf)
+    end
+    doc._obsidian_inline_toggle_patch = true
+  end
+end
+
+local function refresh_snacks_inline_images(bufnr, enabled)
+  local ok, image = pcall(require, "snacks.image")
+  if not ok then
+    return false
+  end
+
+  vim.b[bufnr].obsidian_inline_images_enabled = enabled
+  ensure_snacks_inline_image_patch()
+  close_snacks_inline_images(bufnr)
+
+  if enabled then
+    image.doc.attach(bufnr)
+  end
+
+  return true
+end
+
 return {
   "obsidian-nvim/obsidian.nvim",
   version = "*", -- recommended, use latest release instead of latest commit
   lazy = false,
+  enabled = function()
+    local path = vim.fn.expand("~/obsidian-vault")
+    local stat = vim.uv.fs_stat(path)
+    if stat and stat.type == "directory" then
+      return true
+    else
+      return false
+    end
+  end,
   -- ft = "markdown",
   -- Replace the above line with this if you only want to load obsidian.nvim for markdown files in your vault:
   -- event = {
@@ -332,7 +406,7 @@ return {
 
     -- wiki_link_func = require("obsidian.builtin").wiki_link_id_prefix,
     -- markdown_link_func = require("obsidian.builtin").markdown_link,
-    preferred_link_style = "wiki",
+    link = { style = "wiki" },
     ---@type obsidian.config.CommentOpts
     comment = {
       enabled = true,
@@ -453,6 +527,24 @@ return {
           return require("obsidian").util.toggle_checkbox()
         end, { buffer = true, desc = "Toggle checkbox" })
 
+        -- <leader>oh to toggle inline images with Snacks/which-key state
+        if Snacks and Snacks.toggle then
+          local toggle = Snacks.toggle.get("obsidian_inline_images")
+          if not toggle then
+            toggle = Snacks.toggle({
+              id = "obsidian_inline_images",
+              name = "Inline Images",
+              get = function()
+                return vim.b[vim.api.nvim_get_current_buf()].obsidian_inline_images_enabled ~= false
+              end,
+              set = function(state)
+                refresh_snacks_inline_images(vim.api.nvim_get_current_buf(), state)
+              end,
+            })
+          end
+          toggle:map("<leader>oh", { buffer = true })
+        end
+
         -- <cr> for smart action
         vim.keymap.set("n", "<cr>", function()
           return require("obsidian").util.smart_action()
@@ -492,7 +584,7 @@ return {
         end
 
         -- Use the daily note function with offset
-        local note = require("obsidian.daily").daily(days_until_monday, {})
+        local note = require("obsidian.daily").daily({ offset = days_until_monday })
         note:open()
       end,
     })
@@ -691,15 +783,23 @@ return {
 
         -- Map status to priority
         local priority_map = {
-          ["!"] = "P0", ["*"] = "P1", ["/"] = "P1",
-          ["f"] = "P2", [" "] = "P2", ["S"] = "P2",
-          ["w"] = "P3", ["l"] = "P3", [">"] = "P4",
+          ["!"] = "P0",
+          ["*"] = "P1",
+          ["/"] = "P1",
+          ["f"] = "P2",
+          [" "] = "P2",
+          ["S"] = "P2",
+          ["w"] = "P3",
+          ["l"] = "P3",
+          [">"] = "P4",
         }
         local priority = priority_map[status_char] or "P2"
 
         -- Escape a string for use as gsub replacement (% is special)
+        -- Wrap in parens to discard gsub's second return value (count),
+        -- which otherwise leaks as the n parameter to the outer gsub.
         local function esc(s)
-          return s:gsub("%%", "%%%%")
+          return (s:gsub("%%", "%%%%"))
         end
 
         local content

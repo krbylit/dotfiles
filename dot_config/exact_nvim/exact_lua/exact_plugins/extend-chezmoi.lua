@@ -20,6 +20,8 @@ return {
   },
   config = function(_, opts)
     local ext_opts = {
+      -- NOTE: may help chezmoi hanging at times
+      -- extra_args = { "--no-tty" },
       edit = {
         watch = false,
         force = false,

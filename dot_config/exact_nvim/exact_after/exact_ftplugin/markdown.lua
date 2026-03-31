@@ -5,8 +5,14 @@ vim.opt_local.formatoptions:remove("o")
 -- -- Auto-insert a real newline when typing past 120 chars
 -- vim.opt_local.textwidth = 120
 -- vim.opt_local.formatoptions:append("t")
--- Don't wrap so we get nice code blocks from markview.nvim
-vim.opt_local.wrap = false
+-- Default wrap to off for markdown, but preserve the user's last wrap toggle
+-- for this buffer during the current Neovim session.
+local ok, wrap = pcall(vim.api.nvim_buf_get_var, 0, "buffer_wrap_persist")
+if not ok then
+  wrap = true
+  vim.api.nvim_buf_set_var(0, "buffer_wrap_persist", wrap)
+end
+vim.opt_local.wrap = wrap
 -- Folding suggested for obsidian.nvim: https://github.com/obsidian-nvim/obsidian.nvim/wiki/Folding
 vim.wo.foldexpr = "v:lua.vim.treesitter.foldexpr()"
 vim.wo.foldmethod = "expr"
@@ -163,62 +169,87 @@ local function insert_heading(mode)
   vim.cmd("startinsert!")
 end
 
+local function jump_heading(flags)
+  local views = vim.fn.winsaveview()
+  local found = vim.fn.search("^#\\+\\s", flags)
+  if found == 0 then
+    vim.fn.winrestview(views)
+  end
+end
+
 -- List continuation on Enter in insert mode.
 -- Supports: bullet (- / * / +), todo (- [ ] ), numbered (1.)
--- On an empty list item, pressing Enter exits list mode instead.
-local cr = vim.api.nvim_replace_termcodes("<CR>", true, false, true)
-
+-- On an empty list item, pressing Enter removes the marker and leaves a blank line.
+-- Uses direct buffer manipulation instead of feedkeys for reliability.
 local function markdown_enter()
+  local row = vim.fn.line(".") - 1 -- 0-indexed
+  local col = vim.fn.col(".") - 1 -- 0-indexed byte position
   local line = vim.api.nvim_get_current_line()
-
-  -- Capture optional leading indent
+  local before_cursor = line:sub(1, col)
+  local after_cursor = line:sub(col + 1)
   local indent = line:match("^(%s*)") or ""
 
-  -- TODO list item: - [ ] or * [ ] or + [ ]
-  -- Must be checked before generic bullet to catch the checkbox syntax
-  local todo_match = line:match("^%s*[%-%*%+]%s%[.-%]%s")
-  if todo_match then
-    local content = line:match("^%s*[%-%*%+]%s%[.-%]%s(.*)$") or ""
-    if content == "" then
-      -- Empty item: clear marker and exit list mode
-      vim.api.nvim_set_current_line(indent)
-      return cr
-    end
-    return cr .. "- [ ] "
+  -- Split line at cursor: truncate current line, insert new line below with prefix
+  local function continue_list(prefix)
+    vim.api.nvim_buf_set_text(0, row, col, row, #line, {})
+    local new_line = prefix .. after_cursor
+    vim.api.nvim_buf_set_lines(0, row + 1, row + 1, false, { new_line })
+    vim.api.nvim_win_set_cursor(0, { row + 2, #prefix })
   end
 
-  -- Bullet list item: - / * / +
-  local bullet_match = line:match("^%s*[%-%*%+]%s")
-  if bullet_match then
-    local marker = line:match("^%s*([%-%*%+])")
-    local content = line:match("^%s*[%-%*%+]%s(.*)$") or ""
-    if content == "" then
-      vim.api.nvim_set_current_line(indent)
-      return cr
-    end
-    return cr .. marker .. " "
+  -- Empty list item: replace line with just indent
+  local function clear_marker()
+    vim.api.nvim_set_current_line(indent)
+    vim.api.nvim_win_set_cursor(0, { row + 1, #indent })
   end
 
-  -- Numbered list item: 1. or 1)
-  local num, sep = line:match("^%s*(%d+)([%.%)]%s)")
+  -- 1. TODO list item: - [ ] or * [ ] or + [ ] etc.
+  local todo_full = before_cursor:match("^%s*[%-%*%+]%s%[[^%]]*%]%s?")
+  if todo_full then
+    local content_after_marker = before_cursor:sub(#todo_full + 1)
+    if content_after_marker:match("^%s*$") and after_cursor:match("^%s*$") then
+      clear_marker()
+      return
+    end
+    local marker_type = before_cursor:match("^%s*([%-%*%+])")
+    continue_list(indent .. marker_type .. " [ ] ")
+    return
+  end
+
+  -- 2. Bullet list item: - / * / +
+  local bullet_full = before_cursor:match("^%s*[%-%*%+]%s")
+  if bullet_full then
+    local marker = bullet_full:match("[%-%*%+]")
+    local content_after_marker = before_cursor:sub(#bullet_full + 1)
+    if content_after_marker:match("^%s*$") and after_cursor:match("^%s*$") then
+      clear_marker()
+      return
+    end
+    continue_list(indent .. marker .. " ")
+    return
+  end
+
+  -- 3. Numbered list item: 1. or 1)
+  local num, sep = before_cursor:match("^%s*(%d+)([%.%)]%s)")
   if num and sep then
-    local next_num = tostring(tonumber(num) + 1)
-    local sep_char = sep:match("^([%.%)])")
-    local content = line:match("^%s*%d+[%.%)]%s(.*)$") or ""
-    if content == "" then
-      vim.api.nvim_set_current_line(indent)
-      return cr
+    local full_marker = before_cursor:match("^%s*%d+[%.%)]%s")
+    local content_after_marker = before_cursor:sub(#full_marker + 1)
+    if content_after_marker:match("^%s*$") and after_cursor:match("^%s*$") then
+      clear_marker()
+      return
     end
-    return cr .. indent .. next_num .. sep_char .. " "
+    local next_num = tostring(tonumber(num) + 1)
+    continue_list(indent .. next_num .. sep)
+    return
   end
 
   -- Not a list line — default Enter
-  return cr
+  local cr = vim.api.nvim_replace_termcodes("<CR>", true, false, true)
+  vim.api.nvim_feedkeys(cr, "n", true)
 end
 
 vim.keymap.set("i", "<CR>", markdown_enter, {
   buffer = true,
-  expr = true,
   desc = "Continue list on Enter",
 })
 
@@ -229,6 +260,14 @@ end, { desc = "Insert sibling heading (TS)", buffer = true })
 vim.keymap.set("n", "<localleader>s", function()
   insert_heading("subheading")
 end, { desc = "Insert subheading (TS)", buffer = true })
+
+vim.keymap.set("n", "]]", function()
+  jump_heading("W")
+end, { desc = "Next markdown heading", buffer = true, nowait = true, silent = true })
+
+vim.keymap.set("n", "[[", function()
+  jump_heading("bW")
+end, { desc = "Previous markdown heading", buffer = true, nowait = true, silent = true })
 
 -- Markdown editing helpers — available in all .md files
 vim.keymap.set("n", "<localleader>t", "o- [ ] ", { desc = "Add todo item", buffer = true })

@@ -19,7 +19,15 @@ end
 set -gx fzf_fd_opts --hidden --no-ignore
 
 # Custom keybinding for variable search - Ctrl-Y to copy value to clipboard
-set -gx fzf_variables_opts --bind='ctrl-y:execute-silent(echo -n {2..} | pbcopy)+abort'
+if command -q pbcopy
+    set -gx fzf_variables_opts --bind='ctrl-y:execute-silent(echo -n {2..} | pbcopy)+abort'
+else if command -q xclip
+    set -gx fzf_variables_opts --bind='ctrl-y:execute-silent(echo -n {2..} | xclip -selection clipboard)+abort'
+else if command -q xsel
+    set -gx fzf_variables_opts --bind='ctrl-y:execute-silent(echo -n {2..} | xsel --clipboard --input)+abort'
+else if command -q wl-copy
+    set -gx fzf_variables_opts --bind='ctrl-y:execute-silent(echo -n {2..} | wl-copy)+abort'
+end
 
 # Set fzf.fish cmd for listing dirs (e.g. `ls`)
 # Defaults to `command ls -A -F "$file_path"`

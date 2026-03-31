@@ -8,8 +8,24 @@ return {
     -- Ensure opts table exists
     opts = opts or {}
 
-    -- Function to set up markdown keymaps for a buffer
+    -- Function to set up markdown-only motion helpers for a buffer.
     local function setup_markdown_keymaps(bufnr)
+      local function jump_heading(flags)
+        local view = vim.fn.winsaveview()
+        local found = vim.fn.search("^#\\+\\s", flags)
+        if found == 0 then
+          vim.fn.winrestview(view)
+        end
+      end
+
+      vim.keymap.set("n", "]]", function()
+        jump_heading("W")
+      end, { buffer = bufnr, desc = "Next markdown heading", nowait = true, silent = true })
+
+      vim.keymap.set("n", "[[", function()
+        jump_heading("bW")
+      end, { buffer = bufnr, desc = "Previous markdown heading", nowait = true, silent = true })
+
       vim.keymap.set("n", "]h", function()
         local current_line = vim.fn.getline(".")
         local level = current_line:match("^(#+)")
@@ -36,7 +52,7 @@ return {
     vim.api.nvim_create_autocmd("FileType", {
       pattern = { "markdown", "markdown.pandoc" },
       callback = function(ev)
-        -- Set buffer-local keymaps for [[ and ]]
+        -- Set buffer-local markdown motion helpers and override generic mappings
         setup_markdown_keymaps(ev.buf)
 
         -- Helper to create Markdown text objects only in markdown buffers
@@ -140,28 +156,4 @@ return {
 
     return opts
   end,
-
-  -- Add keymaps for navigating to next/prev heading
-  -- The `ft` field ensures these only load in markdown buffers
-  keys = {
-    -- Navigate to next heading
-    {
-      "]]",
-      function()
-        vim.fn.search("^#\\+\\s", "W")
-      end,
-      desc = "Next markdown heading",
-      ft = { "markdown", "markdown.pandoc" },
-    },
-    -- Navigate to previous heading
-    {
-      "[[",
-      function()
-        vim.fn.search("^#\\+\\s", "bW")
-      end,
-      desc = "Previous markdown heading",
-      ft = { "markdown", "markdown.pandoc" },
-    },
-    -- Note: [[ and ]] are set as buffer-local keymaps in the FileType autocmd above
-  },
 }

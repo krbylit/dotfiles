@@ -358,6 +358,10 @@ return {
             "**/build/**",
             "**/target/**",
             "**/__pycache__/**",
+            "**/.next/**",
+            "**/.turbo/**",
+            "**/.pnpm-store/**",
+            "**/.worktrees/**",
           },
         },
         zoxide = {
@@ -375,7 +379,7 @@ return {
         ---@type snacks.picker.grep.Config
         grep = {
           args = { "-P" }, -- Enable PCRE2
-          hidden = false,
+          hidden = true,
           ignored = false,
           -- Exclude dirs from text search
           exclude = {
@@ -388,6 +392,10 @@ return {
             "**/target/**",
             "**/__pycache__/**",
             "package-lock.json",
+            "**/.next/**",
+            "**/.turbo/**",
+            "**/.pnpm-store/**",
+            "**/.worktrees/**",
           },
           formatters = {
             file = {
@@ -704,9 +712,9 @@ return {
         -- if your env doesn't support unicode placeholders, this will be disabled
         -- takes precedence over `opts.float` on supported terminals
         inline = true,
-        -- render the image in a floating window
-        -- only used if `opts.inline` is disabled
-        -- float = true,
+        -- Keep markdown image previews strictly inline so toggling inline
+        -- rendering fully hides document images instead of falling back to hover floats.
+        float = false,
         -- max_width = 80,
         -- max_height = 40,
         -- Set to `true`, to conceal the image text when rendering inline.
@@ -995,7 +1003,6 @@ return {
         })
       end,
       desc = "Find/create obsidian note + wikilink at cursor",
-      ft = "markdown",
     },
   },
 }

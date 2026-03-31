@@ -12,6 +12,15 @@ local git_cache = {
   update_timer = nil, -- debounce timer for update_git_info
 }
 
+local function should_track_git_info(bufnr)
+  local bt = vim.bo[bufnr].buftype
+  if bt ~= "" then
+    return false
+  end
+
+  return vim.api.nvim_buf_get_name(bufnr) ~= ""
+end
+
 -- Stop watching git changes (cleanup)
 local function stop_git_watcher()
   if git_cache.git_watcher then
@@ -63,8 +72,29 @@ local function start_git_watcher(git_root)
   end
 end
 
+local function refresh_git_branch(current_dir, git_root, opts)
+  opts = opts or {}
+
+  vim.system({ "git", "-C", current_dir, "branch", "--show-current" }, { text = true }, function(branch_result)
+    vim.schedule(function()
+      if branch_result.code == 0 and branch_result.stdout then
+        git_cache.current_branch = branch_result.stdout:gsub("\n", "")
+      else
+        git_cache.current_branch = ""
+      end
+
+      if opts.restart_watcher then
+        start_git_watcher(git_root)
+      end
+
+      vim.cmd("redrawstatus")
+    end)
+  end)
+end
+
 -- Function to update git repository info when changing directories (debounced)
-local function update_git_info()
+local function update_git_info(opts)
+  opts = opts or {}
   -- Don't update during neovim exit
   if git_cache.is_exiting then
     return
@@ -87,7 +117,7 @@ local function update_git_info()
       local current_dir = vim.loop.fs_realpath(current_dir_display) or current_dir_display
 
       -- Only update if directory has changed
-      if current_dir == git_cache.last_dir then
+      if current_dir == git_cache.last_dir and not opts.force then
         if git_cache.update_timer then
           git_cache.update_timer:close()
           git_cache.update_timer = nil
@@ -108,26 +138,9 @@ local function update_git_info()
               -- Different repo - update cache and restart watcher
               git_cache.git_root = new_git_root
               git_cache.current_repo_name = vim.fn.fnamemodify(new_git_root, ":t")
-
-              -- Get initial branch name
-              vim.system(
-                { "git", "-C", current_dir, "branch", "--show-current" },
-                { text = true },
-                function(branch_result)
-                  vim.schedule(function()
-                    if branch_result.code == 0 and branch_result.stdout then
-                      git_cache.current_branch = branch_result.stdout:gsub("\n", "")
-                    else
-                      git_cache.current_branch = ""
-                    end
-
-                    -- Start watching new repo's .git/HEAD
-                    start_git_watcher(new_git_root)
-
-                    vim.cmd("redrawstatus")
-                  end)
-                end
-              )
+              refresh_git_branch(current_dir, new_git_root, { restart_watcher = true })
+            elseif opts.force then
+              refresh_git_branch(current_dir, new_git_root)
             end
           -- If same repo, watcher is already running - no action needed
           else
@@ -190,13 +203,24 @@ end
 -- Also seeds the word count cache for buffers not yet counted.
 local autocmd_id = vim.api.nvim_create_autocmd({ "BufEnter" }, {
   callback = function(ev)
-    if not git_cache.is_exiting then
+    if not git_cache.is_exiting and should_track_git_info(ev.buf) then
       update_git_info()
     end
     -- Seed cache on first visit to this buffer
     if word_count_cache[ev.buf] == nil then
       refresh_word_count(ev.buf)
     end
+  end,
+})
+
+vim.api.nvim_create_autocmd("TermClose", {
+  callback = function()
+    vim.schedule(function()
+      if should_track_git_info(vim.api.nvim_get_current_buf()) then
+        update_git_info({ force = true })
+      end
+      vim.cmd("redrawstatus")
+    end)
   end,
 })
 
@@ -284,12 +308,12 @@ local function custom_section_filename(args)
 
     -- Remove intermediate dirs from left (closest to repo root) until the whole
     -- section fits within the available budget, or no intermediate dirs remain
-    local budget = math.max(30, vim.api.nvim_win_get_width(0) - 70)
     local truncated = false
-    while #path_parts > 0 and plain_width(result .. build_path(path_parts, truncated)) > budget do
-      table.remove(path_parts, 1)
-      truncated = true
-    end
+    -- local budget = math.max(30, vim.api.nvim_win_get_width(0) - 70)
+    -- while #path_parts > 0 and plain_width(result .. build_path(path_parts, truncated)) > budget do
+    --   table.remove(path_parts, 1)
+    --   truncated = true
+    -- end
     result = result .. build_path(path_parts, truncated)
   else
     -- Not in a git repo - show full path with home directory replaced

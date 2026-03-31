@@ -5,6 +5,42 @@ log() {
     echo "$(date '+%Y-%m-%d %H:%M:%S') - $1"
 }
 
+SCRIPT_NAME="$(basename "$0")"
+ERROR_LOG="$(mktemp "/tmp/${SCRIPT_NAME}.XXXXXX.err")"
+exec 3>&2
+exec 2> >(tee -a "$ERROR_LOG" >&3)
+
+cleanup() {
+    if [ -s "$ERROR_LOG" ]; then
+        echo
+        echo "Error summary for $SCRIPT_NAME:"
+        sed 's/^/  /' "$ERROR_LOG"
+    fi
+
+    rm -f "$ERROR_LOG"
+}
+
+trap cleanup EXIT
+
+# Ensure Homebrew is in PATH
+if [ -x /opt/homebrew/bin/brew ]; then
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+elif [ -x /usr/local/bin/brew ]; then
+    eval "$(/usr/local/bin/brew shellenv)"
+elif [ -x /home/linuxbrew/.linuxbrew/bin/brew ]; then
+    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+fi
+
+if ! command -v brew &>/dev/null; then
+    log "brew not found in PATH. Skipping brew bundle."
+    exit 0
+fi
+
+if [ "$(uname)" != "Darwin" ]; then
+    log "Skipping brew bundle on Linux. Packages are managed by Nix."
+    exit 0
+fi
+
 log "Running brew bundle..."
 
 # Run brew bundle and capture stderr
@@ -12,14 +48,14 @@ tmp_err=$(mktemp) # Create a temporary file for stderr
 if [ -z "$SSH_CONNECTION" ] && [ -z "$SSH_CLIENT" ] && [ -z "$SSH_TTY" ]; then
     if ! brew bundle --cleanup --no-upgrade --file="$HOME/Brewfile" >"$tmp_err" 2>&1; then
         log "brew bundle encountered errors:"
-        cat "$tmp_err"
+        tee -a "$ERROR_LOG" >&3 <"$tmp_err"
     fi
 fi
 # If on remote machine, install limited Brew packages designed for remote
 if [ -n "$SSH_CONNECTION" ] || [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
     if ! brew bundle --cleanup --no-upgrade --file="$HOME/Brewfile_ssh" >"$tmp_err" 2>&1; then
         log "brew bundle encountered errors:"
-        cat "$tmp_err"
+        tee -a "$ERROR_LOG" >&3 <"$tmp_err"
     fi
 fi
 rm -f "$tmp_err" # Clean up the temporary file

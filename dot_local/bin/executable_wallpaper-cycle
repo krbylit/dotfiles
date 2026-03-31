@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+WALLPAPER_DIR="$HOME/.local/share/chezmoi/secrets/wallpapers/hyde"
+STATE_FILE="${XDG_STATE_HOME:-$HOME/.local/state}/wallpaper-cycle-index"
+
+if [[ ! -d "$WALLPAPER_DIR" ]]; then
+    echo "Wallpaper directory not found: $WALLPAPER_DIR" >&2
+    exit 1
+fi
+
+mapfile -t wallpapers < <(find "$WALLPAPER_DIR" -maxdepth 1 -type f \( -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.png' -o -iname '*.gif' \) | sort)
+
+if [[ ${#wallpapers[@]} -eq 0 ]]; then
+    echo "No wallpapers found in $WALLPAPER_DIR" >&2
+    exit 1
+fi
+
+index=0
+if [[ -f "$STATE_FILE" ]]; then
+    index=$(cat "$STATE_FILE")
+    index=$(( (index + 1) % ${#wallpapers[@]} ))
+fi
+
+echo "$index" > "$STATE_FILE"
+hydectl wallpaper set "${wallpapers[$index]}"

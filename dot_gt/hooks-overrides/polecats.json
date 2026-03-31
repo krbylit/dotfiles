@@ -1,0 +1,33 @@
+{
+  "SessionStart": [
+    {
+      "matcher": "",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "bash $HOME/gt/hooks/symlink-rig-env.sh"
+        }
+      ]
+    }
+  ],
+  "PostToolUse": [
+    {
+      "matcher": "Bash(bd close*)",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "echo 'REMINDER: Record commit hashes on this bead. Run: bd comments add <bead-id> \"COMMITS: <hash> <message>\" — search git log for your bead ID to find them.'"
+        }
+      ]
+    },
+    {
+      "matcher": "Bash(gt done*)",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "echo 'REMINDER: Ensure commit hashes are recorded on your bead. Run: bd comments add <bead-id> \"COMMITS: <hash> <message>\"'"
+        }
+      ]
+    }
+  ]
+}

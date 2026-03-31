@@ -1,0 +1,32 @@
+/* HyDE's waybar.dcol template maps main-fg to an accent shade (wallbash_1xa8)
+   rather than the dedicated text-contrast color (wallbash_txt1), producing
+   light-on-light text with certain wallpapers. Override every selector that
+   uses @main-fg so all text and borders remain readable. */
+
+.module,
+#workspaces button,
+tooltip,
+tooltip *,
+menu,
+menu menuitem {
+  color: @wallbash_txt2;
+}
+
+tooltip,
+tooltip * {
+  text-shadow: none;
+}
+
+tooltip,
+window.popup decoration {
+  border-color: @wallbash_txt2;
+}
+
+#workspaces button.active,
+menu menuitem:hover {
+  color: @wallbash_txt4;
+}
+
+#workspaces button:hover {
+  color: @wallbash_txt1;
+}

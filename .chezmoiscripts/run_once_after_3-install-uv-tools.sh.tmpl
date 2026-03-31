@@ -1,17 +1,45 @@
 #!/usr/bin/env bash
 
+SCRIPT_NAME="$(basename "$0")"
+ERROR_LOG="$(mktemp "/tmp/${SCRIPT_NAME}.XXXXXX.err")"
+exec 3>&2
+exec 2> >(tee -a "$ERROR_LOG" >&3)
+
+cleanup() {
+  if [ -s "$ERROR_LOG" ]; then
+    echo
+    echo "Error summary for $SCRIPT_NAME:"
+    sed 's/^/  /' "$ERROR_LOG"
+  fi
+
+  rm -f "$ERROR_LOG"
+}
+
+trap cleanup EXIT
+
+# Ensure Homebrew is in PATH
+if [ -x /opt/homebrew/bin/brew ]; then
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+elif [ -x /usr/local/bin/brew ]; then
+  eval "$(/usr/local/bin/brew shellenv)"
+elif [ -x /home/linuxbrew/.linuxbrew/bin/brew ]; then
+  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+fi
+
 if command -v uv &>/dev/null; then
     uv python install 3.13 --preview
 
     if [ "${IS_SSH}" != "1" ]; then
-        # Read and install Python packages from .chezmoidata/uv.toml
+        # Desktop: install all packages
         {{ range .uv.tools -}}
-        uv tool install {{ .name }}{{- if .version -}}{{- if eq (toString .version | regexMatch "^[0-9]") true -}}=={{- else -}}@{{- end }}{{ .version }}{{- end }}
+        uv tool install {{ .name }}{{- if hasKey . "version" -}}{{- if eq (toString .version | regexMatch "^[0-9]") true -}}=={{- else -}}@{{- end }}{{ .version }}{{- end }}
         {{ end -}}
     else
-        # Install uv tools for remote SSH sessions
-        {{ range .uv.tools_ssh -}}
-        uv tool install {{ .name }}{{- if .version -}}{{- if eq (toString .version | regexMatch "^[0-9]") true -}}=={{- else -}}@{{- end }}{{ .version }}{{- end }}
+        # SSH: install only packages with ssh = true
+        {{ range .uv.tools -}}
+        {{ if and (hasKey . "ssh") .ssh -}}
+        uv tool install {{ .name }}{{- if hasKey . "version" -}}{{- if eq (toString .version | regexMatch "^[0-9]") true -}}=={{- else -}}@{{- end }}{{ .version }}{{- end }}
+        {{ end -}}
         {{ end -}}
     fi
 

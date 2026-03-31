@@ -1,0 +1,5 @@
+{{- $config := (joinPath .chezmoi.sourceDir .path.secrets ".config/cliamp/config.toml") -}}
+{{- if (stat $config) -}}
+{{ $config }}
+{{- end -}}
+

@@ -360,9 +360,24 @@ run = "cd ~/.local/share/chezmoi/"
 desc = "Go to the chezmoi directory"
 
 [[mgr.prepend_keymap]]
+on = ["g", "e"]
+run = "cd ~/.local/share/chezmoi/secrets"
+desc = "Go to the chezmoi directory"
+
+[[mgr.prepend_keymap]]
 on = ["g", "o"]
 run = "cd ~/obsidian-vault/"
 desc = "Go to Obsidian vault"
+
+[[mgr.prepend_keymap]]
+on = ["g", "r"]
+run = "cd ~/gt"
+desc = "Go to Gas Town"
+
+[[mgr.prepend_keymap]]
+on = ["g", "p"]
+run = "cd ~/obsidian-vault/01_Projects"
+desc = "Go to Obsidian Projects"
 
 [[mgr.prepend_keymap]]
 on = ["s"]
@@ -401,12 +416,12 @@ desc = "Open fish shell in popup"
 
 # install `ya pack -a Lil-Dank/lazygit`
 [[mgr.prepend_keymap]]
-on = ["g", "l"]
+on = [",", "g"]
 run = "plugin lazygit"
 desc = "run lazygit"
 
 [[mgr.prepend_keymap]]
-on = ["g", "a"]
+on = [",", "l"]
 run = "plugin lazydocker"
 desc = "run lazydocker"
 

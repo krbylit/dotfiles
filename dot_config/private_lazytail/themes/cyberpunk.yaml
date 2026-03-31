@@ -1,0 +1,22 @@
+# cyberpunk — imported from Ghostty
+base: dark
+palette:
+  black: "#000000"
+  red: "#ff7092"
+  green: "#00fbac"
+  yellow: "#fffa6a"
+  blue: "#00bfff"
+  magenta: "#df95ff"
+  cyan: "#86cbfe"
+  white: "#ffffff"
+  bright_black: "#000000"
+  bright_red: "#ff8aa4"
+  bright_green: "#21f6bc"
+  bright_yellow: "#fff787"
+  bright_blue: "#1bccfd"
+  bright_magenta: "#e6aefe"
+  bright_cyan: "#99d6fc"
+  bright_white: "#ffffff"
+  foreground: "#e5e5e5"
+  background: "#332a57"
+  selection: "#c1deff"

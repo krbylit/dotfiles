@@ -1,0 +1,47 @@
+# More streams: https://www.radio-browser.info/
+
+[[station]]
+name = "Radio Paradise"
+url = "http://stream.radioparadise.com/aac-320"
+#
+[[station]]
+name = "Deep House Lounge"
+url = "http://198.15.94.34:8006/stream"
+
+[[station]]
+name = "Adroit Jazz"
+url = "https://icecast.walmradio.com:8443/jazz"
+# HD
+# url = "https://icecast.walmradio.com:8443/jazz_opus"
+
+[[station]]
+name = "Intense Radio - We Love Dance"
+url = "http://secure.live-streams.nl/flac.ogg"
+
+# [[station]]
+# name = "YT: Work"
+# url = "https://music.youtube.com/playlist?list=PL_DCWjJGsNpd3rEY2fDlFVgsDID__QGzQ"
+#
+# [[station]]
+# name = "YT: DJ Sets"
+# url = "https://music.youtube.com/playlist?list=PL_DCWjJGsNpcVC1QYeI0oIAOTpNxCZ1JN"
+#
+# [[station]]
+# name = "YT: Work Chill"
+# url = "https://music.youtube.com/playlist?list=PL_DCWjJGsNpeURhmUetLg3KObcUjs3Wwj"
+#
+# [[station]]
+# name = "YT: Neo-80s Electro"
+# url = "https://music.youtube.com/playlist?list=RDCLAK5uy_mjYpYJsks469XsQGbs2mVQiY9REH231rE"
+#
+# [[station]]
+# name = "YT: Dirty South"
+# url = "https://music.youtube.com/playlist?list=PL_DCWjJGsNpfYre9cHdklroJIwV_Gdxct"
+#
+# [[station]]
+# name = "YT: Liked"
+# url = "https://music.youtube.com/playlist?list=LM"
+
+# [[station]]
+# name = ""
+# url = ""

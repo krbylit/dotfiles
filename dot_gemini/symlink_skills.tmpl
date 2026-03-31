@@ -1,0 +1,4 @@
+{{- $skillsDir := (joinPath .chezmoi.sourceDir .path.secrets ".agents/skills") -}}
+{{- if (stat $skillsDir) -}}
+{{ $skillsDir }}
+{{- end -}}

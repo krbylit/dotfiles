@@ -1,0 +1,4 @@
+{{- $codexConfig := (joinPath .chezmoi.sourceDir .path.secrets "ctrld-configs/codex/config.toml") -}}
+{{- if (stat $codexConfig) -}}
+{{ $codexConfig }}
+{{- end -}}

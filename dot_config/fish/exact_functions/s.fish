@@ -2,7 +2,7 @@ function s --wraps='ssh' --description 'SSH with custom config'
     set -l host $argv[-1]
     set -l ssh_args $argv
 
-    set -l CUSTOM_HOSTNAME $host
+    set -l CUSTOM_HOSTNAME (string split '@' $host)[-1]
     set -l session_name "$USER-$CUSTOM_HOSTNAME"
 
     set -l GIT_ASKPASS "\$HOME/.ssh-dotfiles/git_token.sh"

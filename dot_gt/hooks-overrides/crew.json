@@ -1,0 +1,13 @@
+{
+  "SessionStart": [
+    {
+      "matcher": "",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "bash $HOME/gt/hooks/symlink-rig-env.sh"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,99 @@
+#!/bin/bash
+# Setup kanata (keyboard remapper) on Linux
+# Creates systemd user service, udev rules, and required permissions
+
+{{ if ne .chezmoi.os "linux" }}
+exit 0
+{{ end }}
+
+set -euo pipefail
+
+KANATA_CONFIG="$HOME/.config/kanata/kanata.kbd"
+SYSTEMD_DIR="$HOME/.config/systemd/user"
+SERVICE_FILE="$SYSTEMD_DIR/kanata.service"
+UDEV_RULE="/etc/udev/rules.d/99-kanata.rules"
+
+log() { printf '\033[1;34m[kanata]\033[0m %s\n' "$1"; }
+
+# Ensure systemd user dir exists (may be a symlink or may not exist yet)
+if [ -L "$HOME/.config/systemd" ]; then
+    # systemd is a symlink (to secrets) — create user/ inside the target
+    TARGET=$(readlink -f "$HOME/.config/systemd")
+    mkdir -p "$TARGET/user"
+elif [ -d "$HOME/.config/systemd" ]; then
+    mkdir -p "$SYSTEMD_DIR"
+else
+    mkdir -p "$SYSTEMD_DIR"
+fi
+
+# Write systemd user service
+log "Creating kanata systemd user service"
+cat > "$SERVICE_FILE" << 'EOF'
+[Unit]
+Description=Kanata keyboard remapper
+Documentation=https://github.com/jtroo/kanata
+After=graphical-session.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/env kanata -c %h/.config/kanata/kanata.kbd
+Restart=on-failure
+RestartSec=3
+# Kanata needs access to /dev/input and /dev/uinput
+# User must be in 'input' and 'uinput' groups
+
+[Install]
+WantedBy=default.target
+EOF
+
+# Setup udev rule for /dev/uinput access (requires sudo)
+if [ ! -f "$UDEV_RULE" ]; then
+    log "Setting up udev rule for /dev/uinput (requires sudo)"
+    if sudo -n true 2>/dev/null; then
+        echo 'KERNEL=="uinput", MODE="0660", GROUP="uinput", OPTIONS+="static_node=uinput"' | sudo tee "$UDEV_RULE" > /dev/null
+        sudo udevadm control --reload-rules
+        sudo udevadm trigger
+        log "Udev rule installed"
+    else
+        log "WARNING: Could not install udev rule (no passwordless sudo)"
+        log "Run manually: echo 'KERNEL==\"uinput\", MODE=\"0660\", GROUP=\"uinput\", OPTIONS+=\"static_node=uinput\"' | sudo tee $UDEV_RULE"
+    fi
+fi
+
+# Ensure uinput module loads at boot
+if ! grep -q "^uinput$" /etc/modules-load.d/*.conf 2>/dev/null; then
+    log "Ensuring uinput kernel module loads at boot (requires sudo)"
+    if sudo -n true 2>/dev/null; then
+        echo "uinput" | sudo tee /etc/modules-load.d/uinput.conf > /dev/null
+        sudo modprobe uinput 2>/dev/null || true
+        log "uinput module configured"
+    else
+        log "WARNING: Run manually: echo 'uinput' | sudo tee /etc/modules-load.d/uinput.conf"
+    fi
+fi
+
+# Ensure user is in required groups
+for group in input uinput; do
+    if ! groups "$USER" | grep -qw "$group"; then
+        log "Adding $USER to '$group' group (requires sudo)"
+        if sudo -n true 2>/dev/null; then
+            sudo groupadd -f "$group"
+            sudo usermod -aG "$group" "$USER"
+            log "Added to '$group' group (re-login required for effect)"
+        else
+            log "WARNING: Run manually: sudo usermod -aG $group $USER"
+        fi
+    fi
+done
+
+# Reload systemd and enable service
+systemctl --user daemon-reload
+if command -v kanata &>/dev/null; then
+    systemctl --user enable kanata.service
+    log "kanata service enabled (will start on next login, or run: systemctl --user start kanata)"
+else
+    log "kanata binary not found — install it first (nix profile install, pacman, or cargo)"
+    log "Then run: systemctl --user enable --now kanata.service"
+fi
+
+log "Setup complete. You may need to re-login for group changes to take effect."

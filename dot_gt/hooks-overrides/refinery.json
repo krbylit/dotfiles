@@ -1,0 +1,13 @@
+{
+  "PostToolUse": [
+    {
+      "matcher": "Bash(bd close*)",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "echo 'REMINDER: Record merged commit hashes on this bead. Run: bd comments add <bead-id> \"COMMITS: <hash> <message>\"'"
+        }
+      ]
+    }
+  ]
+}

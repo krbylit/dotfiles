@@ -1,0 +1,107 @@
+#!/usr/bin/env bash
+# ~/.local/bin/claude-alert
+
+# Only run on macOS for now
+# FIX: linux alerts never close automatically, must be clicked
+if [[ "$(uname)" != "Darwin" ]]; then
+    exit 0
+fi
+
+payload="$(cat)"
+title="$(printf '%s' "$payload" | jq -r '.title // "Claude Code"')"
+notification_type="$(printf '%s' "$payload" | jq -r '.notification_type // empty')"
+body="$(printf '%s' "$payload" | jq -r '.message // .body // .content // .subtitle // .text // empty')"
+
+normalize_one_line() {
+    printf '%s' "$1" | tr '\n' ' ' | sed -E 's/[[:space:]]+/ /g; s/^ //; s/ $//'
+}
+
+should_ignore_notification() {
+    local cwd body_one_line body_lc
+    cwd="${CLAUDE_ALERT_CWD:-$PWD}"
+    body_one_line="$(normalize_one_line "$body")"
+    body_lc="$(printf '%s' "$body_one_line" | tr '[:upper:]' '[:lower:]')"
+
+    case "$cwd" in
+    "$HOME/gt/deacon" | "$HOME/gt/deacon/dogs" | "$HOME/gt/deacon/dogs"/* | "$HOME/gt"/*/witness | "$HOME/gt"/*/refinery | "$HOME/gt/unknown")
+        return 0
+        ;;
+    esac
+
+    case "$body_lc" in
+    boot)
+        return 0
+        ;;
+    esac
+
+    if [[ -n "${CLAUDE_ALERT_IGNORE_BODY_REGEX:-}" ]] && [[ "$body_one_line" =~ ${CLAUDE_ALERT_IGNORE_BODY_REGEX} ]]; then
+        return 0
+    fi
+
+    if [[ -n "${CLAUDE_ALERT_IGNORE_TITLE_REGEX:-}" ]] && [[ "$title" =~ ${CLAUDE_ALERT_IGNORE_TITLE_REGEX} ]]; then
+        return 0
+    fi
+
+    if [[ -n "${CLAUDE_ALERT_IGNORE_CWD_REGEX:-}" ]] && [[ "$cwd" =~ ${CLAUDE_ALERT_IGNORE_CWD_REGEX} ]]; then
+        return 0
+    fi
+
+    return 1
+}
+
+if should_ignore_notification; then
+    exit 0
+fi
+
+case "$notification_type" in
+permission_prompt)
+    notification_label="Permission required"
+    default_sound="$HOME/.local/share/chezmoi/cm-util/pkg-backups/sounds/CRcv.aif"
+    ;;
+idle_prompt)
+    notification_label="Idle"
+    default_sound="$HOME/.local/share/chezmoi/cm-util/pkg-backups/sounds/CSnd.aif"
+    ;;
+*)
+    notification_label="Input required"
+    default_sound="$HOME/.local/share/chezmoi/cm-util/pkg-backups/sounds/CRcv.aif"
+    ;;
+esac
+
+if [[ -n "$notification_label" ]]; then
+    title="${title} [${notification_label}]"
+fi
+
+# Build message: repoName::branch or dirname
+git_root="$(git rev-parse --show-toplevel 2>/dev/null)"
+git_branch="$(git symbolic-ref --short HEAD 2>/dev/null)"
+
+if [[ -n "$git_root" ]]; then
+    msg="$(basename "$git_root")"
+    [[ -n "$git_branch" ]] && msg="${msg}::${git_branch}"
+else
+    msg="$(basename "$PWD")"
+fi
+
+if [[ "$notification_type" == "permission_prompt" ]]; then
+    sound="${CLAUDE_ALERT_PERMISSION_SOUND:-$default_sound}"
+elif [[ "$notification_type" == "idle_prompt" ]]; then
+    sound="${CLAUDE_ALERT_IDLE_SOUND:-$default_sound}"
+else
+    sound="${CLAUDE_ALERT_SOUND:-$default_sound}"
+fi
+
+played_sound=false
+if [[ -f "$sound" ]]; then
+    afplay "$sound" &
+    played_sound=true
+fi
+
+if command -v alerter &>/dev/null; then
+    alerter --title "$title" --message "$msg" --timeout 5 &>/dev/null &
+elif command -v osascript &>/dev/null; then
+    $played_sound || osascript -e 'beep'
+    osascript -e "display notification \"${msg//\"/\\\"}\" with title \"${title//\"/\\\"}\""
+elif command -v notify-send &>/dev/null; then
+    notify-send -u critical "$title" "$msg"
+fi

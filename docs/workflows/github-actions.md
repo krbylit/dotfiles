@@ -8,6 +8,7 @@ This workflow explains the automated synchronization system between the private 
 
 - [x] GitHub repository pair: private (`krbylit/dotfiles-private`) and public (`krbylit/dotfiles`)
 - [x] SSH deploy key configured in GitHub secrets (`DOTFILES_PRIVATE_KEY`)
+- [x] Fine-grained PAT configured in GitHub secrets (`GH_PAT`) — required for syncing workflow files
 - [x] `.chezmoiignore` patterns configured to exclude sensitive files
 - [x] Workflow files present in `.github/workflows/` directory
 - [x] Branch structure: `main` and `develop` in both repositories
@@ -220,6 +221,46 @@ rm ~/.ssh/dotfiles_sync_key ~/.ssh/dotfiles_sync_key.pub
 ```
 
 **Security note**: The private key stored in GitHub secrets is encrypted at rest and only exposed during workflow execution in isolated runners.
+
+### Set Up GH_PAT for Workflow File Syncing
+
+The default `GITHUB_TOKEN` provided by GitHub Actions **cannot push changes to `.github/workflows/` files**. This is a GitHub security restriction to prevent workflow self-modification and privilege escalation. Without a PAT, sync workflows will fail silently when the private repo has workflow file changes — the push succeeds for all other files but rejects modifications to workflow files.
+
+The SSH deploy key (`DOTFILES_PRIVATE_KEY`) only authenticates reads from the private repo. The push to the public repo uses whatever token `actions/checkout` configured for git — by default, `GITHUB_TOKEN`. To push workflow file changes, we override this with a fine-grained PAT.
+
+#### Step 1: Create a fine-grained Personal Access Token
+
+1. Go to `https://github.com/settings/personal-access-tokens/new`
+2. **Token name**: `dotfiles-sync-action` (or similar)
+3. **Expiration**: Set an appropriate expiration
+4. **Repository access**: Select "Only select repositories" → `krbylit/dotfiles` (public repo only)
+5. **Permissions**:
+   - **Contents**: Read and write
+   - **Workflows**: Read and write
+6. Click "Generate token" and copy the value
+
+#### Step 2: Add the token as a repository secret
+
+1. Navigate to `https://github.com/krbylit/dotfiles/settings/secrets/actions`
+2. Click "New repository secret" (or update existing)
+3. **Name**: `GH_PAT`
+4. **Value**: Paste the fine-grained PAT
+5. Click "Add secret"
+
+#### Step 3: Verify in workflow files
+
+The sync workflows pass this token to `actions/checkout`:
+
+```yaml
+- uses: actions/checkout@v5
+  with:
+    ref: main
+    token: ${{ secrets.GH_PAT }}
+```
+
+This makes `actions/checkout` configure git authentication with the PAT instead of `GITHUB_TOKEN`, so the subsequent `git push` inherits workflow-file write permission.
+
+**Verification**: Trigger a manual sync after making a workflow file change in the private repo. The workflow should push successfully including `.github/workflows/` changes.
 
 ### Manually Trigger a Sync
 
