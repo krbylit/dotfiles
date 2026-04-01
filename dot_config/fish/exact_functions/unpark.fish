@@ -29,7 +29,13 @@ function unpark --description "Unpark Gas Town rigs, optionally limited to speci
     gt rig unpark $rigs
     or return $status
 
+    gt rig start $rigs
+    or return $status
+
     gt deacon resume
+    or return $status
+
+    gt deacon restart
     or return $status
 
     if test (count $argv) -eq 0

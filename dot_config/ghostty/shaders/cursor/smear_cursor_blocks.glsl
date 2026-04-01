@@ -56,6 +56,15 @@
 // FILL_JITTER     Random variation in partial fill amounts at edge cells.
 //                 Higher = rougher edges, 0.0 = clean quantized edges.
 //                 Range: 0.0–0.5
+//
+// FORCE_BLOCK_TRAIL If true, the trail geometry always uses a block-like
+//                 footprint even when the live cursor is a bar/beam.
+//
+// BLOCK_WIDTH_RATIO Approximate cell width as a multiple of cursor height when
+//                 FORCE_BLOCK_TRAIL is enabled but Ghostty never reports a real
+//                 block cursor width. Ghostty does not expose native cell size
+//                 separately, so width must be inferred. Tune this per font.
+//                 Typical monospace range: 0.45–0.7
 // ══════════════════════════════════════════════════════════════════════
 
 const float HEAD_RATE = 200.0;
@@ -70,6 +79,9 @@ const float CHAOS_DROPOUT = 0.8;
 const float CHAOS_SCATTER = 3.5;
 const float CHAOS_RADIUS = 1.5;
 const float FILL_JITTER = 0.5;
+const float MIN_SAMPLE_TIME = 1.0 / 90.0;
+const bool FORCE_BLOCK_TRAIL = true;
+const float BLOCK_WIDTH_RATIO = 0.6;
 
 // SDF: distance from point p to line segment a→b
 float sdSegment(vec2 p, vec2 a, vec2 b) {
@@ -78,9 +90,15 @@ float sdSegment(vec2 p, vec2 a, vec2 b) {
     return length(pa - ba * h);
 }
 
+bool isBlockCursor(int style) {
+    return style == 0 || style == 1;
+}
+
 // Hash for per-cell randomization (seeded by cursor change time)
+// Use fract(seed) to keep sin() inputs bounded — sin() of large floats
+// has undefined precision on many GPUs after hours of uptime.
 float cellHash(vec2 cellIdx, float seed) {
-    return fract(sin(dot(cellIdx + seed, vec2(127.1, 311.7))) * 43758.5453);
+    return fract(sin(dot(cellIdx + fract(seed * 0.013) * 100.0, vec2(127.1, 311.7))) * 43758.5453);
 }
 
 void mainImage(out vec4 fragColor, in vec2 fragCoord) {
@@ -90,23 +108,49 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord) {
 
     float t = iTime - iTimeCursorChange;
     if (t > TRAIL_TIMEOUT) return;
+    float sampleT = max(t, MIN_SAMPLE_TIME);
 
-    // Cell dimensions from cursor size
-    vec2 cellSize = iCurrentCursor.zw;
+    // Ghostty exposes cursor rectangles plus cursor style, but not native cell
+    // size. When forcing a block trail, prefer exact dimensions from a real
+    // block cursor. Otherwise infer width from height.
+    vec2 liveCursorSize = max(iCurrentCursor.zw, iPreviousCursor.zw);
+    int currentStyle = int(iCurrentCursorStyle.x);
+    int previousStyle = int(iPreviousCursorStyle.x);
+    bool currentIsBlock = isBlockCursor(currentStyle);
+    bool previousIsBlock = isBlockCursor(previousStyle);
+
+    vec2 exactBlockSize = currentIsBlock ? iCurrentCursor.zw
+        : (previousIsBlock ? iPreviousCursor.zw : vec2(0.0));
+    float inferredCellHeight = max(
+        max(iCurrentCursor.w, iPreviousCursor.w),
+        exactBlockSize.y
+    );
+    float inferredBlockWidth = max(
+        exactBlockSize.x,
+        inferredCellHeight * BLOCK_WIDTH_RATIO
+    );
+    vec2 cellSize = FORCE_BLOCK_TRAIL
+        ? vec2(
+            exactBlockSize.x > 0.0 ? exactBlockSize.x : inferredBlockWidth,
+            exactBlockSize.y > 0.0 ? exactBlockSize.y : inferredCellHeight
+        )
+        : liveCursorSize;
     if (cellSize.x < 1.0 || cellSize.y < 1.0) return;
 
     // Cursor centers: xy = top-left corner, zw = size; Y-up coordinate system
-    vec2 curCenter = vec2(iCurrentCursor.x + cellSize.x * 0.5,
-                          iCurrentCursor.y - cellSize.y * 0.5);
-    vec2 prevCenter = vec2(iPreviousCursor.x + iPreviousCursor.z * 0.5,
-                           iPreviousCursor.y - iPreviousCursor.w * 0.5);
+    vec2 curSize = FORCE_BLOCK_TRAIL ? cellSize : iCurrentCursor.zw;
+    vec2 prevSize = FORCE_BLOCK_TRAIL ? cellSize : iPreviousCursor.zw;
+    vec2 curCenter = vec2(iCurrentCursor.x + curSize.x * 0.5,
+                          iCurrentCursor.y - curSize.y * 0.5);
+    vec2 prevCenter = vec2(iPreviousCursor.x + prevSize.x * 0.5,
+                           iPreviousCursor.y - prevSize.y * 0.5);
 
     float totalDist = distance(curCenter, prevCenter);
     if (totalDist < 1.0) return;
 
     // Overdamped spring: head arrives fast, tail follows slowly
-    float headAlpha = 1.0 - exp(-HEAD_RATE * t);
-    float tailAlpha = 1.0 - exp(-TAIL_RATE * t);
+    float headAlpha = 1.0 - exp(-HEAD_RATE * sampleT);
+    float tailAlpha = 1.0 - exp(-TAIL_RATE * sampleT);
     vec2 head = mix(prevCenter, curCenter, headAlpha);
     vec2 tail = mix(prevCenter, curCenter, tailAlpha);
 
@@ -125,7 +169,7 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord) {
     float rng3 = cellHash(cellIdx, iTimeCursorChange + 197.0);
 
     // Chaos factor: strong randomization in early frames, fades as trail develops
-    float chaos = exp(-t * CHAOS_DECAY);
+    float chaos = exp(-sampleT * CHAOS_DECAY);
 
     // Randomly skip cells in early frames (scattered appearance)
     if (rng2 < chaos * CHAOS_DROPOUT) return;

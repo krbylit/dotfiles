@@ -19,6 +19,10 @@ theme = tokyonight_moon
 # custom-shader = shaders/cursor/cursor_smear_fade.glsl
 # custom-shader = shaders/cursor/cursor_smear.glsl
 
+# Cursor shaders look "dead" on long-idle or background tabs if Ghostty only
+# animates focused surfaces. Keep the animation loop running for all tabs.
+custom-shader-animation = always
+
 custom-shader = shaders/cursor/smear_cursor_blocks.glsl
 # custom-shader = shaders/water-color/variegated-wash-bg.glsl
 # custom-shader = shaders/cursor/cursor_frozen.glsl

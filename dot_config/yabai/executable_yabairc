@@ -180,6 +180,7 @@ COMMS_APPS=(
 
 REF_APPS=(
     # Notion
+    TranscribeX
     Obsidian
     "Notion Calendar"
     "LM Studio"

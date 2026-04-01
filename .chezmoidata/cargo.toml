@@ -24,6 +24,7 @@ packages = [
     { name = "terminal-toys" },
     { name = "theattyr" },
     { name = "toktop" },
+    { name = "darya" },
     { name = "tracker", git = "https://github.com/ShenMian/tracker" },
     { name = "wiki-tui" },
 
