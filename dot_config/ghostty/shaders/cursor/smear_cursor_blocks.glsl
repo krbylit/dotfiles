@@ -53,6 +53,12 @@
 //                 as a multiplier of cell height.
 //                 Higher = more irregular boundary. Range: 0.0–3.0
 //
+// BLOCK_BRIGHTNESS_VAR  Per-block random brightness variation. Each cell in the
+//                 trail gets a unique brightness offset, making individual blocks
+//                 visually distinct. 0.0 = uniform brightness, 1.0 = full range
+//                 (some blocks nearly invisible, others full brightness).
+//                 Range: 0.0–1.0
+//
 // FILL_JITTER     Random variation in partial fill amounts at edge cells.
 //                 Higher = rougher edges, 0.0 = clean quantized edges.
 //                 Range: 0.0–0.5
@@ -78,6 +84,7 @@ const float CHAOS_DECAY = 40.0;
 const float CHAOS_DROPOUT = 0.8;
 const float CHAOS_SCATTER = 3.5;
 const float CHAOS_RADIUS = 1.5;
+const float BLOCK_BRIGHTNESS_VAR = 0.5;
 const float FILL_JITTER = 0.5;
 const float MIN_SAMPLE_TIME = 1.0 / 90.0;
 const bool FORCE_BLOCK_TRAIL = true;
@@ -250,6 +257,10 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord) {
         longitudinal = clamp(longitudinal, 0.0, 1.0);
     }
     float fade = (1.0 - tailAlpha) * mix(TAIL_FADE_MIN, 1.0, longitudinal);
+
+    // Per-block brightness: each cell gets a unique brightness offset
+    float blockBrightness = 1.0 - BLOCK_BRIGHTNESS_VAR * rng;
+    fade *= blockBrightness;
 
     // Color: invert background at cell center (reverse-video, like cursor over text)
     vec4 bgColor = texture(iChannel0, cellCenterPx / iResolution.xy);

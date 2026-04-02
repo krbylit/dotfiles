@@ -29,6 +29,9 @@ function park --description "Park Gas Town rigs, optionally limited to specific 
     gt rig park $rigs
     or return $status
 
+    gt rig stop $rigs
+    or return $status
+
     if test (count $argv) -eq 0
         gt daemon stop
         or return $status

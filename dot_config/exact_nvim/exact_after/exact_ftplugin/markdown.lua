@@ -2,6 +2,7 @@
 vim.opt_local.formatoptions:remove("c")
 vim.opt_local.formatoptions:remove("r")
 vim.opt_local.formatoptions:remove("o")
+vim.opt_local.spell = true
 -- -- Auto-insert a real newline when typing past 120 chars
 -- vim.opt_local.textwidth = 120
 -- vim.opt_local.formatoptions:append("t")

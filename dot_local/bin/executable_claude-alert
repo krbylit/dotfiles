@@ -98,7 +98,7 @@ if [[ -f "$sound" ]]; then
 fi
 
 if command -v alerter &>/dev/null; then
-    alerter --title "$title" --message "$msg" --timeout 5 &>/dev/null &
+    alerter --title "$title" --message "$msg" --timeout 10 &>/dev/null &
 elif command -v osascript &>/dev/null; then
     $played_sound || osascript -e 'beep'
     osascript -e "display notification \"${msg//\"/\\\"}\" with title \"${title//\"/\\\"}\""
