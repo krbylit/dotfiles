@@ -5,23 +5,59 @@
       "complex_modifications": {
         "rules": [
           {
-            "description": "Use alt + l for right arrow",
+            "description": "Hyper Key: Right Option → left shift + left option + left command (⌃⇧⌥⌘)",
+            "enabled": true,
             "manipulators": [
               {
-                "conditions": [
+                "from": {
+                  "key_code": "right_option",
+                  "modifiers": { "optional": ["any"] }
+                },
+                "to": [
                   {
-                    "bundle_identifiers": [
-                      "^net\\.kovidgoyal\\.kitty$",
-                      "^com\\.mitchellh\\.ghostty$"
-                    ],
-                    "type": "frontmost_application_if"
+                    "set_variable": {
+                      "name": "hyper_right_option",
+                      "value": 1
+                    }
+                  },
+                  {
+                    "key_code": "left_control",
+                    "modifiers": ["left_shift", "left_option", "left_command"]
                   }
                 ],
+                "to_after_key_up": [
+                  {
+                    "set_variable": {
+                      "name": "hyper_right_option",
+                      "value": 0
+                    }
+                  }
+                ],
+                "type": "basic"
+              }
+            ]
+          },
+          {
+            "description": "Use hyper_right_option + l for right arrow",
+            "manipulators": [
+              {
                 "type": "basic",
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_right_option",
+                    "value": 1
+                  }
+                ],
                 "from": {
                   "key_code": "l",
                   "modifiers": {
-                    "mandatory": ["right_option"]
+                    "mandatory": [
+                      "left_control",
+                      "left_shift",
+                      "left_option",
+                      "left_command"
+                    ]
                   }
                 },
                 "to": [
@@ -33,23 +69,26 @@
             ]
           },
           {
-            "description": "Use alt + k for up arrow",
+            "description": "Use hyper_right_option + k for up arrow",
             "manipulators": [
               {
+                "type": "basic",
                 "conditions": [
                   {
-                    "bundle_identifiers": [
-                      "^net\\.kovidgoyal\\.kitty$",
-                      "^com\\.mitchellh\\.ghostty$"
-                    ],
-                    "type": "frontmost_application_if"
+                    "type": "variable_if",
+                    "name": "hyper_right_option",
+                    "value": 1
                   }
                 ],
-                "type": "basic",
                 "from": {
                   "key_code": "k",
                   "modifiers": {
-                    "mandatory": ["right_option"]
+                    "mandatory": [
+                      "left_control",
+                      "left_shift",
+                      "left_option",
+                      "left_command"
+                    ]
                   }
                 },
                 "to": [
@@ -61,23 +100,26 @@
             ]
           },
           {
-            "description": "Use alt + j for down arrow",
+            "description": "Use hyper_right_option + j for down arrow",
             "manipulators": [
               {
+                "type": "basic",
                 "conditions": [
                   {
-                    "bundle_identifiers": [
-                      "^net\\.kovidgoyal\\.kitty$",
-                      "^com\\.mitchellh\\.ghostty$"
-                    ],
-                    "type": "frontmost_application_if"
+                    "type": "variable_if",
+                    "name": "hyper_right_option",
+                    "value": 1
                   }
                 ],
-                "type": "basic",
                 "from": {
                   "key_code": "j",
                   "modifiers": {
-                    "mandatory": ["right_option"]
+                    "mandatory": [
+                      "left_control",
+                      "left_shift",
+                      "left_option",
+                      "left_command"
+                    ]
                   }
                 },
                 "to": [
@@ -89,23 +131,26 @@
             ]
           },
           {
-            "description": "Use alt + h for left arrow",
+            "description": "Use hyper_right_option + h for left arrow",
             "manipulators": [
               {
+                "type": "basic",
                 "conditions": [
                   {
-                    "bundle_identifiers": [
-                      "^net\\.kovidgoyal\\.kitty$",
-                      "^com\\.mitchellh\\.ghostty$"
-                    ],
-                    "type": "frontmost_application_if"
+                    "type": "variable_if",
+                    "name": "hyper_right_option",
+                    "value": 1
                   }
                 ],
-                "type": "basic",
                 "from": {
                   "key_code": "h",
                   "modifiers": {
-                    "mandatory": ["right_option"]
+                    "mandatory": [
+                      "left_control",
+                      "left_shift",
+                      "left_option",
+                      "left_command"
+                    ]
                   }
                 },
                 "to": [
@@ -117,126 +162,21 @@
             ]
           },
           {
-            "description": "Use ctrl + l for right arrow",
+            "description": "Use hyper_right_option + shift + h for shift+left arrow (text selection)",
             "manipulators": [
               {
+                "type": "basic",
                 "conditions": [
                   {
-                    "bundle_identifiers": [
-                      "^net\\.kovidgoyal\\.kitty$",
-                      "^com\\.mitchellh\\.ghostty$"
-                    ],
-                    "type": "frontmost_application_unless"
+                    "type": "variable_if",
+                    "name": "hyper_right_option",
+                    "value": 1
                   }
                 ],
-                "type": "basic",
-                "from": {
-                  "key_code": "l",
-                  "modifiers": {
-                    "mandatory": ["left_control"]
-                  }
-                },
-                "to": [
-                  {
-                    "key_code": "right_arrow"
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "description": "Use ctrl + k for up arrow",
-            "manipulators": [
-              {
-                "conditions": [
-                  {
-                    "bundle_identifiers": [
-                      "^net\\.kovidgoyal\\.kitty$",
-                      "^com\\.mitchellh\\.ghostty$"
-                    ],
-                    "type": "frontmost_application_unless"
-                  }
-                ],
-                "type": "basic",
-                "from": {
-                  "key_code": "k",
-                  "modifiers": {
-                    "mandatory": ["left_control"]
-                  }
-                },
-                "to": [
-                  {
-                    "key_code": "up_arrow"
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "description": "Use ctrl + j for down arrow",
-            "manipulators": [
-              {
-                "conditions": [
-                  {
-                    "bundle_identifiers": [
-                      "^net\\.kovidgoyal\\.kitty$",
-                      "^com\\.mitchellh\\.ghostty$"
-                    ],
-                    "type": "frontmost_application_unless"
-                  }
-                ],
-                "type": "basic",
-                "from": {
-                  "key_code": "j",
-                  "modifiers": {
-                    "mandatory": ["left_control"]
-                  }
-                },
-                "to": [
-                  {
-                    "key_code": "down_arrow"
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "description": "Use ctrl + h for left arrow",
-            "manipulators": [
-              {
-                "conditions": [
-                  {
-                    "bundle_identifiers": [
-                      "^net\\.kovidgoyal\\.kitty$",
-                      "^com\\.mitchellh\\.ghostty$"
-                    ],
-                    "type": "frontmost_application_unless"
-                  }
-                ],
-                "type": "basic",
                 "from": {
                   "key_code": "h",
                   "modifiers": {
-                    "mandatory": ["left_control"]
-                  }
-                },
-                "to": [
-                  {
-                    "key_code": "left_arrow"
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "description": "Use ctrl+shift + hjkl for shift+arrow keys (text selection)",
-            "manipulators": [
-              {
-                "type": "basic",
-                "from": {
-                  "key_code": "h",
-                  "modifiers": {
-                    "mandatory": ["left_control", "shift"]
+                    "mandatory": ["shift"]
                   }
                 },
                 "to": [
@@ -245,13 +185,25 @@
                     "modifiers": ["shift"]
                   }
                 ]
-              },
+              }
+            ]
+          },
+          {
+            "description": "Use hyper_right_option + shift + j for shift+down arrow (text selection)",
+            "manipulators": [
               {
                 "type": "basic",
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_right_option",
+                    "value": 1
+                  }
+                ],
                 "from": {
                   "key_code": "j",
                   "modifiers": {
-                    "mandatory": ["left_control", "shift"]
+                    "mandatory": ["shift"]
                   }
                 },
                 "to": [
@@ -260,13 +212,25 @@
                     "modifiers": ["shift"]
                   }
                 ]
-              },
+              }
+            ]
+          },
+          {
+            "description": "Use hyper_right_option + shift + k for shift+up arrow (text selection)",
+            "manipulators": [
               {
                 "type": "basic",
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_right_option",
+                    "value": 1
+                  }
+                ],
                 "from": {
                   "key_code": "k",
                   "modifiers": {
-                    "mandatory": ["left_control", "shift"]
+                    "mandatory": ["shift"]
                   }
                 },
                 "to": [
@@ -275,13 +239,25 @@
                     "modifiers": ["shift"]
                   }
                 ]
-              },
+              }
+            ]
+          },
+          {
+            "description": "Use hyper_right_option + shift + l for shift+right arrow (text selection)",
+            "manipulators": [
               {
                 "type": "basic",
+                "conditions": [
+                  {
+                    "type": "variable_if",
+                    "name": "hyper_right_option",
+                    "value": 1
+                  }
+                ],
                 "from": {
                   "key_code": "l",
                   "modifiers": {
-                    "mandatory": ["left_control", "shift"]
+                    "mandatory": ["shift"]
                   }
                 },
                 "to": [
@@ -515,39 +491,6 @@
                 },
                 "to": [{ "key_code": "left_shift" }],
                 "to_if_alone": [{ "key_code": "spacebar" }],
-                "type": "basic"
-              }
-            ]
-          },
-          {
-            "description": "Hyper Key: Right Option → left shift + left option + left command (⌃⇧⌥⌘)",
-            "enabled": false,
-            "manipulators": [
-              {
-                "from": {
-                  "key_code": "right_option",
-                  "modifiers": { "optional": ["any"] }
-                },
-                "to": [
-                  {
-                    "set_variable": {
-                      "name": "hyper_right_option",
-                      "value": 1
-                    }
-                  },
-                  {
-                    "key_code": "left_control",
-                    "modifiers": ["left_shift", "left_option", "left_command"]
-                  }
-                ],
-                "to_after_key_up": [
-                  {
-                    "set_variable": {
-                      "name": "hyper_right_option",
-                      "value": 0
-                    }
-                  }
-                ],
                 "type": "basic"
               }
             ]

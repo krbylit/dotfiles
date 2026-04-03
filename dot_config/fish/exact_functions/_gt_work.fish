@@ -62,7 +62,7 @@ function _gt_work --description "Manage persisted Gas Town workflow state"
                 return 0
             end
 
-            set -l text (string join " " $argv[2..-1])
+            set -l text (string join -- " " $argv[2..-1])
             set text (string replace -ra '[[:space:]]+' ' ' -- "$text")
             string trim -- "$text"
 

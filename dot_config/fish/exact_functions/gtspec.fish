@@ -1,15 +1,32 @@
 function gtspec --description "Start a spec workflow for a crew member and persist workflow state"
     set -l force 0
-    set -l args $argv
+    set -l file_path ""
+    set -l args
 
-    if contains -- --force $args
-        set force 1
-        set args (string match -v -- --force $args)
+    for i in (seq (count $argv))
+        switch $argv[$i]
+            case --force
+                set force 1
+            case --file
+                set -l next (math $i + 1)
+                if test $next -le (count $argv)
+                    set file_path $argv[$next]
+                    set i $next
+                else
+                    echo "Error: --file requires a path argument" >&2
+                    return 1
+                end
+            case '--file=*'
+                set file_path (string replace -- '--file=' '' $argv[$i])
+            case '*'
+                set -a args $argv[$i]
+        end
     end
 
     if test (count $args) -lt 2
-        echo "Usage: gtspec [--force] <crew> <worker> <brief...>" >&2
-        echo "   or: gtspec [--force] <crew/worker> <brief...>" >&2
+        echo "Usage: gtspec [--force] [--file PATH] <crew> <worker> [brief...]" >&2
+        echo "   or: gtspec [--force] [--file PATH] <crew/worker> [brief...]" >&2
+        echo "   or: echo 'text' | gtspec <crew> <worker> -" >&2
         return 1
     end
 
@@ -23,8 +40,8 @@ function gtspec --description "Start a spec workflow for a crew member and persi
         set worker $target_parts[2]
         set brief_args $args[2..-1]
     else
-        if test (count $args) -lt 3
-            echo "Usage: gtspec [--force] <crew> <worker> <brief...>" >&2
+        if test (count $args) -lt 3; and test -z "$file_path"; and not isatty stdin
+            echo "Usage: gtspec [--force] [--file PATH] <crew> <worker> [brief...]" >&2
             return 1
         end
 
@@ -33,7 +50,21 @@ function gtspec --description "Start a spec workflow for a crew member and persi
         set brief_args $args[3..-1]
     end
 
-    set -l brief (string join " " $brief_args)
+    set -l brief
+
+    if test -n "$file_path"
+        if not test -f "$file_path"
+            echo "Error: file not found: $file_path" >&2
+            return 1
+        end
+        set brief (string collect -- (cat "$file_path"))
+    else if test (count $brief_args) -eq 1; and test "$brief_args[1]" = -
+        set brief (string collect -- (cat))
+    else if test (count $brief_args) -eq 0; and not isatty stdin
+        set brief (string collect -- (cat))
+    else
+        set brief (string join -- " " $brief_args)
+    end
 
     if test -z "$brief"
         echo "Error: brief is required" >&2
