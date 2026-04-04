@@ -191,14 +191,22 @@ selection-invert-fg-bg = true
 cursor-invert-fg-bg = true
 cursor-style = block
 cursor-style-blink = true
+cursor-color = cell-foreground
+cursor-text = cell-background
 adjust-cursor-thickness = 2
 adjust-box-thickness =
 adjust-underline-thickness = 1
 
-unfocused-split-opacity = 0.9
+# The minimum contrast ratio between the foreground and background colors. Value of 1.1 avoids invisible text
+minimum-contrast = 1.1
+
+split-divider-color = "#ed8796"
+unfocused-split-opacity = 0.6
 # unfocused-split-fill = "#f7768e"
-background-blur-radius = 80
-background-opacity = .9
+background-blur = 60
+background-opacity = .85
+# Apply opacity to all cells even if a program sets color explicitly
+background-opacity-cells = true
 
 window-new-tab-position = end
 window-padding-balance = true
