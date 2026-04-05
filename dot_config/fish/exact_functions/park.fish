@@ -26,6 +26,9 @@ function park --description "Park Gas Town rigs, optionally limited to specific 
         return 1
     end
 
+    "$town_dir/start-monitors.sh" stop
+    or return $status
+
     gt rig park $rigs
     or return $status
 
@@ -40,9 +43,6 @@ function park --description "Park Gas Town rigs, optionally limited to specific 
         or return $status
 
         gt deacon stop
-        or return $status
-
-        "$town_dir/start-monitors.sh" stop
         or return $status
     end
 end
