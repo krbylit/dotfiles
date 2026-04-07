@@ -11,21 +11,27 @@ SESSION="${1:-$(tmux display-message -p '#{session_name}' 2>/dev/null)}"
 # Only theme Gas Town sessions (hq-*, th-*, gt-monitors, gt-fish)
 # Skip regular user tmux sessions
 case "$SESSION" in
-    hq-*|th-*|gt-monitors|gt-fish) ;; # Gas Town — continue
-    *) exit 0 ;; # Not Gas Town — skip
+*-crew-* | *-refinery | *-witness | hq-* | th-* | pa-* | co-* | le-* | pl-* | pd-* | te-* | ld-* | au-* | ad-* | fd-* | td-* | gt-monitors | gt-fish) ;; # Gas Town — continue
+*) exit 0 ;;                                                                                                                                             # Not Gas Town — skip
 esac
 
 # --- Color assignments by agent type ---
 # Format: bg fg sfg tab
 case "$SESSION" in
-    hq-mayor)       bg="#094338" fg="#3a7868" sfg="#589888" tab="#06322a" ;;
-    hq-deacon)      bg="#423758" fg="#6c6088" sfg="#8878a8" tab="#322a42" ;;
-    hq-boot)        bg="#14161e" fg="#3c4458" sfg="#505868" tab="#0e1016" ;;
-    *-witness)      bg="#564747" fg="#806c6c" sfg="#a08888" tab="#403636" ;;
-    *-refinery)     bg="#583c2e" fg="#80664c" sfg="#a08060" tab="#422d22" ;;
-    *-crew-*)       bg="#2b3a58" fg="#586c98" sfg="#7888b8" tab="#202c42" ;;
-    gt-monitors|gt-fish) bg="#1a1c24" fg="#4c5468" sfg="#606878" tab="#141618" ;;
-    *)              bg="#553036" fg="#805058" sfg="#a06870" tab="#402428" ;;  # polecats/default
+# hq-mayor) bg="#094338" fg="#3a7868" sfg="#589888" tab="#06322a" ;; # Original
+# hq-mayor) bg="#083d32" fg="#346c5d" sfg="#4f897a" tab="#052d26" ;; # 10% darker all
+# hq-mayor) bg="#083d32" fg="#3a7868" sfg="#589888" tab="#06322a" ;; # 10% darker bg
+# hq-mayor) bg="#063128" fg="#3a7868" sfg="#589888" tab="#06322a" ;; # 30% darker bg
+# hq-mayor) bg="#2C3655" fg="#7aa2f7" sfg="#8878a8" tab="#322a42" ;;
+hq-mayor) bg="#2C3655" fg="#7aa2f7" sfg="#b8ccf7" tab="#212840" ;;
+hq-deacon) bg="#423758" fg="#6c6088" sfg="#8878a8" tab="#322a42" ;; # Original
+hq-boot) bg="#14161e" fg="#3c4458" sfg="#505868" tab="#0e1016" ;;
+*-witness) bg="#564747" fg="#806c6c" sfg="#a08888" tab="#403636" ;;
+*-refinery) bg="#583c2e" fg="#80664c" sfg="#a08060" tab="#422d22" ;;
+# *-crew-*) bg="#2b3a58" fg="#586c98" sfg="#7888b8" tab="#202c42" ;; # Original
+*-crew-*) bg="#094338" fg="#3a7868" sfg="#589888" tab="#06322a" ;;
+gt-monitors | gt-fish) bg="#1a1c24" fg="#4c5468" sfg="#606878" tab="#141618" ;;
+*) bg="#553036" fg="#805058" sfg="#a06870" tab="#402428" ;; # polecats/default
 esac
 
 # Pane styling
@@ -46,18 +52,18 @@ tmux set-option -t "$SESSION" message-style "bg=$tab,fg=$sfg" 2>/dev/null
 
 # Window tabs (all existing windows)
 for win in $(tmux list-windows -t "$SESSION" -F '#{window_index}' 2>/dev/null); do
-    tmux set-window-option -t "$SESSION:$win" window-status-format " #I #W " 2>/dev/null
-    tmux set-window-option -t "$SESSION:$win" window-status-current-format " #I #W " 2>/dev/null
-    tmux set-window-option -t "$SESSION:$win" window-status-style "bg=$bg,fg=$fg" 2>/dev/null
-    tmux set-window-option -t "$SESSION:$win" window-status-current-style "bg=$tab,fg=$sfg,bold" 2>/dev/null
-    tmux set-window-option -t "$SESSION:$win" window-status-separator "" 2>/dev/null
-    tmux set-window-option -t "$SESSION:$win" window-style "bg=$bg,fg=$sfg" 2>/dev/null
-    tmux set-window-option -t "$SESSION:$win" window-active-style "bg=$bg,fg=$sfg" 2>/dev/null
+  tmux set-window-option -t "$SESSION:$win" window-status-format " #I #W " 2>/dev/null
+  tmux set-window-option -t "$SESSION:$win" window-status-current-format " #I #W " 2>/dev/null
+  tmux set-window-option -t "$SESSION:$win" window-status-style "bg=$bg,fg=$fg" 2>/dev/null
+  tmux set-window-option -t "$SESSION:$win" window-status-current-style "bg=$tab,fg=$sfg,bold" 2>/dev/null
+  tmux set-window-option -t "$SESSION:$win" window-status-separator "" 2>/dev/null
+  tmux set-window-option -t "$SESSION:$win" window-style "bg=$bg,fg=$sfg" 2>/dev/null
+  tmux set-window-option -t "$SESSION:$win" window-active-style "bg=$bg,fg=$sfg" 2>/dev/null
 done
 
 # Hook for new windows in this session
 tmux set-hook -t "$SESSION" after-new-window \
-    "set-window-option window-status-format ' #I #W '; \
+  "set-window-option window-status-format ' #I #W '; \
      set-window-option window-status-current-format ' #I #W '; \
      set-window-option window-status-style 'bg=$bg,fg=$fg'; \
      set-window-option window-status-current-style 'bg=$tab,fg=$sfg,bold'; \
@@ -68,6 +74,6 @@ tmux set-hook -t "$SESSION" after-new-window \
 # Guard against external tools (e.g. gt theme apply) overwriting status-style.
 # Re-apply our colors whenever a session-level option is set.
 tmux set-hook -t "$SESSION" after-set-option \
-    "set-option -t $SESSION status-style 'bg=$bg,fg=$sfg'; \
+  "set-option -t $SESSION status-style 'bg=$bg,fg=$sfg'; \
      set-option -t $SESSION status-left-style 'bg=$bg,fg=$sfg,bold'; \
      set-option -t $SESSION status-right-style 'bg=$bg,fg=$sfg'" 2>/dev/null
