@@ -1,5 +1,9 @@
 function park --description "Park Gas Town rigs, optionally limited to specific rigs"
-    set -l town_dir "$HOME/gt"
+    if test "$PWD" = "$HOME/gt"; or string match -q "$HOME/gt-*" "$PWD"
+        set -l town_dir $PWD
+    else
+        set -l town_dir $HOME/gt
+    end
 
     if not test -d "$town_dir"
         echo "Error: Gas Town directory not found at $town_dir" >&2
