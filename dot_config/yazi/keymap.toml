@@ -370,7 +370,7 @@ run = "cd ~/obsidian-vault/"
 desc = "Go to Obsidian vault"
 
 [[mgr.prepend_keymap]]
-on = ["g", "g"]
+on = ["g", "r"]
 run = "cd ~/gt"
 desc = "Go to Gas Town"
 
