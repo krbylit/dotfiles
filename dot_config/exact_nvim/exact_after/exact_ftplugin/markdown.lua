@@ -323,6 +323,36 @@ vim.keymap.set("v", "<localleader>l", function()
   vim.api.nvim_buf_set_text(0, start_row, start_col, end_row, end_col, { link })
 end, { desc = "Insert link (wrap selection)", buffer = true })
 
+-- Yank absolute path to current/nearest heading as a linkable reference.
+-- If no heading is found above the cursor, yanks just the file path.
+vim.keymap.set("n", "<localleader>y", function()
+  local bufname = vim.api.nvim_buf_get_name(0)
+  if bufname == "" then
+    vim.notify("Buffer has no file path", vim.log.levels.WARN)
+    return
+  end
+
+  -- Search current line then upward for the nearest heading
+  local heading_text = nil
+  local cur_line = vim.fn.line(".")
+  for lnum = cur_line, 1, -1 do
+    local line = vim.fn.getline(lnum)
+    local text = line:match("^#+%s+(.*)")
+    if text then
+      heading_text = vim.trim(text)
+      break
+    end
+  end
+
+  local ref = bufname
+  if heading_text then
+    ref = bufname .. "#" .. heading_text
+  end
+
+  vim.fn.setreg("+", ref)
+  vim.notify(ref, vim.log.levels.INFO)
+end, { desc = "Yank heading link path", buffer = true })
+
 -- Interactive checkbox: delegates to obsidian.nvim when available, no-ops otherwise.
 -- Outside the vault obsidian.nvim is loaded but the current buffer is not an obsidian
 -- note, so the Checkbox command may not exist — we guard with pcall.
