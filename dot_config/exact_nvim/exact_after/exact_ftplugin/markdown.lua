@@ -346,7 +346,18 @@ vim.keymap.set("n", "<localleader>y", function()
 
   local ref = bufname
   if heading_text then
-    ref = bufname .. "#" .. heading_text
+    -- Slugify: strip leading #/whitespace, lowercase, collapse non-alnum to hyphens
+    local slug = heading_text
+      :gsub("^[#%s]+", "")
+      :lower()
+      :gsub("[^%w%s%-]", "")
+      :gsub("%s+", "-")
+      :gsub("%-+", "-")
+      :gsub("^%-", "")
+      :gsub("%-$", "")
+    if slug ~= "" then
+      ref = bufname .. "#" .. slug
+    end
   end
 
   vim.fn.setreg("+", ref)
