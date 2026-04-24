@@ -144,14 +144,16 @@ kb_search() {
   fi
 
   # BM25 weights: content=-10, tags_text=-5, type=-2, key=-1
-  sqlite3 -separator '|' "$DB_PATH" <<SQL
-SELECT k.type, k.content, k.bead, k.tags_text
+  # $FTS_QUERY is safe to interpolate: the term extractor above restricts it
+  # to [a-zA-Z0-9_.]{2,} tokens wrapped in double quotes, joined by OR.
+  # Note: sqlite3 CLI has no bound parameter support (? binding is C API only).
+  sqlite3 -separator '|' "$DB_PATH" \
+    "SELECT k.type, k.content, k.bead, k.tags_text
 FROM knowledge_fts fts
 JOIN knowledge k ON k.rowid = fts.rowid
 WHERE knowledge_fts MATCH '$FTS_QUERY'
 ORDER BY bm25(knowledge_fts, -10.0, -5.0, -2.0, -1.0)
-LIMIT $TOP_N;
-SQL
+LIMIT $TOP_N;"
 }
 
 # Incremental sync from JSONL files into SQLite FTS5
@@ -219,7 +221,10 @@ kb_sync() {
 _kb_sync_jsonl() {
   local DB_PATH="$1"
   local JSONL_FILE="$2"
-  local DB_COUNT="$3"
+  # $3 (DB_COUNT) intentionally unused: the previous SKIP=(DB_COUNT-50)/tail optimization
+  # silently dropped JSONL-only entries after a cold rebuild where bead-comment population
+  # yielded more DB rows than knowledge.jsonl has lines. kb_insert dedupes on PRIMARY KEY,
+  # so a full-file scan is safe and cheap (O(log N) index lookup per row).
 
   [[ ! -f "$JSONL_FILE" ]] && return 0
 
@@ -227,11 +232,7 @@ _kb_sync_jsonl() {
   FILE_LINES=$(wc -l < "$JSONL_FILE" 2>/dev/null | tr -d ' ')
   [[ "$FILE_LINES" -eq 0 ]] && return 0
 
-  # How many lines to import: difference + 50 margin for safety
-  local SKIP=$(( DB_COUNT - 50 ))
-  [[ "$SKIP" -lt 0 ]] && SKIP=0
-
-  tail -n +"$(( SKIP + 1 ))" "$JSONL_FILE" | while IFS= read -r LINE; do
+  while IFS= read -r LINE; do
     [[ -z "$LINE" ]] && continue
 
     local KEY TYPE CONTENT SOURCE TAGS_TEXT TS BEAD
@@ -246,7 +247,7 @@ _kb_sync_jsonl() {
     BEAD=$(echo "$LINE" | jq -r '.bead // ""' 2>/dev/null)
 
     kb_insert "$DB_PATH" "$KEY" "$TYPE" "$CONTENT" "$SOURCE" "$TAGS_TEXT" "$TS" "$BEAD"
-  done
+  done < "$JSONL_FILE"
 }
 
 # Backward-compatible alias
