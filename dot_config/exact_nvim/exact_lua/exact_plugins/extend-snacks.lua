@@ -394,7 +394,7 @@ return {
         grep = {
           args = { "-P" }, -- Enable PCRE2
           hidden = true,
-          ignored = false,
+          ignored = true,
           -- Exclude dirs from text search
           exclude = {
             "**/.venv/**",
