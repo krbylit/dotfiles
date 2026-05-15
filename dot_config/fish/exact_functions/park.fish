@@ -30,7 +30,7 @@ function park --description "Park Gas Town rigs, optionally limited to specific 
         return 1
     end
 
-    "$town_dir/start-monitors.sh" stop
+    # "$town_dir/start-monitors.sh" stop
     or return $status
 
     gt rig park $rigs

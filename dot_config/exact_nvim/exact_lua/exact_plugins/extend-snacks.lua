@@ -87,6 +87,65 @@ return {
   "folke/snacks.nvim",
   priority = 1000,
   lazy = false,
+  -- Observer (not a patch): strip "[Process exited N]" left behind by the
+  -- terminal sections of snacks.dashboard when ANSI commands like `tte`
+  -- exit with the cursor mid-line. snacks's own hide_process_exited uses
+  -- an anchored regex (`^%[Process exited 0%]`) that misses those cases
+  -- and may also miss messages rendered as virt_text extmarks on newer
+  -- Neovim. Scoped tightly to `snacks_dashboard` buffers; safe to remove
+  -- when snacks fixes this upstream.
+  init = function()
+    local group = vim.api.nvim_create_augroup("kl_snacks_dashboard_strip_exit", { clear = true })
+    local pat = "%[Process exited %d+%]"
+
+    local function clean(buf)
+      if not vim.api.nvim_buf_is_valid(buf) then
+        return
+      end
+      if vim.bo[buf].filetype ~= "snacks_dashboard" then
+        return
+      end
+      local was_modifiable = vim.bo[buf].modifiable
+      vim.bo[buf].modifiable = true
+      -- Strip from real buffer lines (handles leading whitespace, any exit code)
+      local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, true)
+      for i = #lines, 1, -1 do
+        if lines[i]:find(pat) then
+          vim.api.nvim_buf_set_lines(buf, i - 1, i, true, {})
+        end
+      end
+      -- Strip from extmark virt_text (in case Neovim renders the message there)
+      for _, ns_id in pairs(vim.api.nvim_get_namespaces()) do
+        local marks = vim.api.nvim_buf_get_extmarks(buf, ns_id, 0, -1, { details = true })
+        for _, mark in ipairs(marks) do
+          local id, details = mark[1], mark[4]
+          if details and details.virt_text then
+            for _, chunk in ipairs(details.virt_text) do
+              if type(chunk[1]) == "string" and chunk[1]:find(pat) then
+                pcall(vim.api.nvim_buf_del_extmark, buf, ns_id, id)
+                break
+              end
+            end
+          end
+        end
+      end
+      vim.bo[buf].modifiable = was_modifiable
+    end
+
+    vim.api.nvim_create_autocmd("TermClose", {
+      group = group,
+      callback = function(args)
+        local buf = args.buf
+        -- Retry: filetype may be set just after TermClose, and the exit
+        -- message may be written slightly after the channel closes.
+        for _, delay in ipairs({ 0, 50, 150, 400, 1000 }) do
+          vim.defer_fn(function()
+            clean(buf)
+          end, delay)
+        end
+      end,
+    })
+  end,
   ---@type snacks.Config
   opts = {
     ---@type snacks.win.Config

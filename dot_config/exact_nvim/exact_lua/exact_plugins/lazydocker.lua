@@ -8,16 +8,17 @@ vim.keymap.set({ "n", "t" }, "<leader>dd", function()
       height = 0,
       width = 0,
       border = "rounded",
-      keys = {
-        hide = {
-          "<c-/>",
-          function(self)
-            self:hide()
-          end,
-          mode = "t",
-          desc = "Toggle lazydocker closed",
-        },
-      },
+      -- TODO: seems this is no longer needed and we get a duplicate keymap WARN if enabled here, remove after period of validation
+      -- keys = {
+      --   hide = {
+      --     "<c-/>",
+      --     function(self)
+      --       self:hide()
+      --     end,
+      --     mode = "t",
+      --     desc = "Toggle lazydocker closed",
+      --   },
+      -- },
     },
     interactive = true,
     auto_close = true,

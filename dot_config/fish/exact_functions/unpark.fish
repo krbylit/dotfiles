@@ -52,7 +52,7 @@ function unpark --description "Unpark Gas Town rigs, optionally limited to speci
         gt deacon restart
         or return $status
 
-        "$town_dir/start-monitors.sh" start
+        # "$town_dir/start-monitors.sh" start
         or return $status
     end
 end
