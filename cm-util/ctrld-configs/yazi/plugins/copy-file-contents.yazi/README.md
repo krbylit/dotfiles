@@ -37,8 +37,8 @@ Add the below to your `~/.config/yazi/init.lua` file to set custom options for t
 
 ```lua
 require("copy-file-contents"):setup({
- append_char = "\n",
- notification = true,
+	append_char = "\n",
+	notification = true,
 })
 ```
 

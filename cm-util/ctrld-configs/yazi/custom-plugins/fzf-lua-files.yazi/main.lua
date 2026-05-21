@@ -4,7 +4,7 @@
 return {
   entry = function()
     -- Hide yazi UI before running interactive command
-    local _permit = ya.hide()
+    local _permit = ui.hide()
 
     -- Get XDG_DATA_HOME or default to ~/.local/share
     local xdg_data_home = os.getenv("XDG_DATA_HOME") or os.getenv("HOME") .. "/.local/share"

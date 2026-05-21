@@ -2,7 +2,7 @@
 
 Diff the selected file with the hovered file, create a living patch, and copy it to the clipboard.
 
-<https://github.com/yazi-rs/plugins/assets/17523360/eff5e949-386a-44ea-82f9-4cb4a2c37aad>
+https://github.com/yazi-rs/plugins/assets/17523360/eff5e949-386a-44ea-82f9-4cb4a2c37aad
 
 ## Installation
 
@@ -21,7 +21,7 @@ run  = "plugin diff"
 desc = "Diff the selected with the hovered file"
 ```
 
-Make sure the <kbd>C</kbd> + <kbd>d</kbd> key is not used elsewhere.
+Note that, the keybindings above are just examples, please tune them up as needed to ensure they don't conflict with your other actions/plugins.
 
 ## License
 
