@@ -6,14 +6,17 @@ ps.sub("ind-app-title", function(args)
   return args
 end)
 
--- Compat shim: route the deprecated `ya.mgr_emit` to its replacement
--- `ya.emit` (yazi PR #2653, deprecated since v25.5.28). Used so the
--- relative-motions plugin doesn't pop a yellow "Deprecated API"
--- notification on every motion. Safe to remove once upstream
--- dedukun/relative-motions ships the renamed call.
-if ya.mgr_emit and ya.emit then
-  ya.mgr_emit = ya.emit
-end
+-- NOTE: a previous version of this file subscribed to `relay-notify-push`
+-- intending to filter the "Deprecated API" toast. It can't work — that
+-- event only fires when `cx.source() == Source::Relay`, but internal
+-- notifications (yazi-actor/src/app/deprecate.rs -> act!(notify:push, ...))
+-- run at actor level >= 2, and yazi-actor/src/context.rs reduces
+-- `source()` to `Source::Ind` for any non-top-level call. The spark
+-- `RelayNotifyPush` is never emitted, so the subscriber is unreachable
+-- for internal toasts. Notifications are rendered entirely in Rust
+-- (yazi-fm/src/notify/notify.rs) with no preset Lua component to hijack.
+-- The only real fixes are upstream PRs to the offending plugins, or
+-- a post-`ya pkg upgrade` sed script.
 
 -- Load Yazi plugins
 require("folder-rules"):setup()

@@ -55,6 +55,6 @@ return {
     end
 
     -- Reveal the file in yazi
-    ya.mgr_emit("reveal", { file_path })
+    ya.emit("reveal", { file_path })
   end,
 }

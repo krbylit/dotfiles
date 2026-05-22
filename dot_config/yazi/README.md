@@ -4,9 +4,12 @@
 
 [Yazi](https://yazi-rs.github.io/) is a blazing fast terminal file manager written in Rust, featuring async I/O, rich previews, and extensive plugin support. This configuration includes custom keybindings, themes, plugins, and shell integration for a vim-like file navigation experience.
 
-> [!WARNING] Updating yazi breaks our current config
-> Highest compatible version is v25.5.31, next up v25.12.29 will break it. Even after plugin updates
-> (and manual changes to those since they're not fully up-to-date with new API), we don't get previews and a lot of config is lost.
+> [!NOTE] Confirmed working on yazi 26.5.6
+> This config was migrated from 25.5.31 to 26.5.6 in May 2026 (yazi.toml
+> schema rename, flavor `name=`→`url=`, removal of `title_format`,
+> `micro_workers`/`macro_workers`, `sync=true` on previewer rules, etc.).
+> A handful of third-party plugins are still on the v25-era Lua API; see
+> [Post-upgrade plugin patch](#post-upgrade-plugin-patch) below.
 
 ## Table of Contents
 
@@ -39,6 +42,7 @@
 - [Plugin Management](#plugin-management)
   - [Installing Plugins](#installing-plugins)
   - [Updating Plugins](#updating-plugins)
+  - [Post-upgrade plugin patch](#post-upgrade-plugin-patch)
   - [Enabling Plugins](#enabling-plugins)
   - [Currently Installed Plugins](#currently-installed-plugins)
 - [Theme Configuration](#theme-configuration)
@@ -328,7 +332,56 @@ git clone https://github.com/author/plugin.yazi \
 
 ```bash
 ya pkg upgrade
+# or, when ya pkg refuses because local changes are detected:
+ya pkg upgrade --discard
 ```
+
+After every upgrade, **run the post-upgrade patch script** below — `ya pkg`
+overwrites plugins from upstream, which re-introduces deprecated API
+calls that pop a yellow "Deprecated API" toast on every yazi launch.
+
+### Post-upgrade plugin patch
+
+`cm-util/scripts/patch-yazi-pkg-deprecations.sh` rewrites `ya.mgr_emit(`
+→ `ya.emit(` in the third-party plugins that still call the deprecated
+form (yazi deprecated `ya.mgr_emit` in v25.5.28, PR #2653; the two
+functions are equivalent).
+
+```bash
+# patch in place (idempotent — safe to run repeatedly)
+~/.local/share/chezmoi/cm-util/scripts/patch-yazi-pkg-deprecations.sh
+
+# or, for a status-only report (exits 1 if deprecated calls remain)
+~/.local/share/chezmoi/cm-util/scripts/patch-yazi-pkg-deprecations.sh --check
+```
+
+**Plugins it currently patches** (drop entries from the script's
+`TARGETS` array once each upstream merges the rename):
+
+| Plugin                   | Sites |
+|--------------------------|------:|
+| `dedukun/bookmarks`      |     2 |
+| `Reledia/glow`           |     2 |
+| `dedukun/relative-motions` | 26 |
+
+Two questions you'll have:
+
+- **Why not subscribe to `relay-notify-push` and drop the toast in Lua?**
+  Tried — doesn't work. yazi's `Push::hook` only fires the
+  `RelayNotifyPush` spark when `cx.source() == Source::Relay`, but
+  `Ctx::source()` reduces to `Source::Ind` for any nested actor call.
+  The deprecate path runs at actor level ≥ 2 (Deprecate → notify:push),
+  so the subscriber is unreachable. There is also no Lua preset
+  component for notify rendering — it's all in
+  `yazi-fm/src/notify/notify.rs`. See the long comment in `init.lua`.
+- **Why not vendor the plugins into `custom-plugins/`?**
+  Tried that too; locks us out of upstream updates. The patch script is
+  the best compromise: cheap to re-run, easy to delete once each
+  upstream PR lands.
+
+**Custom plugins** (under `cm-util/ctrld-configs/yazi/custom-plugins/`,
+symlinked into `plugins/`) have already been migrated directly to
+`ya.emit` — no post-upgrade patching needed for those.
 
 ### Enabling Plugins
 

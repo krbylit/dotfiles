@@ -1,8 +1,9 @@
 function unpark --description "Unpark Gas Town rigs, optionally limited to specific rigs"
+    set -l town_dir
     if test "$PWD" = "$HOME/gt"; or string match -q "$HOME/gt-*" "$PWD"
-        set -l town_dir $PWD
+        set town_dir $PWD
     else
-        set -l town_dir $HOME/gt
+        set town_dir $HOME/gt
     end
 
     if not test -d "$town_dir"

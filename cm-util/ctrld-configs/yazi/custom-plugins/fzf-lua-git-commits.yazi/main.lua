@@ -45,6 +45,6 @@ return {
       return
     end
 
-    ya.mgr_emit("reveal", { result })
+    ya.emit("reveal", { result })
   end,
 }
