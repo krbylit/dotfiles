@@ -68,6 +68,11 @@ views:
       - name: Closed
         query: status = closed
         color: "#BBBBBB"
+  - name: All
+    columns:
+      - name: All
+        query: title ~ ''
+        color: "#73F59F"
 # View options:
 #   name: Display name for the view (required)
 #   columns: List of columns for this view (required)
