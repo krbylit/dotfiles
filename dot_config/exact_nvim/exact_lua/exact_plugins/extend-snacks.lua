@@ -582,17 +582,17 @@ return {
         { icon = " ", pane = 2, title = "Keymaps", section = "keys", indent = 2, padding = 1 },
         { icon = " ", title = "Projects", section = "projects", indent = 2, padding = 1 },
         { icon = " ", title = "Recent Files", section = "recent_files", indent = 2, padding = 1 },
-        {
-          pane = 2,
-          icon = " ",
-          title = "Git Status",
-          -- cmd = "hub --no-pager diff --stat -B -M -C",
-          -- cmd = "hub status --short --branch --renames",
-          cmd = "git rev-parse --is-inside-work-tree >/dev/null 2>&1 && hub status --short --branch --renames || true",
-          section = "terminal",
-          height = 5,
-          ttl = 0,
-        },
+        -- {
+        --   pane = 2,
+        --   icon = " ",
+        --   title = "Git Status",
+        --   -- cmd = "hub --no-pager diff --stat -B -M -C",
+        --   -- cmd = "hub status --short --branch --renames",
+        --   cmd = "git rev-parse --is-inside-work-tree >/dev/null 2>&1 && hub status --short --branch --renames || true",
+        --   section = "terminal",
+        --   height = 5,
+        --   ttl = 0,
+        -- },
         -- terminal-toys animation
         -- {
         --   section = "terminal",
