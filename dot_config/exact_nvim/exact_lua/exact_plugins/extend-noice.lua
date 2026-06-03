@@ -4,6 +4,11 @@
 return {
   "folke/noice.nvim",
   lazy = false,
+  config = function(_, opts)
+    -- Patch upstream timer-lifecycle leak in noice.util before setup runs.
+    require("utils.noice-timer-fix")
+    require("noice").setup(opts)
+  end,
   opts = {
     cmdline = {
       enabled = true, -- enables the Noice cmdline UI

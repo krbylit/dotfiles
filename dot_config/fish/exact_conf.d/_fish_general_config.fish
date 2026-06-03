@@ -1,7 +1,26 @@
-# Set SSH agent env vars for forwarding
-if not set -q SSH_AUTH_SOCK
-    eval (ssh-agent -c) >/dev/null
-    set -Ux SSH_AGENT_PID $SSH_AGENT_PID
+# Set up SSH agent for key forwarding.
+# macOS (Tahoe) launchd intermittently advertises a dead SSH_AUTH_SOCK, so we
+# check that the agent is actually reachable (`ssh-add -l` exit 2 == no agent)
+# instead of merely checking that the var is set. Pin a fixed socket so the
+# agent is stable across shells. Skip inside SSH sessions, where the forwarded
+# agent (see the `s` function) owns SSH_AUTH_SOCK.
+if not set -q SSH_CONNECTION; and not set -q SSH_TTY
+    set -gx SSH_AUTH_SOCK "$HOME/.ssh/agent-local.sock"
+    ssh-add -l >/dev/null 2>&1
+    if test $status -eq 2
+        # No reachable agent — start a self-managed one bound to the fixed socket.
+        rm -f "$SSH_AUTH_SOCK"
+        ssh-agent -a "$SSH_AUTH_SOCK" >/dev/null 2>&1
+    end
+    ssh-add -l >/dev/null 2>&1
+    if test $status -eq 1
+        # Agent reachable but empty — load keys non-interactively.
+        if test (uname) = Darwin
+            ssh-add --apple-load-keychain >/dev/null 2>&1
+        else
+            ssh-add >/dev/null 2>&1
+        end
+    end
 end
 # Set Editor
 if set -q NVIM

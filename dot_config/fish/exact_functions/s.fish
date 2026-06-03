@@ -30,8 +30,10 @@ function s --wraps='ssh' --description 'SSH with custom config'
         export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID;
         export HOMEBREW_BUNDLE_FILE="$HOME/Brewfile_ssh";
         mkdir -p ~/.ssh;
-        ln -sf \"\$SSH_AUTH_SOCK\" ~/.ssh/agent.sock;
-        export SSH_AUTH_SOCK=~/.ssh/agent.sock;
+        if [ -S \"\$SSH_AUTH_SOCK\" ]; then
+          ln -sf \"\$SSH_AUTH_SOCK\" ~/.ssh/agent.sock;
+          export SSH_AUTH_SOCK=~/.ssh/agent.sock;
+        fi;
         tmux set -g update-environment \"SSH_AUTH_SOCK SSH_CONNECTION SSH_CLIENT\" 2>/dev/null || true;
         bash --login -c 'zellij attach $session_name 2>/dev/null || zellij --session $session_name 2>/dev/null || tmux new-session -A -s \"$session_name\" || bash --login'
     "
