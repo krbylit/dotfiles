@@ -29,6 +29,7 @@ function s --wraps='ssh' --description 'SSH with custom config'
         export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY;
         export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID;
         export HOMEBREW_BUNDLE_FILE="$HOME/Brewfile_ssh";
+        export IS_SSH="1";
         mkdir -p ~/.ssh;
         if [ -S \"\$SSH_AUTH_SOCK\" ]; then
           ln -sf \"\$SSH_AUTH_SOCK\" ~/.ssh/agent.sock;
