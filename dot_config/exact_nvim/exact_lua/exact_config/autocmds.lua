@@ -3,6 +3,21 @@
 -- ================================================================
 -- CUSTOM AUTO COMMANDS
 -- ================================================================
+
+-- Fix highlight-on-yank on nvim-0.13 nightlies.
+-- LazyVim 16.0 assumes any nvim-0.13 renamed vim.hl.on_yank -> vim.hl.hl_op,
+-- but older 0.13 dev builds still only expose on_yank, so its autocmd errors
+-- with: attempt to call field 'hl_op' (a nil value). Recreate LazyVim's
+-- augroup (this file loads after LazyVim's defaults) and call whichever
+-- function exists, so it keeps working before and after the rename lands.
+vim.api.nvim_create_autocmd("TextYankPost", {
+  group = vim.api.nvim_create_augroup("lazyvim_highlight_yank", { clear = true }),
+  callback = function()
+    local hl = vim.hl or vim.highlight
+    ;(hl.hl_op or hl.on_yank)()
+  end,
+})
+
 -- NOTE: Workaround since something is overriding this since we have it set in options. Remove once we figure out what is overriding.
 -- Disabling for now as having root dir set works with persistence.nvim better
 -- vim.api.nvim_create_autocmd("BufEnter", {

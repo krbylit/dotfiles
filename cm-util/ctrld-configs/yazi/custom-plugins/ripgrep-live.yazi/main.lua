@@ -4,7 +4,7 @@
 return {
   entry = function()
     -- Hide yazi UI before running interactive command
-    local _permit = ya.hide()
+    local _permit = ui.hide()
 
     -- Run the yazi_ripgrep Fish function using spawn (like fzf does)
     -- Only pipe stdout, let stderr through for fzf UI
@@ -43,6 +43,6 @@ return {
     end
 
     -- Reveal the file in yazi
-    ya.mgr_emit("reveal", { file_path })
+    ya.emit("reveal", { file_path })
   end,
 }

@@ -2,7 +2,7 @@
 
 Execute `chmod` on the selected files to change their mode. This plugin is only available on Unix platforms since it relies on [`chmod(2)`](https://man7.org/linux/man-pages/man2/chmod.2.html).
 
-<https://github.com/yazi-rs/plugins/assets/17523360/7aa3abc2-d057-498c-8473-a6282c59c464>
+https://github.com/yazi-rs/plugins/assets/17523360/7aa3abc2-d057-498c-8473-a6282c59c464
 
 ## Installation
 
@@ -21,7 +21,7 @@ run  = "plugin chmod"
 desc = "Chmod on selected files"
 ```
 
-Make sure the <kbd>c</kbd> => <kbd>m</kbd> key is not used elsewhere.
+Note that, the keybindings above are just examples, please tune them up as needed to ensure they don't conflict with your other actions/plugins.
 
 ## License
 

@@ -1,5 +1,10 @@
 function park --description "Park Gas Town rigs, optionally limited to specific rigs"
-    set -l town_dir "$HOME/gt"
+    set -l town_dir
+    if test "$PWD" = "$HOME/gt"; or string match -q "$HOME/gt-*" "$PWD"
+        set town_dir $PWD
+    else
+        set town_dir $HOME/gt
+    end
 
     if not test -d "$town_dir"
         echo "Error: Gas Town directory not found at $town_dir" >&2
@@ -26,7 +31,13 @@ function park --description "Park Gas Town rigs, optionally limited to specific 
         return 1
     end
 
+    # "$town_dir/start-monitors.sh" stop
+    or return $status
+
     gt rig park $rigs
+    or return $status
+
+    gt rig stop $rigs
     or return $status
 
     if test (count $argv) -eq 0
@@ -36,7 +47,7 @@ function park --description "Park Gas Town rigs, optionally limited to specific 
         gt deacon pause
         or return $status
 
-        "$town_dir/start-monitors.sh" stop
+        gt deacon stop
         or return $status
     end
 end

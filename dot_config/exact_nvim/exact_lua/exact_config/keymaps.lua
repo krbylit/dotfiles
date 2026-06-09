@@ -25,6 +25,9 @@ end
 -- vim.keymap.set("n", "<C-u>", "25<C-y>", { noremap = true })
 map({ "n", "v" }, "^", "g^", { noremap = true, silent = true })
 map({ "n", "v" }, "$", "g$", { noremap = true, silent = true })
+-- Logical line movement (j/k move visual lines by default for wrap-awareness)
+map({ "n", "v" }, "<leader>j", "j", { noremap = true, silent = true, desc = "Down (logical line)" })
+map({ "n", "v" }, "<leader>k", "k", { noremap = true, silent = true, desc = "Up (logical line)" })
 -- Scrolling
 -- TODO: figure out other maps, these conflict with window movement
 -- map({ "n", "v" }, "<C-j>", "10j", { noremap = true, silent = true })

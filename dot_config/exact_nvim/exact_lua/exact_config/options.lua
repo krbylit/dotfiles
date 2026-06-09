@@ -90,6 +90,7 @@ opt.breakindentopt = "shift:2,sbr,min:20"
 -- opt.showbreak = "↳" -- Show a symbol for a line break
 opt.wrapmargin = 0
 opt.textwidth = 0
+opt.spellfile = vim.fn.stdpath("config") .. "/spell/en.utf-8.add"
 -- opt.showbreak = "	" -- Show a symbol for a line break
 -- opt.textwidth = 80 -- Maximum width of text. Actually changes text in the buffer NOTE: disabling because it causes messes
 -- Cursor: always block, blinks in insert mode, color changes per mode.

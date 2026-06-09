@@ -41,6 +41,11 @@ theme: catppuccin-mocha
 # Board views - each view is a named collection of columns
 # Cycle through views with Shift+J (next) and Shift+K (previous)
 views:
+  - name: Epics
+    columns:
+      - name: Epics
+        query: type in (epic,feature) and status != closed and status != blocked
+        color: "#E879F9"
   - name: Ready
     columns:
       - name: Ready
@@ -55,11 +60,6 @@ views:
       - name: In Progress
         query: status = in_progress
         color: "#54A0FF"
-  - name: Epics
-    columns:
-      - name: Epics
-        query: type in (epic,feature) and status != closed
-        color: "#E879F9"
   - name: Blocked/closed
     columns:
       - name: Blocked
@@ -68,6 +68,11 @@ views:
       - name: Closed
         query: status = closed
         color: "#BBBBBB"
+  - name: All
+    columns:
+      - name: All
+        query: title ~ ''
+        color: "#73F59F"
 # View options:
 #   name: Display name for the view (required)
 #   columns: List of columns for this view (required)

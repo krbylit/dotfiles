@@ -1,6 +1,6 @@
-# A TOML linter such as https://taplo.tamasfe.dev/ can use this schema to validate your config.
-# If you encounter any issues, please make an issue at https://github.com/yazi-rs/schemas.
-"$schema" = "https://yazi-rs.github.io/schemas/yazi.json"
+# yazi-rs/schemas defines the JSON schema for editor LSPs (taplo, tombi).
+# Yazi 26.x rejects a top-level `"$schema"` key as not-kebab-case, so the
+# editor-hint declaration is omitted here.
 
 [mgr]
 ratio = [1, 4, 3]
@@ -14,7 +14,8 @@ show_hidden = true
 show_symlink = true
 scrolloff = 5
 mouse_events = ["click", "scroll"]
-title_format = "Yazi: {cwd}"
+# `title_format` was removed in yazi 26.5.6. The "Yazi: {cwd}" title is now
+# restored via an `ind-app-title` DDS subscription in init.lua.
 
 [preview]
 wrap = "no"
@@ -59,7 +60,7 @@ play = [
 [open]
 rules = [
   # Folder
-  { name = "*/", use = [
+  { url = "*/", use = [
     "edit",
     "open",
     "reveal",
@@ -103,7 +104,7 @@ rules = [
     "reveal",
   ] },
   # Fallback
-  { name = "*", use = [
+  { url = "*", use = [
     "edit",
     "open",
     "reveal",
@@ -111,8 +112,9 @@ rules = [
 ]
 
 [tasks]
-micro_workers = 10
-macro_workers = 25
+# `micro_workers` and `macro_workers` were removed in yazi 26.5.6 in favor of
+# finer-grained worker controls. Defaults are fine; reintroduce specific
+# `*_workers` keys here if/when individual task types need tuning.
 bizarre_retry = 5
 image_alloc = 536870912  # 512MB
 image_bound = [0, 0]
@@ -122,21 +124,21 @@ suppress_preload = false
 spotters = [
   # Avoid image hover shell-popup behavior from file-extra-metadata.
   { mime = "image/*", run = "file" },
-  { name = "*", run = "file-extra-metadata" },
+  { url = "*", run = "file-extra-metadata" },
 ]
 prepend_previewers = [
   # Use rich-cli (Textual) for previews
   # `ya pack -a AnirudhG07/rich-preview`
   # install dep `python -m pip install rich`
-  { name = "*.csv", run = "rich-preview" },     # for csv files
-  { name = "*.md", run = "rich-preview" },      # for markdown (.md) files
-  { name = "*.rst", run = "rich-preview" },     # for restructured text (.rst) files
-  { name = "*.ipynb", run = "rich-preview" },   # for jupyter notebooks (.ipynb)
-  { name = "*.json", run = "rich-preview" },    # for json (.json) files
-  { name = "*.txt.gz", run = "zless-preview" }, # for archive file previews
+  { url = "*.csv", run = "rich-preview" },     # for csv files
+  { url = "*.md", run = "rich-preview" },      # for markdown (.md) files
+  { url = "*.rst", run = "rich-preview" },     # for restructured text (.rst) files
+  { url = "*.ipynb", run = "rich-preview" },   # for jupyter notebooks (.ipynb)
+  { url = "*.json", run = "rich-preview" },    # for json (.json) files
+  { url = "*.txt.gz", run = "zless-preview" }, # for archive file previews
   # # Preview markdown with `glow`
   # # install with `ya pack -a Reledia/glow`
-  # { name = "*.md", run = "glow" },
+  # { url = "*.md", run = "glow" },
   # # install with `ya pack -a Reledia/miller`
   # # Preview CSV with `miller`
   # FIXME: miller not seeming to work, rich-preview does better ATM
@@ -144,8 +146,11 @@ prepend_previewers = [
 ]
 
 fetchers = [
-  # Mimetype
-  { id = "mime", name = "*", run = "mime", if = "!mime", prio = "high" },
+  # MIME-type — yazi 26.x splits this into separate fetchers per URL kind
+  # (mime.dir for folders, mime.local for local files, mime.remote for VFS).
+  { group = "mime", url = "*/",         run = "mime.dir",    if = "!mime", prio = "high" },
+  { group = "mime", url = "local://*",  run = "mime.local",  if = "!mime", prio = "high" },
+  { group = "mime", url = "remote://*", run = "mime.remote", if = "!mime", prio = "high" },
 ]
 preloaders = [
   # Image
@@ -160,7 +165,9 @@ preloaders = [
   { mime = "application/vnd.ms-opentype", run = "font" },
 ]
 previewers = [
-  { name = "*/", run = "folder", sync = true },
+  # yazi 26.x removed the `sync` field from previewer rules — keeping it
+  # silently drops the entry so directory previews go blank.
+  { url = "*/", run = "folder" },
   # Code
   { mime = "text/*", run = "code" },
   { mime = "*/{xml,javascript,x-wine-extension-ini}", run = "code" },
@@ -182,7 +189,7 @@ previewers = [
   # Empty file
   { mime = "inode/x-empty", run = "empty" },
   # Fallback
-  { name = "*", run = "file" },
+  { url = "*", run = "file" },
 ]
 
 [input]

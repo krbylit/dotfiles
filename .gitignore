@@ -25,6 +25,7 @@ firebase-debug.log
 .beads/dolt-monitor.pid.lock
 .beads/push-state.json
 .beads/metadata.json
+.beads/export-state.json
 .beads/locks
 .perles
 .beads-credential-key

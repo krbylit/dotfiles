@@ -1,0 +1,22 @@
+// User settings belong in settings.json.
+// This file is managed automatically.
+{
+  "firstLaunchAt": "2026-04-26T19:59:40.000Z",
+  "trustedFolders": [
+    "/Users/kirbylittle/gt/mayor",
+    "/Users/kirbylittle/src/thread/thread",
+    "/Users/kirbylittle/gt/thread/polecats/guzzle/thread",
+    "/Users/kirbylittle/gt/thread/polecats/shiny/thread",
+    "/Users/kirbylittle/gt"
+  ],
+  "lastLoggedInUser": {
+    "host": "https://github.com",
+    "login": "krbylit"
+  },
+  "loggedInUsers": [
+    {
+      "host": "https://github.com",
+      "login": "krbylit"
+    }
+  ]
+}

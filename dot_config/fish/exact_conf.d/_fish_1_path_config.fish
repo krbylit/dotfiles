@@ -1,5 +1,13 @@
 # PATH setup — cross-platform (macOS + Linux)
-# set -gx PATH $PATH /usr/local/bin # Homebrew on Intel silicon
+# Platform-specific paths
+switch (uname)
+    case Darwin
+        fish_add_path --path /opt/homebrew/bin /opt/homebrew/sbin /usr/local/bin
+        fish_add_path --path /Applications/Obsidian.app/Contents/MacOS
+    case Linux
+        fish_add_path --path /home/linuxbrew/.linuxbrew/bin /home/linuxbrew/.linuxbrew/sbin
+end
+
 set -gx PATH \
     $HOME/.cargo/bin \
     $HOME/.local/bin \
@@ -10,12 +18,3 @@ set -gx PATH \
     $HOME/.nix-profile/bin \
     /nix/var/nix/profiles/default/bin \
     $PATH
-
-# Platform-specific paths
-switch (uname)
-    case Darwin
-        fish_add_path --path /opt/homebrew/bin /opt/homebrew/sbin
-        fish_add_path --path /Applications/Obsidian.app/Contents/MacOS
-    case Linux
-        fish_add_path --path /home/linuxbrew/.linuxbrew/bin /home/linuxbrew/.linuxbrew/sbin
-end

@@ -4,7 +4,7 @@
 return {
   entry = function()
     -- Hide Yazi and get a permit to control the terminal
-    local permit = ya.hide()
+    local permit = ui.hide()
 
     -- Spawn fish shell with inherited stdin/stdout/stderr for full interactivity
     local child, err = Command("fish")

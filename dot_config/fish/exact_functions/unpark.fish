@@ -1,5 +1,10 @@
 function unpark --description "Unpark Gas Town rigs, optionally limited to specific rigs"
-    set -l town_dir "$HOME/gt"
+    set -l town_dir
+    if test "$PWD" = "$HOME/gt"; or string match -q "$HOME/gt-*" "$PWD"
+        set town_dir $PWD
+    else
+        set town_dir $HOME/gt
+    end
 
     if not test -d "$town_dir"
         echo "Error: Gas Town directory not found at $town_dir" >&2
@@ -29,7 +34,13 @@ function unpark --description "Unpark Gas Town rigs, optionally limited to speci
     gt rig unpark $rigs
     or return $status
 
+    gt rig start $rigs
+    or return $status
+
     gt deacon resume
+    or return $status
+
+    gt deacon restart
     or return $status
 
     if test (count $argv) -eq 0
@@ -42,7 +53,7 @@ function unpark --description "Unpark Gas Town rigs, optionally limited to speci
         gt deacon restart
         or return $status
 
-        "$town_dir/start-monitors.sh" start
+        # "$town_dir/start-monitors.sh" start
         or return $status
     end
 end

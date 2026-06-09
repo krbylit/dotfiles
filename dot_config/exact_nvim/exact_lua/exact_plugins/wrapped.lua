@@ -7,7 +7,7 @@ return {
   dependencies = { "nvzone/volt" },
   cmd = { "WrappedNvim" },
   opts = {
-    path = vim.g.chezmoi_source_path,
+    path = (vim.g.chezmoi_source_path or (vim.env.HOME .. "/.local/share/chezmoi")) .. "/dot_config/exact_nvim",
     border = false,
     size = {
       width = 120,

@@ -1,3 +1,23 @@
+-- Restore the `Yazi: {cwd}` window title we used to set via `title_format` in
+-- yazi.toml. yazi 26.5.6 removed `title_format` in favor of this DDS event
+-- (PR #3684 — replaces the {cwd}-only placeholder with full `cx` access).
+ps.sub("ind-app-title", function(args)
+  args.value = "Yazi: " .. tostring(cx.active.current.cwd)
+  return args
+end)
+
+-- NOTE: a previous version of this file subscribed to `relay-notify-push`
+-- intending to filter the "Deprecated API" toast. It can't work — that
+-- event only fires when `cx.source() == Source::Relay`, but internal
+-- notifications (yazi-actor/src/app/deprecate.rs -> act!(notify:push, ...))
+-- run at actor level >= 2, and yazi-actor/src/context.rs reduces
+-- `source()` to `Source::Ind` for any non-top-level call. The spark
+-- `RelayNotifyPush` is never emitted, so the subscriber is unreachable
+-- for internal toasts. Notifications are rendered entirely in Rust
+-- (yazi-fm/src/notify/notify.rs) with no preset Lua component to hijack.
+-- The only real fixes are upstream PRs to the offending plugins, or
+-- a post-`ya pkg upgrade` sed script.
+
 -- Load Yazi plugins
 require("folder-rules"):setup()
 require("searchjump"):setup({
@@ -168,8 +188,14 @@ function Linemode:size_and_mtime()
   return string.format("%s %s", size and ya.readable_size(size) or "-", time)
 end
 
--- Add relative line numbers to relative-motions plugin
-require("relative-motions"):setup({ show_numbers = "relative", show_motion = true, enter_mode = "first" })
+-- relative-motions: vim-style numbered jumps (5j, 3k, etc.) and operators
+-- (d/y/x/v). `show_numbers` dropped — the line-number gutter was making the
+-- row hover highlight look broken in yazi 26.x, and the numbers themselves
+-- weren't worth keeping for it. `show_motion` keeps the partial command
+-- visible in the status bar as you type (e.g. you see "5j" before pressing
+-- a direction). `enter_mode = "first"` makes entering a folder jump to the
+-- first child immediately.
+require("relative-motions"):setup({ show_motion = true, enter_mode = "first" })
 
 -- bookmarks.yazi default config
 require("bookmarks"):setup({
@@ -289,6 +315,10 @@ require("projects"):setup({
   last = {
     update_after_save = true,
     update_after_load = true,
+    -- Save the current project to "last" before yazi quits. Replaces the
+    -- old `plugin projects quit` keybind which projects.yazi removed in
+    -- favor of this setup flag.
+    update_before_quit = true,
     -- NOTE: only works with `lua` save.method
     load_after_start = false,
   },

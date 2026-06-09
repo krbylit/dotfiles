@@ -412,8 +412,7 @@ return {
       enabled = true,
     },
     completion = {
-      -- Set to false to disable completion.
-      nvim_cmp = false,
+      -- Completion is provided by the built-in obsidian-ls LSP server.
       -- Trigger completion at 2 chars.
       min_chars = 2,
     },

@@ -158,7 +158,7 @@ alias nconf="nvim --cmd 'cd $CHEZMOI_SOURCE_PATH/private_dot_config/exact_nvim' 
 alias conf="nvim --cmd 'cd $CHEZMOI_SOURCE_PATH' -c 'lua Snacks.dashboard({win=0})'"
 # alias conf="nvim $CHEZMOI_SOURCE_PATH"
 # cli aliases
-alias n="nvim"
+alias v="nvim"
 # lazygit for chezmoi dir
 alias cmg="lazygit -p $(chezmoi source-path)"
 alias cmf="chezmoi apply --force"
@@ -172,19 +172,19 @@ alias ld="lazydocker"
 alias vm="vi-mongo"
 alias no="nvim ~/.nb"
 # Kitty term diff viewer
-alias diff="kitten diff"
+# alias diff="kitten diff"
 # Utility aliases
 # Yank current dir to clipboard (cross-platform)
 if command -v pbcopy &>/dev/null; then
-    alias ywd="pwd | pbcopy"
+  alias ywd="pwd | pbcopy"
 elif command -v wl-copy &>/dev/null; then
-    alias ywd="pwd | wl-copy"
+  alias ywd="pwd | wl-copy"
 elif command -v xclip &>/dev/null; then
-    alias ywd="pwd | xclip -selection clipboard"
+  alias ywd="pwd | xclip -selection clipboard"
 fi
 alias ll='ls -CF --color=auto'
 # Replace `cat` with syntax-highlighting `bat`
-alias cat='bat --paging=never'
+# alias cat='bat --paging=never'
 # Use `bat` to colorize --help output
 # alias -g -- -h='-h 2>&1 | bat --language=help --style=plain' # Disabling this as some `-h` is not help e.g. `ls -h`
 # alias -g -- --help='--help 2>&1 | bat --language=help --style=plain'
@@ -198,7 +198,7 @@ preexec() {
   fi
 }
 # Use `batgrep` for `rg` with `bat` syntax highlighting, also defaults to smartcase
-alias rg='batgrep -S'
+# alias brg='batgrep -S'
 # SSH kitten
 ksh() {
   # This works

@@ -159,28 +159,28 @@ rules = [
     { mime = "application/msword", fg = "#0598BC" },
     { mime = "application/vnd.openxmlformats-officedocument.*", fg = "#0598BC" },
     # Fallback
-    { name = "*", fg = "#000000" },
-    { name = "*/", fg = "#0000FF" },
+    { url = "*", fg = "#000000" },
+    { url = "*/", fg = "#0000FF" },
     # Executable
-    { name = "*", category = "executable", fg = "#008000", bg = "#FFFFFF" },
+    { url = "*", category = "executable", fg = "#008000", bg = "#FFFFFF" },
     # Directories
-    { name = "*/", fg = "#0000FF", bg = "#FFFFFF" },
+    { url = "*/", fg = "#0000FF", bg = "#FFFFFF" },
     # Hidden files
-    { name = ".*", fg = "#767676" },
+    { url = ".*", fg = "#767676" },
     # Symlinks
-    { name = "*", category = "link", fg = "#0598BC", bg = "#FFFFFF" },
+    { url = "*", category = "link", fg = "#0598BC", bg = "#FFFFFF" },
     # Broken symlinks
-    { name = "*", category = "broken", fg = "#CD3131", bg = "#FFF0F0" },
+    { url = "*", category = "broken", fg = "#CD3131", bg = "#FFF0F0" },
 ]
 
 [icon]
 rules = [
-    { name = "Desktop", text = "" },
-    { name = "Documents", text = "" },
-    { name = "Downloads", text = "" },
-    { name = "Pictures", text = "" },
-    { name = "Music", text = "" },
-    { name = "Videos", text = "" },
-    { name = ".git", text = "" },
-    { name = ".config", text = "" },
+    { url = "Desktop", text = "" },
+    { url = "Documents", text = "" },
+    { url = "Downloads", text = "" },
+    { url = "Pictures", text = "" },
+    { url = "Music", text = "" },
+    { url = "Videos", text = "" },
+    { url = ".git", text = "" },
+    { url = ".config", text = "" },
 ]

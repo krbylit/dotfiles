@@ -290,6 +290,12 @@ if have fish; then
   fi
 fi
 
+if [ "${IS_SSH}" != "1" ]; then
+  if ! have purple; then
+    curl -fsSL getpurple.sh | sh
+  fi
+fi
+
 # FIX: Something is up with `bob` (maybe just local install). Can't find/use/install "stable" release.
 # if command -v bob &>/dev/null; then
 #     bob install stable

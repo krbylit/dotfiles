@@ -1,17 +1,24 @@
--- LazyDocker via Snacks terminal toggle
--- Toggles a fullscreen float running lazydocker inside zellij via the ldz
--- fish function. Session named lazydocker-<dir>-<pathHash> so reattaching
--- from the same directory reuses the existing session.
+-- LazyDocker via Snacks terminal toggle.
+-- Run the Fish helper explicitly so first-open startup still goes through the
+-- custom zellij session naming and compose-root detection logic in `ldz`.
 vim.keymap.set({ "n", "t" }, "<leader>dd", function()
-  Snacks.terminal.toggle("ldz", {
+  Snacks.terminal.toggle({ "fish", "-ic", "ldz" }, {
     win = {
       position = "float",
       height = 0,
       width = 0,
       border = "rounded",
-      keys = {
-        hide = { "<c-/>", function(self) self:hide() end, mode = "t", desc = "Toggle lazydocker closed" },
-      },
+      -- TODO: seems this is no longer needed and we get a duplicate keymap WARN if enabled here, remove after period of validation
+      -- keys = {
+      --   hide = {
+      --     "<c-/>",
+      --     function(self)
+      --       self:hide()
+      --     end,
+      --     mode = "t",
+      --     desc = "Toggle lazydocker closed",
+      --   },
+      -- },
     },
     interactive = true,
     auto_close = true,

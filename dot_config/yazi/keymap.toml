@@ -1,6 +1,6 @@
-# A TOML linter such as https://taplo.tamasfe.dev/ can use this schema to validate your config.
-# If you encounter any issues, please make an issue at https://github.com/yazi-rs/schemas.
-"$schema" = "https://yazi-rs.github.io/schemas/keymap.json"
+# yazi-rs/schemas/keymap.json defines the JSON schema for editor LSPs.
+# Yazi 26.x rejects a top-level `"$schema"` key as not-kebab-case, so the
+# editor-hint declaration is omitted here.
 
 [[mgr.prepend_keymap]]
 on = "F"
@@ -164,8 +164,12 @@ desc = "custom-shell as default, interactive"
 # Keymaps for projects.yazi, store and resume sessions
 # Save project on quit
 [[mgr.prepend_keymap]]
+# projects.yazi removed its own `quit` subaction in favor of the
+# `last.update_before_quit = true` setup flag (set in init.lua), which
+# auto-saves the current project on quit. So `q` can just be the
+# native yazi `quit` action.
 on = ["q"]
-run = "plugin projects quit"
+run = "quit"
 desc = "Save last project and exit the process"
 
 [[mgr.prepend_keymap]]
@@ -428,6 +432,10 @@ desc = "run lazydocker"
 [[mgr.prepend_keymap]]
 # On macOS, open preview with Quick Look
 on = "<C-p>"
+# TODO(yazi 25.12.29): `$@` is deprecated in `shell` actions in favor of
+# the new shell-formatting syntax (#3232). Still works for now; migrate
+# once yazi removes it. New form would be `{*}` or similar — confirm
+# against current docs before flipping.
 run = '''
   shell 'qlmanage -p "$@"' --confirm
 '''

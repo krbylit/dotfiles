@@ -1,54 +1,77 @@
-function tft --description "Launch tftui with workspace + var-file for an environment"
-    # Usage: tft <env>        — select workspace & var-file, launch tftui
-    #        tft              — launch tftui with no var-file (plain mode)
-    #        tft -d [args...] — pass-through to tftui directly
-    #
-    # Run from infra/terraform/ (the submodule directory).
-    # The symlinks in the submodule resolve environments/ and
-    # common.auto.tfvars from the app repo automatically.
+function tft --description "Launch tftui for a Terraform environment"
+    function __tft_find_root
+        set -l dir $PWD
 
-    # Pass-through mode: if first arg is a flag, forward everything
+        while true
+            if test -d "$dir/infra/terraform"
+                echo "$dir/infra/terraform"
+                return 0
+            end
+
+            if test -f "$dir/terraform.tf"; and test -f "$dir/common.auto.tfvars"
+                echo "$dir"
+                return 0
+            end
+
+            if test "$dir" = /
+                return 1
+            end
+
+            set dir (dirname "$dir")
+        end
+    end
+
+    set -l tf_root (__tft_find_root)
+    if test -z "$tf_root"
+        echo "error: could not find terraform root"
+        return 1
+    end
+
+    pushd "$tf_root" >/dev/null
+
     if test (count $argv) -gt 0; and string match -q -- '-*' $argv[1]
         tftui $argv
-        return
+        set -l status_code $status
+        popd >/dev/null
+        return $status_code
     end
 
-    # If no env arg, launch plain tftui
     if test (count $argv) -eq 0
         tftui
-        return
-    end
-
-    set -l env $argv[1]
-
-    # Read application_name from common.auto.tfvars (symlinked from app repo)
-    if not test -f common.auto.tfvars
-        echo "error: common.auto.tfvars not found in current directory"
-        return 1
+        set -l status_code $status
+        popd >/dev/null
+        return $status_code
     end
 
     set -l app_name (string match -r 'application_name\s*=\s*"([^"]+)"' < common.auto.tfvars)[2]
     if test -z "$app_name"
         echo "error: could not read application_name from common.auto.tfvars"
+        popd >/dev/null
         return 1
     end
 
+    set -l env $argv[1]
     set -l workspace "$app_name-$env"
-    set -l varfile "environments/$workspace.tfvars"
+    set -l varfile "environments/$env/$workspace.tfvars"
 
-    if not test -f $varfile
-        echo "error: $varfile not found"
-        echo "available:"
-        ls environments/*.tfvars 2>/dev/null
+    if not test -f "$varfile"
+        echo "error: $tf_root/$varfile not found"
+        popd >/dev/null
         return 1
     end
 
-    # Select or create the workspace
-    terraform workspace select $workspace 2>/dev/null
-    or terraform workspace new $workspace
-    or return 1
+    terraform workspace select "$workspace" >/dev/null 2>/dev/null
+    or terraform workspace new "$workspace" >/dev/null
+    or begin
+        popd >/dev/null
+        return 1
+    end
 
     echo "workspace: $workspace"
-    echo "var-file:  $varfile"
-    tftui -f $varfile
+    echo "var-file:  $tf_root/$varfile"
+
+    tftui -f "$varfile"
+    set -l status_code $status
+    popd >/dev/null
+    return $status_code
 end

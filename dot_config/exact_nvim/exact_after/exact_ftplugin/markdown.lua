@@ -2,6 +2,7 @@
 vim.opt_local.formatoptions:remove("c")
 vim.opt_local.formatoptions:remove("r")
 vim.opt_local.formatoptions:remove("o")
+vim.opt_local.spell = true
 -- -- Auto-insert a real newline when typing past 120 chars
 -- vim.opt_local.textwidth = 120
 -- vim.opt_local.formatoptions:append("t")
@@ -321,6 +322,47 @@ vim.keymap.set("v", "<localleader>l", function()
   local link = "[" .. selected_text .. "](" .. url .. ")"
   vim.api.nvim_buf_set_text(0, start_row, start_col, end_row, end_col, { link })
 end, { desc = "Insert link (wrap selection)", buffer = true })
+
+-- Yank absolute path to current/nearest heading as a linkable reference.
+-- If no heading is found above the cursor, yanks just the file path.
+vim.keymap.set("n", "<localleader>y", function()
+  local bufname = vim.api.nvim_buf_get_name(0)
+  if bufname == "" then
+    vim.notify("Buffer has no file path", vim.log.levels.WARN)
+    return
+  end
+
+  -- Search current line then upward for the nearest heading
+  local heading_text = nil
+  local cur_line = vim.fn.line(".")
+  for lnum = cur_line, 1, -1 do
+    local line = vim.fn.getline(lnum)
+    local text = line:match("^#+%s+(.*)")
+    if text then
+      heading_text = vim.trim(text)
+      break
+    end
+  end
+
+  local ref = bufname
+  if heading_text then
+    -- Slugify: strip leading #/whitespace, lowercase, collapse non-alnum to hyphens
+    local slug = heading_text
+      :gsub("^[#%s]+", "")
+      :lower()
+      :gsub("[^%w%s%-]", "")
+      :gsub("%s+", "-")
+      :gsub("%-+", "-")
+      :gsub("^%-", "")
+      :gsub("%-$", "")
+    if slug ~= "" then
+      ref = bufname .. "#" .. slug
+    end
+  end
+
+  vim.fn.setreg("+", ref)
+  vim.notify(ref, vim.log.levels.INFO)
+end, { desc = "Yank heading link path", buffer = true })
 
 -- Interactive checkbox: delegates to obsidian.nvim when available, no-ops otherwise.
 -- Outside the vault obsidian.nvim is loaded but the current buffer is not an obsidian

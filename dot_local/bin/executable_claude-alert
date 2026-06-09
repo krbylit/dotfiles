@@ -7,6 +7,26 @@ if [[ "$(uname)" != "Darwin" ]]; then
     exit 0
 fi
 
+# cwd glob patterns. Whitelist overrides blacklist.
+# Patterns use shell glob syntax (same as `case`): * matches any chars incl. /.
+# Quote each entry so $HOME expands but * stays literal.
+CWD_BLACKLIST=(
+    "$HOME/gt/deacon"
+    "$HOME/gt/deacon/*"
+    "$HOME/gt/deacon/dogs"
+    "$HOME/gt/deacon/dogs/*"
+    "$HOME/gt/*/witness"
+    "$HOME/gt/*/polecats"
+    "$HOME/gt/*/polecats/*"
+    "$HOME/gt/*/refinery"
+    "$HOME/gt/unknown"
+)
+
+CWD_WHITELIST=(
+    "$HOME/gt/*/crew/*"
+    "$HOME/gt/*/mayor/*"
+)
+
 payload="$(cat)"
 title="$(printf '%s' "$payload" | jq -r '.title // "Claude Code"')"
 notification_type="$(printf '%s' "$payload" | jq -r '.notification_type // empty')"
@@ -16,17 +36,30 @@ normalize_one_line() {
     printf '%s' "$1" | tr '\n' ' ' | sed -E 's/[[:space:]]+/ /g; s/^ //; s/ $//'
 }
 
+cwd_matches_any() {
+    local cwd="$1"
+    shift
+    local pattern
+    for pattern in "$@"; do
+        # shellcheck disable=SC2053
+        if [[ "$cwd" == $pattern ]]; then
+            return 0
+        fi
+    done
+    return 1
+}
+
 should_ignore_notification() {
     local cwd body_one_line body_lc
     cwd="${CLAUDE_ALERT_CWD:-$PWD}"
     body_one_line="$(normalize_one_line "$body")"
     body_lc="$(printf '%s' "$body_one_line" | tr '[:upper:]' '[:lower:]')"
 
-    case "$cwd" in
-    "$HOME/gt/deacon" | "$HOME/gt/deacon/dogs" | "$HOME/gt/deacon/dogs"/* | "$HOME/gt"/*/witness | "$HOME/gt"/*/refinery | "$HOME/gt/unknown")
-        return 0
-        ;;
-    esac
+    if ! cwd_matches_any "$cwd" "${CWD_WHITELIST[@]}"; then
+        if cwd_matches_any "$cwd" "${CWD_BLACKLIST[@]}"; then
+            return 0
+        fi
+    fi
 
     case "$body_lc" in
     boot)
@@ -98,7 +131,7 @@ if [[ -f "$sound" ]]; then
 fi
 
 if command -v alerter &>/dev/null; then
-    alerter --title "$title" --message "$msg" --timeout 5 &>/dev/null &
+    alerter --title "$title" --message "$msg" --timeout 10 &>/dev/null &
 elif command -v osascript &>/dev/null; then
     $played_sound || osascript -e 'beep'
     osascript -e "display notification \"${msg//\"/\\\"}\" with title \"${title//\"/\\\"}\""
