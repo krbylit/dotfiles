@@ -4,10 +4,10 @@
 
 keybinds clear-defaults=true {
     locked {
-        bind "Ctrl b" { SwitchToMode "normal"; } // tmux-style prefix: unlock into the command layer
+        bind "Ctrl g" { SwitchToMode "normal"; }
     }
     normal {
-        bind "Ctrl b" { Write 2; SwitchToMode "locked"; } // Ctrl-b Ctrl-b sends a literal Ctrl-b (ASCII 2), like tmux prefix-prefix
+        bind "Ctrl g" "Ctrl g" { Write 7; SwitchToMode "locked"; } // Send Ctrl-g (ASCII 7) to terminal
         bind "d" { Detach; } // tmux-style detach
     }
     pane {

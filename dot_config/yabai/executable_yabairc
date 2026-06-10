@@ -4,45 +4,24 @@
 # Load scripting addition (requires root and SIP disabled)
 yabai -m signal --add event=dock_did_restart action="sudo yabai --load-sa"
 sudo yabai --load-sa
-# Restart and apply rules on display add/remove
-yabai -m signal --add event=display_added action="osascript -e 'tell application "System Events" to set visible of (every process whose visible is false and background only is false) to true'; sleep .25; env -u TERMINFO sudo -n /opt/homebrew/bin/yabai --load-sa; yabai --stop-service; sleep .25; yabai --start-service; sleep 2; yabai -m rule --apply"
-yabai -m signal --add event=display_removed action="osascript -e 'tell application "System Events" to set visible of (every process whose visible is false and background only is false) to true'; sleep .25; env -u TERMINFO sudo -n /opt/homebrew/bin/yabai --load-sa; yabai --stop-service; sleep .25; yabai --start-service; sleep 2; yabai -m rule --apply"
-yabai -m signal --add event=display_moved action="osascript -e 'tell application "System Events" to set visible of (every process whose visible is false and background only is false) to true'; sleep .25; env -u TERMINFO sudo -n /opt/homebrew/bin/yabai --load-sa; yabai --stop-service; sleep .25; yabai --start-service; sleep 2; yabai -m rule --apply"
-# If above aren't working, we might try: `bass source ~/.config/yabai/yabairc`
+# On display change, re-run the space setup (so a newly attached display
+# gets its spaces created, labeled, and laid out) and re-apply rules so
+# windows resort onto the right spaces. This must NOT restart yabai:
+# yabai emits a display event on startup, so a restart here would re-fire
+# the signal and loop forever. setup-spaces.sh only creates/labels spaces
+# (no restart, no rule/signal re-adding), so it is safe to re-run.
+yabai -m signal --add event=display_added action="$HOME/.config/yabai/util/setup-spaces.sh; yabai -m rule --apply"
+yabai -m signal --add event=display_removed action="$HOME/.config/yabai/util/setup-spaces.sh; yabai -m rule --apply"
+yabai -m signal --add event=display_moved action="$HOME/.config/yabai/util/setup-spaces.sh; yabai -m rule --apply"
 
-
-sudo yabai --load-sa
-
-# Basic variables
-# BAR_HEIGHT=$(sketchybar -m --query bar | jq -r '.height')
-# TOP_PADDING=$((BAR_HEIGHT + 6))
+# Space setup and the variables that drive it (DISPLAY_COUNT, SPACES,
+# DEFAULT_LAYOUT, ...) live in a shared script so the display-change
+# signals can re-run the SAME setup on hot-plug without restarting yabai.
+# Sourcing it here defines those variables for the config and rule
+# sections below and performs the initial space create/label/assign and
+# per-space layouts. Keep the display signals' action in sync with this.
 PADDING=6
-
-# Display detection
-DISPLAY_COUNT=$(yabai -m query --displays | jq '. | length')
-DISPLAY_2=$((DISPLAY_COUNT > 1 ? 2 : 1))
-
-# Space names (in order)
-if [ "$DISPLAY_COUNT" -gt 1 ]; then
-	SPACES="term browser code dev misc comms ref debug util"
-else
-	SPACES="term browser code dev misc comms ref debug"
-fi
-# Determine the layout based on the number of connected displays
-if [ "$DISPLAY_COUNT" -gt 1 ]; then
-    DEFAULT_LAYOUT="bsp"
-else
-    DEFAULT_LAYOUT="stack"
-fi
-
-# Main display spaces
-MAIN_SPACES="term browser code dev misc"
-# Secondary display spaces
-if [ "$DISPLAY_COUNT" -gt 1 ]; then
-	SEC_SPACES="comms ref debug util"
-else
-	SEC_SPACES="comms ref debug"
-fi
+. "$HOME/.config/yabai/util/setup-spaces.sh"
 
 # General Configurations
 # yabai -m config external_bar "${BAR_HEIGHT}":0
@@ -79,31 +58,8 @@ yabai -m config mouse_drop_action swap
 yabai -m config focus_follows_mouse off
 yabai -m config mouse_follows_focus off
 
-# Ensure correct number of spaces exist
-current_space_count=$(yabai -m query --spaces | jq 'length')
-target_space_count=$(echo "$SPACES" | wc -w | tr -d ' ')
-
-# Create missing spaces if needed
-while [ "$current_space_count" -lt "$target_space_count" ]; do
-	yabai -m space --create
-	current_space_count=$((current_space_count + 1))
-done
-
-# Label spaces
-i=1
-for space in $SPACES; do
-	yabai -m space $i --label "$space"
-	i=$((i + 1))
-done
-
-# Assign spaces to displays
-for space in $MAIN_SPACES; do
-	yabai -m space "$space" --display 1
-done
-
-for space in $SEC_SPACES; do
-	yabai -m space "$space" --display $DISPLAY_2
-done
+# Space creation, labels, and display assignment are handled by the
+# sourced setup-spaces.sh above.
 
 # # Rules for Excluded Applications
 # yabai -m rule --add label=Finder app="^Finder$" title="(Co(py|nnect)|Move|Info|Pref)" manage=off
@@ -230,19 +186,7 @@ else
 	assign_to_space ref "${UTIL_APPS[@]}"
 fi
 
-# Space-Specific Configurations
-yabai -m config --space term layout stack window_gap $PADDING window_opacity off top_padding 0 bottom_padding 0 left_padding 0 right_padding 0
-yabai -m config --space browser layout stack
-yabai -m config --space code layout stack
-yabai -m config --space dev layout $DEFAULT_LAYOUT
-yabai -m config --space comms layout $DEFAULT_LAYOUT
-yabai -m config --space ref layout $DEFAULT_LAYOUT
-yabai -m config --space misc layout $DEFAULT_LAYOUT
-yabai -m config --space debug layout $DEFAULT_LAYOUT
-# Only configure util space if it exists (multi-display)
-if [ "$DISPLAY_COUNT" -gt 1 ]; then
-	yabai -m config --space util layout $DEFAULT_LAYOUT
-fi
+# Per-space layouts are handled by the sourced setup-spaces.sh above.
 
 # Signals for `YabaiIndicator`
 yabai -m signal --add event=mission_control_exit action='echo "refresh" | nc -U /tmp/yabai-indicator.socket'
@@ -276,3 +220,9 @@ yabai -m rule --add label="ref_Notion" \
   title!="^Tab Preview$" \
   space="^ref"
 yabai -m rule --add label="notion_tab_preview" app="^Notion$" title="^Tab Preview$" manage=off
+
+# Sentinel: signal that yabairc has fully finished -- all rules added
+# and spaces labeled. skhd/util/restart.sh waits for this file before
+# `yabai -m rule --apply` so it never applies a half-loaded ruleset.
+# Keep this path in sync with $SENTINEL in restart.sh.
+touch "/tmp/yabai_${USER}.ready"
