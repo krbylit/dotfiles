@@ -149,6 +149,7 @@ DEBUG_APPS=(
 	"Google Chrome for Testing"
     Claude
     ChatGPT
+    Xcode
 )
 
 UTIL_APPS=(

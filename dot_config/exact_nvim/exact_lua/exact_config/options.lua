@@ -301,6 +301,15 @@ vim.filetype.add({
     [".*gitconfig$"] = "gitconfig",
     [".*dot_bash.*"] = "bash",
     [".*ssh/.*config"] = "sshconfig",
+    -- Treat `.env.<suffix>` (.env.local, .env.prod, …) as 'env' like bare `.env`.
+    -- LazyVim's util.dot extra registers `%.env%.[%w_.-]+` -> 'sh'. Two gotchas:
+    --   1) vim.filetype.add keys patterns by their text, so reusing LazyVim's
+    --      exact string gets overwritten by it (it loads later) — use a DISTINCT
+    --      string (leading `.*`) so both coexist; priority then decides the match.
+    --   2) NO literal `/` in the pattern: parse_pattern() sets has_slash from a
+    --      `/` search, which switches matching to full-path and breaks basename
+    --      matches (this is why a `[^/]` class silently failed).
+    [".*%.env%.[%w_.-]+"] = { "env", { priority = 100 } },
   },
   -- pattern = {
   -- 	[".*gitconfig$"] = "gitconfig",

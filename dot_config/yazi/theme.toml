@@ -27,3 +27,16 @@ dark = "nord"
 
 
 # : }}}
+
+# : Icons {{{
+[icon]
+# Give `.env.local`, `.env.prod`, … the same icon yazi shows for bare `.env`.
+# Icon globs match on `url` (a path glob) and are evaluated BEFORE the exact
+# `files` rules, so `**/.env.*` catches the suffixed variants while bare `.env`
+# keeps its builtin files-rule. `.envrc`/`.envrc.*` are untouched (no dot after
+# `env`). Glyph + fg copied verbatim from yazi's default `.env` rule (U+F462).
+prepend_globs = [
+	{ url = "**/.env.*", text = "", fg = "#faf743" },
+]
+
+# : }}}
