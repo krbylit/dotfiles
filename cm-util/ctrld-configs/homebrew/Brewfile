@@ -2,6 +2,7 @@ tap "adembc/tap"
 tap "ahkohd/oyo"
 tap "ameshkov/tap"
 tap "anomalyco/tap"
+tap "asmvik/formulae"
 tap "beadbox/cask"
 tap "bellicose100xp/tap"
 tap "bjarneo/cliamp"
@@ -28,7 +29,6 @@ tap "jesseduffield/lazynpm"
 tap "jordond/tap"
 tap "kdash-rs/kdash"
 tap "kiki-ki/tap"
-tap "koekeishiya/formulae"
 tap "kopecmaciej/vi-mongo"
 tap "lance0/tap"
 tap "lazynop/tap"
@@ -95,6 +95,8 @@ brew "cariddi"
 brew "chafa"
 # Manage your dotfiles across multiple diverse machines, securely
 brew "chezmoi"
+# Tool for emulating mouse and keyboard events
+brew "cliclick"
 # Cross-platform make
 brew "cmake"
 # GNU File, Shell, and Text utilities
@@ -191,6 +193,8 @@ brew "jql"
 brew "lazydocker"
 # Simple terminal UI for git commands
 brew "lazygit"
+# Cross-platform TUI database management tool
+brew "lazysql"
 # Manipulate OpenType and multiple-master fonts
 brew "lcdf-typetools"
 # Fast and powerful Git hooks manager for any type of projects
@@ -233,6 +237,8 @@ brew "pandoc"
 brew "pipx"
 # Paste PNG into files
 brew "pngpaste"
+# PNG image optimizing utility
+brew "pngquant"
 # Fast, disk space efficient package manager
 brew "pnpm"
 # PDF rendering library (based on the xpdf-3.0 code base)
@@ -247,6 +253,8 @@ brew "procs"
 brew "qpdf"
 # Better WHOIS and domain intelligence toolkit
 brew "quien"
+# Database management TUI for PostgreSQL/MySQL/SQLite
+brew "rainfrog"
 # Search tool like grep and The Silver Searcher
 brew "ripgrep"
 # Rust toolchain installer
@@ -329,6 +337,8 @@ brew "yazi"
 brew "yq"
 # Shell extension to navigate your filesystem faster
 brew "zoxide"
+# Terminal UI for Beads issue tracking — your issues deserve a parade
+brew "matt-wright86/tap/mardi-gras", link: false
 # Single-host system diagnostics TUI — sibling to netwatch
 brew "matthart1983/tap/syswatch", trusted: true
 # Password manager that keeps all passwords secure behind one password
@@ -341,6 +351,8 @@ cask "basictex"
 cask "betterdisplay"
 # Automated testing of webapps for Google Chrome
 cask "chromedriver"
+# Command Performance Benchmarking
+cask "miklosn/tap/cmdperf"
 # Brings the power of Copilot coding agent directly to your terminal
 cask "copilot-cli"
 # Server and cloud storage browser
@@ -366,12 +378,10 @@ cask "hammerspoon"
 cask "karabiner-elements"
 # GPU-based terminal emulator
 cask "kitty@nightly"
-# App to manage software development and track bugs
-cask "linear"
 # File system integration
 cask "macfuse"
-# Speech recognition tool
-cask "macwhisper"
+# Terminal UI for Beads issue tracking — your issues deserve a parade
+cask "matt-wright86/tap/mardi-gras", trusted: true
 # Multi-platform web browser
 cask "microsoft-edge"
 # Interactive tool for analyzing MongoDB data
@@ -386,12 +396,6 @@ cask "notion"
 cask "notion-calendar"
 # Knowledge base that works on top of a local folder of plain text Markdown files
 cask "obsidian"
-# Administration and development platform for PostgreSQL
-cask "pgadmin4"
-# App wrapper for Postgres
-cask "postgres-app"
-# Collaboration platform for API development
-cask "postman"
 # Control your tools with a few keystrokes
 cask "raycast"
 # Plugin for AWS CLI to start and end sessions that connect to managed instances
@@ -404,6 +408,8 @@ cask "shottr"
 cask "slack"
 # Text editor for code, markup and prose
 cask "sublime-text"
+# Surge is a blazing fast, open-source terminal (TUI) download manager built in Go.
+cask "surge-downloader/tap/surge"
 # JDK from the Eclipse Foundation (Adoptium)
 cask "temurin@11"
 # Open-source code editor
@@ -413,6 +419,7 @@ cask "zoom"
 go "github.com/hymkor/csvi/cmd/csvi"
 go "github.com/nlamirault/e2c/cmd/e2c"
 go "github.com/05sanjaykumar/gitslice"
+go "github.com/aspiers/lazydolt/cmd/lazydolt"
 go "github.com/dimonomid/nerdlog/cmd/nerdlog"
 go "github.com/plutov/oq"
 go "github.com/ymtdzzz/otel-tui"
@@ -478,5 +485,6 @@ uv "terminaltexteffects"
 uv "wut-cli"
 uv "yapf"
 uv "youtube-playlist-to-m3u"
+npm "@openai/codex"
 npm "context-mode"
 npm "corepack"

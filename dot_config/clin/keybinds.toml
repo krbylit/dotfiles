@@ -1,0 +1,20 @@
+[list]
+move_up = ["Up", "k"]
+move_down = ["Down", "j"]
+open = ["Enter"]
+delete = ["d", "Delete"]
+quit = ["q"]
+help = ["?", "F1"]
+open_command_palette = ["Ctrl+p", "Shift+Enter"]
+# ... see CONFIG_REFERENCE.md for full list
+
+[edit]
+back = ["Esc"]
+cycle_focus = ["Tab"]
+copy = ["Ctrl+c", "Ctrl+Insert"]
+# ... see CONFIG_REFERENCE.md
+
+[graph]
+quit = ["Esc"]
+pan_up = ["Up", "k"]
+# ... see CONFIG_REFERENCE.md

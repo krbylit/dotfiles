@@ -1,10 +1,26 @@
 {
-  "PostToolUse": [
+  "PreToolUse": [
     {
-      "matcher": "Bash(bd close*)",
+      "matcher": "Bash",
       "hooks": [
         {
           "type": "command",
+          "command": "bash $HOME/.agents/hooks/beads-remote-sync-pre.sh"
+        }
+      ]
+    }
+  ],
+  "PostToolUse": [
+    {
+      "matcher": "Bash",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "bash $HOME/.agents/hooks/beads-remote-sync-post.sh"
+        },
+        {
+          "type": "command",
+          "if": "Bash(bd close*)",
           "command": "echo 'REMINDER: Record merged commit hashes on this bead. Run: bd comments add <bead-id> \"COMMITS: <hash> <message>\"'"
         }
       ]

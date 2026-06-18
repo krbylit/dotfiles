@@ -9,5 +9,27 @@
         }
       ]
     }
+  ],
+  "PreToolUse": [
+    {
+      "matcher": "Bash",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "bash $HOME/.agents/hooks/beads-remote-sync-pre.sh"
+        }
+      ]
+    }
+  ],
+  "PostToolUse": [
+    {
+      "matcher": "Bash",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "bash $HOME/.agents/hooks/beads-remote-sync-post.sh"
+        }
+      ]
+    }
   ]
 }

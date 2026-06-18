@@ -10,21 +10,33 @@
       ]
     }
   ],
-  "PostToolUse": [
+  "PreToolUse": [
     {
-      "matcher": "Bash(bd close*)",
+      "matcher": "Bash",
       "hooks": [
         {
           "type": "command",
-          "command": "echo 'REMINDER: Record commit hashes on this bead. Run: bd comments add <bead-id> \"COMMITS: <hash> <message>\" — search git log for your bead ID to find them.'"
+          "command": "bash $HOME/.agents/hooks/beads-remote-sync-pre.sh"
         }
       ]
-    },
+    }
+  ],
+  "PostToolUse": [
     {
-      "matcher": "Bash(gt done*)",
+      "matcher": "Bash",
       "hooks": [
         {
           "type": "command",
+          "command": "bash $HOME/.agents/hooks/beads-remote-sync-post.sh"
+        },
+        {
+          "type": "command",
+          "if": "Bash(bd close*)",
+          "command": "echo 'REMINDER: Record commit hashes on this bead. Run: bd comments add <bead-id> \"COMMITS: <hash> <message>\" — search git log for your bead ID to find them.'"
+        },
+        {
+          "type": "command",
+          "if": "Bash(gt done*)",
           "command": "echo 'REMINDER: Ensure commit hashes are recorded on your bead. Run: bd comments add <bead-id> \"COMMITS: <hash> <message>\"'"
         }
       ]
