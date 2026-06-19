@@ -271,6 +271,25 @@ theme "nightfox"
 // theme "catppuccin-macchiato"
 // theme "catppuccin-frappe"
 
+// paraiso-dark: matches ghostty's "Paraiso Dark" theme. Selected only for the
+// Neovim <c-/> popup via `zellij options --theme paraiso-dark` (see the Snacks
+// terminal launch in extend-snacks.lua); the default session theme stays nightfox.
+themes {
+    paraiso-dark {
+        fg "#a39e9b"
+        bg "#2f1e2e"
+        black "#2f1e2e"
+        red "#ef6155"
+        green "#48b685"
+        yellow "#fec418"
+        blue "#06b6ef"
+        magenta "#815ba4"
+        cyan "#5bc4bf"
+        white "#a39e9b"
+        orange "#f99b15"
+    }
+}
+
 // Choose the base input mode of zellij.
 // Default: normal
 //

@@ -77,8 +77,18 @@ local function toggle_root_terminal()
     return
   end
 
-  root_terminal = Snacks.terminal.open(nil, {
+  -- Paraiso Dark for this popup only: launch zellij with the paraiso-dark theme
+  -- override (chrome), paint the float bg/fg via winhighlight, and set
+  -- PARAISO_POPUP so the fish theme gate (conf.d/_fish_theme.fish) applies its
+  -- session-local Paraiso colors. None of this touches global/universal state.
+  root_terminal = Snacks.terminal.open({ "zellij", "options", "--theme", "paraiso-dark" }, {
     cwd = cwd,
+    env = { PARAISO_POPUP = "1" },
+    win = {
+      wo = {
+        winhighlight = "Normal:ParaisoTerm,NormalNC:ParaisoTerm,NormalFloat:ParaisoTerm",
+      },
+    },
   })
 end
 
@@ -95,6 +105,16 @@ return {
   -- Neovim. Scoped tightly to `snacks_dashboard` buffers; safe to remove
   -- when snacks fixes this upstream.
   init = function()
+    -- Opaque Paraiso Dark bg/fg for the <c-/> popup terminal window. Defined
+    -- here (and re-applied on ColorScheme) because tokyonight sets transparent
+    -- floats, which would otherwise leave this window showing ghostty's bg.
+    local paraiso_group = vim.api.nvim_create_augroup("kl_paraiso_term", { clear = true })
+    local function set_paraiso_hl()
+      vim.api.nvim_set_hl(0, "ParaisoTerm", { fg = "#a39e9b", bg = "#2f1e2e" })
+    end
+    vim.api.nvim_create_autocmd("ColorScheme", { group = paraiso_group, callback = set_paraiso_hl })
+    set_paraiso_hl()
+
     local group = vim.api.nvim_create_augroup("kl_snacks_dashboard_strip_exit", { clear = true })
     local pat = "%[Process exited %d+%]"
 
