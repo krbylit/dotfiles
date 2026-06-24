@@ -1,8 +1,8 @@
-tap "adembc/tap"
+tap "adembc/tap", "https://github.com/Adembc/homebrew-tap"
 tap "ahkohd/oyo"
 tap "ameshkov/tap"
 tap "anomalyco/tap"
-tap "asmvik/formulae"
+tap "asmvik/formulae", "https://github.com/asmvik/homebrew-formulae.git"
 tap "beadbox/cask"
 tap "bellicose100xp/tap"
 tap "bjarneo/cliamp"
@@ -16,6 +16,7 @@ tap "ggozad/formulas"
 tap "gromgit/brewtils"
 tap "harehare/tap"
 tap "hashicorp/tap"
+tap "herald-email/herald", trusted: { casks: ["herald"] }
 tap "hjr265/gittop"
 tap "hmenzagh/tap"
 tap "homebrew/bundle"
@@ -52,7 +53,7 @@ tap "surge-downloader/tap"
 tap "tattoy-org/tap"
 tap "tokuhirom/tap"
 tap "unhappychoice/tap"
-tap "valkyrie00/bbrew"
+tap "valkyrie00/bbrew", "https://github.com/Valkyrie00/homebrew-bbrew"
 tap "vjeantet/tap"
 tap "x52dev/tap"
 tap "xwmx/taps"
@@ -175,6 +176,8 @@ brew "gobackup"
 brew "gping"
 # Graph visualization software from AT&T and Bell Labs
 brew "graphviz"
+# Agent multiplexer that lives in your terminal
+brew "herdr"
 # Powerful, lightweight programming language
 brew "lua"
 # Convert source code to formatted text with syntax highlighting
@@ -337,8 +340,10 @@ brew "yazi"
 brew "yq"
 # Shell extension to navigate your filesystem faster
 brew "zoxide"
+# Terminal email client and inbox cleanup tool
+brew "herald-email/herald/herald", trusted: true
 # Terminal UI for Beads issue tracking — your issues deserve a parade
-brew "matt-wright86/tap/mardi-gras", link: false
+brew "matt-wright86/tap/mardi-gras", link: false, trusted: true
 # Single-host system diagnostics TUI — sibling to netwatch
 brew "matthart1983/tap/syswatch", trusted: true
 # Password manager that keeps all passwords secure behind one password
@@ -352,7 +357,7 @@ cask "betterdisplay"
 # Automated testing of webapps for Google Chrome
 cask "chromedriver"
 # Command Performance Benchmarking
-cask "miklosn/tap/cmdperf"
+cask "miklosn/tap/cmdperf", trusted: true
 # Brings the power of Copilot coding agent directly to your terminal
 cask "copilot-cli"
 # Server and cloud storage browser
@@ -437,6 +442,7 @@ cargo "cargo-deny"
 cargo "cargo-insta"
 cargo "cargo-vet"
 cargo "cctop"
+cargo "clin-rs"
 cargo "clock-cli"
 cargo "clock-tui"
 cargo "csvlint"
@@ -485,6 +491,8 @@ uv "terminaltexteffects"
 uv "wut-cli"
 uv "yapf"
 uv "youtube-playlist-to-m3u"
+npm "@google/gemini-cli"
 npm "@openai/codex"
-npm "context-mode"
-npm "corepack"
+npm "@zed-industries/claude-code-acp"
+npm "typescript-language-server"
+npm "typescript"

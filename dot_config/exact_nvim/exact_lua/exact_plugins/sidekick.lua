@@ -4,6 +4,34 @@ end
 
 return {
   "folke/sidekick.nvim",
+  config = function(_, opts)
+    require("sidekick").setup(opts)
+    -- Sidekick's built-in zellij layout omits the tab-bar/status-bar, so embedded
+    -- CLI sessions lack the tabline and keymap hints. Override the layout template
+    -- (read at call time in sidekick.cli.session.zellij) to add a default_tab_template
+    -- that restores both bars. Done here so it survives plugin updates.
+    require("sidekick.cli.session.zellij").tpl = [[
+layout {
+    default_tab_template {
+        pane size=1 borderless=true {
+            plugin location="zellij:tab-bar"
+        }
+        children
+        pane size=1 borderless=true {
+            plugin location="zellij:status-bar"
+        }
+    }
+    pane command="{cmd}" {
+      borderless true
+      focus true
+      name "{name}"
+      close_on_exit true
+      {args}
+   }
+}
+session_serialization false
+]]
+  end,
   ---@type sidekick.Config
   opts = {
     jump = {

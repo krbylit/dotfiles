@@ -7,6 +7,15 @@ function cl --wraps='claude' --description 'Claude Code in Zellij'
 
     printf '%s\n' \
         'layout {' \
+        '    default_tab_template {' \
+        '        pane size=1 borderless=true {' \
+        '            plugin location="zellij:tab-bar"' \
+        '        }' \
+        '        children' \
+        '        pane size=1 borderless=true {' \
+        '            plugin location="zellij:status-bar"' \
+        '        }' \
+        '    }' \
         '    tab name="claude" {' \
         '        pane command="claude"' \
         '    }' \
