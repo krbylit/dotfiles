@@ -10,6 +10,10 @@ return {
     -- CLI sessions lack the tabline and keymap hints. Override the layout template
     -- (read at call time in sidekick.cli.session.zellij) to add a default_tab_template
     -- that restores both bars. Done here so it survives plugin updates.
+    -- NOTE: the command pane MUST be wrapped in an explicit `tab` node. Zellij only
+    -- applies `default_tab_template` to declared `tab` nodes; bare top-level panes get
+    -- an implicit tab that ignores the template, so the bars never render (this is the
+    -- difference from cl.fish, which has always used a `tab` wrapper and works).
     require("sidekick.cli.session.zellij").tpl = [[
 layout {
     default_tab_template {
@@ -21,13 +25,15 @@ layout {
             plugin location="zellij:status-bar"
         }
     }
-    pane command="{cmd}" {
-      borderless true
-      focus true
-      name "{name}"
-      close_on_exit true
-      {args}
-   }
+    tab name="{name}" {
+        pane command="{cmd}" {
+          borderless true
+          focus true
+          name "{name}"
+          close_on_exit true
+          {args}
+        }
+    }
 }
 session_serialization false
 ]]

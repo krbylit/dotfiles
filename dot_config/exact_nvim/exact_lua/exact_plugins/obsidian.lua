@@ -485,8 +485,8 @@ return {
     -- },
     ---@type obsidian.config.PickerNoteMappingOpts
     picker = {
-      -- Set your preferred picker. Can be one of 'telescope.nvim', 'fzf-lua', or 'mini.pick'.
-      name = "fzf-lua",
+      -- Set your preferred picker. Can be one of 'telescope.nvim', 'fzf-lua', 'mini.pick', or 'snacks.picker'.
+      name = "snacks.picker",
       -- Optional, configure key mappings for the picker. These are the defaults.
       -- Not all pickers support all mappings.
       mappings = {
@@ -566,6 +566,69 @@ return {
 
     -- Register custom "monday" subcommand using obsidian.nvim's command system
     local commands = require("obsidian.commands")
+
+    -- Re-register "today" to roll unfinished tasks forward from the previous
+    -- daily note when a NEW today note is created. Mirrors the built-in
+    -- commands/today.lua arg parsing (numeric offset / date / bare today) and
+    -- preserves nargs="?" so `:Obsidian today 3` and `:Obsidian today <date>`
+    -- still work. `register` is last-write-wins, so this overrides the built-in
+    -- for both <leader>ot and the fish `t` function (which runs the same
+    -- `:Obsidian today`). Idempotency is structural: migration only runs in the
+    -- `not note:exists()` creation branch, gated to the real today note.
+    commands.register("today", {
+      nargs = "?",
+      func = function(data)
+        local daily = require("obsidian.daily")
+        local util = require("obsidian.util")
+        local log = require("obsidian.log")
+
+        local arg = string.gsub(data.args or "", " ", "")
+        local note
+        if string.len(arg) > 0 then
+          local offset = tonumber(arg)
+          if offset ~= nil then
+            note = daily.daily({ offset = offset })
+          else
+            local date, err = util.parse_date(arg)
+            if date then
+              note = daily.daily({ date = os.time(date) })
+            else
+              log.err(
+                string.format(
+                  "Invalid argument: %s (expected integer offset or date like YYYY-MM-DD)\nErr: %s",
+                  arg,
+                  err
+                )
+              )
+              return
+            end
+          end
+        else
+          note = daily.today()
+        end
+
+        if note == nil then
+          return
+        end
+
+        local _, today_id = daily.daily_note_path(os.time())
+        local fresh = not note:exists()
+        if fresh then
+          note:write()
+        end
+        -- Only roll tasks into the real today note, never offset/date dailies.
+        if fresh and note.id == today_id then
+          local ok, err = pcall(function()
+            require("utils.obsidian_daily_rollover").migrate(note)
+          end)
+          if not ok then
+            vim.notify("daily task rollover failed: " .. tostring(err), vim.log.levels.WARN)
+          end
+        end
+        note:open()
+      end,
+    })
+
     commands.register("monday", {
       nargs = 0,
       func = function()
